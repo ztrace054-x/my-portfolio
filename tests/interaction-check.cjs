@@ -47,7 +47,7 @@ function fixture() {
   const scripts=[];
   const context = vm.createContext({ window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:''},history:{pushState(){}},performance:{now:()=>time},AbortController,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
   const cache = new Map();
-  async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); if(file==='main.js')source=source.split('// Bind native functionality before contacting a CDN.')[0];const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative)));await mod.evaluate();return mod; }
+  async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); if(file==='main.js')source=source.split('// Bind native functionality before contacting a CDN.')[0];const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative).split('?')[0]));await mod.evaluate();return mod; }
   const load = async file => (await loadModule(file)).namespace;
   return {doc,nodes,win,values,timers,advance,observers,scripts,load,context};
 }
@@ -115,9 +115,9 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
     const contact=Object.assign(new Element(),{top:289,bottom:925});
     f.doc.all['main > section']=[gallery,contact];f.win.scrollY=1000;
     f.win.scrollTo=({top})=>{contact.top-=top-f.win.scrollY;contact.bottom-=top-f.win.scrollY;f.win.scrollY=top;};
-    const mod=await f.load('viewport.js');const preserve=mod.createViewportPreserver({getScroll:()=>null});
+    const mod=await f.load('viewport.js');let invalidated=0;const preserve=mod.createViewportPreserver({getScroll:()=>null,invalidateScroll:()=>invalidated++});
     preserve(()=>{contact.top+=480;contact.bottom+=480;});f.advance(16);
-    assert.equal(contact.top,289);assert.equal(f.win.scrollY,1480);checks++;
+    assert.equal(contact.top,289);assert.equal(f.win.scrollY,1480);assert(invalidated>=1);checks++;
   }
   // Pin creation also preserves the section and resynchronizes Lenis immediately.
   {

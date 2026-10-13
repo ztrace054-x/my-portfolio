@@ -45,6 +45,7 @@ To update the email, change `CONTENT.email` in `js/config.js` and every address 
 - The intro is sound-free, cancellable, and bounded to three seconds. Returning visits preserve `saad-visited-v1` and bypass it. Deep links and reduced motion also bypass it.
 - System reduced motion overrides the saved motion preference (`saad-motion`). Switching motion off completes typing, removes pinning, restores the normal cursor, and stops decorative rendering.
 - Lenis runs only on eligible fine-pointer screens. Touch scrolling remains native. The journey is pinned only on desktop when the entire stage fits below the header.
+- Motion changes preserve the visible section, invalidate old scroll measurements, and avoid reinserting a pin above an already-passed learning sequence. Browser scroll anchoring is disabled; image dimensions are reserved.
 - Canvas and cursor share one clock; the scene stops offscreen or in a hidden document. Canvas resolution is capped at 1.5 device pixel ratio. Mobile uses inline SVG.
 - The complete content remains readable without JavaScript. A no-script navigation fallback provides direct section links. Ordinary email is not described as encrypted or as a messaging service.
 

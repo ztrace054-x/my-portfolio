@@ -4,6 +4,8 @@
 }
 
 html {
+  /* Reserved image dimensions and our scroll owner avoid competing adjustments. */
+  overflow-anchor: none;
   scroll-padding-top:calc(var(--header-height) + 24px);
   background:var(--bg);
   color-scheme:dark

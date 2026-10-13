@@ -5,9 +5,9 @@ import { createOverlayManager, initNavigation } from './navigation.js';
 import { initGallery } from './gallery.js';
 import { initHeroScene } from './hero-scene.js';
 import { initCursor } from './cursor.js';
-import { initAnimations } from './animations.js';
+import { initAnimations } from './animations.js?v=20261013.4';
 import { installSmoothScroll } from './smooth-scroll.js';
-import { createViewportPreserver } from './viewport.js';
+import { createViewportPreserver } from './viewport.js?v=20261013.4';
 
 /* One clock feeds scene/cursor. It switches to GSAP without a second RAF loop. */
 export function createClock() {
@@ -70,14 +70,17 @@ export async function loadDependencies() {
 }
 
 // Bind native functionality before contacting a CDN.
-document.documentElement.dataset.release = '20261013.3';
+document.documentElement.dataset.release = '20261013.4';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
 let motionAllowed = storage.get(CONTENT.motionKey) !== 'off' && !reduced.matches;
 let dependencies = null, animations = null, smooth = null, cursor = null;
 let entryAt = 0, entered = false;
-const keepViewport = createViewportPreserver({ getScroll: () => smooth?.instance });
+const keepViewport = createViewportPreserver({
+  getScroll: () => smooth?.instance,
+  invalidateScroll: () => dependencies?.ScrollTrigger.clearScrollMemory(),
+});
 const seen = new Set();
 const clock = createClock();
 const contact = initContact({ motionAllowed });

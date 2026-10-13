@@ -1,6 +1,6 @@
 /* Preserve a semantic section through pin creation/removal. Avoid hit testing:
    overlapping transformed photos can be hit even after they leave the viewport. */
-export function createViewportPreserver({ getScroll }) {
+export function createViewportPreserver({ getScroll, invalidateScroll = () => {} }) {
   let pendingFrame = 0;
   let originalOverflowAnchor = '';
   return function preserve(change) {
@@ -26,6 +26,8 @@ export function createViewportPreserver({ getScroll }) {
         const smooth = getScroll();
         if (smooth) smooth.scrollTo(top, { immediate: true, force: true });
         else window.scrollTo({ top, behavior: 'instant' });
+        // Prevent an automatic refresh from restoring a cached pre-change position.
+        invalidateScroll();
         root.dataset.motionDrift = String(Math.round(anchor.getBoundingClientRect().top - before));
       };
       restore();

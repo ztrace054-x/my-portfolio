@@ -61,7 +61,10 @@ export function initAnimations({ gsap, ScrollTrigger, heroEntry, seen }) {
           gsap.set(track, { scaleX: 0 });
           cards.forEach(card => card.classList.remove('is-active'));
         }
-        if (fits && !pin) {
+        // Enabling motion should enhance the story ahead, without reinserting
+        // pin spacing above a section the visitor has already passed.
+        const ahead = stage.getBoundingClientRect().bottom > document.getElementById('site-header').offsetHeight + 24;
+        if (fits && ahead && !pin) {
           const line = gsap.to(track, { scaleX: 1, ease: 'none', paused: true });
           pin = ScrollTrigger.create({
             trigger: stage, pin: stage, pinSpacing: true,
