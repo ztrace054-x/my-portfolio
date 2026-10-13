@@ -69,6 +69,7 @@ export async function loadDependencies() {
 }
 
 // Bind native functionality before contacting a CDN.
+document.documentElement.dataset.release = '20261013.2';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
@@ -102,6 +103,8 @@ function destroyMotion() {
   const element = document.elementFromPoint(window.innerWidth / 2, window.innerHeight * .55)?.closest('article,section');
   const before = element?.getBoundingClientRect().top;
   const root = document.documentElement;
+  root.dataset.motionAnchor = element?.id || 'none';
+  root.dataset.motionBefore = String(before);
   if (viewportRestore) cancelAnimationFrame(viewportRestore);
   else previousOverflowAnchor = root.style.overflowAnchor;
   // Pin removal and browser scroll anchoring must not both adjust the viewport.
@@ -117,6 +120,7 @@ function destroyMotion() {
   // Complete after ScrollTrigger has reverted its pin and restored native styles.
   viewportRestore = requestAnimationFrame(() => {
     restore();
+    root.dataset.motionDrift = element && before !== undefined ? String(Math.round(element.getBoundingClientRect().top - before)) : '0';
     root.style.overflowAnchor = previousOverflowAnchor;
     viewportRestore = 0;
   });
