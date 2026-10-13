@@ -18,9 +18,13 @@
 <body>
   <!-- Development-only viewer: an iframe provides a real independent layout viewport. -->
   <header><strong>Responsive review</strong><label for="viewport-width">Viewport width<select id="viewport-width"><option>320</option><option selected>390</option><option>768</option><option>1024</option><option>1440</option></select></label><label for="viewport-height">Viewport height<select id="viewport-height"><option>640</option><option selected>800</option><option>936</option></select></label><a href="../">Open the portfolio</a></header>
-  <div class="viewport-container"><iframe id="preview" title="Portfolio at the selected viewport" src="../"></iframe></div>
+  <div class="viewport-container"><iframe id="preview" title="Portfolio at the selected viewport" src="../?review=20261013.5"></iframe></div>
   <script>
     const preview = document.getElementById('preview');
+    // A fresh document key avoids reviewing stale Pages HTML after deployment.
+    const reviewUrl = new URL('../', location.href);
+    reviewUrl.searchParams.set('review', String(Date.now()));
+    preview.src = reviewUrl.href;
     document.getElementById('viewport-width').addEventListener('change', event => { preview.style.width = event.target.value + 'px'; });
     document.getElementById('viewport-height').addEventListener('change', event => { preview.style.height = event.target.value + 'px'; });
   </script>
