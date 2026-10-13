@@ -16,7 +16,7 @@ class Element {
   hasAttribute(key) { return key in this.attrs; }
   removeAttribute(key) { delete this.attrs[key]; }
   focus() { if (this.doc) this.doc.activeElement = this; this.focused = true; }
-  getBoundingClientRect() { return { top: this.top || 0, left: 0, right: 100, bottom: 100, width: 100, height: 100 }; }
+  getBoundingClientRect() { return { top: this.top || 0, left: 0, right: 100, bottom: this.bottom ?? 100, width: 100, height: 100 }; }
   matches() { return false; }
   closest() { return this; }
   showModal() { this.open = true; }
@@ -107,6 +107,27 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
   // The shared clock never leaves native RAF running after switching to a ticker.
   {
     const f=fixture();const mod=await f.load('main.js');const clock=mod.createClock();let frames=0;const un=clock.subscribe(()=>frames++);assert.equal(f.timers.size,1);f.advance(16);assert.equal(frames,1);const ticks=new Set();clock.setTicker({add:fn=>ticks.add(fn),remove:fn=>ticks.delete(fn)});assert.equal(f.timers.size,0);assert.equal(ticks.size,1);un();assert.equal(ticks.size,0);clock.dispose();checks++;
+  }
+  // Layout-based preservation ignores an overlapping photo hit target.
+  {
+    const f=fixture();f.doc.documentElement.clientHeight=936;
+    const gallery=Object.assign(new Element(),{top:-61,bottom:190});
+    const contact=Object.assign(new Element(),{top:289,bottom:925});
+    f.doc.all['main > section']=[gallery,contact];f.win.scrollY=1000;
+    f.win.scrollTo=({top})=>{contact.top-=top-f.win.scrollY;contact.bottom-=top-f.win.scrollY;f.win.scrollY=top;};
+    const mod=await f.load('viewport.js');const preserve=mod.createViewportPreserver({getScroll:()=>null});
+    preserve(()=>{contact.top+=480;contact.bottom+=480;});f.advance(16);
+    assert.equal(contact.top,289);assert.equal(f.win.scrollY,1480);checks++;
+  }
+  // Pin creation also preserves the section and resynchronizes Lenis immediately.
+  {
+    const f=fixture();f.doc.documentElement.clientHeight=936;f.win.scrollY=1000;
+    const contact=Object.assign(new Element(),{top:289,bottom:925});f.doc.all['main > section']=[contact];
+    let options;
+    const smooth={scrollTo(top,opts){options=opts;contact.top-=top-f.win.scrollY;contact.bottom-=top-f.win.scrollY;f.win.scrollY=top;}};
+    const mod=await f.load('viewport.js');const preserve=mod.createViewportPreserver({getScroll:()=>smooth});
+    preserve(()=>{contact.top+=1497;contact.bottom+=1497;});f.advance(16);
+    assert.equal(contact.top,289);assert.equal(options.immediate,true);assert.equal(options.force,true);checks++;
   }
   console.log(`PASS: ${checks} interaction checks (intro, cancellation, preferences, clipboard, gallery, dependency deadline, Lenis cleanup, shared clock).`);
 })().catch(error=>{console.error(error);process.exit(1);});

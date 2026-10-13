@@ -16,6 +16,7 @@ A static, responsive portfolio for an SSC student taking his first steps into cy
 | `js/main.js` | Native startup, motion preference, dependency deadline, and shared clock |
 | `js/animations.js` | GSAP reveals, parallax, and the single optional journey pin |
 | `js/smooth-scroll.js` | Lenis integration and cleanup |
+| `js/viewport.js` | Preserve the visible section when pinning is created or removed |
 | `js/intro.js` | Skippable boot introduction and three-second deadline |
 | `js/cursor.js` | Fine-pointer cursor, magnetic buttons, and subtle photo tilt |
 | `js/hero-scene.js` | Lightweight illustrative core and static SVG fallback |

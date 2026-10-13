@@ -7,6 +7,7 @@ import { initHeroScene } from './hero-scene.js';
 import { initCursor } from './cursor.js';
 import { initAnimations } from './animations.js';
 import { installSmoothScroll } from './smooth-scroll.js';
+import { createViewportPreserver } from './viewport.js';
 
 /* One clock feeds scene/cursor. It switches to GSAP without a second RAF loop. */
 export function createClock() {
@@ -69,14 +70,14 @@ export async function loadDependencies() {
 }
 
 // Bind native functionality before contacting a CDN.
-document.documentElement.dataset.release = '20261013.2';
+document.documentElement.dataset.release = '20261013.3';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
 let motionAllowed = storage.get(CONTENT.motionKey) !== 'off' && !reduced.matches;
 let dependencies = null, animations = null, smooth = null, cursor = null;
 let entryAt = 0, entered = false;
-let viewportRestore = 0, previousOverflowAnchor = '';
+const keepViewport = createViewportPreserver({ getScroll: () => smooth?.instance });
 const seen = new Set();
 const clock = createClock();
 const contact = initContact({ motionAllowed });
@@ -99,43 +100,26 @@ function updateControls() {
   });
 }
 function destroyMotion() {
-  // Preserve the element under the viewport when a pin spacer disappears.
-  const element = document.elementFromPoint(window.innerWidth / 2, window.innerHeight * .55)?.closest('article,section');
-  const before = element?.getBoundingClientRect().top;
-  const root = document.documentElement;
-  root.dataset.motionAnchor = element?.id || 'none';
-  root.dataset.motionBefore = String(before);
-  if (viewportRestore) cancelAnimationFrame(viewportRestore);
-  else previousOverflowAnchor = root.style.overflowAnchor;
-  // Pin removal and browser scroll anchoring must not both adjust the viewport.
-  root.style.overflowAnchor = 'none';
-  cursor?.dispose(); cursor = null;
-  smooth?.dispose(); smooth = null;
-  animations?.dispose(); animations = null;
-  clock.setTicker(null);
-  const restore = () => {
-    if (element && before !== undefined) window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - before, behavior: 'instant' });
-  };
-  restore();
-  // Complete after ScrollTrigger has reverted its pin and restored native styles.
-  viewportRestore = requestAnimationFrame(() => {
-    restore();
-    root.dataset.motionDrift = element && before !== undefined ? String(Math.round(element.getBoundingClientRect().top - before)) : '0';
-    root.style.overflowAnchor = previousOverflowAnchor;
-    viewportRestore = 0;
+  keepViewport(() => {
+    cursor?.dispose(); cursor = null;
+    smooth?.dispose(); smooth = null;
+    animations?.dispose(); animations = null;
+    clock.setTicker(null);
+    document.documentElement.dataset.scrollEngine = 'native';
   });
-  document.documentElement.dataset.scrollEngine = 'native';
 }
 function enhance() {
   if (!entered || !motionAllowed || !dependencies || animations) return;
   const { gsap, ScrollTrigger, Lenis } = dependencies;
-  clock.setTicker(gsap.ticker);
   try {
-    animations = initAnimations({ gsap, ScrollTrigger, seen, heroEntry: !location.hash && window.scrollY < 20 && performance.now() - entryAt < 350 });
-    smooth = installSmoothScroll({ gsap, ScrollTrigger, Lenis, enabled: smoothEligible.matches });
-    if (overlays.locked) smooth?.instance.stop();
-    if (fine.matches) cursor = initCursor({ clock });
-    document.documentElement.dataset.scrollEngine = smooth ? 'lenis' : 'native';
+    keepViewport(() => {
+      clock.setTicker(gsap.ticker);
+      animations = initAnimations({ gsap, ScrollTrigger, seen, heroEntry: !location.hash && window.scrollY < 20 && performance.now() - entryAt < 350 });
+      smooth = installSmoothScroll({ gsap, ScrollTrigger, Lenis, enabled: smoothEligible.matches });
+      if (overlays.locked) smooth?.instance.stop();
+      if (fine.matches) cursor = initCursor({ clock });
+      document.documentElement.dataset.scrollEngine = smooth ? 'lenis' : 'native';
+    });
   } catch { destroyMotion(); }
 }
 function setMotion() {
