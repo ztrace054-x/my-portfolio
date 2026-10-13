@@ -19,5 +19,5 @@ export const storage = {
 export const PHOTOS = Object.freeze([
   { src: './assets/saad-dark.jpg', title: 'A different perspective', alt: 'Black and white portrait of Saad wearing sunglasses and a dark shirt', width: 810, height: 1080 },
   { src: './assets/saad-formal.jpg', title: 'Another side of Saad', alt: 'Black and white portrait of Saad in a suit and tie', width: 810, height: 1080 },
-  { src: './assets/saad-golden.jpg', title: 'Learning in public', alt: 'Saad outdoors in golden light, wearing a denim jacket', width: 864, height: 1080 },
+  { src: './assets/saad-golden.jpg', title: 'Learning in public', alt: 'Saad outdoors in golden light, wearing a dark jacket', width: 864, height: 1080 },
 ]);

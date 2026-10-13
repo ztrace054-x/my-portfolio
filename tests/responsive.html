@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio responsive review</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #151a1d; color: #edf2ef; font: 14px system-ui, sans-serif; }
+    header { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; padding: 16px 24px; }
+    label { display: flex; align-items: center; gap: 10px; }
+    select { min-height: 40px; padding: 8px; background: #07090c; color: #edf2ef; border: 1px solid #71877b; }
+    a { color: #85e9ad; }
+    .viewport-container { width: 100%; padding: 16px 24px; overflow: auto; }
+    iframe { display: block; width: 390px; height: 800px; border: 1px solid #71877b; background: #07090c; }
+  </style>
+</head>
+<body>
+  <!-- Development-only viewer: an iframe provides a real independent layout viewport. -->
+  <header><strong>Responsive review</strong><label for="viewport-width">Viewport width<select id="viewport-width"><option>320</option><option selected>390</option><option>768</option><option>1024</option><option>1440</option></select></label><label for="viewport-height">Viewport height<select id="viewport-height"><option>640</option><option selected>800</option><option>936</option></select></label><a href="../">Open the portfolio</a></header>
+  <div class="viewport-container"><iframe id="preview" title="Portfolio at the selected viewport" src="../"></iframe></div>
+  <script>
+    const preview = document.getElementById('preview');
+    document.getElementById('viewport-width').addEventListener('change', event => { preview.style.width = event.target.value + 'px'; });
+    document.getElementById('viewport-height').addEventListener('change', event => { preview.style.height = event.target.value + 'px'; });
+  </script>
+</body>
+</html>

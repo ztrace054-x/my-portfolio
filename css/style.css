@@ -551,6 +551,12 @@ strong {
   border-radius:3px
 }
 
+.core-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .core-label b {
   font-weight:400;
   color:var(--accent)

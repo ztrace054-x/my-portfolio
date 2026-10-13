@@ -70,11 +70,12 @@ export async function loadDependencies() {
 
 // Bind native functionality before contacting a CDN.
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const fine = matchMedia('(pointer: fine) and (hover: hover)');
+const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
 let motionAllowed = storage.get(CONTENT.motionKey) !== 'off' && !reduced.matches;
 let dependencies = null, animations = null, smooth = null, cursor = null;
 let entryAt = 0, entered = false;
+let viewportRestore = 0, previousOverflowAnchor = '';
 const seen = new Set();
 const clock = createClock();
 const contact = initContact({ motionAllowed });
@@ -98,13 +99,27 @@ function updateControls() {
 }
 function destroyMotion() {
   // Preserve the element under the viewport when a pin spacer disappears.
-  const element = document.elementFromPoint(window.innerWidth / 2, document.getElementById('site-header').offsetHeight + 100)?.closest('article,section');
+  const element = document.elementFromPoint(window.innerWidth / 2, window.innerHeight * .55)?.closest('article,section');
   const before = element?.getBoundingClientRect().top;
+  const root = document.documentElement;
+  if (viewportRestore) cancelAnimationFrame(viewportRestore);
+  else previousOverflowAnchor = root.style.overflowAnchor;
+  // Pin removal and browser scroll anchoring must not both adjust the viewport.
+  root.style.overflowAnchor = 'none';
   cursor?.dispose(); cursor = null;
   smooth?.dispose(); smooth = null;
   animations?.dispose(); animations = null;
   clock.setTicker(null);
-  if (element && before !== undefined) window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - before, behavior: 'instant' });
+  const restore = () => {
+    if (element && before !== undefined) window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - before, behavior: 'instant' });
+  };
+  restore();
+  // Complete after ScrollTrigger has reverted its pin and restored native styles.
+  viewportRestore = requestAnimationFrame(() => {
+    restore();
+    root.style.overflowAnchor = previousOverflowAnchor;
+    viewportRestore = 0;
+  });
   document.documentElement.dataset.scrollEngine = 'native';
 }
 function enhance() {

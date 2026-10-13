@@ -24,6 +24,7 @@ A static, responsive portfolio for an SSC student taking his first steps into cy
 | `js/contact.js` | Accessible email typing and truthful clipboard feedback |
 | `assets/` | Three original portraits, static grain, and licensed fonts |
 | `tests/interaction-check.cjs` | Deterministic interaction tests without browser dependencies |
+| `tests/responsive.html` | Development-only viewport review, isolated from the portfolio navigation |
 | `.nojekyll` | Static GitHub Pages serving |
 
 No framework, backend, analytics, package installation, or production build step is required. Local ES modules use relative paths that work under the repository's GitHub Pages prefix.
@@ -68,6 +69,8 @@ node --experimental-vm-modules tests/interaction-check.cjs
 The tests exercise intro completion/cancellation, returning and deep-link visits, reduced motion, copying before typing finishes, clipboard rejection, gallery wrapping and focus return, dependency timeout, Lenis disposal, and the shared animation clock. VM Modules may print a Node experimental-feature notice.
 
 Additional release checks verify JavaScript syntax, unique IDs, local file/import/anchor references, portrait dimensions, four unearned credential statuses, accessible email text, color contrast, and asset budgets. Browser review should check the served site, motion toggling, navigation, the gallery, clipboard feedback, responsive layouts, and console output. Actual frame rate depends on the device; no hardware-independent 60 FPS guarantee is made.
+
+The optional `tests/responsive.html` viewer renders the actual site inside a selectable 320/390/768/1024/1440px viewport. It has no link from the public portfolio and is for development review only.
 
 For local development, serve the folder over HTTP using your preferred static development server. Opening the file directly is insufficient for testing ES modules.
 
