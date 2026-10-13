@@ -1,0 +1,40 @@
+/* Design tokens: edit colors, type, and spacing here. */
+@font-face {
+  font-family:"Space Grotesk";
+  src:url("../assets/fonts/space-grotesk-latin.woff2") format("woff2");
+  font-style:normal;
+  font-weight:300 700;
+  font-display:swap
+}
+
+@font-face {
+  font-family:"JetBrains Mono";
+  src:url("../assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  font-style:normal;
+  font-weight:100 800;
+  font-display:swap
+}
+
+:root {
+  --bg:#07090c;
+  --bg-soft:#0d1215;
+  --surface:#141c20;
+  --surface-raised:#1a252a;
+  --text:#edf2ef;
+  --secondary:#b7c2bd;
+  --muted:#98a8a1;
+  --accent:#85e9ad;
+  --accent-soft:rgba(133,233,173,.1);
+  --line:rgba(183,194,189,.18);
+  --control-line:#71877b;
+  --focus:#b7ffd0;
+  --warning:#d6c792;
+  --display:"Space Grotesk",Arial,sans-serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+  --gutter:64px;
+  --gap:24px;
+  --section-space:128px;
+  --header-height:80px;
+  --radius:12px;
+  --ease:cubic-bezier(.22,1,.36,1)
+}

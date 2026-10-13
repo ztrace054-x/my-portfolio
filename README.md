@@ -17,13 +17,13 @@ A static, responsive portfolio for an SSC student taking his first steps into cy
 | `js/animations.js` | GSAP reveals, parallax, and the single optional journey pin |
 | `js/smooth-scroll.js` | Lenis integration and cleanup |
 | `js/viewport.js` | Preserve the visible section when pinning is created or removed |
-| `js/intro.js` | Skippable boot introduction and three-second deadline |
+| `js/intro.js` | Skippable hacker boot intro (matrix rain, terminal lines, ACCESS GRANTED) with a hard deadline; replays after 30 minutes or with `?intro=1` |
 | `js/cursor.js` | Fine-pointer cursor, magnetic buttons, and subtle photo tilt |
 | `js/hero-scene.js` | Lightweight illustrative core and static SVG fallback |
 | `js/navigation.js` | Native anchor navigation, mobile menu, and shared overlay lock |
 | `js/gallery.js` | Photo viewer, captions, arrow navigation, and focus return |
 | `js/contact.js` | Accessible email typing and truthful clipboard feedback |
-| `assets/` | Three original portraits, static grain, and licensed fonts |
+| `assets/` | Original portraits, static grain, and licensed fonts |
 | `tests/interaction-check.cjs` | Deterministic interaction tests without browser dependencies |
 | `tests/responsive.html` | Development-only viewport review, isolated from the portfolio navigation |
 | `.nojekyll` | Static GitHub Pages serving |
@@ -34,7 +34,7 @@ No framework, backend, analytics, package installation, or production build step
 
 Edit the bio, learning phases, tools, and roadmap in `index.html`. Heading animations have an intact screen-reader copy and a visual copy: update both when editing a heading.
 
-The **CERTIFICATION ROADMAP** comment marks the four future credentials. Each currently says **Future goal · Not yet earned**. Only after earning a credential should its status change; include a verifiable credential link at that time. The tools and current learning topics describe beginner exploration, not mastery. The gallery contains personal photos, not completed security projects.
+The **CERTIFICATION ROADMAP** comment marks the four future credentials. Each currently says **Future goal · Not yet earned**. Only after earning a credential should its status change; include a verifiable credential link at that time. The tools and current learning topics describe beginner exploration, not mastery. The gallery contains two personal photos and a terminal-style profile card with LinkedIn, GitHub and email links, not completed security projects.
 
 To update the email, change `CONTENT.email` in `js/config.js` and every address and `mailto:` reference in `index.html`. To replace a photograph, keep its filename, then update its description/dimensions in `index.html` and `PHOTOS` in `js/config.js`.
 
