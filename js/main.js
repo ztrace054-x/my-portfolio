@@ -1,8 +1,8 @@
-import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js';
-import { initIntro } from './intro.js';
+import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js?v=20261014.1';
+import { initIntro } from './intro.js?v=20261014.1';
 import { initContact } from './contact.js';
 import { createOverlayManager, initNavigation } from './navigation.js';
-import { initGallery } from './gallery.js';
+import { initGallery } from './gallery.js?v=20261014.1';
 import { initHeroScene } from './hero-scene.js';
 import { initCursor } from './cursor.js';
 import { initAnimations } from './animations.js?v=20261013.4';

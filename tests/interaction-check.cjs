@@ -59,11 +59,11 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
   {
     const f=fixture(), intro=f.doc.getElementById('intro'),page=f.doc.getElementById('page');
     intro.hidden=true;
-    const lines=['Loading identity...','Loading curiosity...','Loading cybersecurity journey...'].map(text=>{const e=new Element();e.dataset.bootLine=text;return e;});
+    const lines=['INITIALIZING SAAD.SECURITY_PROFILE...','> Loading identity','> Loading cybersecurity path','> Establishing secure connection'].map(text=>{const e=new Element();e.dataset.bootLine=text;return e;});
     intro.all['[data-boot-line]']=lines;
     const mod=await f.load('intro.js'); const controller=mod.initIntro({motionAllowed:true});
     assert(page.inert && !intro.hidden); f.advance(200);assert(lines[0].textContent.length>0 && lines[1].textContent==='');
-    f.advance(1700); await controller.completed;assert(intro.hidden && !page.inert);assert.equal(f.values.get('saad-visited-v1'),'yes');assert.equal(f.timers.size,0);checks++;
+    f.advance(4600); await controller.completed;assert(intro.hidden && !page.inert);assert(Number(f.values.get('saad-visited-v1'))>0);assert.equal(f.timers.size,0);checks++;
   }
   // Skip is idempotent; cancelled character callbacks cannot reopen the panel.
   {
@@ -72,7 +72,7 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
   }
   // Returning visitors, deep links and reduced motion bypass without overlay timers.
   for(const mode of ['return','deep','reduce']){
-    const f=fixture();if(mode==='return')f.values.set('saad-visited-v1','yes');if(mode==='deep')f.context.location.hash='#contact';
+    const f=fixture();if(mode==='return')f.values.set('saad-visited-v1',String(Date.now()));if(mode==='deep')f.context.location.hash='#contact';
     const mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='reduce'}).completed;assert(f.doc.getElementById('intro').hidden);assert.equal(f.timers.size,0);checks++;
   }
   function contactFixture() { const f=fixture(); const button=f.doc.getElementById('copy-email');button.children.span=new Element();return f; }
@@ -92,7 +92,7 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
   }
   // Gallery wraps in both directions, updates descriptions, unlocks and returns focus.
   {
-    const f=fixture(),trigger=new Element();trigger.doc=f.doc;trigger.dataset.galleryItem='0';f.doc.all['[data-gallery-item]']=[trigger];let locks=0,unlocks=0;const mod=await f.load('gallery.js');mod.initGallery({overlays:{lock(){locks++;},unlock(){unlocks++;}}});trigger.emit('click');assert(f.doc.getElementById('photo-viewer').open);f.doc.getElementById('viewer-prev').emit('click');assert.equal(f.doc.getElementById('viewer-index').textContent,'03 / 03');f.doc.getElementById('photo-viewer').emit('keydown',{key:'ArrowRight'});assert.equal(f.doc.getElementById('viewer-index').textContent,'01 / 03');f.doc.getElementById('viewer-close').emit('click');assert.equal(locks,1);assert.equal(unlocks,1);assert(trigger.focused);checks++;
+    const f=fixture(),trigger=new Element();trigger.doc=f.doc;trigger.dataset.galleryItem='0';f.doc.all['[data-gallery-item]']=[trigger];let locks=0,unlocks=0;const mod=await f.load('gallery.js');mod.initGallery({overlays:{lock(){locks++;},unlock(){unlocks++;}}});trigger.emit('click');assert(f.doc.getElementById('photo-viewer').open);f.doc.getElementById('viewer-prev').emit('click');assert.equal(f.doc.getElementById('viewer-index').textContent,'02 / 02');f.doc.getElementById('photo-viewer').emit('keydown',{key:'ArrowRight'});assert.equal(f.doc.getElementById('viewer-index').textContent,'01 / 02');f.doc.getElementById('viewer-close').emit('click');assert.equal(locks,1);assert.equal(unlocks,1);assert(trigger.focused);checks++;
   }
   // Lenis has one ticker subscription and is completely disposed.
   {

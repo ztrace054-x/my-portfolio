@@ -1,4 +1,4 @@
-import { CONTENT, TIMING } from './config.js';
+import { CONTENT, TIMING } from './config.js?v=20261014.1';
 
 export function initContact({ motionAllowed }) {
   const panel = document.getElementById('contact-panel');

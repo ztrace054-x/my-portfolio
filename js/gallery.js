@@ -1,4 +1,4 @@
-import { PHOTOS } from './config.js';
+import { PHOTOS } from './config.js?v=20261014.1';
 
 export function initGallery({ overlays }) {
   const events = new AbortController();
@@ -17,7 +17,7 @@ export function initGallery({ overlays }) {
     image.width = photo.width;
     image.height = photo.height;
     caption.textContent = photo.title;
-    number.textContent = String(index + 1).padStart(2, '0') + ' / 03';
+    number.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(PHOTOS.length).padStart(2, '0');
   }
   const dismiss = () => { if (dialog.open) dialog.close(); };
   document.querySelectorAll('[data-gallery-item]').forEach(button => button.addEventListener('click', () => {

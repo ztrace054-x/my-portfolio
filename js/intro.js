@@ -1,4 +1,8 @@
-import { CONTENT, TIMING, storage } from './config.js';
+import { CONTENT, TIMING, storage } from './config.js?v=20261014.1';
+
+const TYPE_SPEED = 16;   // ms per character
+const LINE_PAUSE = 240;  // ms between boot lines
+const HOLD = 950;        // ms ACCESS GRANTED stays before the intro leaves
 
 export function initIntro({ motionAllowed }) {
   const overlay = document.getElementById('intro');
@@ -8,6 +12,7 @@ export function initIntro({ motionAllowed }) {
   const events = new AbortController();
   let state = 'idle';
   let exitTimer;
+  let stopRain = () => {};
   let resolve;
   const completed = new Promise(done => { resolve = done; });
   let resolveEntry;
@@ -21,17 +26,52 @@ export function initIntro({ motionAllowed }) {
     timers.clear();
     overlay.querySelectorAll('.is-typing').forEach(line => line.classList.remove('is-typing'));
   };
+  const setProgress = value => overlay.style.setProperty?.('--p', String(value));
+
+  /* Faint matrix rain behind the terminal. Optional: skipped if canvas is unavailable. */
+  function startRain() {
+    const canvas = overlay.querySelector('canvas');
+    const ctx = canvas?.getContext?.('2d');
+    if (!ctx || typeof requestAnimationFrame !== 'function') return () => {};
+    const size = 16;
+    const glyphs = '01<>/{}[]$#=+*'.split('');
+    let drops = [], raf = 0, last = 0;
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drops = Array.from({ length: Math.ceil(canvas.width / size) }, () => Math.random() * -30);
+    };
+    const draw = now => {
+      raf = requestAnimationFrame(draw);
+      if (now - last < 48) return;
+      last = now;
+      ctx.fillStyle = 'rgba(7,9,12,.14)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#85e9ad';
+      ctx.font = size + 'px monospace';
+      drops.forEach((y, i) => {
+        ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * size, y * size);
+        drops[i] = y * size > canvas.height && Math.random() > 0.96 ? 0 : y + 1;
+      });
+    };
+    resize();
+    window.addEventListener('resize', resize, { signal: events.signal });
+    raf = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(raf);
+  }
+
   function finish() {
     if (state === 'finished') return;
     state = 'finished';
     clearTyping();
     clearTimeout(exitTimer);
+    stopRain();
     events.abort();
     overlay.hidden = true;
     page.inert = false;
     document.documentElement.classList.remove('is-intro');
     resolveEntry();
-    storage.set(CONTENT.visitedKey, 'yes');
+    storage.set(CONTENT.visitedKey, String(Date.now()));
     if (document.activeElement === skip) document.querySelector('.wordmark').focus({ preventScroll: true });
     resolve();
   }
@@ -46,7 +86,13 @@ export function initIntro({ motionAllowed }) {
     overlay.classList.toggle('is-skipping', fast);
     exitTimer = setTimeout(finish, fast ? TIMING.skipExit : TIMING.introExit);
   }
-  const bypass = !motionAllowed || location.hash || storage.get(CONTENT.visitedKey) || window.scrollY > 10;
+
+  // Play again if the last visit was a while ago, or when the URL contains ?intro=1.
+  const forced = /[?&]intro=1/.test(String(location.search || ''));
+  const lastVisit = Number(storage.get(CONTENT.visitedKey)) || 0;
+  const recent = lastVisit > 0 && Date.now() - lastVisit < TIMING.introReplay;
+  const bypass = !motionAllowed || location.hash || window.scrollY > 10 || (recent && !forced);
+
   // Essential cancellation and the deadline exist before any overlay is shown.
   skip.addEventListener('click', () => exit(true), { signal: events.signal });
   document.addEventListener('keydown', event => { if (event.key === 'Escape') exit(true); }, { signal: events.signal });
@@ -56,20 +102,26 @@ export function initIntro({ motionAllowed }) {
   page.inert = true;
   overlay.hidden = false;
   document.documentElement.classList.add('is-intro');
+  stopRain = startRain();
+
   const lines = [...overlay.querySelectorAll('[data-boot-line]')];
   let offset = 180;
   for (const [index, line] of lines.entries()) {
     const text = line.dataset.bootLine;
     later(() => line.classList.add('is-typing'), offset);
     for (let count = 1; count <= text.length; count++) {
-      later(() => { line.textContent = text.slice(0, count); }, offset + count * 9);
+      later(() => { line.textContent = text.slice(0, count); }, offset + count * TYPE_SPEED);
     }
     if (index > 0) later(() => line.classList.add('line-flicker'), offset + 75);
-    offset += text.length * 9;
-    later(() => line.classList.remove('is-typing'), offset);
-    offset += 60;
+    offset += text.length * TYPE_SPEED;
+    later(() => {
+      line.classList.remove('is-typing');
+      line.classList.add('is-done');
+      setProgress(((index + 1) / lines.length) * 0.92);
+    }, offset);
+    offset += LINE_PAUSE;
   }
-  later(() => overlay.classList.add('is-ready'), 1050);
-  later(() => exit(), 1300);
+  later(() => { setProgress(1); overlay.classList.add('is-ready'); }, offset);
+  later(() => exit(), offset + HOLD);
   return { completed, entryStarted, cancel: () => exit(true, true) };
 }
