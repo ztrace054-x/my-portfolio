@@ -48,6 +48,10 @@
   .hero-visual {
     max-width:440px
   }
+  /* Keep the decorative glow inside narrow layout viewports. */
+  .hero-visual::before {
+    inset: 0;
+  }
   .hero-facts {
     gap:18px;
     font-size:9px
