@@ -1,86 +1,83 @@
-# SAAD // A cybersecurity journey
+# Saad — A cybersecurity journey
 
-A cinematic, dark-terminal portfolio for a cybersecurity **beginner** who is learning ethical hacking in public.
-It is honest by design: the goals section is clearly marked *Not Yet Earned*, and nothing claims a certificate that has not been earned.
+A static, responsive portfolio for an SSC student taking his first steps into cybersecurity. Editorial typography, a connected Canvas 2D core, masked GSAP reveals, and an optional desktop learning sequence support an honest beginner story.
 
 **Live:** https://ztrace054-x.github.io/my-portfolio/
 
-## What is inside
+## Project structure
 
-```
-my-portfolio/
-├── index.html      all content and structure
-├── style.css       theme, layout, animations, responsive rules
-├── script.js       intro, globe, matrix rain, scroll effects (vanilla JS)
-├── .nojekyll       tells GitHub Pages to serve the files as they are
-└── assets/
-    ├── saad-dark.jpg      photo for "The Beginning"
-    ├── saad-formal.jpg    photo for "The Journey"
-    ├── og-image.jpg       link preview image (1200x630)
-    ├── noise.svg          film-grain texture
-    └── fonts/             Space Grotesk + JetBrains Mono (local, no external requests)
-```
+| Path | Purpose |
+| --- | --- |
+| `index.html` | All semantic content, metadata, stable navigation anchors, and accessible dialogs |
+| `css/tokens.css` | Colors, font declarations, spacing, and motion tokens |
+| `css/style.css` | Components and desktop layouts |
+| `css/responsive.css` | Mobile/tablet layouts, reduced motion, and print |
+| `js/config.js` | Contact details, photo data, pinned dependencies, and timings |
+| `js/main.js` | Native startup, motion preference, dependency deadline, and shared clock |
+| `js/animations.js` | GSAP reveals, parallax, and the single optional journey pin |
+| `js/smooth-scroll.js` | Lenis integration and cleanup |
+| `js/viewport.js` | Preserve the visible section when pinning is created or removed |
+| `js/intro.js` | Skippable hacker boot intro (matrix rain, terminal lines, ACCESS GRANTED) with a hard deadline; replays after 30 minutes or with `?intro=1` |
+| `js/cursor.js` | Fine-pointer cursor, magnetic buttons, and subtle photo tilt |
+| `js/hero-scene.js` | Lightweight illustrative core and static SVG fallback |
+| `js/navigation.js` | Native anchor navigation, mobile menu, and shared overlay lock |
+| `js/gallery.js` | Photo viewer, captions, arrow navigation, and focus return |
+| `js/contact.js` | Accessible email typing and truthful clipboard feedback |
+| `assets/` | Original portraits, static grain, and licensed fonts |
+| `tests/interaction-check.cjs` | Deterministic interaction tests without browser dependencies |
+| `tests/responsive.html` | Development-only viewport review, isolated from the portfolio navigation |
+| `.nojekyll` | Static GitHub Pages serving |
 
-No frameworks, no libraries, no build step, no third-party requests.
-
-## Sections
-
-1. **Home**: SAAD., terminal `whoami`, animated cyber globe (drag it), matrix rain
-2. **About** + **Why cybersecurity?**
-3. **Story**: *The Beginning* and *The Journey* (one photo per section, different atmosphere and reveal)
-4. **Roadmap**: five animated stages, the line fills as you scroll
-5. **Currently exploring**: Linux & Kali, Networking, Nmap, Wireshark, Burp Suite, Python for Security
-6. **Future goals**: six goals, all marked *Not Yet Earned*
-7. **Contact**: email (with copy button), LinkedIn, GitHub
-
-## The intro
-
-A boot sequence with matrix rain, CRT power-on, flicker, glitch, red/green warning panels, digital noise and a short screen shake on **ACCESS GRANTED**.
-
-- **SKIP INTRO →** button, or press `Esc`
-- Plays on a first visit and again after 30 minutes
-- Add `?intro=1` to the URL to force it, or use **Replay intro** in the footer
-- Skipped automatically for `prefers-reduced-motion`, deep links (`#about`) and when the **Motion** switch is off
+No framework, backend, analytics, package installation, or production build step is required. Local ES modules use relative paths that work under the repository's GitHub Pages prefix.
 
 ## Editing content
 
-- **Text:** edit `index.html`. Every section has a comment above it.
-- **Goal / tool statuses:** search for `class="goal-card"` and `class="tool-card"`.
-  Keep goals as goals until they are really earned. When one is earned, change its status and remove the `NOT YET EARNED` line.
-- **Roadmap stage state:** `data-state="base | now | future"` on each `.stage`.
-- **Photos:** replace the files in `assets/` using the same names, or change the `src` in `index.html`.
-- **Colors / spacing:** the `TOKENS` block at the top of `style.css`.
+Edit the bio, learning phases, tools, and roadmap in `index.html`. Heading animations have an intact screen-reader copy and a visual copy: update both when editing a heading.
 
-## Run locally
+The **CERTIFICATION ROADMAP** comment marks the four future credentials. Each currently says **Future goal · Not yet earned**. Only after earning a credential should its status change; include a verifiable credential link at that time. The tools and current learning topics describe beginner exploration, not mastery. The gallery contains two personal photos and a terminal-style profile card with LinkedIn, GitHub and email links, not completed security projects.
 
-Just open `index.html`, or serve the folder:
+To update the email, change `CONTENT.email` in `js/config.js` and every address and `mailto:` reference in `index.html`. To replace a photograph, keep its filename, then update its description/dimensions in `index.html` and `PHOTOS` in `js/config.js`.
 
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+## Motion and resilience
+
+- GSAP **3.15.0** and matching ScrollTrigger load from jsDelivr; Lenis **1.3.26** loads from unpkg. Exact URLs are in `js/config.js`. Do not use unversioned `latest` dependencies.
+- Native menu, gallery, contact, and preference handlers start before CDN requests. The optional dependency group has a 2.5-second deadline. Blocked dependencies retain native scrolling and readable content.
+- The intro is sound-free, cancellable, and bounded to three seconds. Returning visits preserve `saad-visited-v1` and bypass it. Deep links and reduced motion also bypass it.
+- System reduced motion overrides the saved motion preference (`saad-motion`). Switching motion off completes typing, removes pinning, restores the normal cursor, and stops decorative rendering.
+- Lenis runs only on eligible fine-pointer screens. Touch scrolling remains native. The journey is pinned only on desktop when the entire stage fits below the header.
+- Motion changes preserve the visible section, invalidate old scroll measurements, and avoid reinserting a pin above an already-passed learning sequence. Browser scroll anchoring is disabled; image dimensions are reserved.
+- Canvas and cursor share one clock; the scene stops offscreen or in a hidden document. Canvas resolution is capped at 1.5 device pixel ratio. Mobile uses inline SVG.
+- The complete content remains readable without JavaScript. A no-script navigation fallback provides direct section links. Ordinary email is not described as encrypted or as a messaging service.
+
+## Fonts and attribution
+
+Self-hosted Latin subsets of **Space Grotesk** and **JetBrains Mono** are approximately 57 KB combined. They were subset from the official Google Fonts repository using FontTools. Variable weights and original font names are preserved. Font loading uses `font-display: swap`; system fonts remain usable if font loading fails.
+
+The SIL Open Font License and original attribution notices are retained in:
+
+- `assets/fonts/Space-Grotesk-OFL.txt`
+- `assets/fonts/JetBrains-Mono-OFL.txt`
+
+Sources: [Space Grotesk](https://github.com/google/fonts/tree/main/ofl/spacegrotesk), [JetBrains Mono](https://github.com/google/fonts/tree/main/ofl/jetbrainsmono). Animation libraries retain their own licenses: [GSAP](https://gsap.com/standard-license/) and [Lenis](https://github.com/darkroomengineering/lenis/blob/main/LICENSE).
+
+## Checks and development
+
+Run the interaction checks with Node 20 or newer:
+
+```sh
+node --experimental-vm-modules tests/interaction-check.cjs
 ```
 
-## Deploy (GitHub Pages)
+The tests exercise intro completion/cancellation, returning and deep-link visits, reduced motion, copying before typing finishes, clipboard rejection, gallery wrapping and focus return, dependency timeout, Lenis disposal, and the shared animation clock. VM Modules may print a Node experimental-feature notice.
 
-Push the folder contents to the repo root and keep Pages on the `main` branch (root).
+Additional release checks verify JavaScript syntax, unique IDs, local file/import/anchor references, portrait dimensions, four unearned credential statuses, accessible email text, color contrast, and asset budgets. Browser review should check the served site, motion toggling, navigation, the gallery, clipboard feedback, responsive layouts, and console output. Actual frame rate depends on the device; no hardware-independent 60 FPS guarantee is made.
 
-If the repository still has the old structure, remove it first so nothing stale is left behind:
+The optional `tests/responsive.html` viewer renders the actual site inside a selectable 320/390/768/1024/1440px viewport. It has no link from the public portfolio and is for development review only.
 
-```bash
-git checkout -b cinematic-redesign
-git rm -r css js tests            # old folders, if they exist
-# copy the new files in, then:
-git add -A
-git commit -m "Cinematic redesign: hacker intro, story sections, roadmap, honest goals"
-git push origin cinematic-redesign
-```
+For local development, serve the folder over HTTP using your preferred static development server. Opening the file directly is insufficient for testing ES modules.
 
-Open a pull request and merge. The live site updates in 1-2 minutes.
+## GitHub Pages deployment and rollback
 
-## Performance and accessibility notes
+Pages serves **main / root**. Commit all code and assets to `main`; the existing Pages workflow publishes them. The URL remains unchanged.
 
-- Canvas animations pause when off screen or when the tab is hidden.
-- Respects `prefers-reduced-motion`, plus a manual **Motion on/off** switch (remembered).
-- Works without JavaScript (content stays visible, the intro simply does not run).
-- Keyboard friendly: skip link, visible focus, `Esc` closes the intro, menu and photo viewer.
-- Mobile tested at 390px wide, no horizontal scrolling.
+The previous Matrix-style release remains in Git history at `308be82da850d5e2322f50844bdcc80bc844949d`. To roll back, revert the redesign commit and push the revert to `main`; the same Pages workflow redeploys it. Do not delete repository history or the existing photographs.

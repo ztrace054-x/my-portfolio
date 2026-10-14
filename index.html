@@ -2,437 +2,311 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07090c">
-<meta name="color-scheme" content="dark">
 <title>Saad — A cybersecurity journey</title>
-<meta name="description" content="Saad is an SSC student and cybersecurity beginner, learning ethical hacking through Byte Capsule and documenting his journey in public, one concept at a time.">
+<meta name="description" content="Saad is an SSC student and cybersecurity beginner, learning ethical hacking through Byte Capsule and documenting his journey in public.">
 <meta property="og:title" content="Saad — A cybersecurity journey">
-<meta property="og:description" content="Learning ethical hacking one concept at a time. An honest record of a beginner's cybersecurity journey.">
+<meta property="og:description" content="A curious mind. A new direction. An honest record of a beginner's cybersecurity journey.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ztrace054-x.github.io/my-portfolio/">
-<meta property="og:image" content="https://ztrace054-x.github.io/my-portfolio/assets/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="SAAD. Cybersecurity journey. Learning ethical hacking, one concept at a time.">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://ztrace054-x.github.io/my-portfolio/assets/saad-golden.jpg">
 <link rel="canonical" href="https://ztrace054-x.github.io/my-portfolio/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307090c'/%3E%3Cpath d='M43 18H25l-5 14h19l-5 14H16' fill='none' stroke='%2385e9ad' stroke-width='6'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./style.css?v=2.0">
-<script>
-/* Enable JS-only visual states early. Failsafe: never leave content hidden if script.js fails. */
-document.documentElement.classList.add('js');
-setTimeout(function () { document.documentElement.classList.add('is-live'); }, 14000);
-/* Preload the two local fonts on http(s) only (a file:// preview does not need it and would log a CORS warning). */
-if (/^https?:$/.test(location.protocol)) {
-  ['space-grotesk-latin', 'jetbrains-mono-latin'].forEach(function (name) {
-    var l = document.createElement('link');
-    l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = 'anonymous';
-    l.href = './assets/fonts/' + name + '.woff2';
-    document.head.appendChild(l);
-  });
-}
-</script>
-<script src="./script.js?v=2.0" defer></script>
+<link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./css/tokens.css">
+<link rel="stylesheet" href="./css/style.css?v=20261014.1">
+<link rel="stylesheet" href="./css/responsive.css?v=20261014.1">
+<script type="module" src="./js/main.js?v=20261014.1"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="progress" id="progress" aria-hidden="true"></div>
-
 <div id="page">
   <header class="site-header" id="site-header">
     <div class="header-inner container">
       <a class="wordmark" href="#home" aria-label="Saad, home">SAAD<span>.</span><small>ztrace_</small></a>
       <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#home" data-nav-link="home"><span>01</span> Home</a>
-        <a href="#about" data-nav-link="about"><span>02</span> About</a>
-        <a href="#story" data-nav-link="story"><span>03</span> Story</a>
-        <a href="#roadmap" data-nav-link="roadmap"><span>04</span> Roadmap</a>
-        <a href="#exploring" data-nav-link="exploring"><span>05</span> Exploring</a>
-        <a href="#goals" data-nav-link="goals"><span>06</span> Goals</a>
-        <a href="#contact" data-nav-link="contact"><span>07</span> Contact</a>
+        <a href="#home"><span>01</span> Home</a><a href="#about"><span>02</span> About</a><a href="#journey"><span>03</span> Journey</a><a href="#gallery"><span>04</span> Gallery</a><a href="#contact"><span>05</span> Contact</a>
       </nav>
       <div class="header-controls">
-        <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="true" aria-label="Turn animations off"><span class="motion-dot" aria-hidden="true"></span><span id="motion-label">Motion on</span></button>
-        <button class="menu-button" id="menu-button" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span><span></span></button>
+        <button class="motion-toggle" data-motion-toggle type="button" aria-pressed="true" aria-label="Turn animations off"><span class="motion-dot" aria-hidden="true"></span><span data-motion-label>Motion on</span></button><button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" aria-controls="mobile-menu" aria-expanded="false"><span></span><span></span></button>
       </div>
     </div>
   </header>
-
-  <div class="menu" id="menu" hidden>
-    <nav class="menu-nav container" aria-label="Mobile navigation">
-      <a href="#home"><span>01</span>Home</a>
-      <a href="#about"><span>02</span>About</a>
-      <a href="#story"><span>03</span>Story</a>
-      <a href="#roadmap"><span>04</span>Roadmap</a>
-      <a href="#exploring"><span>05</span>Exploring</a>
-      <a href="#goals"><span>06</span>Goals</a>
-      <a href="#contact"><span>07</span>Contact</a>
-    </nav>
-    <p class="menu-foot container">saad@secure-node:~$ <span class="cursor" aria-hidden="true"></span></p>
-  </div>
-
   <main id="main" tabindex="-1">
-
-    <!-- 01 / HOME -->
-    <section class="hero" id="home" data-nav="home" aria-labelledby="hero-title">
-      <canvas class="hero-rain" id="hero-rain" aria-hidden="true"></canvas>
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="container hero-grid">
+    <noscript>
+    <nav class="container no-script-nav" aria-label="Section links">
+      <a href="#home">Home</a><a href="#about">About</a><a href="#journey">Journey</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+    </nav>
+    </noscript>
+    <section class="hero container" id="home" aria-labelledby="hero-title">
+      <div class="hero-atmosphere" aria-hidden="true">
+        <i></i><i></i><i></i>
+      </div>
+      <div class="hero-main">
         <div class="hero-copy">
-          <p class="eyebrow" data-in style="--i:0"><span class="status-dot" aria-hidden="true"></span>01 / LEARNING IN PUBLIC</p>
-          <h1 class="hero-name glitch" id="hero-title" data-text="SAAD.">
-            <span class="sr-only">Saad — Cybersecurity journey</span>
-            <span class="hero-letters" aria-hidden="true"><span style="--i:0">S</span><span style="--i:1">A</span><span style="--i:2">A</span><span style="--i:3">D</span><span class="dot" style="--i:4">.</span></span>
-          </h1>
-          <p class="hero-statement" aria-hidden="true" data-in style="--i:5"><span>CYBERSECURITY</span><span class="outline">JOURNEY</span></p>
-          <p class="hero-quote" data-in style="--i:6">
-            <span>Learning Ethical Hacking.</span>
-            <span>Building Security Knowledge.</span>
-            <span class="accent">One Concept At A Time.</span>
-          </p>
-
-          <div class="term-card" data-in style="--i:7">
-            <div class="term-card-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>user@secure-node:~</span></div>
-            <div class="term-card-body">
-              <p><span class="prompt">user@secure-node:~$</span> <span class="t-type" style="--n:6;--d:.7s">whoami</span></p>
-              <p class="out"><span class="t-type" style="--n:4;--d:1.15s">saad</span></p>
-              <p><span class="key">&gt; role:</span> <span class="t-type" style="--n:22;--d:1.5s">cybersecurity beginner</span></p>
-              <p><span class="key">&gt; mission:</span> <span class="t-type" style="--n:23;--d:2.6s">learn, explore, improve</span></p>
-              <p><span class="prompt">user@secure-node:~$</span> <span class="cursor" aria-hidden="true"></span></p>
-            </div>
+          <p class="eyebrow hero-eyebrow"><span class="status-dot" aria-hidden="true"></span>01 / LEARNING IN PUBLIC</p>
+          <h1 class="hero-name" id="hero-title"><span class="sr-only">Saad — Cybersecurity journey</span><span class="name-visual" aria-hidden="true"><span class="word-mask"><span class="name-letter">S</span></span><span class="word-mask"><span class="name-letter">A</span></span><span class="word-mask"><span class="name-letter">A</span></span><span class="word-mask"><span class="name-letter">D</span></span><span class="name-period">.</span></span></h1>
+          <p class="hero-statement" aria-hidden="true"><span class="line-mask"><span>CYBERSECURITY</span></span><span class="line-mask"><span class="text-outline">JOURNEY</span></span></p>
+          <p class="hero-description">SSC student. Cybersecurity beginner.<br>Learning ethical hacking one concept at a time.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#journey" data-magnetic><span>Explore my journey <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a><a class="text-link" href="#about">Meet Saad <span aria-hidden="true">↗</span></a>
           </div>
-
-          <div class="hero-actions" data-in style="--i:8">
-            <a class="button button-primary" href="#roadmap"><span>Explore my journey <b aria-hidden="true">↓</b></span></a>
-            <a class="text-link" href="#about">Meet Saad <span aria-hidden="true">↗</span></a>
-          </div>
+          <p class="course-credit">Currently learning through <strong>Byte Capsule</strong></p>
         </div>
-
-        <div class="hero-visual" data-in style="--i:4">
-          <div class="globe" id="globe-wrap">
-            <canvas id="globe" role="img" aria-label="Animated cyber globe made of connected network nodes"></canvas>
-            <span class="globe-label gl-1" aria-hidden="true">IDENTITY <b>SAAD</b></span>
-            <span class="globe-label gl-2" aria-hidden="true">MODE <b>LEARNING</b></span>
-            <span class="globe-label gl-3" aria-hidden="true">NEXT <b>KEEP EXPLORING</b></span>
+        <div class="hero-visual" aria-label="An abstract connected core representing curiosity and learning" role="img">
+          <div class="visual-parallax" data-parallax="core">
+            <div class="core-orbit orbit-one" aria-hidden="true">
+            </div>
+            <div class="core-orbit orbit-two" aria-hidden="true">
+            </div>
+            <svg class="core-fallback" id="core-fallback" viewBox="0 0 520 520" aria-hidden="true"><defs><radialGradient id="coreGlow"><stop stop-color="#85e9ad" stop-opacity=".14"/><stop offset="1" stop-color="#85e9ad" stop-opacity="0"/></radialGradient></defs><circle cx="260" cy="260" r="225" fill="url(#coreGlow)"/><g fill="none" stroke="#85e9ad" stroke-width="1" opacity=".5"><ellipse cx="260" cy="260" rx="154" ry="182" transform="rotate(-24 260 260)"/><ellipse cx="260" cy="260" rx="74" ry="182" transform="rotate(-24 260 260)"/><ellipse cx="260" cy="260" rx="181" ry="57" transform="rotate(-24 260 260)"/><ellipse cx="260" cy="260" rx="181" ry="115" transform="rotate(-24 260 260)"/><path d="m165 112 211 53 61 174-140 96-189-117 57-206 132-36 140 161-140 96-189-117 268-53-79 192L165 112"/></g><g fill="#b7ffd0"><circle cx="165" cy="112" r="3"/><circle cx="376" cy="165" r="3"/><circle cx="437" cy="339" r="3"/><circle cx="297" cy="435" r="3"/><circle cx="108" cy="318" r="3"/><circle cx="297" cy="76" r="3"/><circle cx="260" cy="260" r="4"/></g></svg>
+            <canvas id="hero-canvas" aria-hidden="true" hidden></canvas><span class="core-center" aria-hidden="true">S<span>_</span></span>
           </div>
-          <div class="globe-hud" aria-hidden="true">
-            <span>LON <b id="hud-lon">000°</b></span><span>NODES <b id="hud-nodes">--</b></span><span>LINKS <b id="hud-links">--</b></span>
+          <div class="core-labels" aria-hidden="true">
+            <span class="core-label identity-label">IDENTITY <b>SAAD</b></span><span class="core-label mode-label"><i></i> MODE / LEARNING</span><span class="core-label next-label">NEXT / KEEP EXPLORING <b>↗</b></span>
           </div>
-          <p class="fig">FIG. 01 <span>CONNECTED CURIOSITY</span></p>
+          <div class="visual-index" aria-hidden="true">
+            <span>FIG. 01</span><span>CONNECTED CURIOSITY</span>
+          </div>
         </div>
       </div>
-
-      <div class="container hero-foot" data-in style="--i:9">
-        <ul class="hero-facts"><li>SSC student</li><li>Ethical Hacking for Beginners</li><li>Learning in public</li></ul>
-        <p class="hero-credit">Currently learning through <strong>Byte Capsule</strong></p>
+      <div class="hero-bottom">
+        <div class="hero-facts">
+          <span>SSC student</span><span>Ethical Hacking for Beginners</span><span>Learning in public</span>
+        </div>
         <a class="scroll-cue" href="#about">Scroll to discover <span aria-hidden="true">↓</span></a>
       </div>
     </section>
-
-    <!-- 02 / ABOUT -->
-    <section class="section about" id="about" data-nav="about" aria-labelledby="about-title">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">02 / ABOUT ME</p>
-          <h2 class="title" id="about-title" data-reveal="title"><span class="line"><span>A curious mind.</span></span> <span class="line dim"><span>A new direction.</span></span></h2>
-          <p class="section-code">IDENTITY / 002</p>
-        </header>
-
-        <div class="about-grid">
-          <aside class="id-card" data-reveal="left" aria-label="Profile card">
-            <div class="id-top"><span>SECURITY_PROFILE::SAAD</span><span class="id-status"><i aria-hidden="true"></i>LEARNING</span></div>
-            <div class="id-main">
-              <div class="id-avatar" aria-hidden="true">S<span>_</span></div>
-              <div>
-                <p class="id-name">SAAD</p>
-                <p class="id-role">SSC student · cybersecurity beginner</p>
-              </div>
+    <section class="about section container" id="about" aria-labelledby="about-title">
+      <div class="section-heading">
+        <p class="eyebrow">02 / ABOUT ME</p><h2 class="section-title" id="about-title" data-reveal="heading"><span class="sr-only">A curious mind. A new direction.</span><span class="heading-visual" aria-hidden="true"><span class="line-mask"><span>A curious mind.</span></span><span class="line-mask"><span class="secondary-heading">A new direction.</span></span></span></h2><span class="section-code" aria-hidden="true">IDENTITY / 002</span>
+      </div>
+      <div class="about-grid">
+        <figure class="about-portrait" data-reveal="photo">
+          <div class="portrait-frame">
+            <div class="photo-parallax" data-parallax="portrait">
+              <img src="./assets/saad-golden.jpg" alt="Saad sitting outdoors in warm evening light, wearing a dark jacket" width="864" height="1080" loading="lazy" decoding="async">
             </div>
-            <dl class="id-list">
-              <div><dt>level</dt><dd>Beginner</dd></div>
-              <div><dt>course</dt><dd>Ethical Hacking for Beginners</dd></div>
-              <div><dt>platform</dt><dd>Byte Capsule</dd></div>
-              <div><dt>guided by</dt><dd>Saki <span lang="bn">ভাই</span></dd></div>
-              <div><dt>frontend</dt><dd>HTML · CSS · JavaScript</dd></div>
-              <div><dt>approach</dt><dd>Learn responsibly. Practice with permission.</dd></div>
-            </dl>
-            <p class="id-note"><span aria-hidden="true">//</span> No fake badges. Only honest progress.</p>
-          </aside>
-
-          <div class="about-copy" data-reveal="up">
-            <p class="kicker">WHO AM I?</p>
-            <h3 class="about-lead">I'm Saad.<br><span class="dim">And this is my beginning.</span></h3>
-            <p>I'm an SSC student taking my first steps into cybersecurity. My journey started with guidance from Saki <span lang="bn">ভাই</span>, and I'm now learning through <strong>Byte Capsule</strong>, where I'm building an understanding of networking, Linux, reconnaissance, and ethical security concepts.</p>
-            <p>I also have a frontend foundation in HTML, CSS, and JavaScript. This website documents what I'm learning and the direction I hope to grow in. I'm at the beginning, and I'm choosing to make that beginning visible, InshaAllah.</p>
-            <p class="about-sign">The journey is real. <span class="dim">The learning is ongoing.</span></p>
+          </div>
+          <figcaption>
+            <span>A face behind the curiosity.</span><span aria-hidden="true">01 — SAAD</span>
+          </figcaption>
+        </figure>
+        <div class="about-narrative">
+          <p class="small-label" data-reveal="block">WHO AM I?</p><p class="bio-lead" data-reveal="block">I'm Saad.<br>And this is my beginning.</p><p data-reveal="block">I'm an SSC student taking my first steps into cybersecurity. I'm currently enrolled in <strong>Ethical Hacking for Beginners</strong> through Byte Capsule, where I'm building an understanding of networking, Linux, reconnaissance, and ethical security concepts.</p><p data-reveal="block">This website documents what I'm learning and the direction I hope to grow in. I'm at the beginning, and I'm choosing to make that beginning visible, InshaAllah.</p><dl class="identity-details" data-reveal="block">
+          <div>
+            <dt>Current level</dt><dd><span class="status-dot" aria-hidden="true"></span>Beginner</dd>
+          </div>
+          <div>
+            <dt>Current course</dt><dd>Ethical Hacking for Beginners</dd>
+          </div>
+          <div>
+            <dt>Approach</dt><dd>Learn responsibly.<br>Practice with permission.</dd>
+          </div>
+          </dl>
+        </div>
+      </div>
+      <p class="about-statement" data-reveal="heading"><span class="line-mask"><span>The journey is real.</span></span><span class="line-mask"><span class="secondary-heading">The learning is ongoing.</span></span></p>
+    </section>
+    <section class="journey section" id="journey" aria-labelledby="journey-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">03 / THE LEARNING PATH</p><h2 class="section-title" id="journey-title" data-reveal="heading"><span class="sr-only">Foundations first. Possibilities ahead.</span><span class="heading-visual" aria-hidden="true"><span class="line-mask"><span>Foundations first.</span></span><span class="line-mask"><span class="secondary-heading">Possibilities ahead.</span></span></span></h2><span class="section-code" aria-hidden="true">PROGRESSION / 003</span>
+        </div>
+        <p class="section-intro" data-reveal="block">What I'm exploring now, what I want to try next,<br class="desktop-break"> and the direction I'm working toward.</p><a class="journey-skip text-link" href="#journey-details">Skip to tools and future goals <span aria-hidden="true">↓</span></a>
+        <div class="journey-stage">
+          <div class="journey-stage-label">
+            <span>THE ROAD AHEAD</span><span>A learning roadmap, one step at a time.</span>
+          </div>
+          <div class="journey-track" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="phase-grid">
+            <article class="phase-card" data-phase="0">
+              <span class="phase-number" aria-hidden="true">01</span>
+              <div class="phase-body">
+                <p class="phase-status">CURRENTLY LEARNING</p><h3>Foundations.</h3><p>Understanding the essentials before moving further.</p><ul><li>Ethical hacking fundamentals</li><li>Networking basics</li><li>Linux fundamentals</li><li>Reconnaissance concepts</li></ul><span class="phase-note">In progress / Beginner level</span>
+              </div>
+            </article>
+            <article class="phase-card" data-phase="1">
+              <span class="phase-number" aria-hidden="true">02</span>
+              <div class="phase-body">
+                <p class="phase-status">NEXT GOALS — PLANNED</p><h3>Practice.</h3><p>Turning future understanding into responsible exploration.</p><ul><li>Authorized security labs</li><li>Beginner CTF challenges</li><li>Responsible bug hunting practice</li><li>Future certification goals</li></ul><span class="phase-note">Planned / Not yet completed</span>
+              </div>
+            </article>
+            <article class="phase-card" data-phase="2">
+              <span class="phase-number" aria-hidden="true">03</span>
+              <div class="phase-body">
+                <p class="phase-status">LONG-TERM AMBITION</p><h3>Direction.</h3><p>Grow toward a professional cybersecurity career through consistent learning and responsible practice.</p><p class="phase-aspiration">Stay curious.<br>Build with intention.<br>Keep learning.</p><span class="phase-note">Future ambition / InshaAllah</span>
+              </div>
+            </article>
           </div>
         </div>
+        <div class="journey-details" id="journey-details" tabindex="-1">
+          <article class="detail-panel tools-panel" data-reveal="block">
+            <p class="small-label">EXPLORATION / TOOLS</p><h3>Getting familiar.</h3><p class="panel-description">Tools I'm learning to use. Familiarity is a work in progress.</p><dl class="tool-list">
+            <div>
+              <dt>Kali Linux</dt><dd>Learning environment</dd>
+            </div>
+            <div>
+              <dt>Nmap</dt><dd>Discovery basics</dd>
+            </div>
+            <div>
+              <dt>Wireshark</dt><dd>Packet concepts</dd>
+            </div>
+            <div>
+              <dt>Burp Suite</dt><dd>Web request concepts</dd>
+            </div>
+            </dl><p class="panel-status"><span class="status-dot" aria-hidden="true"></span>Beginner exploration</p>
+          </article>
+          <!-- CERTIFICATION ROADMAP: only change a status after actually earning that credential. Add a verifiable credential link at that time. -->
+          <article class="detail-panel credentials-panel" data-reveal="block">
+            <p class="small-label">FUTURE / CREDENTIALS</p><h3>Goals, not achievements.</h3><p class="panel-description">I haven't earned these certifications yet. These are future ambitions, InshaAllah.</p><ul class="credential-list"><li><span>Junior Penetration Tester Certificate</span><small>Future goal · Not yet earned</small></li><li><span>Senior Penetration Tester Certificate</span><small>Future goal · Not yet earned</small></li><li><span>CEH (Certified Ethical Hacker)</span><small>Future goal · Not yet earned</small></li><li><span>OSCP</span><small>Future goal · Not yet earned</small></li></ul>
+          </article>
+        </div>
       </div>
     </section>
-
-    <!-- 02.1 / WHY CYBERSECURITY -->
-    <section class="section why" id="why" data-nav="about" aria-labelledby="why-title">
-      <div class="container why-wrap">
-        <p class="eyebrow">02.1 / WHY CYBERSECURITY?</p>
-        <h2 class="title" id="why-title" data-reveal="title"><span class="line"><span>Why</span></span> <span class="line dim"><span>cybersecurity?</span></span></h2>
-        <blockquote class="why-quote" data-reveal="up">
-          <p>I am fascinated by <mark>how technology works</mark>, <mark>how systems communicate</mark>, and <mark>how security protects</mark> digital environments.</p>
-        </blockquote>
-        <p class="why-goal" data-reveal="up">My goal is to continuously learn, practice, and grow in cybersecurity.</p>
-        <ul class="why-pillars">
-          <li data-reveal="up" style="--d:0ms"><span>01</span><b>// systems</b><small>how technology works</small></li>
-          <li data-reveal="up" style="--d:120ms"><span>02</span><b>// signals</b><small>how systems communicate</small></li>
-          <li data-reveal="up" style="--d:240ms"><span>03</span><b>// shields</b><small>how security protects</small></li>
-        </ul>
+    <section class="gallery section container" id="gallery" aria-labelledby="gallery-title">
+      <div class="section-heading">
+        <p class="eyebrow">04 / BEYOND THE SCREEN</p><h2 class="section-title" id="gallery-title" data-reveal="heading"><span class="sr-only">The person behind the journey.</span><span class="heading-visual" aria-hidden="true"><span class="line-mask"><span>The person behind</span></span><span class="line-mask"><span class="secondary-heading">the journey.</span></span></span></h2><span class="section-code" aria-hidden="true">PERSONAL FRAMES / 004</span>
       </div>
-    </section>
-
-    <!-- 03.1 / THE BEGINNING -->
-    <section class="section story story-beginning" id="story" data-nav="story" aria-labelledby="beginning-title">
-      <div class="container story-grid">
-        <figure class="photo-card photo-beginning" data-reveal="scan">
-          <button class="photo-open" type="button" data-photo="./assets/saad-dark.jpg" data-alt="Black and white portrait of Saad wearing sunglasses and a dark shirt" data-caption="THE BEGINNING — curiosity first." aria-label="View larger photo: The Beginning">
-            <span class="photo-frame">
-              <img src="./assets/saad-dark.jpg" width="810" height="1080" loading="lazy" decoding="async" alt="Black and white portrait of Saad wearing sunglasses and a dark shirt">
-              <span class="photo-tint" aria-hidden="true"></span>
-              <span class="photo-scan" aria-hidden="true"></span>
-              <i class="corner tl" aria-hidden="true"></i><i class="corner tr" aria-hidden="true"></i><i class="corner bl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
-              <span class="photo-tag" aria-hidden="true">FRAME 01 // ORIGIN</span>
-              <span class="photo-view" aria-hidden="true">View photo ↗</span>
-            </span>
+      <p class="section-intro" data-reveal="block">A few personal frames. Another way to meet the person<br class="desktop-break"> behind the learning.</p>
+      <div class="gallery-grid">
+        <article class="gallery-card gallery-first">
+          <button class="gallery-trigger" type="button" data-gallery-item="0" data-cursor="view" aria-label="View photo: A different perspective">
+          <div class="gallery-tilt" data-tilt>
+            <div class="gallery-reveal" data-reveal="photo">
+              <div class="gallery-image-parallax" data-parallax="gallery">
+                <img src="./assets/saad-dark.jpg" alt="Black and white portrait of Saad wearing sunglasses and a dark shirt" width="810" height="1080" loading="lazy" decoding="async">
+              </div>
+              <span class="photo-number" aria-hidden="true">01</span><span class="view-photo">View photo <span aria-hidden="true">↗</span></span>
+            </div>
+          </div>
           </button>
-          <figcaption>A portrait from outside the screen.</figcaption>
-        </figure>
-
-        <div class="story-copy">
-          <p class="eyebrow">03.1 / STORY · FRAME 01</p>
-          <h2 class="title" id="beginning-title" data-reveal="title"><span class="line"><span>The</span></span> <span class="line accent"><span>Beginning.</span></span></h2>
-          <p class="story-quote" data-reveal="up">Every journey starts with <em>curiosity.</em></p>
-          <p class="story-text" data-reveal="up">My interest in technology pushed me towards understanding how systems work.</p>
-          <ul class="log" data-reveal="up" aria-label="Origin log">
-            <li><span>origin</span><i></i><b>curiosity</b></li>
-            <li><span>guided by</span><i></i><b>Saki <span lang="bn">ভাই</span></b></li>
-            <li><span>learning at</span><i></i><b>Byte Capsule</b></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 03.2 / THE JOURNEY -->
-    <section class="section story story-journey" id="story-journey" data-nav="story" aria-labelledby="journey-title">
-      <div class="container story-grid reverse">
-        <figure class="photo-card photo-journey" data-reveal="open">
-          <button class="photo-open" type="button" data-photo="./assets/saad-formal.jpg" data-alt="Black and white portrait of Saad in a suit and tie" data-caption="THE JOURNEY — one step at a time." aria-label="View larger photo: The Journey">
-            <span class="photo-frame">
-              <img src="./assets/saad-formal.jpg" width="810" height="1080" loading="lazy" decoding="async" alt="Black and white portrait of Saad in a suit and tie">
-              <span class="photo-sweep" aria-hidden="true"></span>
-              <span class="photo-curtain" aria-hidden="true"></span>
-              <i class="corner tl" aria-hidden="true"></i><i class="corner tr" aria-hidden="true"></i><i class="corner bl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
-              <span class="photo-tag" aria-hidden="true">FRAME 02 // PATH</span>
-              <span class="photo-view" aria-hidden="true">View photo ↗</span>
-            </span>
+          <div class="gallery-caption" data-reveal="block">
+            <div class="gallery-category">
+              <span>PERSONAL PORTRAIT</span><span>PHOTO</span>
+            </div>
+            <h3>A different perspective</h3><p>A portrait from outside the screen.</p>
+          </div>
+        </article>
+        <article class="gallery-card gallery-second">
+          <button class="gallery-trigger" type="button" data-gallery-item="1" data-cursor="view" aria-label="View photo: Another side of Saad">
+          <div class="gallery-tilt" data-tilt>
+            <div class="gallery-reveal" data-reveal="photo">
+              <div class="gallery-image-parallax" data-parallax="gallery">
+                <img src="./assets/saad-formal.jpg" alt="Black and white portrait of Saad in a suit and tie" width="810" height="1080" loading="lazy" decoding="async">
+              </div>
+              <span class="photo-number" aria-hidden="true">02</span><span class="view-photo">View photo <span aria-hidden="true">↗</span></span>
+            </div>
+          </div>
           </button>
-          <figcaption>A more formal frame in the same personal story.</figcaption>
-        </figure>
-
-        <div class="story-copy">
-          <p class="eyebrow">03.2 / STORY · FRAME 02</p>
-          <h2 class="title" id="journey-title" data-reveal="title"><span class="line"><span>The</span></span> <span class="line accent"><span>Journey.</span></span></h2>
-          <p class="story-quote" data-reveal="up">My cybersecurity path is about continuous <em>learning</em>, <em>practice</em>, and <em>exploration</em>.</p>
-          <ol class="path" data-reveal="up" aria-label="The path">
-            <li><span>01</span>Learning<small>concepts before tools</small></li>
-            <li><span>02</span>Practice<small>only with permission</small></li>
-            <li><span>03</span>Exploration<small>one concept at a time</small></li>
-          </ol>
-        </div>
+          <div class="gallery-caption" data-reveal="block">
+            <div class="gallery-category">
+              <span>PERSONAL PORTRAIT</span><span>PHOTO</span>
+            </div>
+            <h3>Another side of Saad</h3><p>A more formal frame in the same personal story.</p>
+          </div>
+        </article>
+        <article class="gallery-card gallery-profile" data-reveal="block">
+          <div class="profile-card">
+            <div class="profile-bar">
+              <span class="profile-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>saad@secure-node:~</span>
+            </div>
+            <div class="profile-body">
+              <p class="profile-cmd"><span aria-hidden="true">$</span> whoami</p>
+              <p class="profile-out">saad: cybersecurity beginner</p>
+              <p class="profile-cmd"><span aria-hidden="true">$</span> cat status.txt</p>
+              <dl class="profile-status">
+                <div><dt>level</dt><dd>beginner</dd></div>
+                <div><dt>course</dt><dd>Ethical Hacking for Beginners</dd></div>
+                <div><dt>focus</dt><dd>Linux, networking, recon basics</dd></div>
+                <div><dt>mode</dt><dd>learning in public</dd></div>
+              </dl>
+              <p class="profile-cmd"><span aria-hidden="true">$</span> ls ./connect</p>
+              <ul class="profile-links">
+                <li><a href="https://www.linkedin.com/in/saad-undefined-04a996431" target="_blank" rel="noopener noreferrer">linkedin <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+                <li><a href="https://github.com/ztrace054-x" target="_blank" rel="noopener noreferrer">github <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+                <li><a href="mailto:ztrace054@gmail.com">email <span aria-hidden="true">↗</span></a></li>
+              </ul>
+              <p class="profile-cmd"><span aria-hidden="true">$</span> <span class="terminal-cursor" aria-hidden="true"></span></p>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
-
-    <!-- 04 / ROADMAP -->
-    <section class="section roadmap" id="roadmap" data-nav="roadmap" aria-labelledby="roadmap-title">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">04 / THE ROAD AHEAD</p>
-          <h2 class="title" id="roadmap-title" data-reveal="title"><span class="line"><span>My learning</span></span> <span class="line dim"><span>roadmap.</span></span></h2>
-          <p class="section-code">PROGRESSION / 004</p>
-        </header>
-        <p class="lead" data-reveal="up">Where I started, where I am, and where I'm heading. Every stage builds on the one before it.</p>
-
-        <div class="roadmap-wrap" id="roadmap-wrap">
-          <div class="rail" aria-hidden="true"><i class="rail-fill"></i></div>
-          <ol class="stages">
-            <li class="stage" data-reveal="up" data-state="base">
-              <span class="stage-node" aria-hidden="true"></span>
-              <article class="stage-card">
-                <p class="stage-num">STAGE 01</p>
-                <h3>Web Development Foundation</h3>
-                <ul class="chips" aria-label="Topics"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
-                <p>Where it started: building for the web and understanding how a browser works.</p>
-                <p class="stage-status"><i aria-hidden="true"></i>Foundation in place</p>
-              </article>
-            </li>
-            <li class="stage" data-reveal="up" data-state="now">
-              <span class="stage-node" aria-hidden="true"></span>
-              <article class="stage-card">
-                <p class="stage-num">STAGE 02</p>
-                <h3>Computer &amp; Network Fundamentals</h3>
-                <p>How computers connect and communicate, the layer underneath every security concept.</p>
-                <p class="stage-status"><i aria-hidden="true"></i>Learning now</p>
-              </article>
-            </li>
-            <li class="stage" data-reveal="up" data-state="now">
-              <span class="stage-node" aria-hidden="true"></span>
-              <article class="stage-card">
-                <p class="stage-num">STAGE 03</p>
-                <h3>Linux Environment</h3>
-                <p>Getting comfortable with the command line and a safe Kali Linux learning setup.</p>
-                <p class="stage-status"><i aria-hidden="true"></i>Learning now</p>
-              </article>
-            </li>
-            <li class="stage" data-reveal="up" data-state="now">
-              <span class="stage-node" aria-hidden="true"></span>
-              <article class="stage-card">
-                <p class="stage-num">STAGE 04</p>
-                <h3>Ethical Hacking Fundamentals</h3>
-                <p>Reconnaissance, core security concepts, and the ethics that come with them, through Byte Capsule.</p>
-                <p class="stage-status"><i aria-hidden="true"></i>Learning now · beginner level</p>
-              </article>
-            </li>
-            <li class="stage" data-reveal="up" data-state="future">
-              <span class="stage-node" aria-hidden="true"></span>
-              <article class="stage-card">
-                <p class="stage-num">STAGE 05</p>
-                <h3>Advanced Security Research</h3>
-                <p>Deeper practice and independent research, once the foundations are strong.</p>
-                <p class="stage-status"><i aria-hidden="true"></i>Future stage · not started</p>
-              </article>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 / CURRENTLY EXPLORING -->
-    <section class="section exploring" id="exploring" data-nav="exploring" aria-labelledby="exploring-title">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">05 / CURRENTLY EXPLORING</p>
-          <h2 class="title" id="exploring-title" data-reveal="title"><span class="line"><span>Getting familiar.</span></span> <span class="line dim"><span>Not mastered yet.</span></span></h2>
-          <p class="section-code">EXPLORATION / 005</p>
-        </header>
-        <p class="lead" data-reveal="up">Tools and topics I'm learning to use. Familiarity is a work in progress, and this is an honest list of where I am.</p>
-
-        <ul class="tool-grid">
-          <li class="tool-card" data-reveal="up" style="--d:0ms"><span class="idx">01</span><h3>Linux &amp; Kali Linux</h3><p class="status"><i aria-hidden="true"></i>Learning Environment</p></li>
-          <li class="tool-card" data-reveal="up" style="--d:90ms"><span class="idx">02</span><h3>Networking Fundamentals</h3><p class="status"><i aria-hidden="true"></i>Building Foundation</p></li>
-          <li class="tool-card" data-reveal="up" style="--d:180ms"><span class="idx">03</span><h3>Nmap</h3><p class="status"><i aria-hidden="true"></i>Reconnaissance Basics</p></li>
-          <li class="tool-card" data-reveal="up" style="--d:0ms"><span class="idx">04</span><h3>Wireshark</h3><p class="status"><i aria-hidden="true"></i>Packet Analysis Concepts</p></li>
-          <li class="tool-card" data-reveal="up" style="--d:90ms"><span class="idx">05</span><h3>Burp Suite</h3><p class="status"><i aria-hidden="true"></i>Web Security Exploration</p></li>
-          <li class="tool-card" data-reveal="up" style="--d:180ms"><span class="idx">06</span><h3>Python for Security</h3><p class="status"><i aria-hidden="true"></i>Future Development Skill</p></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 06 / FUTURE SECURITY GOALS -->
-    <section class="section goals" id="goals" data-nav="goals" aria-labelledby="goals-title">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">06 / FUTURE SECURITY GOALS</p>
-          <h2 class="title" id="goals-title" data-reveal="title"><span class="line"><span>Goals,</span></span> <span class="line dim"><span>not achievements.</span></span></h2>
-          <p class="section-code">DIRECTION / 006</p>
-        </header>
-
-        <div class="goals-banner" data-reveal="up" role="note">
-          <svg class="lock-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-          <p><strong>Future Goals — Not Yet Earned.</strong> I haven't achieved any of these yet. They are the direction I'm working toward, InshaAllah.</p>
-        </div>
-
-        <!-- Keep these as goals until they are truly earned. Never mark one as achieved before it is. -->
-        <ul class="goal-grid">
-          <li class="goal-card" data-reveal="up" style="--d:0ms"><span class="goal-no">GOAL 01</span><h3>Junior Penetration Tester</h3><p class="status"><i aria-hidden="true"></i>Future Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-          <li class="goal-card" data-reveal="up" style="--d:90ms"><span class="goal-no">GOAL 02</span><h3>Security+ Certification</h3><p class="status"><i aria-hidden="true"></i>Future Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-          <li class="goal-card" data-reveal="up" style="--d:180ms"><span class="goal-no">GOAL 03</span><h3>Certified Ethical Hacker (CEH)</h3><p class="status"><i aria-hidden="true"></i>Future Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-          <li class="goal-card" data-reveal="up" style="--d:0ms"><span class="goal-no">GOAL 04</span><h3>OSCP</h3><p class="status"><i aria-hidden="true"></i>Long-Term Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-          <li class="goal-card" data-reveal="up" style="--d:90ms"><span class="goal-no">GOAL 05</span><h3>Security Researcher</h3><p class="status"><i aria-hidden="true"></i>Career Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-          <li class="goal-card goal-final" data-reveal="up" style="--d:180ms"><span class="goal-no">GOAL 06</span><h3>Cybersecurity Professional</h3><p class="status"><i aria-hidden="true"></i>Ultimate Goal</p><p class="not-yet">NOT YET EARNED</p></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 07 / CONTACT -->
-    <section class="section contact" id="contact" data-nav="contact" aria-labelledby="contact-title">
+    <section class="contact section" id="contact" aria-labelledby="contact-title">
       <div class="container contact-grid">
         <div class="contact-copy">
-          <p class="eyebrow">07 / OPEN A CONNECTION</p>
-          <h2 class="title" id="contact-title" data-reveal="title"><span class="line"><span>Let's exchange</span></span> <span class="line dim"><span>ideas.</span></span></h2>
-          <p class="lead" data-reveal="up">Want to talk about cybersecurity, technology, or learning? A simple hello is a good place to start.</p>
+          <p class="eyebrow">05 / OPEN A CONNECTION</p><h2 class="section-title" id="contact-title" data-reveal="heading"><span class="sr-only">Let's exchange ideas.</span><span class="heading-visual" aria-hidden="true"><span class="line-mask"><span>Let's exchange</span></span><span class="line-mask"><span class="secondary-heading">ideas.</span></span></span></h2><p class="section-intro" data-reveal="block">Want to talk about cybersecurity, technology, or learning? A simple hello is a good place to start.</p>
         </div>
-        <div class="contact-panel" data-reveal="up">
-          <p class="panel-label"><span aria-hidden="true">&gt;</span> contact --email <span class="panel-no">01</span></p>
+        <div class="contact-panel" id="contact-panel" data-reveal="block">
+          <div class="terminal-command">
+            <span aria-hidden="true">&gt;</span> contact --email<span class="command-index" aria-hidden="true">01</span>
+          </div>
           <div class="email-row">
-            <a class="email-text" href="mailto:ztrace054@gmail.com" id="email-text">ztrace054@gmail.com</a>
-            <button class="copy-button" id="copy-email" type="button" aria-label="Copy email address"><span id="copy-label">Copy</span></button>
+            <a class="email-address" id="email-link" href="mailto:ztrace054@gmail.com"><span class="sr-only">ztrace054@gmail.com</span><span class="email-display" aria-hidden="true"><span id="email-text">ztrace054@gmail.com</span><span class="terminal-cursor"></span></span></a><button class="copy-button" id="copy-email" type="button" aria-label="Copy email address"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></svg><span>Copy</span></button>
           </div>
-          <p class="sr-only" id="copy-status" role="status" aria-live="polite"></p>
+          <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
           <div class="contact-actions">
-            <a class="button button-outline" href="mailto:ztrace054@gmail.com"><span>Send email <b aria-hidden="true">↗</b></span></a>
-            <a class="text-link" href="https://www.linkedin.com/in/saad-undefined-04a996431" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-            <a class="text-link" href="https://github.com/ztrace054-x" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+            <a class="button button-outline" href="mailto:ztrace054@gmail.com" data-magnetic><span>Send email <span aria-hidden="true">↗</span></span></a><a class="text-link" href="https://www.linkedin.com/in/saad-undefined-04a996431" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a class="text-link" href="https://github.com/ztrace054-x" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
           </div>
-          <p class="panel-foot">A conversation starts with curiosity.</p>
+          <span class="contact-caption">A conversation starts with curiosity.</span>
         </div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer container">
-    <span class="footer-credit"><span aria-hidden="true">&gt;</span> Training at Byte Capsule</span>
-    <span>© <span id="year">2026</span> Saad / Learning in public</span>
-    <span class="footer-right"><button class="replay" id="replay-intro" type="button">↻ Replay intro</button><span class="online"><i aria-hidden="true"></i>Portfolio online</span></span>
+    <span class="footer-credit"><span aria-hidden="true">&gt;</span> Training at Byte Capsule</span><span>© <span id="year">2026</span> Saad / Learning in public</span><span class="online-status"><span class="status-dot" aria-hidden="true"></span>Portfolio online</span>
   </footer>
 </div>
-
-<!-- Cinematic boot intro. Hidden by default; shown by script.js only after Skip and the hard deadline exist. -->
-<div class="intro" id="intro" hidden aria-label="Portfolio introduction">
-  <canvas class="intro-rain" id="intro-rain" aria-hidden="true"></canvas>
-  <div class="intro-noise" aria-hidden="true"></div>
-  <div class="intro-vignette" aria-hidden="true"></div>
-  <div class="intro-flash" aria-hidden="true"></div>
-  <div class="intro-bars" aria-hidden="true"><i></i><i></i><i></i></div>
-
-  <div class="warn warn-red w1" aria-hidden="true"><b>⚠</b><span><strong>ALERT</strong>unknown visitor detected<small>trace: pending...</small></span></div>
-  <div class="warn warn-green w2" aria-hidden="true"><b>●</b><span><strong>FIREWALL</strong>online<small>status: active</small></span></div>
-  <div class="warn warn-red w3" aria-hidden="true"><b>⚠</b><span><strong>SCAN</strong>profile analysis running<small>integrity: checking...</small></span></div>
-  <div class="warn warn-green w4" aria-hidden="true"><b>●</b><span><strong>VERIFIED</strong>identity confirmed<small>access: visitor</small></span></div>
-
-  <div class="intro-stage">
-    <div class="intro-term" id="intro-term">
-      <div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>saad@secure-node:~</span><span class="sys" aria-hidden="true">SYS. 001</span></div>
-      <p class="sr-only">Initializing Saad security profile. Access granted.</p>
-      <div class="boot" aria-hidden="true">
-        <p class="boot-head glitch" id="boot-head" data-text="INITIALIZING SAAD.SECURITY_PROFILE..."></p>
-        <p class="boot-line" data-label="Loading identity"><span class="lbl"></span><i class="lead"></i><b class="ok">[OK]</b></p>
-        <p class="boot-line" data-label="Loading cybersecurity path"><span class="lbl"></span><i class="lead"></i><b class="ok">[OK]</b></p>
-        <p class="boot-line" data-label="Connecting secure channel"><span class="lbl"></span><i class="lead"></i><b class="ok">[OK]</b></p>
-        <p class="boot-line" data-label="Scanning profile"><span class="lbl"></span><i class="lead"></i><b class="ok">[OK]</b></p>
-      </div>
-      <div class="boot-meta" aria-hidden="true"><span id="boot-status">booting</span><span id="boot-pct">0%</span></div>
-      <div class="boot-bar" aria-hidden="true"><span id="boot-fill"></span></div>
-      <p class="access glitch" id="access" data-text="ACCESS GRANTED" aria-hidden="true">ACCESS GRANTED</p>
+<!-- Displayed only after a working Skip handler and hard deadline have been registered. -->
+<div class="intro" id="intro" hidden aria-label="Brief portfolio introduction">
+  <canvas class="intro-rain" aria-hidden="true"></canvas>
+  <div class="intro-panel">
+    <div class="intro-top">
+      <span class="intro-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>saad@secure-node:~</span><span aria-hidden="true">SYS. 001</span>
     </div>
+    <p class="sr-only">Initializing Saad security profile. Access granted.</p>
+    <div class="boot-lines" aria-hidden="true">
+      <p class="boot-head" data-boot-line="INITIALIZING SAAD.SECURITY_PROFILE..."></p>
+      <p data-boot-line="> Loading identity"></p><p data-boot-line="> Loading cybersecurity path"></p><p data-boot-line="> Establishing secure connection"></p>
+    </div>
+    <div class="intro-rule" aria-hidden="true">
+      <span></span>
+    </div>
+    <p class="intro-status" id="intro-status" aria-hidden="true">ACCESS GRANTED</p>
   </div>
-
-  <p class="intro-sim" aria-hidden="true">visual simulation · not a real system scan</p>
-  <button class="intro-skip" id="skip-intro" type="button">SKIP INTRO <span aria-hidden="true">→</span></button>
+  <button class="intro-skip" id="skip-intro" type="button">Skip Intro <span aria-hidden="true">→</span></button>
+  <div class="intro-bands" aria-hidden="true">
+  </div>
 </div>
-
-<dialog class="photo-dialog" id="photo-dialog" aria-label="Photo viewer">
-  <button class="dialog-close" id="photo-close" type="button">✕ Close</button>
-  <img id="photo-dialog-img" src="" alt="">
-  <p id="photo-dialog-cap"></p>
+<dialog class="mobile-menu" id="mobile-menu" aria-label="Navigation" data-lenis-prevent>
+  <div class="menu-top">
+    <span>SAAD.</span><button class="icon-button" id="menu-close" type="button" aria-label="Close navigation">×</button>
+  </div>
+  <nav aria-label="Mobile navigation">
+    <a href="#home"><span>01</span> Home <b aria-hidden="true">↗</b></a><a href="#about"><span>02</span> About <b aria-hidden="true">↗</b></a><a href="#journey"><span>03</span> Journey <b aria-hidden="true">↗</b></a><a href="#gallery"><span>04</span> Gallery <b aria-hidden="true">↗</b></a><a href="#contact"><span>05</span> Contact <b aria-hidden="true">↗</b></a>
+  </nav>
+  <p class="small-label">SSC STUDENT / CYBERSECURITY BEGINNER</p>
 </dialog>
-
-<noscript><style>.intro,.progress{display:none!important}</style></noscript>
+<dialog class="photo-viewer" id="photo-viewer" aria-labelledby="viewer-caption" data-lenis-prevent>
+  <div class="viewer-top">
+    <span id="viewer-index">01 / 02</span><button class="icon-button" id="viewer-close" type="button" aria-label="Close photo viewer">×</button>
+  </div>
+  <figure>
+    <img id="viewer-image" src="./assets/saad-dark.jpg" alt="Black and white portrait of Saad" width="810" height="1080">
+    <figcaption id="viewer-caption">
+      A different perspective
+    </figcaption>
+  </figure>
+  <div class="viewer-controls">
+    <button class="viewer-button" id="viewer-prev" type="button" aria-label="Previous photo">← <span>Previous</span></button><span>PERSONAL FRAMES</span><button class="viewer-button" id="viewer-next" type="button" aria-label="Next photo"><span>Next</span> →</button>
+  </div>
+</dialog>
+<div class="custom-cursor" id="custom-cursor" aria-hidden="true" hidden>
+  <span class="cursor-ring"><span>VIEW</span></span><span class="cursor-dot"></span>
+</div>
 </body>
 </html>
