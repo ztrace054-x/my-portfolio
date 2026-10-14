@@ -1,7 +1,7 @@
 /* Design tokens: edit colors, type, and spacing here. */
 @font-face {
   font-family:"Space Grotesk";
-  src:url("../assets/fonts/space-grotesk-latin.woff2") format("woff2");
+  src:url("./assets/fonts/space-grotesk-latin.woff2") format("woff2");
   font-style:normal;
   font-weight:300 700;
   font-display:swap
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family:"JetBrains Mono";
-  src:url("../assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  src:url("./assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
   font-style:normal;
   font-weight:100 800;
   font-display:swap
