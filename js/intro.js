@@ -87,11 +87,9 @@ export function initIntro({ motionAllowed }) {
     exitTimer = setTimeout(finish, fast ? TIMING.skipExit : TIMING.introExit);
   }
 
-  // Play again if the last visit was a while ago, or when the URL contains ?intro=1.
-  const forced = /[?&]intro=1/.test(String(location.search || ''));
-  const lastVisit = Number(storage.get(CONTENT.visitedKey)) || 0;
-  const recent = lastVisit > 0 && Date.now() - lastVisit < TIMING.introReplay;
-  const bypass = !motionAllowed || location.hash || window.scrollY > 10 || (recent && !forced);
+  // Always show the intro on the main link.
+  // Only skip when motion is off, page has a hash, or user already scrolled.
+  const bypass = !motionAllowed || location.hash || window.scrollY > 10;
 
   // Essential cancellation and the deadline exist before any overlay is shown.
   skip.addEventListener('click', () => exit(true), { signal: events.signal });
