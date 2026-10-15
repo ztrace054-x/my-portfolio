@@ -1,5 +1,5 @@
-import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js?v=20261014.1';
-import { initIntro } from './intro.js?v=20261014.1';
+import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js?v=20261015.1';
+import { initIntro } from './intro.js?v=20261015.1';
 import { initContact } from './contact.js';
 import { createOverlayManager, initNavigation } from './navigation.js';
 import { initGallery } from './gallery.js?v=20261014.1';
@@ -70,7 +70,7 @@ export async function loadDependencies() {
 }
 
 // Bind native functionality before contacting a CDN.
-document.documentElement.dataset.release = '20261013.4';
+document.documentElement.dataset.release = '20261015.1';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
