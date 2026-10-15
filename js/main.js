@@ -1,5 +1,5 @@
-import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js?v=20261015.1';
-import { initIntro } from './intro.js?v=20261015.1';
+import { CONTENT, DEPENDENCIES, TIMING, storage } from './config.js?v=20261015.3';
+import { initIntro } from './intro.js?v=20261015.3';
 import { initContact } from './contact.js';
 import { createOverlayManager, initNavigation } from './navigation.js';
 import { initGallery } from './gallery.js?v=20261014.1';
@@ -9,7 +9,6 @@ import { initAnimations } from './animations.js?v=20261013.4';
 import { installSmoothScroll } from './smooth-scroll.js';
 import { createViewportPreserver } from './viewport.js?v=20261013.4';
 
-/* One clock feeds scene/cursor. It switches to GSAP without a second RAF loop. */
 export function createClock() {
   const callbacks = new Set();
   let ticker = null, raf = 0, attached = false, last = 0;
@@ -69,8 +68,7 @@ export async function loadDependencies() {
   return result;
 }
 
-// Bind native functionality before contacting a CDN.
-document.documentElement.dataset.release = '20261015.1';
+document.documentElement.dataset.release = '20261015.3';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 768px) and (pointer: fine) and (hover: hover)');
 const smoothEligible = matchMedia('(min-width: 768px) and (pointer: fine)');
@@ -89,7 +87,6 @@ const navigation = initNavigation({ getScroll: () => smooth?.instance, getMotion
 initGallery({ overlays });
 const intro = initIntro({ motionAllowed });
 let scene;
-// An unsupported canvas must not affect the rest of the application.
 try { scene = initHeroScene({ clock, motionAllowed }); } catch { /* Inline SVG remains visible. */ }
 document.getElementById('year').textContent = String(new Date().getFullYear());
 
@@ -152,7 +149,6 @@ dependencyPromise.then(result => {
   enhance();
   document.fonts?.ready.then(() => animations?.refresh());
 });
-// A bfcache return refreshes geometry without initializing another set of owners.
 window.addEventListener('pageshow', event => { if (event.persisted) animations?.refresh(); });
 window.addEventListener('beforeprint', () => { intro.cancel(); destroyMotion(); scene?.setMotion(false); });
 window.addEventListener('afterprint', () => { scene?.setMotion(motionAllowed); enhance(); });
