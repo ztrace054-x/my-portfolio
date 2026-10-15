@@ -2,72 +2,69 @@
 :root{--red:#ff2a3d;--red-deep:#2a0509;--red-soft:rgba(255,42,61,.14)}
 
 /* ===== INTRO: red dark-web boot ===== */
-.intro{background:#050608;color:#edf2ef}
-.intro::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(255,42,61,.12),transparent 70%);pointer-events:none;z-index:0}
-.intro-rain{opacity:.55;filter:hue-rotate(-40deg) saturate(1.4)}
-.intro-panel{border-color:rgba(255,42,61,.35);box-shadow:0 0 0 1px rgba(255,42,61,.12),0 24px 80px rgba(0,0,0,.55)}
-.intro-eyebrow{color:var(--red)}
-.intro-title{color:#fff;text-shadow:0 0 18px rgba(255,42,61,.35)}
-.intro [data-boot-line]{color:rgba(237,242,239,.72)}
+.intro{background:#080204}
+.intro::before{background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 1px,transparent 1px 3px);opacity:.5;z-index:1}
+.intro-rain{opacity:.4;filter:hue-rotate(-50deg) saturate(1.6) brightness(.85)}
+.intro-panel{background:rgba(8,2,4,.92);border:1px solid rgba(255,42,61,.4);box-shadow:0 0 0 1px rgba(255,42,61,.1),0 0 60px rgba(255,42,61,.12),0 30px 90px rgba(0,0,0,.7);position:relative;z-index:2}
+.intro-eyebrow{color:var(--red);letter-spacing:.2em}
+.intro-title{color:#fff;text-shadow:0 0 24px rgba(255,42,61,.45)}
+.intro [data-boot-line]{color:rgba(237,242,239,.65)}
 .intro [data-boot-line].is-done{color:#edf2ef}
-.intro [data-boot-line].is-typing::after{background:var(--red);box-shadow:0 0 8px var(--red)}
-.intro-rule span{background:linear-gradient(90deg,transparent,var(--red),transparent)}
-.intro-status{color:var(--red);text-shadow:0 0 20px rgba(255,42,61,.5);letter-spacing:.18em}
-.intro-skip{border-color:rgba(255,42,61,.4);color:#edf2ef}
-.intro-skip:hover{background:var(--red-soft);border-color:var(--red)}
-.intro-bands{background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,42,61,.03) 2px,rgba(255,42,61,.03) 4px)}
+.intro [data-boot-line].is-typing::after{background:var(--red);box-shadow:0 0 10px var(--red)}
+.intro-rule span{background:linear-gradient(90deg,transparent,var(--red) 30%,var(--red) 70%,transparent)}
+.intro-status{color:var(--red);text-shadow:0 0 28px rgba(255,42,61,.6);letter-spacing:.22em;font-weight:600}
+.intro-skip{border:1px solid rgba(255,42,61,.45);color:#edf2ef;background:rgba(255,42,61,.06)}
+.intro-skip:hover{background:rgba(255,42,61,.18);border-color:var(--red)}
+.intro-bands{background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,42,61,.04) 2px,rgba(255,42,61,.04) 4px);opacity:.7}
 
-/* ===== HERO: terminal-style name + red accents ===== */
-.hero-name{position:relative}
-.hero-name .name-letter{text-shadow:0 0 40px rgba(255,42,61,.15)}
+/* Moon / atmospheric accent for intro */
+.intro-moon{position:absolute;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff6b7a,#ff2a3d 40%,#2a0509);box-shadow:0 0 40px rgba(255,42,61,.35),inset -8px -8px 20px rgba(0,0,0,.4);top:8%;right:10%;z-index:1;opacity:.85;animation:moon-float 8s ease-in-out infinite}
+@keyframes moon-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ===== HERO red accents ===== */
 .name-period{color:var(--red)!important}
-.hero-statement .text-outline{-webkit-text-stroke-color:rgba(255,42,61,.45)}
-.status-dot,.eyebrow .status-dot{background:var(--red);box-shadow:0 0 8px var(--red)}
-.hero-atmosphere i{background:linear-gradient(transparent,rgba(255,42,61,.35),transparent)}
-.core-orbit{border-color:rgba(255,42,61,.18)!important}
+.hero-statement .text-outline{-webkit-text-stroke-color:rgba(255,42,61,.4)}
+.status-dot{background:var(--red)!important;box-shadow:0 0 8px var(--red)}
+.hero-atmosphere i{background:linear-gradient(transparent,rgba(255,42,61,.3),transparent)!important}
+.core-orbit{border-color:rgba(255,42,61,.2)!important}
 .orbit-two{border-color:rgba(255,42,61,.1)!important}
 .core-center>span{color:var(--red)!important}
 .core-label b{color:var(--red)}
-.mode-label i{background:var(--red)}
-.button-primary{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 24px rgba(255,42,61,.2)}
-.button-primary:hover{background:#ff4d5c;box-shadow:0 0 36px rgba(255,42,61,.35)}
-.text-link::after{background:var(--red)}
-.text-link>span:not(.sr-only){color:var(--red)}
-.scroll-cue>span{color:var(--red)}
+.mode-label i{background:var(--red)!important}
+.button-primary{background:var(--red)!important;border-color:var(--red)!important;color:#fff!important;box-shadow:0 0 28px rgba(255,42,61,.25)}
+.button-primary:hover{background:#ff4d5c!important;box-shadow:0 0 40px rgba(255,42,61,.4)}
+.text-link::after{background:var(--red)!important}
+.text-link>span:not(.sr-only){color:var(--red)!important}
+.scroll-cue>span{color:var(--red)!important}
 
-/* ===== PROFILE CARD: red terminal ===== */
-.profile-card{border-color:rgba(255,42,61,.25);box-shadow:0 0 0 1px rgba(255,42,61,.08),0 16px 48px rgba(0,0,0,.4)}
-.profile-bar{background:var(--red-deep);border-bottom-color:rgba(255,42,61,.3)}
-.profile-dots i:nth-child(1){background:#ff5f57}
-.profile-dots i:nth-child(2){background:#febc2e}
-.profile-dots i:nth-child(3){background:#28c840}
-.profile-cmd span{color:var(--red)}
-.profile-out{color:#b7ffd0}
-.profile-status dd{color:var(--red)}
-.profile-links a:hover{color:var(--red)}
+/* ===== PROFILE CARD red terminal ===== */
+.profile-card{border-color:rgba(255,42,61,.28)!important;box-shadow:0 0 0 1px rgba(255,42,61,.1),0 20px 50px rgba(0,0,0,.45)}
+.profile-bar{background:var(--red-deep)!important;border-bottom:1px solid rgba(255,42,61,.35)}
+.profile-cmd span{color:var(--red)!important}
+.profile-status dd{color:var(--red)!important}
+.profile-links a:hover{color:var(--red)!important}
 
-/* ===== GALLERY + CONTACT red accents ===== */
-.gallery-reveal{box-shadow:0 0 0 1px rgba(255,42,61,.1)}
-.view-photo{border-color:rgba(255,42,61,.35)}
-.view-photo>span{color:var(--red)}
-.phase-card.is-active{border-color:var(--red)}
-.phase-card.is-active .phase-number{background:var(--red);border-color:var(--red);color:#fff}
-.phase-status{color:var(--red)}
-.panel-status{color:var(--red)}
-.contact-panel{border-color:rgba(255,42,61,.2);box-shadow:0 0 0 1px rgba(255,42,61,.08)}
-.terminal-command{color:var(--red)}
-.copy-button:hover{border-color:var(--red);color:var(--red)}
-.email-address:hover{color:var(--red)}
+/* ===== GALLERY / PHASE / CONTACT ===== */
+.gallery-reveal{box-shadow:0 0 0 1px rgba(255,42,61,.12)}
+.view-photo{border-color:rgba(255,42,61,.4)}
+.view-photo>span{color:var(--red)!important}
+.phase-card.is-active{border-color:var(--red)!important}
+.phase-card.is-active .phase-number{background:var(--red)!important;border-color:var(--red)!important;color:#fff!important}
+.phase-status{color:var(--red)!important}
+.panel-status{color:var(--red)!important}
+.contact-panel{border-color:rgba(255,42,61,.22)!important;box-shadow:0 0 0 1px rgba(255,42,61,.08)}
+.terminal-command{color:var(--red)!important}
+.copy-button:hover{border-color:var(--red)!important;color:var(--red)!important}
+.email-address:hover{color:var(--red)!important}
 
-/* ===== CURSOR ring red on interactive ===== */
-.custom-cursor.is-hover .cursor-ring{border-color:var(--red)}
-.custom-cursor.is-hover .cursor-dot{background:var(--red)}
+/* ===== CURSOR + HEADER + FOOTER ===== */
+.custom-cursor.is-hover .cursor-ring{border-color:var(--red)!important}
+.custom-cursor.is-hover .cursor-dot{background:var(--red)!important}
+.wordmark>span{color:var(--red)!important}
+.desktop-nav a:hover,.desktop-nav a[aria-current]{color:var(--red)!important}
+.site-footer .status-dot{background:var(--red)!important}
 
-/* ===== FOOTER + HEADER subtle red ===== */
-.wordmark>span{color:var(--red)}
-.desktop-nav a:hover,.desktop-nav a[aria-current]{color:var(--red)}
-.site-footer .status-dot{background:var(--red)}
-.online-status{color:rgba(237,242,239,.6)}
-
-/* Motion-off keeps contrast */
-.motion-off .intro::before{opacity:.6}
+/* Responsive + reduced motion */
+@media(max-width:720px){.intro-moon{width:72px;height:72px;top:4%;right:6%}}
+@media(prefers-reduced-motion:reduce){.intro-panel,.intro-moon,.al{animation:none!important}}
+.motion-off .intro-panel,.motion-off .intro-moon{animation:none}
