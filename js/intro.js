@@ -1,8 +1,8 @@
-import { CONTENT, TIMING, storage } from './config.js?v=20261014.1';
+import { CONTENT, TIMING, storage } from './config.js?v=20261015.3';
 
-const TYPE_SPEED = 16;   // ms per character
-const LINE_PAUSE = 240;  // ms between boot lines
-const HOLD = 950;        // ms ACCESS GRANTED stays before the intro leaves
+const TYPE_SPEED = 15;
+const LINE_PAUSE = 220;
+const HOLD = 1100;
 
 export function initIntro({ motionAllowed }) {
   const overlay = document.getElementById('intro');
@@ -28,30 +28,46 @@ export function initIntro({ motionAllowed }) {
   };
   const setProgress = value => overlay.style.setProperty?.('--p', String(value));
 
-  /* Faint matrix rain behind the terminal. Optional: skipped if canvas is unavailable. */
+  /* Horizontal red matrix / warning streams (left-right, not top-down) */
   function startRain() {
     const canvas = overlay.querySelector('canvas');
     const ctx = canvas?.getContext?.('2d');
     if (!ctx || typeof requestAnimationFrame !== 'function') return () => {};
-    const size = 16;
-    const glyphs = '01<>/{}[]$#=+*'.split('');
-    let drops = [], raf = 0, last = 0;
+    const size = 14;
+    const glyphs = '01<>/{}[]$#=+*WARNINGERRORTRACE@#%'.split('');
+    let streams = [], raf = 0, last = 0;
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      drops = Array.from({ length: Math.ceil(canvas.width / size) }, () => Math.random() * -30);
+      const rows = Math.ceil(canvas.height / size);
+      streams = Array.from({ length: rows }, (_, i) => ({
+        x: Math.random() * canvas.width,
+        y: i * size,
+        speed: 1.2 + Math.random() * 2.8,
+        dir: Math.random() > 0.5 ? 1 : -1,
+        len: 8 + (Math.random() * 18 | 0),
+      }));
     };
     const draw = now => {
       raf = requestAnimationFrame(draw);
-      if (now - last < 48) return;
+      if (now - last < 40) return;
       last = now;
-      ctx.fillStyle = 'rgba(7,9,12,.14)';
+      ctx.fillStyle = 'rgba(5,2,4,.18)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#85e9ad';
       ctx.font = size + 'px monospace';
-      drops.forEach((y, i) => {
-        ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * size, y * size);
-        drops[i] = y * size > canvas.height && Math.random() > 0.96 ? 0 : y + 1;
+      streams.forEach(s => {
+        for (let k = 0; k < s.len; k++) {
+          const alpha = 1 - k / s.len;
+          ctx.fillStyle = `rgba(255,42,61,${0.15 + alpha * 0.55})`;
+          const ch = glyphs[(Math.random() * glyphs.length) | 0];
+          ctx.fillText(ch, s.x - k * size * s.dir, s.y);
+        }
+        s.x += s.speed * s.dir;
+        if (s.x > canvas.width + 40 || s.x < -40) {
+          s.x = s.dir > 0 ? -20 : canvas.width + 20;
+          s.speed = 1.2 + Math.random() * 2.8;
+          s.len = 8 + (Math.random() * 18 | 0);
+        }
       });
     };
     resize();
@@ -72,7 +88,7 @@ export function initIntro({ motionAllowed }) {
     document.documentElement.classList.remove('is-intro');
     resolveEntry();
     storage.set(CONTENT.visitedKey, String(Date.now()));
-    if (document.activeElement === skip) document.querySelector('.wordmark').focus({ preventScroll: true });
+    if (document.activeElement === skip) document.querySelector('.wordmark')?.focus({ preventScroll: true });
     resolve();
   }
   function exit(fast = false, immediate = false) {
@@ -87,11 +103,8 @@ export function initIntro({ motionAllowed }) {
     exitTimer = setTimeout(finish, fast ? TIMING.skipExit : TIMING.introExit);
   }
 
-  // Always show the intro on the main link.
-  // Only skip when motion is off, page has a hash, or user already scrolled.
   const bypass = !motionAllowed || location.hash || window.scrollY > 10;
 
-  // Essential cancellation and the deadline exist before any overlay is shown.
   skip.addEventListener('click', () => exit(true), { signal: events.signal });
   document.addEventListener('keydown', event => { if (event.key === 'Escape') exit(true); }, { signal: events.signal });
   if (bypass) { finish(); return { completed, entryStarted, cancel: () => finish() }; }
@@ -103,14 +116,14 @@ export function initIntro({ motionAllowed }) {
   stopRain = startRain();
 
   const lines = [...overlay.querySelectorAll('[data-boot-line]')];
-  let offset = 180;
+  let offset = 160;
   for (const [index, line] of lines.entries()) {
     const text = line.dataset.bootLine;
     later(() => line.classList.add('is-typing'), offset);
     for (let count = 1; count <= text.length; count++) {
       later(() => { line.textContent = text.slice(0, count); }, offset + count * TYPE_SPEED);
     }
-    if (index > 0) later(() => line.classList.add('line-flicker'), offset + 75);
+    if (index > 0) later(() => line.classList.add('line-flicker'), offset + 60);
     offset += text.length * TYPE_SPEED;
     later(() => {
       line.classList.remove('is-typing');
