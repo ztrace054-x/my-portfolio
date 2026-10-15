@@ -1,61 +1,73 @@
-/* Dark web accent layer for the redesign. */
-:root {
-  --dark-web-glow: rgba(133, 233, 173, 0.08);
-  --dark-web-line: rgba(133, 233, 173, 0.22);
-}
+/* Dark-web intro, hero terminal, gallery and link refinements. Loaded last. */
+:root{--red:#ff2a3d;--red-deep:#2a0509;--red-soft:rgba(255,42,61,.14)}
 
-/* Subtle grid / scanline atmosphere */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 15;
-  background-image:
-    linear-gradient(rgba(133, 233, 173, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(133, 233, 173, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  opacity: 0.4;
-}
+/* ===== INTRO: red dark-web boot ===== */
+.intro{background:#050608;color:#edf2ef}
+.intro::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(255,42,61,.12),transparent 70%);pointer-events:none;z-index:0}
+.intro-rain{opacity:.55;filter:hue-rotate(-40deg) saturate(1.4)}
+.intro-panel{border-color:rgba(255,42,61,.35);box-shadow:0 0 0 1px rgba(255,42,61,.12),0 24px 80px rgba(0,0,0,.55)}
+.intro-eyebrow{color:var(--red)}
+.intro-title{color:#fff;text-shadow:0 0 18px rgba(255,42,61,.35)}
+.intro [data-boot-line]{color:rgba(237,242,239,.72)}
+.intro [data-boot-line].is-done{color:#edf2ef}
+.intro [data-boot-line].is-typing::after{background:var(--red);box-shadow:0 0 8px var(--red)}
+.intro-rule span{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.intro-status{color:var(--red);text-shadow:0 0 20px rgba(255,42,61,.5);letter-spacing:.18em}
+.intro-skip{border-color:rgba(255,42,61,.4);color:#edf2ef}
+.intro-skip:hover{background:var(--red-soft);border-color:var(--red)}
+.intro-bands{background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,42,61,.03) 2px,rgba(255,42,61,.03) 4px)}
 
-/* Enhanced terminal-style accents */
-.profile-card,
-.contact-panel,
-.detail-panel {
-  box-shadow: 0 0 0 1px var(--dark-web-line), 0 12px 40px rgba(0, 0, 0, 0.35);
-}
+/* ===== HERO: terminal-style name + red accents ===== */
+.hero-name{position:relative}
+.hero-name .name-letter{text-shadow:0 0 40px rgba(255,42,61,.15)}
+.name-period{color:var(--red)!important}
+.hero-statement .text-outline{-webkit-text-stroke-color:rgba(255,42,61,.45)}
+.status-dot,.eyebrow .status-dot{background:var(--red);box-shadow:0 0 8px var(--red)}
+.hero-atmosphere i{background:linear-gradient(transparent,rgba(255,42,61,.35),transparent)}
+.core-orbit{border-color:rgba(255,42,61,.18)!important}
+.orbit-two{border-color:rgba(255,42,61,.1)!important}
+.core-center>span{color:var(--red)!important}
+.core-label b{color:var(--red)}
+.mode-label i{background:var(--red)}
+.button-primary{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 24px rgba(255,42,61,.2)}
+.button-primary:hover{background:#ff4d5c;box-shadow:0 0 36px rgba(255,42,61,.35)}
+.text-link::after{background:var(--red)}
+.text-link>span:not(.sr-only){color:var(--red)}
+.scroll-cue>span{color:var(--red)}
 
-.core-label,
-.phase-card.is-active {
-  border-color: var(--dark-web-line);
-}
+/* ===== PROFILE CARD: red terminal ===== */
+.profile-card{border-color:rgba(255,42,61,.25);box-shadow:0 0 0 1px rgba(255,42,61,.08),0 16px 48px rgba(0,0,0,.4)}
+.profile-bar{background:var(--red-deep);border-bottom-color:rgba(255,42,61,.3)}
+.profile-dots i:nth-child(1){background:#ff5f57}
+.profile-dots i:nth-child(2){background:#febc2e}
+.profile-dots i:nth-child(3){background:#28c840}
+.profile-cmd span{color:var(--red)}
+.profile-out{color:#b7ffd0}
+.profile-status dd{color:var(--red)}
+.profile-links a:hover{color:var(--red)}
 
-/* Soft glow on primary actions */
-.button-primary {
-  box-shadow: 0 0 20px var(--dark-web-glow);
-}
+/* ===== GALLERY + CONTACT red accents ===== */
+.gallery-reveal{box-shadow:0 0 0 1px rgba(255,42,61,.1)}
+.view-photo{border-color:rgba(255,42,61,.35)}
+.view-photo>span{color:var(--red)}
+.phase-card.is-active{border-color:var(--red)}
+.phase-card.is-active .phase-number{background:var(--red);border-color:var(--red);color:#fff}
+.phase-status{color:var(--red)}
+.panel-status{color:var(--red)}
+.contact-panel{border-color:rgba(255,42,61,.2);box-shadow:0 0 0 1px rgba(255,42,61,.08)}
+.terminal-command{color:var(--red)}
+.copy-button:hover{border-color:var(--red);color:var(--red)}
+.email-address:hover{color:var(--red)}
 
-.button-primary:hover {
-  box-shadow: 0 0 32px rgba(133, 233, 173, 0.25);
-}
+/* ===== CURSOR ring red on interactive ===== */
+.custom-cursor.is-hover .cursor-ring{border-color:var(--red)}
+.custom-cursor.is-hover .cursor-dot{background:var(--red)}
 
-/* Intro / boot screen refinements */
-.intro {
-  background: radial-gradient(ellipse at center, #0d1215 0%, #07090c 70%);
-}
+/* ===== FOOTER + HEADER subtle red ===== */
+.wordmark>span{color:var(--red)}
+.desktop-nav a:hover,.desktop-nav a[aria-current]{color:var(--red)}
+.site-footer .status-dot{background:var(--red)}
+.online-status{color:rgba(237,242,239,.6)}
 
-.intro-title,
-.intro-status {
-  text-shadow: 0 0 12px rgba(133, 233, 173, 0.35);
-}
-
-/* Gallery and portrait subtle frame glow */
-.gallery-reveal,
-.portrait-frame {
-  box-shadow: 0 0 0 1px rgba(133, 233, 173, 0.12);
-}
-
-/* Motion-off fallback keeps readability */
-.motion-off body::before {
-  opacity: 0.15;
-}
+/* Motion-off keeps contrast */
+.motion-off .intro::before{opacity:.6}
