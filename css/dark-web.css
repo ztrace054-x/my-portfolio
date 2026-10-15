@@ -1,0 +1,61 @@
+/* Dark web accent layer for the redesign. */
+:root {
+  --dark-web-glow: rgba(133, 233, 173, 0.08);
+  --dark-web-line: rgba(133, 233, 173, 0.22);
+}
+
+/* Subtle grid / scanline atmosphere */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  background-image:
+    linear-gradient(rgba(133, 233, 173, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(133, 233, 173, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.4;
+}
+
+/* Enhanced terminal-style accents */
+.profile-card,
+.contact-panel,
+.detail-panel {
+  box-shadow: 0 0 0 1px var(--dark-web-line), 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.core-label,
+.phase-card.is-active {
+  border-color: var(--dark-web-line);
+}
+
+/* Soft glow on primary actions */
+.button-primary {
+  box-shadow: 0 0 20px var(--dark-web-glow);
+}
+
+.button-primary:hover {
+  box-shadow: 0 0 32px rgba(133, 233, 173, 0.25);
+}
+
+/* Intro / boot screen refinements */
+.intro {
+  background: radial-gradient(ellipse at center, #0d1215 0%, #07090c 70%);
+}
+
+.intro-title,
+.intro-status {
+  text-shadow: 0 0 12px rgba(133, 233, 173, 0.35);
+}
+
+/* Gallery and portrait subtle frame glow */
+.gallery-reveal,
+.portrait-frame {
+  box-shadow: 0 0 0 1px rgba(133, 233, 173, 0.12);
+}
+
+/* Motion-off fallback keeps readability */
+.motion-off body::before {
+  opacity: 0.15;
+}
