@@ -1,4 +1,4 @@
-import { PHOTOS } from './config.js?v=20261014.1';
+import { PHOTOS } from './config.js?v=20261016.1';
 
 export function initGallery({ overlays }) {
   const events = new AbortController();

@@ -31,7 +31,7 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
   const toggle = document.getElementById('menu-toggle');
   const close = document.getElementById('menu-close');
   const header = document.getElementById('site-header');
-  const mobile = matchMedia('(max-width: 767px)');
+  const mobile = matchMedia('(max-width: 900px)');
   let focusTimer;
   let returnFocus = true;
   function closeMenu(restore = true) {

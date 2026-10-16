@@ -1,38 +1,36 @@
-import { CONTENT, TIMING } from './config.js?v=20261014.1';
+import { CONTENT, TIMING } from './config.js?v=20261016.1';
 
-export function initContact({ motionAllowed }) {
+export function initContact({ motionAllowed, clock }) {
   const panel = document.getElementById('contact-panel');
   const text = document.getElementById('email-text');
   const copy = document.getElementById('copy-email');
   const label = copy.querySelector('span');
   const feedback = document.getElementById('copy-feedback');
   const events = new AbortController();
-  let typed = !motionAllowed;
-  let timer;
+  let typed = !motionAllowed, elapsed = 0, unsubscribe;
   let resetTimer;
   let pending = false;
   let disposed = false;
   const completeTyping = () => {
-    clearTimeout(timer);
+    unsubscribe?.(); unsubscribe = null;
     typed = true;
     text.textContent = CONTENT.email;
   };
   function typeEmail() {
-    if (typed) return;
-    typed = true;
-    let count = 0;
-    const next = () => {
-      text.textContent = CONTENT.email.slice(0, ++count);
-      if (count < CONTENT.email.length) timer = setTimeout(next, TIMING.emailTyping / CONTENT.email.length);
-    };
-    next();
+    if (typed || unsubscribe) return;
+    unsubscribe = clock.subscribe((_time, dt) => {
+      elapsed += dt;
+      text.textContent = CONTENT.email.slice(0, Math.ceil(elapsed / TIMING.emailTyping * CONTENT.email.length));
+      if (elapsed >= TIMING.emailTyping) completeTyping();
+    });
   }
-  // The full link and screen-reader text always remain intact.
-  if (motionAllowed && 'IntersectionObserver' in window) text.textContent = '';
+  // Full accessible address and the mailto URL never change during the visual typing.
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
-    if (entries.some(entry => entry.intersectionRatio >= .25)) { typeEmail(); observer.disconnect(); }
+    if (entries.some(entry => entry.isIntersecting)) typeEmail();
+    else { unsubscribe?.(); unsubscribe = null; }
   }, { threshold: .25 }) : null;
   if (observer) observer.observe(panel); else completeTyping();
+  panel.addEventListener('focusin', completeTyping, { signal: events.signal });
   copy.addEventListener('click', async () => {
     if (pending) return;
     pending = true;
@@ -69,6 +67,6 @@ export function initContact({ motionAllowed }) {
   }, { signal: events.signal });
   return {
     setMotion(allowed) { if (!allowed) { completeTyping(); observer?.disconnect(); } },
-    dispose() { disposed = true; clearTimeout(timer); clearTimeout(resetTimer); observer?.disconnect(); events.abort(); },
+    dispose() { disposed = true; unsubscribe?.(); clearTimeout(resetTimer); observer?.disconnect(); events.abort(); },
   };
 }

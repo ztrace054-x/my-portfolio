@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const root = path.join(__dirname, '..', 'js');
 
 class Element {
-  constructor() { this.listeners = {}; this.attrs = {}; this.dataset = {}; this.hidden = false; this.textContent = ''; this.open = false; this.inert = false; this.disabled = false; this.children = {}; this.all = {}; this.classes = new Set(); this.classList = { add: (...x) => x.forEach(v => this.classes.add(v)), remove: (...x) => x.forEach(v => this.classes.delete(v)), toggle: (v,on) => { if(on === undefined) on = !this.classes.has(v); on ? this.classes.add(v) : this.classes.delete(v); }, contains: v => this.classes.has(v) }; this.style = { removeProperty() {} }; }
+  constructor() { this.listeners = {}; this.attrs = {}; this.dataset = {}; this.hidden = false; this.textContent = ''; this.open = false; this.inert = false; this.disabled = false; this.children = {}; this.all = {}; this.classes = new Set(); this.classList = { add: (...x) => x.forEach(v => this.classes.add(v)), remove: (...x) => x.forEach(v => this.classes.delete(v)), toggle: (v,on) => { if(on === undefined) on = !this.classes.has(v); on ? this.classes.add(v) : this.classes.delete(v); }, contains: v => this.classes.has(v) }; this.style = { removeProperty(key) { delete this[key]; } }; this.clientWidth=1000; this.clientHeight=800; }
   addEventListener(type, fn, options = {}) { (this.listeners[type] ||= []).push(fn); options.signal?.addEventListener('abort', () => this.removeEventListener(type, fn)); }
   removeEventListener(type, fn) { this.listeners[type] = (this.listeners[type] || []).filter(x => x !== fn); }
   emit(type, data = {}) { const event = { target: this, button: 0, preventDefault() { this.defaultPrevented = true; }, ...data }; for (const fn of this.listeners[type] || []) fn(event); return event; }
@@ -17,6 +17,8 @@ class Element {
   removeAttribute(key) { delete this.attrs[key]; }
   focus() { if (this.doc) this.doc.activeElement = this; this.focused = true; }
   getBoundingClientRect() { return { top: this.top || 0, left: 0, right: 100, bottom: this.bottom ?? 100, width: 100, height: 100 }; }
+  contains(node) { return node === this || this.descendants?.includes(node); }
+  getContext() { return null; }
   matches() { return false; }
   closest() { return this; }
   showModal() { this.open = true; }
@@ -35,9 +37,9 @@ function fixture() {
   const setTimeout = (fn,delay=0) => { const id=next++;timers.set(id,{at:time+delay,fn});return id; };
   const clearTimeout = id => timers.delete(id);
   const advance = duration => { const limit=time+duration; let guard=0; while(true){ const entry=[...timers].filter(([,t])=>t.at<=limit).sort((a,b)=>a[1].at-b[1].at)[0]; if(!entry)break; assert(++guard<5000); const [id,t]=entry;time=t.at;timers.delete(id);t.fn(); }time=limit; };
-  const values = new Map();
+  const values = new Map(), sessionValues = new Map();
   const observers=[];
-  class IO { constructor(callback){ this.callback=callback; observers.push(this); } observe(){} disconnect(){this.disconnected=true;} send(ratio){this.callback([{intersectionRatio:ratio,isIntersecting:ratio>0}]);} }
+  class IO { constructor(callback){ this.callback=callback; observers.push(this); } observe(target){this.target=target;} unobserve(){} disconnect(){this.disconnected=true;} send(ratio){this.callback([{target:this.target,intersectionRatio:ratio,isIntersecting:ratio>0}]);} }
   const win = new Element();
   win.scrollY=0;
   win.innerHeight=900; win.innerWidth=1300;
@@ -45,89 +47,88 @@ function fixture() {
   win.getSelection = () => ({ removeAllRanges(){},addRange(){} });
   win.IntersectionObserver=IO;
   const scripts=[];
-  const context = vm.createContext({ window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:''},history:{pushState(){}},performance:{now:()=>time},AbortController,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
+  const context = vm.createContext({ window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:'',search:'',pathname:'/my-portfolio/'},history:{pushState(){},replaceState(){}},URLSearchParams,performance:{now:()=>time},AbortController,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},sessionStorage:{getItem:key=>sessionValues.get(key)||null,setItem:(key,v)=>sessionValues.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
   const cache = new Map();
-  async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); if(file==='main.js')source=source.split('// Bind native functionality before contacting a CDN.')[0];const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative).split('?')[0]));await mod.evaluate();return mod; }
+  async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative).split('?')[0]));await mod.evaluate();return mod; }
   const load = async file => (await loadModule(file)).namespace;
-  return {doc,nodes,win,values,timers,advance,observers,scripts,load,context};
+  return {doc,nodes,win,values,sessionValues,timers,advance,observers,scripts,load,context};
 }
 const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
 
-(async()=>{
+function introFixture() {
+  const f=fixture(), intro=f.doc.getElementById('intro'), skip=f.doc.getElementById('skip-intro');
+  intro.hidden=true; intro.descendants=[skip];
+  const progress=new Element(); progress.children.span=new Element(); intro.children['.intro-progress']=progress;
+  intro.all['.intro-nodes>span']=Array.from({length:7},()=>new Element());
+  intro.all['#intro-log p']=Array.from({length:3},()=>new Element());
+  return f;
+}
+async function clockFor(f) { return (await f.load('motion.js')).createClock(); }
+function contactFixture() { const f=fixture(); f.doc.getElementById('copy-email').children.span=new Element(); return f; }
+async function run() {
   let checks=0;
-  // First visit types sequentially, completes automatically, and releases inert content.
   {
-    const f=fixture(), intro=f.doc.getElementById('intro'),page=f.doc.getElementById('page');
-    intro.hidden=true;
-    const lines=['INITIALIZING SAAD.SECURITY_PROFILE...','> Loading identity','> Loading cybersecurity path','> Establishing secure connection'].map(text=>{const e=new Element();e.dataset.bootLine=text;return e;});
-    intro.all['[data-boot-line]']=lines;
-    const mod=await f.load('intro.js'); const controller=mod.initIntro({motionAllowed:true});
-    assert(page.inert && !intro.hidden); f.advance(200);assert(lines[0].textContent.length>0 && lines[1].textContent==='');
-    f.advance(4600); await controller.completed;assert(intro.hidden && !page.inert);assert(Number(f.values.get('saad-visited-v1'))>0);assert.equal(f.timers.size,0);checks++;
+    const f=fixture(),mod=await f.load('intro-timeline.js');
+    assert.equal(mod.stageAt(0),0); assert.equal(mod.STAGES[mod.stageAt(4300)][3],47);assert.equal(mod.STAGES[mod.stageAt(4400)][3],46);assert.equal(mod.STAGES[mod.stageAt(6250)][1],'ACCESS GRANTED');
+    assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:false,hash:''}),false);assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:true,hash:''}),true);checks++;
   }
-  // Skip is idempotent; cancelled character callbacks cannot reopen the panel.
   {
-    const f=fixture(),intro=f.doc.getElementById('intro');intro.all['[data-boot-line]']=[Object.assign(new Element(),{dataset:{bootLine:'Loading identity...'}})];
-    const mod=await f.load('intro.js');mod.initIntro({motionAllowed:true});f.advance(250);f.doc.getElementById('skip-intro').emit('click');f.advance(320);assert(intro.hidden);f.advance(4000);assert(intro.hidden && !f.doc.getElementById('page').inert);checks++;
+    const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'); const controller=mod.initIntro({motionAllowed:true,clock});
+    assert(f.doc.getElementById('page').inert); assert(!f.doc.getElementById('intro').hidden);assert(f.doc.getElementById('skip-intro').focused);
+    f.advance(4300);assert.equal(f.doc.getElementById('intro-percent').textContent,'47%');
+    f.advance(100);assert.equal(f.doc.getElementById('intro-percent').textContent,'46%');
+    f.advance(3400);await controller.completed;
+    assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v3'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
   }
-  // Returning visitors, deep links and reduced motion bypass without overlay timers.
-  for(const mode of ['return','deep','reduce']){
-    const f=fixture();if(mode==='return')f.values.set('saad-visited-v1',String(Date.now()));if(mode==='deep')f.context.location.hash='#contact';
-    const mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='reduce'}).completed;assert(f.doc.getElementById('intro').hidden);assert.equal(f.timers.size,0);checks++;
+  for (const method of ['click','escape','cancel']) {
+    const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.advance(300);
+    if(method==='click')f.doc.getElementById('skip-intro').emit('click');if(method==='escape')f.doc.emit('keydown',{key:'Escape'});if(method==='cancel')controller.cancel();
+    await controller.completed;controller.cancel();f.advance(10000);assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.timers.size,0);clock.dispose();checks++;
   }
-  function contactFixture() { const f=fixture(); const button=f.doc.getElementById('copy-email');button.children.span=new Element();return f; }
-  // Copy always uses the full address during typing, waits for success and resets.
+  for (const mode of ['return','deep','reduce']) {
+    const f=introFixture();if(mode==='return')f.sessionValues.set('saad-intro-v3','seen');if(mode==='deep')f.context.location.hash='#contact';
+    const clock=await clockFor(f),mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='reduce',clock}).completed;
+    assert(f.doc.getElementById('intro').hidden);assert.equal(f.timers.size,0);clock.dispose();checks++;
+  }
   {
-    const f=contactFixture();let copied;let release;f.context.navigator.clipboard.writeText=value=>{copied=value;return new Promise(resolve=>{release=resolve;});};
-    const mod=await f.load('contact.js');mod.initContact({motionAllowed:true});const button=f.doc.getElementById('copy-email');f.observers[0].send(.3);f.advance(120);assert(f.doc.getElementById('email-text').textContent.length<17);
-    button.emit('click');button.emit('click');assert.equal(copied,'ztrace054@gmail.com');assert.equal(button.children.span.textContent,'Copy');assert(button.disabled);release();await flush();assert.equal(button.children.span.textContent,'Copied! ✓');f.advance(1800);assert.equal(button.children.span.textContent,'Copy');checks++;
+    const f=introFixture();f.sessionValues.set('saad-intro-v3','seen');f.context.location.search='?intro=1';const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});assert(!f.doc.getElementById('intro').hidden);controller.cancel();clock.dispose();checks++;
   }
-  // Rejection never announces success; the full address is selected for manual copy.
   {
-    const f=contactFixture();f.context.navigator.clipboard.writeText=async()=>{throw Error('Permission denied');};const mod=await f.load('contact.js');mod.initContact({motionAllowed:true});f.doc.getElementById('copy-email').emit('click');await flush();assert.equal(f.doc.selected,'ztrace054@gmail.com');assert(!f.doc.getElementById('copy-email').classList.contains('is-copied'));assert(f.doc.getElementById('copy-feedback').textContent.includes('Copy unavailable'));checks++;
+    const f=introFixture(),mod=await f.load('intro.js');const controller=mod.initIntro({motionAllowed:true,clock:{subscribe(){return()=>{};}}});f.advance(9600);await controller.completed;assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);checks++;
   }
-  // Motion reduction immediately completes a partial reveal.
   {
-    const f=contactFixture();const mod=await f.load('contact.js');const controller=mod.initContact({motionAllowed:true});f.observers[0].send(.3);f.advance(120);controller.setMotion(false);assert.equal(f.doc.getElementById('email-text').textContent,'ztrace054@gmail.com');f.advance(1000);assert.equal(f.doc.getElementById('email-text').textContent,'ztrace054@gmail.com');checks++;
+    const f=introFixture();f.context.sessionStorage.getItem=()=>{throw Error('blocked')};f.context.sessionStorage.setItem=()=>{throw Error('blocked')};const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.doc.emit('keydown',{key:'Tab'});assert(f.doc.getElementById('skip-intro').focused);controller.cancel();assert(!f.doc.getElementById('page').inert);clock.dispose();checks++;
   }
-  // Gallery wraps in both directions, updates descriptions, unlocks and returns focus.
+  {
+    const f=fixture(),clock=await clockFor(f);let frames=0;const un=clock.subscribe(()=>frames++);f.advance(32);assert.equal(frames,2);
+    f.doc.hidden=true;f.doc.emit('visibilitychange');assert.equal(f.timers.size,0);f.advance(1000);assert.equal(frames,2);
+    f.doc.hidden=false;f.doc.emit('visibilitychange');f.advance(16);assert.equal(frames,3);un();assert.equal(f.timers.size,0);clock.dispose();checks++;
+  }
+  {
+    const f=contactFixture(),clock=await clockFor(f);let copied,release;f.context.navigator.clipboard.writeText=value=>{copied=value;return new Promise(resolve=>release=resolve);};
+    const mod=await f.load('contact.js');mod.initContact({motionAllowed:true,clock});f.observers[0].send(.3);f.advance(120);assert(f.doc.getElementById('email-text').textContent.length<19);
+    const button=f.doc.getElementById('copy-email');button.emit('click');button.emit('click');assert.equal(copied,'ztrace054@gmail.com');assert(button.disabled);release();await flush();assert.equal(button.children.span.textContent,'Copied! ✓');f.advance(1800);assert.equal(button.children.span.textContent,'Copy');clock.dispose();checks++;
+  }
+  {
+    const f=contactFixture(),clock=await clockFor(f);f.context.navigator.clipboard.writeText=async()=>{throw Error('Permission denied');};const mod=await f.load('contact.js');mod.initContact({motionAllowed:true,clock});f.doc.getElementById('copy-email').emit('click');await flush();assert.equal(f.doc.selected,'ztrace054@gmail.com');assert(!f.doc.getElementById('copy-email').classList.contains('is-copied'));assert(f.doc.getElementById('copy-feedback').textContent.includes('Copy unavailable'));clock.dispose();checks++;
+  }
+  {
+    const f=contactFixture(),clock=await clockFor(f),mod=await f.load('contact.js'),controller=mod.initContact({motionAllowed:true,clock});f.observers[0].send(.3);f.advance(120);f.observers[0].send(0);const partial=f.doc.getElementById('email-text').textContent;f.advance(1000);assert.equal(f.doc.getElementById('email-text').textContent,partial);controller.setMotion(false);assert.equal(f.doc.getElementById('email-text').textContent,'ztrace054@gmail.com');controller.dispose();clock.dispose();checks++;
+  }
+  for (const ending of ['complete','reduce','focus']) {
+    const f=fixture(),terminal=f.doc.getElementById('identity-terminal');const commands=['whoami','cat status.txt','ls ./connect'].map(text=>{const e=new Element();e.dataset.typeCommand=text;e.textContent=text;return e;});const outputs=Array.from({length:3},()=>new Element());terminal.all['[data-type-command]']=commands;terminal.all['[data-terminal-output]']=outputs;
+    const clock=await clockFor(f),mod=await f.load('terminal.js'),controller=mod.initTerminal({clock,motionAllowed:true});f.observers[0].send(.5);f.advance(200);assert.equal(outputs[2].style.opacity,'0');
+    if(ending==='reduce')controller.setMotion(false);else if(ending==='focus')terminal.emit('focusin');else { f.observers[0].send(0);const partial=commands[0].textContent;f.advance(500);assert.equal(commands[0].textContent,partial);f.observers[0].send(.5);f.advance(3100); }
+    commands.forEach(c=>assert.equal(c.textContent,c.dataset.typeCommand));outputs.forEach(o=>assert.equal(o.style.opacity,undefined));assert.equal(f.timers.size,0);controller.dispose();clock.dispose();checks++;
+  }
   {
     const f=fixture(),trigger=new Element();trigger.doc=f.doc;trigger.dataset.galleryItem='0';f.doc.all['[data-gallery-item]']=[trigger];let locks=0,unlocks=0;const mod=await f.load('gallery.js');mod.initGallery({overlays:{lock(){locks++;},unlock(){unlocks++;}}});trigger.emit('click');assert(f.doc.getElementById('photo-viewer').open);f.doc.getElementById('viewer-prev').emit('click');assert.equal(f.doc.getElementById('viewer-index').textContent,'02 / 02');f.doc.getElementById('photo-viewer').emit('keydown',{key:'ArrowRight'});assert.equal(f.doc.getElementById('viewer-index').textContent,'01 / 02');f.doc.getElementById('viewer-close').emit('click');assert.equal(locks,1);assert.equal(unlocks,1);assert(trigger.focused);checks++;
   }
-  // Lenis has one ticker subscription and is completely disposed.
   {
-    const f=fixture();const mod=await f.load('smooth-scroll.js');const ticks=new Set();let raf, destroyed=false,updated=0;
-    class Lenis {constructor(){this.events={};}on(key,fn){this.events[key]=fn;}off(key){delete this.events[key];}raf(ms){raf=ms;}destroy(){destroyed=true;}}
-    const gsap={ticker:{add:fn=>ticks.add(fn),remove:fn=>ticks.delete(fn),lagSmoothing(){}}};const installed=mod.installSmoothScroll({gsap,ScrollTrigger:{update(){updated++;}},Lenis,enabled:true});assert.equal(ticks.size,1);[...ticks][0](2);assert.equal(raf,2000);installed.instance.events.scroll();assert.equal(updated,1);installed.dispose();assert(destroyed);assert.equal(ticks.size,0);checks++;
+    const f=fixture(),mod=await f.load('navigation.js'),manager=mod.createOverlayManager({getScroll:()=>null,refresh(){}});f.win.scrollY=1200;const owner={};manager.lock(owner);assert(f.doc.getElementById('page').inert);assert(manager.locked);manager.unlock({});assert(manager.locked);manager.unlock(owner);assert(!manager.locked);assert(!f.doc.getElementById('page').inert);assert.equal(f.win.scrollY,1200);checks++;
   }
-  // Optional dependencies time out; a late GSAP callback cannot start more loading.
-  {
-    const f=fixture();const mod=await f.load('main.js');const result=mod.loadDependencies();f.advance(2500);await flush();assert.equal(await result,null);const gsapScript=f.scripts.find(x=>x.src?.includes('gsap.min'));gsapScript.onload();await flush();assert.equal(f.scripts.filter(x=>x.src?.includes('ScrollTrigger')).length,0);checks++;
-  }
-  // The shared clock never leaves native RAF running after switching to a ticker.
-  {
-    const f=fixture();const mod=await f.load('main.js');const clock=mod.createClock();let frames=0;const un=clock.subscribe(()=>frames++);assert.equal(f.timers.size,1);f.advance(16);assert.equal(frames,1);const ticks=new Set();clock.setTicker({add:fn=>ticks.add(fn),remove:fn=>ticks.delete(fn)});assert.equal(f.timers.size,0);assert.equal(ticks.size,1);un();assert.equal(ticks.size,0);clock.dispose();checks++;
-  }
-  // Layout-based preservation ignores an overlapping photo hit target.
-  {
-    const f=fixture();f.doc.documentElement.clientHeight=936;
-    const gallery=Object.assign(new Element(),{top:-61,bottom:190});
-    const contact=Object.assign(new Element(),{top:289,bottom:925});
-    f.doc.all['main > section']=[gallery,contact];f.win.scrollY=1000;
-    f.win.scrollTo=({top})=>{contact.top-=top-f.win.scrollY;contact.bottom-=top-f.win.scrollY;f.win.scrollY=top;};
-    const mod=await f.load('viewport.js');let invalidated=0;const preserve=mod.createViewportPreserver({getScroll:()=>null,invalidateScroll:()=>invalidated++});
-    preserve(()=>{contact.top+=480;contact.bottom+=480;});f.advance(16);
-    assert.equal(contact.top,289);assert.equal(f.win.scrollY,1480);assert(invalidated>=1);checks++;
-  }
-  // Pin creation also preserves the section and resynchronizes Lenis immediately.
-  {
-    const f=fixture();f.doc.documentElement.clientHeight=936;f.win.scrollY=1000;
-    const contact=Object.assign(new Element(),{top:289,bottom:925});f.doc.all['main > section']=[contact];
-    let options;
-    const smooth={scrollTo(top,opts){options=opts;contact.top-=top-f.win.scrollY;contact.bottom-=top-f.win.scrollY;f.win.scrollY=top;}};
-    const mod=await f.load('viewport.js');const preserve=mod.createViewportPreserver({getScroll:()=>smooth});
-    preserve(()=>{contact.top+=1497;contact.bottom+=1497;});f.advance(16);
-    assert.equal(contact.top,289);assert.equal(options.immediate,true);assert.equal(options.force,true);checks++;
-  }
-  console.log(`PASS: ${checks} interaction checks (intro, cancellation, preferences, clipboard, gallery, dependency deadline, Lenis cleanup, shared clock).`);
-})().catch(error=>{console.error(error);process.exit(1);});
+  console.log(`PASS: ${checks} interaction checks (timeline, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
+}
+// A stalled promise must fail, rather than letting Node exit with a misleading zero code.
+const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);
+run().then(()=>clearTimeout(watchdog)).catch(error=>{clearTimeout(watchdog);console.error(error);process.exitCode=1;});

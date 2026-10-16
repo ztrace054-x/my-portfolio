@@ -1,83 +1,77 @@
 # Saad — A cybersecurity journey
 
-A static, responsive portfolio for an SSC student taking his first steps into cybersecurity. Editorial typography, a connected Canvas 2D core, masked GSAP reveals, and an optional desktop learning sequence support an honest beginner story.
+A static portfolio for an SSC student and cybersecurity beginner. A simulated terminal intro leads into bold typography, a connected network globe, and an honest learning story.
 
 **Live:** https://ztrace054-x.github.io/my-portfolio/
 
-## Project structure
+## Source of truth
+
+`index.html` loads only `css/{tokens,style,intro,responsive}.css` and `js/main.js`. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | All semantic content, metadata, stable navigation anchors, and accessible dialogs |
-| `css/tokens.css` | Colors, font declarations, spacing, and motion tokens |
-| `css/style.css` | Components and desktop layouts |
-| `css/responsive.css` | Mobile/tablet layouts, reduced motion, and print |
-| `js/config.js` | Contact details, photo data, pinned dependencies, and timings |
-| `js/main.js` | Native startup, motion preference, dependency deadline, and shared clock |
-| `js/animations.js` | GSAP reveals, parallax, and the single optional journey pin |
-| `js/smooth-scroll.js` | Lenis integration and cleanup |
-| `js/viewport.js` | Preserve the visible section when pinning is created or removed |
-| `js/intro.js` | Skippable hacker boot intro (matrix rain, terminal lines, ACCESS GRANTED) with a hard deadline; replays after 30 minutes or with `?intro=1` |
-| `js/cursor.js` | Fine-pointer cursor, magnetic buttons, and subtle photo tilt |
-| `js/hero-scene.js` | Lightweight illustrative core and static SVG fallback |
-| `js/navigation.js` | Native anchor navigation, mobile menu, and shared overlay lock |
-| `js/gallery.js` | Photo viewer, captions, arrow navigation, and focus return |
-| `js/contact.js` | Accessible email typing and truthful clipboard feedback |
-| `assets/` | Original portraits, static grain, and licensed fonts |
-| `tests/interaction-check.cjs` | Deterministic interaction tests without browser dependencies |
-| `tests/responsive.html` | Development-only viewport review, isolated from the portfolio navigation |
-| `.nojekyll` | Static GitHub Pages serving |
+| `index.html` | Five semantic sections, original photos and links, dialogs, metadata, static fallbacks |
+| `css/tokens.css` | Self-hosted fonts, colors, spacing |
+| `css/style.css` | Desktop and shared component styles |
+| `css/intro.css` | Cinematic simulated intro |
+| `css/responsive.css` | Responsive layouts from 320px, reduced motion, print |
+| `js/main.js` | Core startup, preference controls, optional visual initialization |
+| `js/motion.js` | Shared frame clock; hidden-tab suspension |
+| `js/intro-timeline.js` | Testable display-only timeline and intro eligibility |
+| `js/intro.js` | Intro state, skip, focus, session state, matrix rain, fail-safe |
+| `js/hero-scene.js` | Canvas2D globe, nodes, routes, synthetic packets, static SVG fallback |
+| `js/animations.js` | Native Web Animations and intersection reveals |
+| `js/terminal.js` | Optional three-command identity sequence |
+| `js/navigation.js` | Anchor navigation, mobile menu, overlay locks |
+| `js/gallery.js` | Two-photo viewer, arrow navigation, focus restoration |
+| `js/contact.js` | Email typing, clipboard success and failure handling |
+| `js/cursor.js` | Fine-pointer cursor, magnetic text, subtle photo tilt |
+| `js/config.js` | Existing contact, photos, local-storage helper, small timing constants |
+| `tests/interaction-check.cjs` | Deterministic behavior tests with a completion watchdog |
+| `tests/responsive.html` | Development viewport viewer (not linked from the portfolio) |
+| `RELEASE-NOTES.md` | Change summary, verification, assumptions, limitations |
 
-No framework, backend, analytics, package installation, or production build step is required. Local ES modules use relative paths that work under the repository's GitHub Pages prefix.
+No framework, backend, analytics, CDN script, package installation, or production build is required. Relative asset paths work under the GitHub Pages repository prefix.
 
-## Editing content
+## Content and identity
 
-Edit the bio, learning phases, tools, and roadmap in `index.html`. Heading animations have an intact screen-reader copy and a visual copy: update both when editing a heading.
+Keep the SSC student / beginner positioning truthful. Edit the biography, course, learning roadmap, and four **Future goal · Not yet earned** credential labels in `index.html`. The identity terminal now appears directly after the hero in About. Gallery retains the two distinct original portraits.
 
-The **CERTIFICATION ROADMAP** comment marks the four future credentials. Each currently says **Future goal · Not yet earned**. Only after earning a credential should its status change; include a verifiable credential link at that time. The tools and current learning topics describe beginner exploration, not mastery. The gallery contains two personal photos and a terminal-style profile card with LinkedIn, GitHub and email links, not completed security projects.
+The original GitHub, TryHackMe, ZeroDayTest, Instagram, and email URLs remain intact. The ZeroDayTest URL is the originally supplied dashboard/profile URL; a visitor may need to sign in there. Do not invent a replacement public handle.
 
-To update the email, change `CONTENT.email` in `js/config.js` and every address and `mailto:` reference in `index.html`. To replace a photograph, keep its filename, then update its description/dimensions in `index.html` and `PHOTOS` in `js/config.js`.
+To change the email, update `CONTENT.email` in `js/config.js` and the accessible address and `mailto:` URLs in `index.html`. Update `PHOTOS` and image alternative text if replacing a gallery portrait. Keep image dimensions to reserve layout space.
 
-## Motion and resilience
+## Motion and fallbacks
 
-- GSAP **3.15.0** and matching ScrollTrigger load from jsDelivr; Lenis **1.3.26** loads from unpkg. Exact URLs are in `js/config.js`. Do not use unversioned `latest` dependencies.
-- Native menu, gallery, contact, and preference handlers start before CDN requests. The optional dependency group has a 2.5-second deadline. Blocked dependencies retain native scrolling and readable content.
-- The intro is sound-free, cancellable, and bounded to three seconds. Returning visits preserve `saad-visited-v1` and bypass it. Deep links and reduced motion also bypass it.
-- System reduced motion overrides the saved motion preference (`saad-motion`). Switching motion off completes typing, removes pinning, restores the normal cursor, and stops decorative rendering.
-- Lenis runs only on eligible fine-pointer screens. Touch scrolling remains native. The journey is pinned only on desktop when the entire stage fits below the header.
-- Motion changes preserve the visible section, invalidate old scroll measurements, and avoid reinserting a pin above an already-passed learning sequence. Browser scroll anchoring is disabled; image dimensions are reserved.
-- Canvas and cursor share one clock; the scene stops offscreen or in a hidden document. Canvas resolution is capped at 1.5 device pixel ratio. Mobile uses inline SVG.
-- The complete content remains readable without JavaScript. A no-script navigation fallback provides direct section links. Ordinary email is not described as encrypted or as a messaging service.
+- The first visit in a tab plays an approximately **7.6-second fictional sequence**. All security messages, nodes, packets, and telemetry are visual simulations. The site performs no scanning, access bypass, device inspection, or audio playback.
+- Skip is available immediately; Enter/Space activates the focused native button, and Escape also skips. A 9.5-second wall-clock fail-safe releases the page even if animation callbacks stall. Hidden tabs can therefore finish without replaying the remaining effect.
+- Session key `saad-intro-v3` skips subsequent visits. `?intro=1` explicitly replays; the query is consumed so ordinary reloads return to the session behavior. Deep links, system reduced motion, and saved motion-off bypass the intro.
+- System reduced motion takes priority over local preference `saad-motion`. Turning motion off completes typing, stops frame effects, removes the custom cursor, and preserves document layout and scroll position. There is no scroll pinning.
+- A shared `requestAnimationFrame` clock stops in hidden documents. Globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and roughly 40 / 24 render FPS targets. Slow-frame detection reduces the desktop render rate.
+- Cursor and 7px magnetic effects run only on fine-pointer screens above 900px. Photo tilt is bounded to 3.5 degrees. Mobile and reduced-motion views keep standard interactions.
+- Source HTML remains readable without JavaScript; the SVG globe, biography, email, social links, and photos remain available. No-script navigation is provided. The enhanced gallery viewer and motion/copy controls require JavaScript.
+- Animation failure never gates content on a third-party library. Self-hosted fonts fall back to system fonts.
 
-## Fonts and attribution
+## Verification
 
-Self-hosted Latin subsets of **Space Grotesk** and **JetBrains Mono** are approximately 57 KB combined. They were subset from the official Google Fonts repository using FontTools. Variable weights and original font names are preserved. Font loading uses `font-display: swap`; system fonts remain usable if font loading fails.
-
-The SIL Open Font License and original attribution notices are retained in:
-
-- `assets/fonts/Space-Grotesk-OFL.txt`
-- `assets/fonts/JetBrains-Mono-OFL.txt`
-
-Sources: [Space Grotesk](https://github.com/google/fonts/tree/main/ofl/spacegrotesk), [JetBrains Mono](https://github.com/google/fonts/tree/main/ofl/jetbrainsmono). Animation libraries retain their own licenses: [GSAP](https://gsap.com/standard-license/) and [Lenis](https://github.com/darkroomengineering/lenis/blob/main/LICENSE).
-
-## Checks and development
-
-Run the interaction checks with Node 20 or newer:
+Run with Node 20 or newer:
 
 ```sh
 node --experimental-vm-modules tests/interaction-check.cjs
 ```
 
-The tests exercise intro completion/cancellation, returning and deep-link visits, reduced motion, copying before typing finishes, clipboard rejection, gallery wrapping and focus return, dependency timeout, Lenis disposal, and the shared animation clock. VM Modules may print a Node experimental-feature notice.
+The suite checks timeline progression and its brief rollback, automatic completion, Skip/Escape/cancellation, repeat visits, replay, deep links, reduced motion, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
 
-Additional release checks verify JavaScript syntax, unique IDs, local file/import/anchor references, portrait dimensions, four unearned credential statuses, accessible email text, color contrast, and asset budgets. Browser review should check the served site, motion toggling, navigation, the gallery, clipboard feedback, responsive layouts, and console output. Actual frame rate depends on the device; no hardware-independent 60 FPS guarantee is made.
+`tests/responsive.html` displays the actual site in 320/390/768/1024/1440px iframe viewports. Use the live served site for browser QA; ES modules do not work correctly from a direct file URL.
 
-The optional `tests/responsive.html` viewer renders the actual site inside a selectable 320/390/768/1024/1440px viewport. It has no link from the public portfolio and is for development review only.
+## Fonts
 
-For local development, serve the folder over HTTP using your preferred static development server. Opening the file directly is insufficient for testing ES modules.
+Space Grotesk and JetBrains Mono are self-hosted Latin subsets (approximately 57 KB combined), with `font-display: swap`. Their SIL Open Font License notices remain in `assets/fonts/Space-Grotesk-OFL.txt` and `assets/fonts/JetBrains-Mono-OFL.txt`.
 
-## GitHub Pages deployment and rollback
+Original sources: [Space Grotesk](https://github.com/google/fonts/tree/main/ofl/spacegrotesk), [JetBrains Mono](https://github.com/google/fonts/tree/main/ofl/jetbrainsmono).
 
-Pages serves **main / root**. Commit all code and assets to `main`; the existing Pages workflow publishes them. The URL remains unchanged.
+## Deployment and rollback
 
-The previous Matrix-style release remains in Git history at `308be82da850d5e2322f50844bdcc80bc844949d`. To roll back, revert the redesign commit and push the revert to `main`; the same Pages workflow redeploys it. Do not delete repository history or the existing photographs.
+GitHub Pages serves **main / root**. The existing Pages workflow publishes merged changes; the live URL remains the same. Original assets and repository history are retained.
+
+The pre-redesign version is commit `2dd55465135c63dbb568a15e01e6375654e5a06b`. To roll back, revert the redesign merge commit and push the revert to `main`; the Pages workflow will publish that revision. Do not force-push or delete repository history.
