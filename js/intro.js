@@ -108,7 +108,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion }) {
     resolveEntry();
     deadline = setTimeout(() => {
       root.classList.add('is-exiting');
-      exitDeadline = setTimeout(finish, 280);
+      exitDeadline = setTimeout(finish, INTRO_CONFIG.reducedMotionFade);
     }, 120);
     return { completed, entryStarted, cancel: finish };
   }

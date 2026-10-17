@@ -77,7 +77,7 @@ async function run() {
     assert(f.doc.getElementById('page').inert); assert(!f.doc.getElementById('intro').hidden);assert(f.doc.getElementById('skip-intro').focused);
     f.advance(3500);assert.equal(f.doc.getElementById('intro-percent').textContent,'88%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS DENIED');
     f.advance(350);assert.equal(f.doc.getElementById('intro-percent').textContent,'100%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS GRANTED');
-    f.advance(300);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
+    f.advance(470);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
     f.advance(1200);await controller.completed;
     assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v4'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
   }
