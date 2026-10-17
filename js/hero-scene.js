@@ -1,92 +1,106 @@
-/* An illustrative connected core, not a live security monitor. Canvas 2D only. */
+/* Small Canvas2D sphere: no 3D engine, textures, downloads, or network calls. */
 export function initHeroScene({ clock, motionAllowed }) {
   const canvas = document.getElementById('hero-canvas');
   const fallback = document.getElementById('core-fallback');
-  const hero = document.getElementById('home');
-  const visual = document.querySelector('.hero-visual');
-  const events = new AbortController();
-  const eligible = matchMedia('(min-width: 768px) and (pointer: fine)');
+  const stage = canvas.parentElement;
   const ctx = canvas.getContext('2d', { alpha: true });
-  let allowed = motionAllowed;
-  let visible = true;
-  let unsubscribe;
-  let size = 0;
-  let angle = .35;
-  let dpr = 1;
-  // Three offset rings of eight vertices; 24 ring edges and 16 cross edges.
-  const vertices = Array.from({ length: 24 }, (_, index) => {
-    const ring = Math.floor(index / 8);
-    const latitude = (ring - 1) * .78;
-    const azimuth = (index % 8) * Math.PI / 4 + ring * .19;
-    return { x: Math.cos(latitude) * Math.cos(azimuth), y: Math.sin(latitude), z: Math.cos(latitude) * Math.sin(azimuth) };
-  });
-  const edges = vertices.map((_, i) => [i, Math.floor(i / 8) * 8 + (i + 1) % 8]);
-  for (let i = 0; i < 16; i++) edges.push([i, i + 8]);
-  const particles = Array.from({ length: 24 }, (_, i) => ({ a: i * 2.399, radius: .36 + (i % 5) * .035, speed: .018 + (i % 3) * .005 }));
-  function measure() {
-    size = Math.min(520, visual.clientWidth);
-    dpr = Math.min(1.5, window.devicePixelRatio || 1);
-    canvas.width = Math.round(size * dpr);
-    canvas.height = Math.round(size * dpr);
-  }
-  function draw(_time, dt) {
-    if (!size || !ctx) return;
-    angle += Math.min(dt, 50) * .000085;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, size, size);
-    const center = size / 2;
-    const radius = size * .32;
-    const cosine = Math.cos(angle), sine = Math.sin(angle);
-    const projected = vertices.map(point => {
-      const x = point.x * cosine - point.z * sine;
-      const z = point.x * sine + point.z * cosine;
-      const y = point.y * .94 - z * .34;
-      const depth = z * .94 + point.y * .34;
-      const scale = 3.4 / (3.4 - depth * .5);
-      return { x: center + x * radius * scale, y: center + y * radius * scale, z: depth };
+  if (!ctx) return null;
+  const events = new AbortController();
+  const small = matchMedia('(max-width: 600px)');
+  const fine = matchMedia('(pointer: fine) and (hover: hover)');
+  let enabled = motionAllowed, visible = false, unsubscribe, size = 1, angle = -.35, time = 0, frame = 0;
+  let px = 0, py = 0, tx = 0, ty = 0, points = [], edges = [], slowFrames = 0, lowPower = false;
+  const cpu = document.querySelector('[data-telemetry="cpu"]');
+  const packets = document.querySelector('[data-telemetry="packets"]');
+  let lastTelemetry = 0;
+  function build() {
+    const count = small.matches ? 44 : 82;
+    points = Array.from({ length: count }, (_, i) => {
+      const y = 1 - (i / (count - 1)) * 2, radius = Math.sqrt(1 - y * y), theta = Math.PI * (3 - Math.sqrt(5)) * i;
+      return { x: Math.cos(theta) * radius, y, z: Math.sin(theta) * radius };
     });
-    const glow = ctx.createRadialGradient(center, center, 0, center, center, radius * 1.7);
-    glow.addColorStop(0, 'rgba(133,233,173,.08)'); glow.addColorStop(1, 'rgba(133,233,173,0)');
-    ctx.fillStyle = glow; ctx.fillRect(0, 0, size, size);
-    ctx.lineWidth = .85;
-    for (const [a, b] of edges) {
-      const first = projected[a], second = projected[b];
-      const alpha = .15 + ((first.z + second.z) / 2 + 1) * .14;
-      ctx.strokeStyle = `rgba(133,233,173,${alpha})`;
-      ctx.beginPath(); ctx.moveTo(first.x, first.y); ctx.lineTo(second.x, second.y); ctx.stroke();
+    edges = [];
+    points.forEach((a, i) => points.forEach((b, j) => {
+      if (j <= i) return;
+      const d = Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+      if (d < (small.matches ? .67 : .48)) edges.push([i, j]);
+    }));
+  }
+  function project(point, height = 1) {
+    const a = angle + px, ca = Math.cos(a), sa = Math.sin(a), tilt = -.16 + py;
+    const x = point.x * ca - point.z * sa, z = point.x * sa + point.z * ca;
+    const y = point.y * Math.cos(tilt) - z * Math.sin(tilt), depth = point.y * Math.sin(tilt) + z * Math.cos(tilt);
+    const scale = 1 + depth * .08;
+    return { x: size / 2 + x * size * .36 * height * scale, y: size / 2 + y * size * .36 * height * scale, z: depth };
+  }
+  function draw() {
+    ctx.clearRect(0, 0, size, size);
+    const projected = points.map(p => project(p));
+    edges.forEach(([i, j]) => {
+      const a = projected[i], b = projected[j], alpha = .08 + ((a.z + b.z + 2) / 4) * .32;
+      ctx.strokeStyle = `rgba(125,255,154,${alpha})`; ctx.lineWidth = .65;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    });
+    // Great-circle routes rise gently above the sphere. Packet positions are synthetic.
+    const routes = small.matches ? 3 : 5;
+    for (let route = 0; route < routes; route++) {
+      const a = points[(route * 13 + 3) % points.length], b = points[(route * 17 + 24) % points.length];
+      const dot = Math.max(-.99, Math.min(.99, a.x * b.x + a.y * b.y + a.z * b.z));
+      const omega = Math.acos(dot), denominator = Math.sin(omega);
+      const position = t => {
+        const p = Math.sin((1 - t) * omega) / denominator, q = Math.sin(t * omega) / denominator;
+        return project({ x: a.x * p + b.x * q, y: a.y * p + b.y * q, z: a.z * p + b.z * q }, 1 + .09 * Math.sin(t * Math.PI));
+      };
+      ctx.beginPath();
+      for (let segment = 0; segment <= 30; segment++) { const p = position(segment / 30); if (!segment) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); }
+      ctx.strokeStyle = route % 2 ? 'rgba(255,42,42,.42)' : 'rgba(125,255,154,.4)'; ctx.lineWidth = .9; ctx.stroke();
+      const packet = position((time / (4100 + route * 720) + route * .19) % 1);
+      ctx.fillStyle = route % 2 ? '#ff6969' : '#caffd5'; ctx.beginPath(); ctx.arc(packet.x, packet.y, 2.1, 0, Math.PI * 2); ctx.fill();
     }
-    for (const point of projected) {
-      ctx.fillStyle = `rgba(183,255,208,${.35 + (point.z + 1) * .25})`;
-      ctx.beginPath(); ctx.arc(point.x, point.y, 1.4 + (point.z + 1) * .45, 0, Math.PI * 2); ctx.fill();
-    }
-    const count = window.innerWidth < 1024 ? 12 : 24;
-    for (const point of particles.slice(0, count)) {
-      const a = point.a + angle * point.speed;
-      const x = center + Math.cos(a) * size * point.radius;
-      const y = center + Math.sin(a) * size * point.radius * .86;
-      ctx.fillStyle = 'rgba(133,233,173,.42)'; ctx.fillRect(x, y, 1.3, 1.3);
+    projected.forEach((p, i) => {
+      ctx.fillStyle = i % 13 === 0 ? `rgba(255,90,90,${.45 + (p.z + 1) * .25})` : `rgba(165,255,187,${.22 + (p.z + 1) * .39})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, i % 13 === 0 ? 2.6 : 1.25 + (p.z + 1) * .3, 0, Math.PI * 2); ctx.fill();
+      if (!small.matches && i % 19 === 0 && p.z > .3) { ctx.font = '8px monospace'; ctx.fillStyle = '#94b59b'; ctx.fillText(`N.${String(i).padStart(2, '0')}`, p.x + 7, p.y - 7); }
+    });
+  }
+  function resize() {
+    size = Math.max(1, stage.clientWidth);
+    const dpr = Math.min(window.devicePixelRatio || 1, small.matches ? 1 : 1.5);
+    canvas.width = Math.round(size * dpr); canvas.height = Math.round(size * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    build(); draw();
+  }
+  function step(_now, dt) {
+    time += dt; angle += dt * .000055; frame += dt;
+    px += (tx - px) * (1 - Math.exp(-dt / 400)); py += (ty - py) * (1 - Math.exp(-dt / 400));
+    if (dt > 42) slowFrames++; else slowFrames = Math.max(0, slowFrames - .2);
+    if (slowFrames > 35) lowPower = true;
+    if (frame >= (small.matches || lowPower ? 1000 / 24 : 1000 / 40)) { frame = 0; draw(); }
+    if (time - lastTelemetry > 2500) {
+      lastTelemetry = time;
+      cpu.textContent = Math.round(42 + Math.sin(time / 6000) * 8) + '%';
+      packets.textContent = Math.round(128 + Math.sin(time / 4200) * 21) + '/s';
     }
   }
   function reconcile() {
-    const enabled = Boolean(ctx && allowed && eligible.matches && visible && !document.hidden);
-    unsubscribe?.(); unsubscribe = null;
-    canvas.hidden = !enabled;
-    fallback.hidden = enabled;
-    if (enabled) { measure(); draw(0, 0); unsubscribe = clock.subscribe(draw); }
+    if (enabled && visible && !unsubscribe) unsubscribe = clock.subscribe(step);
+    if ((!enabled || !visible) && unsubscribe) { unsubscribe(); unsubscribe = null; }
   }
-  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
-    visible = entries[0].isIntersecting;
-    hero.classList.toggle('is-offscreen', !visible);
-    reconcile();
-  }) : null;
-  observer?.observe(hero);
-  const resize = 'ResizeObserver' in window ? new ResizeObserver(measure) : null;
-  resize?.observe(visual);
-  eligible.addEventListener('change', reconcile);
-  document.addEventListener('visibilitychange', reconcile, { signal: events.signal });
-  reconcile();
+  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => { visible = entries.some(e => e.isIntersecting); reconcile(); }, { threshold: 0 }) : null;
+  if (observer) observer.observe(stage); else visible = true;
+  const resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(resize) : null;
+  if (resizeObserver) resizeObserver.observe(stage); else window.addEventListener('resize', resize, { passive: true, signal: events.signal });
+  stage.addEventListener('pointermove', event => {
+    if (!enabled || !fine.matches || small.matches || event.pointerType !== 'mouse') return;
+    const rect = stage.getBoundingClientRect();
+    tx = ((event.clientX - rect.left) / rect.width - .5) * .32;
+    ty = ((event.clientY - rect.top) / rect.height - .5) * .2;
+  }, { passive: true, signal: events.signal });
+  stage.addEventListener('pointerleave', () => { tx = 0; ty = 0; }, { signal: events.signal });
+  const changed = () => { resize(); };
+  small.addEventListener('change', changed);
+  resize(); canvas.hidden = false; fallback.hidden = true; fallback.style.display = 'none'; reconcile();
   return {
-    setMotion(value) { allowed = value; reconcile(); },
-    dispose() { unsubscribe?.(); observer?.disconnect(); resize?.disconnect(); eligible.removeEventListener('change', reconcile); events.abort(); canvas.hidden = true; fallback.hidden = false; },
+    setMotion(allowed) { enabled = allowed; if (!allowed) { tx = ty = px = py = 0; draw(); } reconcile(); },
+    dispose() { unsubscribe?.(); events.abort(); observer?.disconnect(); resizeObserver?.disconnect(); small.removeEventListener('change', changed); canvas.hidden = true; fallback.hidden = false; fallback.style.removeProperty('display'); },
   };
 }

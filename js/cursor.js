@@ -29,6 +29,7 @@ export function initCursor({ clock }) {
     show();
     const target = event.target.closest?.('[data-cursor],button,a');
     const view = target?.dataset.cursor === 'view';
+    layer.classList.toggle('is-terminal', Boolean(event.target.closest?.('[data-cursor="terminal"]')));
     diameter = view ? 76 : target?.matches('.button,button') ? 60 : target?.matches('a') ? 36 : 24;
     layer.classList.toggle('is-view', Boolean(view));
   }, { passive: true, signal: events.signal });
@@ -46,13 +47,14 @@ export function initCursor({ clock }) {
       let box = boxes.get(target); if (!box) { box = target.getBoundingClientRect(); boxes.set(target, box); }
       const dx = (event.clientX - box.left) / box.width - .5;
       const dy = (event.clientY - box.top) / box.height - .5;
-      value.tx = Math.max(-1, Math.min(1, dx * 2)) * (tilt ? 2.5 : 7);
-      value.ty = Math.max(-1, Math.min(1, dy * 2)) * (tilt ? -2.5 : 7);
+      value.tx = Math.max(-1, Math.min(1, dx * 2)) * (tilt ? 3.5 : 7);
+      value.ty = Math.max(-1, Math.min(1, dy * 2)) * (tilt ? -3.5 : 7);
     }, { passive: true, signal: events.signal });
     target.addEventListener('pointerleave', reset, { signal: events.signal });
     target.addEventListener('blur', reset, { signal: events.signal });
   }
   document.querySelectorAll('[data-magnetic]').forEach(target => install(target, target.firstElementChild, false));
   document.querySelectorAll('[data-tilt]').forEach(inner => install(inner.closest('button'), inner, true));
+  document.querySelectorAll('[data-identity-tilt]').forEach(inner => install(inner.parentElement, inner, true));
   return { dispose() { events.abort(); hide(); } };
 }
