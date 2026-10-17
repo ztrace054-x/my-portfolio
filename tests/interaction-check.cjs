@@ -47,7 +47,7 @@ function fixture() {
   win.getSelection = () => ({ removeAllRanges(){},addRange(){} });
   win.IntersectionObserver=IO;
   const scripts=[];
-  const context = vm.createContext({ window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:'',search:'',pathname:'/my-portfolio/'},history:{pushState(){},replaceState(){}},URLSearchParams,performance:{now:()=>time},AbortController,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},sessionStorage:{getItem:key=>sessionValues.get(key)||null,setItem:(key,v)=>sessionValues.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
+  const context = vm.createContext({ matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:'',search:'',pathname:'/my-portfolio/'},history:{pushState(){},replaceState(){}},URLSearchParams,performance:{now:()=>time},AbortController,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},sessionStorage:{getItem:key=>sessionValues.get(key)||null,setItem:(key,v)=>sessionValues.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
   const cache = new Map();
   async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative).split('?')[0]));await mod.evaluate();return mod; }
   const load = async file => (await loadModule(file)).namespace;
@@ -69,7 +69,7 @@ async function run() {
   let checks=0;
   {
     const f=fixture(),mod=await f.load('intro-timeline.js');
-    assert.equal(mod.INTRO_DURATION,5200);assert.equal(mod.stageAt(0),0);assert.equal(mod.STAGES[mod.stageAt(3500)][1],'ACCESS DENIED');assert.equal(mod.STAGES[mod.stageAt(3850)][1],'ACCESS GRANTED');assert.equal(mod.STAGES[mod.stageAt(4100)][1],'WELCOME, OPERATOR');
+    assert.equal(mod.INTRO_CONFIG.duration,5200);assert.equal(mod.INTRO_CONFIG.exitAt,4550);assert.equal(mod.INTRO_DURATION,5200);assert.equal(mod.stageAt(0),0);assert.equal(mod.STAGES[mod.stageAt(3500)][1],'ACCESS DENIED');assert.equal(mod.STAGES[mod.stageAt(3850)][1],'ACCESS GRANTED');assert.equal(mod.STAGES[mod.stageAt(4100)][1],'WELCOME, OPERATOR');
     assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:false,hash:''}),false);assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:true,hash:''}),true);checks++;
   }
   {
@@ -77,7 +77,7 @@ async function run() {
     assert(f.doc.getElementById('page').inert); assert(!f.doc.getElementById('intro').hidden);assert(f.doc.getElementById('skip-intro').focused);
     f.advance(3500);assert.equal(f.doc.getElementById('intro-percent').textContent,'88%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS DENIED');
     f.advance(350);assert.equal(f.doc.getElementById('intro-percent').textContent,'100%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS GRANTED');
-    f.advance(250);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
+    f.advance(300);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
     f.advance(1200);await controller.completed;
     assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v4'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
   }

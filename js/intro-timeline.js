@@ -1,5 +1,14 @@
 /* Pure display data; none of these messages represent real security operations. */
-export const INTRO_DURATION = 5200;
+export const INTRO_CONFIG = Object.freeze({
+  duration: 5200,
+  exitAt: 4550,
+  failSafeAt: 7200,
+  reducedMotionHold: 120,
+  reducedMotionFade: 260,
+  colors: Object.freeze({ background: '#030503', green: '#7dff9a', red: '#ff2a2a' }),
+  copy: Object.freeze({ denied: 'ACCESS DENIED', granted: 'ACCESS GRANTED', welcome: 'WELCOME, OPERATOR' }),
+});
+export const INTRO_DURATION = INTRO_CONFIG.duration;
 export const INTRO_KEY = 'saad-intro-v4';
 export const STAGES = Object.freeze([
   [0, 'SYSTEM BOOT // DARK NODE', 'INITIALIZING LOCAL VISUAL ENGINE...', 0, 'BOOTSTRAP / VISUAL ENGINE'],

@@ -1,6 +1,7 @@
-import { INTRO_DURATION, INTRO_KEY, STAGES, stageAt, shouldPlayIntro } from './intro-timeline.js?v=20261017.2';
+import { INTRO_CONFIG, INTRO_DURATION, INTRO_KEY, STAGES, stageAt, shouldPlayIntro } from './intro-timeline.js?v=20261017.2';
 
-export function initIntro({ clock, motionAllowed, reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches }) {
+export function initIntro({ clock, motionAllowed, reducedMotion }) {
+  if (reducedMotion === undefined) reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const root = document.getElementById('intro');
   const page = document.getElementById('page');
   const skip = document.getElementById('skip-intro');
@@ -112,7 +113,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion = matchMedia('(p
     return { completed, entryStarted, cancel: finish };
   }
 
-  deadline = setTimeout(finish, INTRO_DURATION + 2000);
+  deadline = setTimeout(finish, INTRO_CONFIG.failSafeAt);
   const canvas = document.getElementById('intro-rain');
   let ctx = null;
   try { ctx = canvas.getContext('2d', { alpha: true }); } catch { /* Typography is the fallback. */ }
@@ -198,7 +199,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion = matchMedia('(p
       telemetryTime = 0;
       updateTelemetry();
     }
-    if (elapsed >= 4550 && !exiting) {
+    if (elapsed >= INTRO_CONFIG.exitAt && !exiting) {
       exiting = true;
       root.classList.add('is-exiting');
       resolveEntry();
