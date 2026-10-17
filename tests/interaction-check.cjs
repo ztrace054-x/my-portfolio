@@ -107,6 +107,10 @@ async function run() {
     const f=introFixture();f.context.sessionStorage.getItem=()=>{throw Error('blocked')};f.context.sessionStorage.setItem=()=>{throw Error('blocked')};const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.doc.emit('keydown',{key:'Tab'});assert(f.doc.getElementById('skip-intro').focused);controller.cancel();assert(!f.doc.getElementById('page').inert);clock.dispose();checks++;
   }
   {
+    const f=fixture(),mod=await f.load('ambient-field.js');
+    assert.equal(mod.initAmbientField({clock:{subscribe(){return()=>{};}},motionAllowed:true}),null);checks++;
+  }
+  {
     const f=fixture(),clock=await clockFor(f);let frames=0;const un=clock.subscribe(()=>frames++);f.advance(32);assert.equal(frames,2);
     f.doc.hidden=true;f.doc.emit('visibilitychange');assert.equal(f.timers.size,0);f.advance(1000);assert.equal(frames,2);
     f.doc.hidden=false;f.doc.emit('visibilitychange');f.advance(16);assert.equal(frames,3);un();assert.equal(f.timers.size,0);clock.dispose();checks++;
