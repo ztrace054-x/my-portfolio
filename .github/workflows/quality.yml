@@ -1,0 +1,34 @@
+name: Portfolio quality checks
+
+on:
+  push:
+    branches:
+      - feat/cinematic-intro-v2
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript module syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in js/*.js; do
+            node --input-type=module --check < "$file"
+          done
+      - name: Run interaction and accessibility-state tests
+        run: node --experimental-vm-modules tests/interaction-check.cjs

@@ -15,9 +15,10 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%2307090c'/%3E%3Cpath%20d='M43%2018H25l-5%2014h19l-5%2014H16'%20fill='none'%20stroke='%2385e9ad'%20stroke-width='6'/%3E%3C/svg%3E">
 <link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="./assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<script type="module" src="./js/main.js?v=20261016.1"></script>
-<link rel="stylesheet" href="./css/tokens.css?v=20261016.1"><link rel="stylesheet" href="./css/style.css?v=20261016.1"><link rel="stylesheet" href="./css/intro.css?v=20261016.1"><link rel="stylesheet" href="./css/responsive.css?v=20261016.1"><meta name="color-scheme" content="dark"></head>
+<script type="module" src="./js/main.js?v=20261017.3"></script>
+<link rel="stylesheet" href="./css/tokens.css?v=20261017.3"><link rel="stylesheet" href="./css/style.css?v=20261017.3"><link rel="stylesheet" href="./css/intro.css?v=20261017.3"><link rel="stylesheet" href="./css/responsive.css?v=20261017.3"><meta name="color-scheme" content="dark"></head>
 <body data-design="cinematic-v3">
+<canvas id="ambient-canvas" class="ambient-canvas" aria-hidden="true"></canvas>
 <a class="skip-link" href="#main">Skip to content</a>
 <div id="page">
   <header class="site-header" id="site-header">
@@ -143,10 +144,23 @@
   <a class="replay-link text-link" href="?intro=1">Replay intro <span aria-hidden="true">↻</span></a></footer>
 </div>
 <div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title" aria-describedby="intro-disclaimer" hidden>
- <canvas id="intro-rain" aria-hidden="true"></canvas><div class="intro-grid" aria-hidden="true"></div><div class="intro-scanlines" aria-hidden="true"></div><div class="intro-vignette" aria-hidden="true"></div>
+ <canvas id="intro-rain" aria-hidden="true"></canvas><div class="intro-grid" aria-hidden="true"></div><div class="intro-scanlines" aria-hidden="true"></div><div class="intro-vignette" aria-hidden="true"></div><div class="intro-wordfield" aria-hidden="true">
+  <span class="intro-word intro-word--denied">ACCESS DENIED</span>
+  <span class="intro-word intro-word--granted">ACCESS GRANTED</span>
+  <span class="intro-word intro-word--breach">BREACH</span>
+  <span class="intro-word intro-word--root">ROOT</span>
+  <span class="intro-word intro-word--unauthorized">UNAUTHORIZED</span>
+ </div>
+ <div class="intro-hud" aria-hidden="true">
+  <div class="intro-hud-top"><span>LOCAL NODE / 07</span><span>TRACE / SIMULATED</span></div>
+  <div class="intro-hex"><span>7F A1 00 3C</span><span>FF 09 C2 8D</span><span>11 0A 7F E4</span><span>00 31 AA 09</span></div>
+  <div class="intro-hud-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <svg class="intro-waveform" viewBox="0 0 320 54" preserveAspectRatio="none"><path d="M0 27 L20 27 L30 14 L40 40 L50 22 L60 27 L80 27 L90 8 L100 45 L110 27 L135 27 L145 18 L155 34 L165 27 L190 27 L200 5 L210 48 L220 27 L245 27 L255 17 L265 37 L275 27 L320 27"></path></svg>
+  <div class="intro-hud-metrics"><div><span>PACKETS</span><b id="intro-packets">1180</b></div><div><span>LATENCY</span><b id="intro-latency">018ms</b></div><div><span>INTEGRITY</span><b id="intro-integrity">00%</b></div></div>
+ </div>
  <div class="intro-topbar"><span class="micro"><i class="status-dot"></i> SAAD.SECURITY_PROFILE</span><button id="skip-intro" class="intro-skip" type="button">Skip Intro <span aria-hidden="true">↗ / ESC</span></button></div>
  <div class="intro-layout"><aside class="intro-radar" aria-hidden="true"><div class="radar-disc"><i class="radar-sweep"></i><i class="radar-blip b1"></i><i class="radar-blip b2"></i><i class="radar-blip b3"></i><span class="radar-cross"></span></div><span class="micro">TRACE // SIMULATED</span><div class="intro-coordinates micro">NODE 0x7F<br>SESSION // LOCAL<br>LOCAL VISUAL SEQUENCE</div></aside>
- <div class="intro-console"><div class="intro-console-bar micro"><span>SYSTEM BOOT // DARK NODE</span><span id="intro-stage-index">01 / 19</span></div><p class="intro-eyebrow micro">FICTIONAL ACCESS SEQUENCE</p><p id="intro-title" class="intro-title">SYSTEM BOOT<br><span>// DARK NODE</span></p><p id="intro-message" class="intro-message" aria-hidden="true">INITIALIZING SAAD.SECURITY_PROFILE...</p>
+ <div class="intro-console"><div class="intro-console-bar micro"><span>SYSTEM BOOT // DARK NODE</span><span id="intro-stage-index">01 / 12</span></div><p class="intro-eyebrow micro">FICTIONAL ACCESS SEQUENCE</p><p id="intro-title" class="intro-title">SYSTEM BOOT<br><span>// DARK NODE</span></p><p id="intro-message" class="intro-message" aria-hidden="true">INITIALIZING SAAD.SECURITY_PROFILE...</p>
  <div class="intro-nodes" aria-label="Seven simulated network nodes"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span></div>
  <div id="intro-log" class="intro-log micro" aria-hidden="true"><p>&gt; BOOTSTRAP / VISUAL ENGINE</p><p>&gt; ALL NETWORK ACTIVITY IS SIMULATED</p><p>&gt; IDENTITY PROFILE / WAITING</p></div>
  <div class="intro-progress-head micro"><span id="intro-status">INITIALIZING</span><b id="intro-percent">00%</b></div><div class="intro-progress" role="progressbar" aria-label="Intro sequence" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div></div>
