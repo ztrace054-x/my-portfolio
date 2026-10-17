@@ -43,9 +43,9 @@ To change the email, update `CONTENT.email` in `js/config.js` and the accessible
 
 ## Motion and fallbacks
 
-- The first visit in a tab plays an approximately **7.6-second fictional sequence**. All security messages, nodes, packets, and telemetry are visual simulations. The site performs no scanning, access bypass, device inspection, or audio playback.
-- Skip is available immediately; Enter/Space activates the focused native button, and Escape also skips. A 9.5-second wall-clock fail-safe releases the page even if animation callbacks stall. Hidden tabs can therefore finish without replaying the remaining effect.
-- Session key `saad-intro-v3` skips subsequent visits. `?intro=1` explicitly replays; the query is consumed so ordinary reloads return to the session behavior. Deep links, system reduced motion, and saved motion-off bypass the intro.
+- The first visit in a tab plays an approximately **5.2-second fictional sequence** with cropped status typography, a restrained telemetry HUD, a simulated waveform, and a denial-to-grant handoff. All security messages, nodes, packets, and telemetry are visual simulations. The site performs no scanning, access bypass, device inspection, or audio playback.
+- Skip is available immediately; Enter/Space activates the focused native button, and Escape also skips. A 7.2-second wall-clock fail-safe releases the page even if animation callbacks stall. Hidden tabs can therefore finish without replaying the remaining effect.
+- Session key `saad-intro-v4` skips subsequent visits. `?intro=1` explicitly replays; the query is consumed so ordinary reloads return to the session behavior. Deep links and saved motion-off bypass the intro; system reduced motion uses a short, non-flashing static handoff.
 - System reduced motion takes priority over local preference `saad-motion`. Turning motion off completes typing, stops frame effects, removes the custom cursor, and preserves document layout and scroll position. There is no scroll pinning.
 - A shared `requestAnimationFrame` clock stops in hidden documents. Globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and roughly 40 / 24 render FPS targets. Slow-frame detection reduces the desktop render rate.
 - Cursor and 7px magnetic effects run only on fine-pointer screens above 900px. Photo tilt is bounded to 3.5 degrees. Mobile and reduced-motion views keep standard interactions.
@@ -60,7 +60,7 @@ Run with Node 20 or newer:
 node --experimental-vm-modules tests/interaction-check.cjs
 ```
 
-The suite checks timeline progression and its brief rollback, automatic completion, Skip/Escape/cancellation, repeat visits, replay, deep links, reduced motion, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
+The suite checks the 5.2-second timeline, automatic completion, Skip/Escape/Enter/cancellation, repeat visits, replay, deep links, reduced-motion handoff, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
 
 `tests/responsive.html` displays the actual site in 320/390/768/1024/1440px iframe viewports. Use the live served site for browser QA; ES modules do not work correctly from a direct file URL.
 

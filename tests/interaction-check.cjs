@@ -69,29 +69,36 @@ async function run() {
   let checks=0;
   {
     const f=fixture(),mod=await f.load('intro-timeline.js');
-    assert.equal(mod.stageAt(0),0); assert.equal(mod.STAGES[mod.stageAt(4300)][3],47);assert.equal(mod.STAGES[mod.stageAt(4400)][3],46);assert.equal(mod.STAGES[mod.stageAt(6250)][1],'ACCESS GRANTED');
+    assert.equal(mod.INTRO_DURATION,5200);assert.equal(mod.stageAt(0),0);assert.equal(mod.STAGES[mod.stageAt(3500)][1],'ACCESS DENIED');assert.equal(mod.STAGES[mod.stageAt(3850)][1],'ACCESS GRANTED');assert.equal(mod.STAGES[mod.stageAt(4100)][1],'WELCOME, OPERATOR');
     assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:false,hash:''}),false);assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:true,hash:''}),true);checks++;
   }
   {
     const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'); const controller=mod.initIntro({motionAllowed:true,clock});
     assert(f.doc.getElementById('page').inert); assert(!f.doc.getElementById('intro').hidden);assert(f.doc.getElementById('skip-intro').focused);
-    f.advance(4300);assert.equal(f.doc.getElementById('intro-percent').textContent,'47%');
-    f.advance(100);assert.equal(f.doc.getElementById('intro-percent').textContent,'46%');
-    f.advance(3400);await controller.completed;
-    assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v3'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
+    f.advance(3500);assert.equal(f.doc.getElementById('intro-percent').textContent,'88%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS DENIED');
+    f.advance(350);assert.equal(f.doc.getElementById('intro-percent').textContent,'100%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS GRANTED');
+    f.advance(250);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
+    f.advance(1200);await controller.completed;
+    assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v4'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
   }
-  for (const method of ['click','escape','cancel']) {
+  for (const method of ['click','escape','enter','cancel']) {
     const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.advance(300);
-    if(method==='click')f.doc.getElementById('skip-intro').emit('click');if(method==='escape')f.doc.emit('keydown',{key:'Escape'});if(method==='cancel')controller.cancel();
+    if(method==='click')f.doc.getElementById('skip-intro').emit('click');if(method==='escape')f.doc.emit('keydown',{key:'Escape'});if(method==='enter')f.doc.emit('keydown',{key:'Enter'});if(method==='cancel')controller.cancel();
     await controller.completed;controller.cancel();f.advance(10000);assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.timers.size,0);clock.dispose();checks++;
   }
-  for (const mode of ['return','deep','reduce']) {
-    const f=introFixture();if(mode==='return')f.sessionValues.set('saad-intro-v3','seen');if(mode==='deep')f.context.location.hash='#contact';
-    const clock=await clockFor(f),mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='reduce',clock}).completed;
+  for (const mode of ['return','deep','motion-off']) {
+    const f=introFixture();if(mode==='return')f.sessionValues.set('saad-intro-v4','seen');if(mode==='deep')f.context.location.hash='#contact';
+    const clock=await clockFor(f),mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='motion-off',clock}).completed;
     assert(f.doc.getElementById('intro').hidden);assert.equal(f.timers.size,0);clock.dispose();checks++;
   }
   {
-    const f=introFixture();f.sessionValues.set('saad-intro-v3','seen');f.context.location.search='?intro=1';const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});assert(!f.doc.getElementById('intro').hidden);controller.cancel();clock.dispose();checks++;
+    const f=introFixture(),mod=await f.load('intro.js');
+    const controller=mod.initIntro({motionAllowed:false,reducedMotion:true,clock:{subscribe(){return()=>{};}}});
+    assert(!f.doc.getElementById('intro').hidden);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
+    f.advance(500);await controller.completed;assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.timers.size,0);checks++;
+  }
+  {
+    const f=introFixture();f.sessionValues.set('saad-intro-v4','seen');f.context.location.search='?intro=1';const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});assert(!f.doc.getElementById('intro').hidden);controller.cancel();clock.dispose();checks++;
   }
   {
     const f=introFixture(),mod=await f.load('intro.js');const controller=mod.initIntro({motionAllowed:true,clock:{subscribe(){return()=>{};}}});f.advance(9600);await controller.completed;assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);checks++;
