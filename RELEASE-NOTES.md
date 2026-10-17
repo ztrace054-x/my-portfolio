@@ -19,7 +19,16 @@
 - [x] Existing portrait and font files preserved; explicit image dimensions retained.
 - [x] Static HTML fallback and the absence of external runtime dependency requests reviewed.
 
-Browser verification results are recorded after deployment below. Deterministic DOM mocks do not establish visual layout, real browser focus behavior, or frame rate.
+## Browser verification after deployment
+
+- [x] Public GitHub Pages URL loaded successfully and displayed the expected portfolio title.
+- [x] Cinematic intro appeared; the visible Skip Intro control dismissed it and restored access to the page.
+- [x] Hero title and animated Canvas2D network globe rendered.
+- [x] Portrait and identity terminal appeared immediately after the hero; gallery portraits loaded without broken images.
+- [x] About, Journey, Gallery, and Contact navigation links reached their matching sections.
+- [x] Mobile viewport (390 × 844) checked; the hamburger menu opened and exposed all five navigation links.
+- [x] No visible horizontal scrollbar, blank sections, JavaScript runtime errors, unhandled rejections, or console errors were observed during the tested browser session.
+- [x] GitHub, TryHackMe, ZeroDay, Instagram, and email links were present with the original destinations.
 
 ## Assumptions and limits
 
@@ -27,9 +36,6 @@ Browser verification results are recorded after deployment below. Deterministic 
 - All security language and telemetry are explicitly decorative; there is no backend or real network-security functionality.
 - The original ZeroDayTest link points to a dashboard profile and may require the visitor to sign in.
 - Responsive emulation cannot guarantee every physical phone or browser. Render targets are not a guaranteed device-independent FPS result.
+- Browser checks covered a desktop session and a 390 × 844 mobile viewport; all physical devices, keyboard/screen-reader combinations, Lighthouse scores, and guaranteed frame rates were not independently measured.
 - Motion-off is also enforced by system reduced-motion settings; the control cannot override an OS preference.
 - GitHub Pages may briefly serve a cached prior revision after a successful deployment.
-
-## Browser verification after deployment
-
-Pending deployment verification.
