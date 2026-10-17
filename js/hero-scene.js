@@ -38,7 +38,7 @@ export function initHeroScene({ clock, motionAllowed }) {
     const projected = points.map(p => project(p));
     edges.forEach(([i, j]) => {
       const a = projected[i], b = projected[j], alpha = .08 + ((a.z + b.z + 2) / 4) * .32;
-      ctx.strokeStyle = `rgba(125,255,154,${alpha})`; ctx.lineWidth = .65;
+      ctx.strokeStyle = `rgba(133,233,173,${alpha})`; ctx.lineWidth = .65;
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     });
     // Great-circle routes rise gently above the sphere. Packet positions are synthetic.
@@ -53,12 +53,12 @@ export function initHeroScene({ clock, motionAllowed }) {
       };
       ctx.beginPath();
       for (let segment = 0; segment <= 30; segment++) { const p = position(segment / 30); if (!segment) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); }
-      ctx.strokeStyle = route % 2 ? 'rgba(255,42,42,.42)' : 'rgba(125,255,154,.4)'; ctx.lineWidth = .9; ctx.stroke();
+      ctx.strokeStyle = route % 2 ? 'rgba(255,42,42,.42)' : 'rgba(133,233,173,.4)'; ctx.lineWidth = .9; ctx.stroke();
       const packet = position((time / (4100 + route * 720) + route * .19) % 1);
       ctx.fillStyle = route % 2 ? '#ff6969' : '#caffd5'; ctx.beginPath(); ctx.arc(packet.x, packet.y, 2.1, 0, Math.PI * 2); ctx.fill();
     }
     projected.forEach((p, i) => {
-      ctx.fillStyle = i % 13 === 0 ? `rgba(255,90,90,${.45 + (p.z + 1) * .25})` : `rgba(165,255,187,${.22 + (p.z + 1) * .39})`;
+      ctx.fillStyle = i % 13 === 0 ? `rgba(255,90,90,${.45 + (p.z + 1) * .25})` : `rgba(183,255,208,${.22 + (p.z + 1) * .39})`;
       ctx.beginPath(); ctx.arc(p.x, p.y, i % 13 === 0 ? 2.6 : 1.25 + (p.z + 1) * .3, 0, Math.PI * 2); ctx.fill();
       if (!small.matches && i % 19 === 0 && p.z > .3) { ctx.font = '8px monospace'; ctx.fillStyle = '#94b59b'; ctx.fillText(`N.${String(i).padStart(2, '0')}`, p.x + 7, p.y - 7); }
     });

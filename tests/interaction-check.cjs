@@ -68,6 +68,14 @@ function contactFixture() { const f=fixture(); f.doc.getElementById('copy-email'
 async function run() {
   let checks=0;
   {
+    const site=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
+    assert.match(site,/id="workbench"/);
+    assert.match(site,/href="#workbench"/);
+    assert.match(site,/portfolio-refresh\.css\?v=20261017\.4/);
+    assert.match(site,/Authorized lab journal/);
+    checks++;
+  }
+  {
     const f=fixture(),mod=await f.load('intro-timeline.js');
     assert.equal(mod.INTRO_CONFIG.duration,5200);assert.equal(mod.INTRO_CONFIG.exitAt,4550);assert.equal(mod.INTRO_DURATION,5200);assert.equal(mod.stageAt(0),0);assert.equal(mod.STAGES[mod.stageAt(3500)][1],'ACCESS DENIED');assert.equal(mod.STAGES[mod.stageAt(3850)][1],'ACCESS GRANTED');assert.equal(mod.STAGES[mod.stageAt(4100)][1],'WELCOME, OPERATOR');
     assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:false,hash:''}),false);assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:true,hash:''}),true);checks++;
