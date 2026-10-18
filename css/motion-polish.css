@@ -102,6 +102,7 @@ html.motion-off .cursor-dot {
 
 /* The explicit user toggle is a hard stop for CSS animation and transitions.
    JavaScript also cancels Web Animations, typing, the canvas, and the cursor. */
+html.motion-off { scroll-behavior: auto !important; }
 html.motion-off *,
 html.motion-off *::before,
 html.motion-off *::after {
