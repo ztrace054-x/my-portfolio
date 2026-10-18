@@ -183,14 +183,14 @@ async function run() {
     const cards=[0,1,2].map(i=>{const card=new Element();card.getBoundingClientRect=()=>({top:1050+i*350-f.win.scrollY,bottom:1150+i*350-f.win.scrollY,height:100,left:0,right:400,width:400});return card;});
     timeline.all['.phase-card']=cards;f.doc.children['[data-journey-timeline]']=timeline;
     const mod=await f.load('journey.js'),controller=mod.initJourney({motionAllowed:true});
-    assert.equal(timeline.style['--journey-progress'],'0.00%');
+    assert.equal(timeline.style['--journey-progress'],'0%');
     f.win.scrollY=1000;f.win.emit('scroll');f.advance(16);
     const mid=Number.parseFloat(timeline.style['--journey-progress']);
     assert(mid>0&&mid<100);assert.equal(timeline.dataset.progress,String(Math.round(mid)));
     assert(cards[1].classes.has('is-active'));assert(!cards[0].classes.has('is-active'));
     controller.setMotion(false);assert(timeline.classes.has('motion-off'));
     f.win.scrollY=3000;f.win.emit('scroll');f.advance(16);
-    assert.equal(timeline.style['--journey-progress'],'100.00%');
+    assert.equal(timeline.style['--journey-progress'],'100%');
     controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
   }
   console.log(`PASS: ${checks} interaction checks (timeline scroll progress, active phase, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
