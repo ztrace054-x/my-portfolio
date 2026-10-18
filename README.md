@@ -6,11 +6,14 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,motion-polish}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,motion-polish}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Phase 7 removed the confirmed orphan files `css/dark-web.css`, `css/cyber-overrides.css`, `js/ambient-field.js`, `js/smooth-scroll.js`, and `js/viewport.js`. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | Six semantic sections, original photos and links, learning workbench, dialogs, metadata, static fallbacks |
+| `index.html` | Six semantic sections, original photos and links, learning workbench, dialogs, SEO metadata, Person JSON-LD, static fallbacks |
+| `robots.txt` / `sitemap.xml` | Crawler guidance and the canonical single-page URL |
+| `assets/favicon.svg` | Reusable mint-on-ink browser favicon |
+| `assets/og-image.jpg` | Social sharing preview image |
 | `css/tokens.css` | Self-hosted fonts and centralized color, type, spacing, radius, glow, layer, grain, and motion tokens |
 | `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
 | `css/phase-3.css` | Phase 3 glass navbar, magnetic nav labels, hero glitch reveal, animated grid, and scroll cue |
@@ -35,6 +38,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `js/contact.js` | Email typing, clipboard success and failure handling |
 | `js/cursor.js` | Fine-pointer cursor and restrained magnetic text; tilt loops removed for lower frame cost |
 | `js/config.js` | Existing contact, photos, local-storage helper, small timing constants |
+| `tests/qa-check.cjs` | Dependency-free SEO, structured-data, local-link, asset, contrast, and accessibility-structure checks |
 | `tests/interaction-check.cjs` | Deterministic behavior tests with a completion watchdog |
 | `tests/responsive.html` | Development viewport viewer (not linked from the portfolio) |
 | `RELEASE-NOTES.md` | Change summary, verification, assumptions, limitations |
@@ -65,8 +69,11 @@ To change the email, update `CONTENT.email` in `js/config.js` and the accessible
 Run with Node 20 or newer:
 
 ```sh
+node tests/qa-check.cjs
 node --experimental-vm-modules tests/interaction-check.cjs
 ```
+
+The GitHub Actions quality workflow runs both suites and JavaScript module syntax checks on pull requests to `main` and pushes to `main`.
 
 The suite checks the 5.2-second timeline, automatic completion, Skip/Escape/Enter/cancellation, repeat visits, replay, deep links, reduced-motion handoff, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
 
@@ -74,10 +81,34 @@ The suite checks the 5.2-second timeline, automatic completion, Skip/Escape/Ente
 
 ## Fonts
 
-Space Grotesk and JetBrains Mono are self-hosted Latin subsets (approximately 57 KB combined), with `font-display: swap`. Their SIL Open Font License notices remain in `assets/fonts/Space-Grotesk-OFL.txt` and `assets/fonts/JetBrains-Mono-OFL.txt`.
+Space Grotesk and JetBrains Mono are self-hosted Latin subsets (approximately 57 KB combined), with `font-display: swap`. Their SIL Open Font License notices remain in the repository root as `Space-Grotesk-OFL.txt` and `JetBrains-Mono-OFL.txt`.
 
 Original sources: [Space Grotesk](https://github.com/google/fonts/tree/main/ofl/spacegrotesk), [JetBrains Mono](https://github.com/google/fonts/tree/main/ofl/jetbrainsmono).
 
+## Quick edit guide
+
+- **Page title, description, SEO, and section copy:** edit `index.html`. Keep the title, meta description, canonical URL, Open Graph URL, Twitter preview, and Person JSON-LD consistent with the live domain.
+- **Social profiles:** update the social anchor URLs in `index.html` and the public profile URLs in the JSON-LD `sameAs` array together. The ZeroDayTest dashboard/profile URL currently redirects to its sign-in page; replace it only if you have the correct public profile URL.
+- **Email:** update `CONTENT.email` in `js/config.js` and the visible address plus every `mailto:` URL in `index.html`.
+- **Biography, learning roadmap, tools, credentials, and labels:** edit the matching markup in `index.html`. Keep future credentials clearly marked as not yet earned.
+- **Gallery:** replace `assets/saad-golden.jpg`, `assets/saad-dark.jpg`, or `assets/saad-formal.jpg` while retaining the filenames, then update image alt text and intrinsic dimensions in `index.html` and the `PHOTOS` array in `js/gallery.js`. Keep raster images below 250 KB where practical; current portfolio images already meet that budget and do not need lossy re-encoding.
+- **Colors, type, spacing, and motion:** edit tokens in `css/tokens.css`; adjust shared layout in `css/style.css` and `css/responsive.css`; keep section-specific changes in `css/portfolio-refresh.css`, `css/phase-3.css`, or `css/phase-4.css`. `css/motion-polish.css` owns the global motion/reduced-motion policy.
+- **Favicon and search previews:** edit `assets/favicon.svg`, the social preview image `assets/og-image.jpg`, and matching metadata in `index.html`. If the public URL or repository path changes, update the canonical URL, Open Graph/Twitter image URLs, JSON-LD URLs, `robots.txt`, and `sitemap.xml` together.
+- **Cache busting:** when editing a linked CSS or JavaScript file, increment the corresponding `?v=` value in `index.html` (or the importing module URL) so visitors do not keep an older cached copy.
+
+## Final QA and manual browser checklist
+
+The automated QA suite checks SEO metadata/schema, unique IDs, internal anchors, ARIA/label references, heading-level order, image alt/dimensions/loading, local HTML/CSS references, active JavaScript imports, core token contrast, reduced-motion support, and image/font size budgets. It does not replace a real browser audit.
+
+Before a significant release, manually check Chrome and Firefox on desktop plus Safari on macOS/iOS and Chrome on Android when available:
+
+1. At `tests/responsive.html`, review 320, 390, 768, 1024, and 1440 px viewports; confirm no horizontal overflow or clipped controls.
+2. Use only the keyboard: focus the skip link, navigate the menu, open/close the gallery, move between photos, dismiss dialogs with Escape, and activate the email copy control.
+3. Test system reduced motion and the site Motion toggle; confirm content remains visible and no essential information depends on animation.
+4. Inspect browser DevTools Console and Network for uncaught exceptions, failed local assets, 404s, font errors, and layout shifts.
+5. Confirm the social preview image and profile links resolve as expected. The ZeroDayTest dashboard URL may redirect to login, which is expected for that private route.
+
+**GitHub Pages robots.txt note:** this repository is a project site served beneath `/my-portfolio/`. The committed `robots.txt` and sitemap are published beneath that path, but search crawlers conventionally look for `robots.txt` at the origin root (`https://ztrace054-x.github.io/`). To control crawler rules for the whole origin, configure the root `ztrace054-x.github.io` site or use a custom domain; the project-level sitemap can still be submitted directly in Search Console.
 ## Deployment and rollback
 
 GitHub Pages serves **main / root**. The existing Pages workflow publishes merged changes; the live URL remains the same. Original assets and repository history are retained.
