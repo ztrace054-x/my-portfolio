@@ -49,7 +49,7 @@
 .intro .radar-sweep,
 .intro .intro-waveform path,
 .intro .intro-hud-bars i {
-  animation-duration: var(--motion-page-duration);
+  animation-duration: var(--motion-intro-duration);
   animation-iteration-count: 1;
 }
 .intro .intro-console-bar::after,
