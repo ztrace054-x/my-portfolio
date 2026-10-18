@@ -1,5 +1,4 @@
 /* Portfolio refresh v4: stronger layout, restored mint-on-ink palette, and a real learning workbench. */
-:root{--bg:var(--bg);--bg-deep:var(--bg-deep);--surface:var(--surface);--surface-raised:var(--surface-raised);--red:var(--red);--red-soft:var(--red-soft);--green:var(--accent);--green-soft:var(--green-soft);--text:var(--text);--text-soft:var(--text-soft);--secondary:var(--text-soft);--muted:var(--muted);--line:rgba(var(--text-soft-rgb),.18);--accent:var(--green);--accent-soft:rgba(var(--accent-rgb),.1);--focus:var(--accent-hover);--warning:var(--warning);--control-line:var(--control-line);--radius:12px;--hero-glow:rgba(var(--accent-rgb),.1);--panel-edge:rgba(var(--text-soft-rgb),.2)}
 body{background:var(--bg);color:var(--text)}body::before{content:none!important}.ambient-canvas{display:none!important}
 .site-header{background:rgba(7,9,12,.93);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
 .wordmark{letter-spacing:-.07em}.wordmark>span{color:var(--green)}
