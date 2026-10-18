@@ -106,7 +106,14 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
     scheduleActiveSection();
   }, { signal: events.signal });
 
-  const onBreakpoint = () => { if (!mobile.matches && menu.open) closeMenu(); };
+  const onBreakpoint = () => {
+    if (!mobile.matches && menu.open) {
+      closeMenu(false);
+      const desktopTarget = document.querySelector('.desktop-nav a[aria-current="location"]')
+        || document.querySelector('.desktop-nav a[href="#home"]');
+      desktopTarget?.focus({ preventScroll: true });
+    }
+  };
   mobile.addEventListener('change', onBreakpoint);
 
   function updateActiveSection() {
