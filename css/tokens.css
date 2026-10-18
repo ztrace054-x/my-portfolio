@@ -33,6 +33,7 @@
   --surface-legacy-raised: #111;
   --text: #edf2ef;
   --text-soft: #b7c2bd;
+  --secondary: var(--text-soft);
   --text-legacy: #f3f3f0;
   --text-soft-legacy: #c5c5bf;
   --muted: #98a8a1;
