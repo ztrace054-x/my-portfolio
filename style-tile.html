@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" data-grain="on">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#07090c">
+  <meta name="description" content="Phase 1 design-system style tile for the Saad cybersecurity portfolio.">
+  <title>Design System / Style Tile — SAAD</title>
+  <link rel="stylesheet" href="./css/tokens.css?v=20261018.2">
+  <link rel="stylesheet" href="./css/design-system.css?v=20261018.2">
+  <link rel="stylesheet" href="./css/style-tile.css?v=20261018.2">
+</head>
+<body>
+  <main class="tile-shell">
+    <header class="tile-header">
+      <a class="tile-brand" href="./index.html" aria-label="SAAD portfolio home">
+        <img src="./assets/mark-hood-minimal.svg" alt="" width="42" height="42">
+        <span>SAAD<span class="tile-brand-period">.</span></span>
+      </a>
+      <div class="tile-header-meta">
+        <span class="tile-kicker"><i></i> PHASE 01 / DESIGN FOUNDATION</span>
+        <a class="tile-back" href="./index.html">RETURN TO PORTFOLIO <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <section class="tile-intro grid-background" aria-labelledby="tile-title">
+      <p class="tile-eyebrow">DESIGN SYSTEM / REVIEW BUILD</p>
+      <h1 id="tile-title">Mint on <span>ink.</span></h1>
+      <p class="tile-lede">A restrained, technical visual language for a cybersecurity learning portfolio. Same identity, cleaner rules underneath.</p>
+      <div class="tile-intro-foot">
+        <span>COLOR / TYPE / SURFACE / MOTION</span>
+        <span>PROPOSED TOKENS <b>v1.0</b></span>
+      </div>
+    </section>
+
+    <section class="tile-section" aria-labelledby="colors-title">
+      <div class="tile-section-head">
+        <div><p class="tile-index">01 — COLOR</p><h2 id="colors-title">Palette & roles</h2></div>
+        <p>Semantic tokens first. Decorative colors stay subordinate to readable content.</p>
+      </div>
+      <div class="tile-swatches">
+        <article class="tile-swatch"><div class="swatch-color swatch-ink"></div><div class="swatch-meta"><b>Ink</b><code>--bg · #07090C</code></div></article>
+        <article class="tile-swatch"><div class="swatch-color swatch-surface"></div><div class="swatch-meta"><b>Elevated surface</b><code>--surface · #141C20</code></div></article>
+        <article class="tile-swatch"><div class="swatch-color swatch-mint"></div><div class="swatch-meta"><b>Mint accent</b><code>--accent · #85E9AD</code></div></article>
+        <article class="tile-swatch"><div class="swatch-color swatch-text"></div><div class="swatch-meta"><b>Primary text</b><code>--text · #EDF2EF</code></div></article>
+        <article class="tile-swatch"><div class="swatch-color swatch-muted"></div><div class="swatch-meta"><b>Secondary text</b><code>--text-soft · #B7C2BD</code></div></article>
+        <article class="tile-swatch"><div class="swatch-color swatch-alert"></div><div class="swatch-meta"><b>Security alert</b><code>--red-alert · #FF2A2A</code></div></article>
+      </div>
+    </section>
+
+    <section class="tile-section" aria-labelledby="type-title">
+      <div class="tile-section-head">
+        <div><p class="tile-index">02 — TYPOGRAPHY</p><h2 id="type-title">Two voices. One system.</h2></div>
+        <p>Fluid heading tokens scale with the viewport. Technical labels use the self-hosted mono family.</p>
+      </div>
+      <div class="tile-type-grid">
+        <article class="tile-type-card">
+          <div class="tile-type-meta"><span>DISPLAY / SPACE GROTESK</span><code>--type-h1</code></div>
+          <p class="tile-display-sample">Build with intent<span>.</span></p>
+          <p class="tile-type-note">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz 0123456789</p>
+        </article>
+        <article class="tile-type-card tile-type-mono">
+          <div class="tile-type-meta"><span>TECHNICAL / JETBRAINS MONO</span><code>--type-code</code></div>
+          <p class="tile-code-sample">root@saad:~$ whoami<br><span>security learner / in progress</span></p>
+          <p class="tile-type-note">0123456789 / { } [ ] / : ; _ - +</p>
+        </article>
+      </div>
+      <div class="tile-scale-row">
+        <span>DISPLAY</span><strong>clamp(100px, 12.2vw, 194px)</strong>
+        <span>SECTION</span><strong>clamp(36px, 4.7vw, 68px)</strong>
+        <span>BODY</span><strong>16px base</strong>
+      </div>
+    </section>
+
+    <section class="tile-section" aria-labelledby="buttons-title">
+      <div class="tile-section-head">
+        <div><p class="tile-index">03 — INTERACTION</p><h2 id="buttons-title">Buttons & focus</h2></div>
+        <p>High-contrast primary action, quiet secondary action, visible keyboard focus.</p>
+      </div>
+      <div class="tile-controls glass-surface">
+        <div class="tile-button-row">
+          <a class="button button-primary" href="#cards">Primary action <span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" href="#cards">Secondary action</a>
+          <a class="button button-quiet" href="#surface">Quiet link <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="tile-hint">Keyboard check: press Tab to inspect the focus ring. Reduced-motion preferences are respected.</p>
+      </div>
+    </section>
+
+    <section class="tile-section" id="cards" aria-labelledby="cards-title">
+      <div class="tile-section-head">
+        <div><p class="tile-index">04 — COMPONENTS</p><h2 id="cards-title">Cards & surfaces</h2></div>
+        <p>Thin borders, deliberate contrast and low-intensity glow. No heavy neon bloom.</p>
+      </div>
+      <div class="tile-card-grid">
+        <article class="tile-card">
+          <div class="tile-card-top"><span>01 / RECON</span><span class="tile-status"><i></i> LEARNING</span></div>
+          <div class="tile-card-symbol">01</div>
+          <h3>Recon foundations</h3>
+          <p>Build a reliable understanding of networking, enumeration and authorized testing workflows.</p>
+          <div class="tile-tags"><span>NETWORKS</span><span>LINUX</span><span>NOTES</span></div>
+        </article>
+        <article class="tile-card tile-card-glass glass-surface" id="surface">
+          <div class="tile-card-top"><span>02 / SURFACE</span><span class="tile-status"><i></i> TOKENIZED</span></div>
+          <div class="tile-card-symbol">⌁</div>
+          <h3>Glass surface</h3>
+          <p>Translucent layers use shared border, blur and shadow tokens instead of one-off values.</p>
+          <div class="tile-tags"><span>BLUR</span><span>BORDER</span><span>DEPTH</span></div>
+        </article>
+        <article class="tile-card tile-card-grid">
+          <div class="tile-card-top"><span>03 / GRID</span><span class="tile-status"><i></i> UTILITY</span></div>
+          <div class="tile-card-symbol">+</div>
+          <h3>Quiet structure</h3>
+          <p>A reusable thin-line grid adds technical texture without competing with the content.</p>
+          <div class="tile-tags"><span>72PX</span><span>SUBTLE</span><span>RESPONSIVE</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="tile-section tile-effects" aria-labelledby="effects-title">
+      <div class="tile-section-head">
+        <div><p class="tile-index">05 — ATMOSPHERE</p><h2 id="effects-title">Grain & motion</h2></div>
+        <p>Grain stays subtle by default. The switch below demonstrates the global off state.</p>
+      </div>
+      <div class="tile-effects-panel">
+        <div><span class="tile-kicker">FILM GRAIN / SVG OVERLAY</span><p>Fine texture only. The toggle changes <code>data-grain</code> on the document root.</p></div>
+        <button class="button button-secondary tile-grain-toggle" type="button" data-grain-toggle aria-pressed="true">Grain: On</button>
+      </div>
+      <div class="tile-motion-tokens">
+        <span><b>FAST</b><code>180ms</code></span>
+        <span><b>NORMAL</b><code>300ms</code></span>
+        <span><b>CINEMATIC</b><code>650ms</code></span>
+        <span><b>EASING</b><code>cubic-bezier(.16, 1, .3, 1)</code></span>
+      </div>
+    </section>
+
+    <footer class="tile-footer">
+      <img src="./assets/mark-hood-minimal.svg" alt="" width="28" height="28">
+      <span>PHASE 01 / STYLE TILE</span>
+      <span>READY FOR VISUAL APPROVAL</span>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.querySelector("[data-grain-toggle]");
+      if (!toggle) return;
+      toggle.addEventListener("click", () => {
+        const enabled = root.dataset.grain !== "off";
+        root.dataset.grain = enabled ? "off" : "on";
+        toggle.setAttribute("aria-pressed", String(!enabled));
+        toggle.textContent = enabled ? "Grain: Off" : "Grain: On";
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -6,16 +6,19 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh}.css` and `js/main.js`. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
 | `index.html` | Six semantic sections, original photos and links, learning workbench, dialogs, metadata, static fallbacks |
-| `css/tokens.css` | Self-hosted fonts, colors, spacing |
+| `css/tokens.css` | Self-hosted fonts and centralized color, type, spacing, radius, glow, layer, grain, and motion tokens |
+| `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
+| `style-tile.html` / `css/style-tile.css` | Standalone visual approval page for palette, type, buttons, cards, grid, glass, and grain |
+| `assets/mark-hood-minimal.svg` | Original minimal hooded-figure SVG concept mark (not yet inserted into the live navigation) |
 | `css/style.css` | Desktop and shared component styles |
 | `css/intro.css` | Cinematic simulated intro |
 | `css/responsive.css` | Responsive layouts from 320px, reduced motion, print |
-| `css/portfolio-refresh.css` | Restored mint-on-ink palette, console hero, workbench cards, responsive polish |
+| `css/portfolio-refresh.css` | Layout refinements, console hero, workbench cards, responsive polish |
 | `js/main.js` | Core startup, preference controls, optional visual initialization |
 | `js/motion.js` | Shared frame clock; hidden-tab suspension |
 | `js/intro-timeline.js` | Testable display-only timeline and intro eligibility |
