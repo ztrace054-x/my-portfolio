@@ -290,6 +290,12 @@
   letter-spacing: .015em;
 }
 
+/* Keep the Journey tools and credentials content comfortably inset. */
+.journey-details > .detail-panel {
+  padding: clamp(20px, 2.2vw, 30px);
+  border: 1px solid var(--panel-edge);
+}
+ 
 /* Keyboard and reduced-motion support. */
 .identity-photo:hover .photo-brackets i,
 .identity-photo:focus-within .photo-brackets i { border-color: var(--accent); }
