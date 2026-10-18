@@ -6,24 +6,28 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh}.css` and `js/main.js`. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
 | `index.html` | Six semantic sections, original photos and links, learning workbench, dialogs, metadata, static fallbacks |
-| `css/tokens.css` | Self-hosted fonts, colors, spacing |
+| `css/tokens.css` | Self-hosted fonts and centralized color, type, spacing, radius, glow, layer, grain, and motion tokens |
+| `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
+| `css/phase-3.css` | Phase 3 glass navbar, magnetic nav labels, hero glitch reveal, animated grid, and scroll cue |
+| `style-tile.html` / `css/style-tile.css` | Standalone visual approval page for palette, type, buttons, cards, grid, glass, and grain |
+| `assets/mark-hood-minimal.svg` | Original minimal hooded-figure SVG concept mark (not yet inserted into the live navigation) |
 | `css/style.css` | Desktop and shared component styles |
 | `css/intro.css` | Cinematic simulated intro |
 | `css/responsive.css` | Responsive layouts from 320px, reduced motion, print |
-| `css/portfolio-refresh.css` | Restored mint-on-ink palette, console hero, workbench cards, responsive polish |
+| `css/portfolio-refresh.css` | Layout refinements, console hero, workbench cards, responsive polish |
 | `js/main.js` | Core startup, preference controls, optional visual initialization |
 | `js/motion.js` | Shared frame clock; hidden-tab suspension |
 | `js/intro-timeline.js` | Testable display-only timeline and intro eligibility |
 | `js/intro.js` | Intro state, skip, focus, session state, matrix rain, fail-safe |
-| `js/hero-scene.js` | Canvas2D globe, nodes, routes, synthetic packets, static SVG fallback |
-| `js/animations.js` | Native Web Animations and intersection reveals |
+| `js/hero-scene.js` | Canvas2D globe, subtle mouse/device-tilt parallax, synthetic packets, static SVG fallback |
+| `js/animations.js` | Native Web Animations, headline glitch, typing reveal, and intersection reveals |
 | `js/terminal.js` | Optional three-command identity sequence |
-| `js/navigation.js` | Anchor navigation, mobile menu, overlay locks |
+| `js/navigation.js` | Anchor navigation, active-section tracking, accessible mobile menu, overlay locks |
 | `js/gallery.js` | Two-photo viewer, arrow navigation, focus restoration |
 | `js/contact.js` | Email typing, clipboard success and failure handling |
 | `js/cursor.js` | Fine-pointer cursor, magnetic text, subtle photo tilt |

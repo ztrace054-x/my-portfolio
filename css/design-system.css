@@ -1,0 +1,122 @@
+/* Shared design primitives. Keep these utilities small and dependency-free. */
+
+/* The global grain layer uses the same local SVG as the original site. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  background-image: var(--grain-image);
+  background-repeat: repeat;
+  opacity: var(--grain-opacity);
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+html[data-grain="off"] body::after {
+  opacity: 0 !important;
+}
+
+/* Consistent keyboard focus without removing the browser-visible indicator. */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+button:focus-visible,
+.button:focus-visible {
+  outline-offset: var(--focus-offset-compact);
+}
+
+/* Shared button primitives. Existing hero-specific selectors retain precedence. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 52px;
+  padding-inline: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: 500 var(--type-button)/1.2 var(--font-display);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+.button-primary {
+  color: var(--bg-deep);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.button-primary:hover {
+  color: var(--bg-deep);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: var(--glow-accent-sm);
+}
+.button-secondary {
+  color: var(--text);
+  background: var(--surface-raised);
+  border-color: var(--line-strong);
+}
+.button-secondary:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+.button-quiet {
+  color: var(--text-soft);
+  background: transparent;
+  border-color: transparent;
+}
+.button-quiet:hover {
+  color: var(--text);
+  border-color: var(--line);
+  background: rgba(var(--white-rgb), 0.025);
+}
+.button:disabled,
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Thin grid background utility; add to any positioned surface or section. */
+.u-grid-background,
+.grid-background {
+  position: relative;
+  isolation: isolate;
+}
+.u-grid-background::before,
+.grid-background::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-behind);
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  mask-image: linear-gradient(transparent, #000 12%, #000 82%, transparent);
+}
+
+/* Reusable translucent surface for overlays, menus and technical panels. */
+.u-glass,
+.glass-surface {
+  background: var(--surface-glass);
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Keep system preferences authoritative, including for the new primitives. */
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none !important;
+  }
+}

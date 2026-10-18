@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal hooded figure mark</title>
+  <desc id="desc">An original abstract hood silhouette with a mint visor line.</desc>
+  <path d="M32 5.5C20.7 5.5 11.4 14.1 9.8 25.5L6.5 49.8c-.3 2.1 1.9 3.5 3.7 2.4L20 46.5c3.7 2.2 7.7 3.3 12 3.3s8.3-1.1 12-3.3l9.8 5.7c1.8 1.1 4-.3 3.7-2.4L54.2 25.5C52.6 14.1 43.3 5.5 32 5.5Z" fill="#85E9AD" fill-opacity=".07" stroke="#85E9AD" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M18.5 28.5C20.1 18.7 25 14 32 14s11.9 4.7 13.5 14.5l2 13.1c-4.5 3.3-9.7 5-15.5 5s-11-1.7-15.5-5l2-13.1Z" fill="#07090C" stroke="#85E9AD" stroke-opacity=".48" stroke-width="1.2"/>
+  <path d="M21.5 31.5 29 29l-2 5.2-5.5 1.4M42.5 31.5 35 29l2 5.2 5.5 1.4" fill="none" stroke="#85E9AD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M25.5 40.5c4.2 1.5 8.8 1.5 13 0" fill="none" stroke="#85E9AD" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M4 15V4h11M49 4h11v11M60 49v11H49M15 60H4V49" fill="none" stroke="#85E9AD" stroke-opacity=".6" stroke-width="1"/>
+</svg>

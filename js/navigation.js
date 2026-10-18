@@ -32,26 +32,41 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
   const close = document.getElementById('menu-close');
   const header = document.getElementById('site-header');
   const mobile = matchMedia('(max-width: 900px)');
+  const sections = [...document.querySelectorAll('main>section[id]')];
   let focusTimer;
+  let activeFrame = 0;
   let returnFocus = true;
+
+  function setMenuState(open) {
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  }
+
   function closeMenu(restore = true) {
     returnFocus = restore;
     if (menu.open) menu.close();
     overlays.unlock(menu);
-    toggle.setAttribute('aria-expanded', 'false');
+    setMenuState(false);
     if (restore) toggle.focus({ preventScroll: true });
   }
+
   toggle.addEventListener('click', () => {
     if (typeof menu.showModal !== 'function') { location.hash = '#about'; return; }
     returnFocus = true;
     overlays.lock(menu);
     try { menu.showModal(); } catch { overlays.unlock(menu); return; }
-    toggle.setAttribute('aria-expanded', 'true');
-    menu.querySelector('nav a').focus();
+    setMenuState(true);
+    menu.querySelector('nav a')?.focus();
   }, { signal: events.signal });
+
   close.addEventListener('click', () => closeMenu(), { signal: events.signal });
   menu.addEventListener('cancel', event => { event.preventDefault(); closeMenu(); }, { signal: events.signal });
-  menu.addEventListener('close', () => { overlays.unlock(menu); toggle.setAttribute('aria-expanded', 'false'); if (returnFocus) toggle.focus({ preventScroll: true }); }, { signal: events.signal });
+  menu.addEventListener('close', () => {
+    overlays.unlock(menu);
+    setMenuState(false);
+    if (returnFocus) toggle.focus({ preventScroll: true });
+  }, { signal: events.signal });
+
   function goTo(hash, push = true) {
     let target;
     try { target = document.querySelector(hash); } catch { return; }
@@ -73,7 +88,9 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
       window.scrollTo({ top, behavior: getMotion() ? 'smooth' : 'instant' });
       focusTimer = setTimeout(focusTarget, getMotion() ? 650 : 0);
     }
+    scheduleActiveSection();
   }
+
   document.addEventListener('click', event => {
     const link = event.target.closest?.('a[href^="#"]');
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
@@ -82,23 +99,67 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
     event.preventDefault();
     goTo(hash);
   }, { signal: events.signal });
-  window.addEventListener('popstate', () => { if (location.hash) goTo(location.hash, false); else window.scrollTo({ top: 0, behavior: 'instant' }); }, { signal: events.signal });
-  const onBreakpoint = () => { if (!mobile.matches && menu.open) closeMenu(); };
+
+  window.addEventListener('popstate', () => {
+    if (location.hash) goTo(location.hash, false);
+    else window.scrollTo({ top: 0, behavior: 'instant' });
+    scheduleActiveSection();
+  }, { signal: events.signal });
+
+  const onBreakpoint = () => {
+    if (!mobile.matches && menu.open) {
+      closeMenu(false);
+      const desktopTarget = document.querySelector('.desktop-nav a[aria-current="location"]')
+        || document.querySelector('.desktop-nav a[href="#home"]');
+      desktopTarget?.focus({ preventScroll: true });
+    }
+  };
   mobile.addEventListener('change', onBreakpoint);
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 20);
-  window.addEventListener('scroll', onScroll, { passive: true, signal: events.signal });
-  onScroll();
-  const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
-    const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    document.querySelectorAll('.desktop-nav a').forEach(link => {
-      if (link.getAttribute('href') === '#' + visible.target.id) link.setAttribute('aria-current', 'location');
+
+  function updateActiveSection() {
+    activeFrame = 0;
+    if (!sections.length) return;
+    const activationLine = header.offsetHeight + Math.min(window.innerHeight * 0.32, 260);
+    let active = sections[0];
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= activationLine) active = section;
+      else break;
+    }
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+      active = sections[sections.length - 1];
+    }
+    const currentHash = '#' + active.id;
+    document.querySelectorAll('.desktop-nav a, .mobile-menu nav a').forEach(link => {
+      if (link.getAttribute('href') === currentHash) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
-  }, { rootMargin: '-15% 0px -55% 0px', threshold: 0 }) : null;
-  document.querySelectorAll('main>section').forEach(section => observer?.observe(section));
+  }
+
+  function scheduleActiveSection() {
+    if (activeFrame) return;
+    if (typeof requestAnimationFrame === 'function') activeFrame = requestAnimationFrame(updateActiveSection);
+    else activeFrame = setTimeout(updateActiveSection, 16);
+  }
+
+  const onScroll = () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 20);
+    scheduleActiveSection();
+  };
+  window.addEventListener('scroll', onScroll, { passive: true, signal: events.signal });
+  window.addEventListener('resize', scheduleActiveSection, { passive: true, signal: events.signal });
+  onScroll();
+
   return {
     goTo,
-    dispose() { closeMenu(false); events.abort(); observer?.disconnect(); mobile.removeEventListener('change', onBreakpoint); clearTimeout(focusTimer); },
+    dispose() {
+      closeMenu(false);
+      events.abort();
+      mobile.removeEventListener('change', onBreakpoint);
+      clearTimeout(focusTimer);
+      if (activeFrame) {
+        if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(activeFrame);
+        else clearTimeout(activeFrame);
+      }
+    },
   };
 }

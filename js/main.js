@@ -2,15 +2,15 @@ import { CONTENT, storage } from './config.js?v=20261016.1';
 import { createClock } from './motion.js?v=20261016.1';
 import { initIntro } from './intro.js?v=20261017.2';
 import { initContact } from './contact.js?v=20261016.1';
-import { createOverlayManager, initNavigation } from './navigation.js?v=20261016.1';
+import { createOverlayManager, initNavigation } from './navigation.js?v=20261018.3';
 import { initGallery } from './gallery.js?v=20261016.1';
-import { initHeroScene } from './hero-scene.js?v=20261017.4';
+import { initHeroScene } from './hero-scene.js?v=20261018.3';
 import { initCursor } from './cursor.js?v=20261016.1';
-import { initAnimations } from './animations.js?v=20261016.1';
+import { initAnimations } from './animations.js?v=20261018.3';
 import { initTerminal } from './terminal.js?v=20261016.1';
 
 const root = document.documentElement;
-root.dataset.release = '20261017.4';
+root.dataset.release = '20261018.3';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
@@ -57,6 +57,7 @@ reduced.addEventListener('change', setMotion);
 fine.addEventListener('change', setCursor);
 intro.entryStarted.then(() => {
   entered = true;
+  root.classList.add('hero-motion-ready');
   try { animations = initAnimations({ clock, motionAllowed, heroEntry: !location.hash && window.scrollY < 20 }); } catch { /* Source content stays readable. */ }
   scene?.setMotion(motionAllowed); setCursor();
 });
