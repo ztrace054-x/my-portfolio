@@ -1,0 +1,129 @@
+/* Phase 6 — shared motion policy. No layout or content changes. */
+:root {
+  --motion-hover-duration: var(--duration-fast);
+  --motion-hover-easing: var(--ease-standard);
+}
+
+/* Keep hover behavior quick and consistent. State changes remain visible;
+   only the transition timing is normalized. */
+:where(
+  .site-header,
+  .wordmark,
+  .desktop-nav a,
+  .desktop-nav a::after,
+  .desktop-nav a > .nav-link-inner,
+  .menu-toggle,
+  .menu-toggle > span,
+  .mobile-menu nav a,
+  .button,
+  .text-link,
+  .hero-actions .button-primary,
+  .profile-links a,
+  .profile-links a > span:first-child,
+  .identity-photo,
+  .identity-photo img,
+  .identity-photo::before,
+  .identity-portrait figcaption span:first-child,
+  .phase-card,
+  .phase-number,
+  .tool-card,
+  .credential-list li,
+  .workbench-card,
+  .gallery-trigger,
+  .gallery-image-parallax img,
+  .contact-panel,
+  .copy-button,
+  .intro-skip,
+  .intro-nodes > span,
+  .intro-error
+) {
+  transition-duration: var(--motion-hover-duration);
+  transition-timing-function: var(--motion-hover-easing);
+}
+
+/* Longer motion is reserved for intentional entrance moments. */
+.intro {
+  transition-duration: var(--motion-page-duration);
+  transition-timing-function: var(--ease-out);
+}
+.intro .radar-sweep,
+.intro .intro-waveform path,
+.intro .intro-hud-bars i {
+  animation-duration: var(--motion-page-duration);
+  animation-iteration-count: 1;
+}
+.intro .intro-console-bar::after,
+.terminal-cursor,
+.terminal-caret,
+[data-type-command].is-typing::after {
+  animation-duration: 1.2s;
+}
+.hero-grid {
+  will-change: auto;
+  animation-duration: var(--motion-grid-duration);
+}
+.hero-motion-ready #home.is-in-view .hero-grid {
+  will-change: transform;
+}
+.hero-name.is-glitching .name-visual::before,
+.hero-name.is-glitching .name-visual::after {
+  animation-duration: var(--motion-glitch-duration);
+}
+.hero-hud .scroll-cue.is-cue-active > span {
+  animation-duration: var(--motion-cue-duration);
+  animation-iteration-count: 1;
+}
+.identity-photo:hover .photo-scan::after,
+.identity-photo:focus-within .photo-scan::after {
+  animation-duration: var(--motion-reveal-duration);
+  animation-iteration-count: 1;
+}
+
+/* Reveal/cursor layers promote only while they are doing visible work. */
+.desktop-nav a > .nav-link-inner { will-change: auto; }
+.desktop-nav a:hover > .nav-link-inner,
+.desktop-nav a:focus-visible > .nav-link-inner { will-change: transform; }
+.custom-cursor { contain: layout style paint; }
+.cursor-ring,
+.cursor-dot { will-change: transform; }
+html.motion-off .hero-grid,
+html.motion-off .desktop-nav a > .nav-link-inner,
+html.motion-off .cursor-ring,
+html.motion-off .cursor-dot {
+  will-change: auto !important;
+}
+
+/* The shared clock adds .page-paused while the document is hidden. */
+.page-paused *,
+.page-paused *::before,
+.page-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* The explicit user toggle is a hard stop for CSS animation and transitions.
+   JavaScript also cancels Web Animations, typing, the canvas, and the cursor. */
+html.motion-off *,
+html.motion-off *::before,
+html.motion-off *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html.motion-off .custom-cursor { display: none !important; }
+
+/* System-level reduced motion works even before JavaScript initializes. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-grid,
+  .desktop-nav a > .nav-link-inner,
+  .cursor-ring,
+  .cursor-dot { will-change: auto !important; }
+  .custom-cursor { display: none !important; }
+}
