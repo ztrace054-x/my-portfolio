@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ztrace054-x.github.io/my-portfolio/sitemap.xml

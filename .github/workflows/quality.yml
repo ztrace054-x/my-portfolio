@@ -3,7 +3,7 @@ name: Portfolio quality checks
 on:
   push:
     branches:
-      - feat/cinematic-intro-v2
+      - main
   pull_request:
     branches:
       - main
@@ -30,5 +30,7 @@ jobs:
           for file in js/*.js; do
             node --input-type=module --check < "$file"
           done
+      - name: Run static SEO, link, accessibility, contrast, and asset checks
+        run: node tests/qa-check.cjs
       - name: Run interaction and accessibility-state tests
         run: node --experimental-vm-modules tests/interaction-check.cjs
