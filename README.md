@@ -6,7 +6,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,motion-polish}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Older root-level CSS/JS and the old `css/dark-web.css`, `css/cyber-overrides.css`, `js/smooth-scroll.js`, and `js/viewport.js` are retained for history/compatibility, but are **not loaded by the portfolio**. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
@@ -15,6 +15,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
 | `css/phase-3.css` | Phase 3 glass navbar, magnetic nav labels, hero glitch reveal, animated grid, and scroll cue |
 | `css/phase-4.css` | Phase 4 portrait duotone/scan hover, vertical learning timeline, tool cards, and future-goal credentials |
+| `css/motion-polish.css` | Phase 6 shared timing, hover consistency, hidden-tab pause, and reduced-motion hard stop |
 | `style-tile.html` / `css/style-tile.css` | Standalone visual approval page for palette, type, buttons, cards, grid, glass, and grain |
 | `assets/mark-hood-minimal.svg` | Original minimal hooded-figure SVG concept mark (not yet inserted into the live navigation) |
 | `css/style.css` | Desktop and shared component styles |
@@ -27,12 +28,12 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `js/intro.js` | Intro state, skip, focus, session state, matrix rain, fail-safe |
 | `js/hero-scene.js` | Canvas2D globe, subtle mouse/device-tilt parallax, synthetic packets, static SVG fallback |
 | `js/journey.js` | Scroll-driven roadmap progress and active learning phase |
-| `js/animations.js` | Native Web Animations, headline glitch, typing reveal, and intersection reveals |
+| `js/animations.js` | Token-driven native Web Animations, concise hero choreography, typing reveal, and intersection reveals |
 | `js/terminal.js` | Optional three-command identity sequence |
 | `js/navigation.js` | Anchor navigation, active-section tracking, accessible mobile menu, overlay locks |
 | `js/gallery.js` | Two-photo viewer, arrow navigation, focus restoration |
 | `js/contact.js` | Email typing, clipboard success and failure handling |
-| `js/cursor.js` | Fine-pointer cursor, magnetic text, subtle photo tilt |
+| `js/cursor.js` | Fine-pointer cursor and restrained magnetic text; tilt loops removed for lower frame cost |
 | `js/config.js` | Existing contact, photos, local-storage helper, small timing constants |
 | `tests/interaction-check.cjs` | Deterministic behavior tests with a completion watchdog |
 | `tests/responsive.html` | Development viewport viewer (not linked from the portfolio) |
@@ -53,9 +54,9 @@ To change the email, update `CONTENT.email` in `js/config.js` and the accessible
 - The first visit in a tab plays an approximately **5.2-second fictional sequence** with cropped status typography, a restrained telemetry HUD, a simulated waveform, and a denial-to-grant handoff. All security messages, nodes, packets, and telemetry are visual simulations. The site performs no scanning, access bypass, device inspection, or audio playback.
 - Skip is available immediately; Enter/Space activates the focused native button, and Escape also skips. A 7.2-second wall-clock fail-safe releases the page even if animation callbacks stall. Hidden tabs can therefore finish without replaying the remaining effect.
 - Session key `saad-intro-v4` skips subsequent visits. `?intro=1` explicitly replays; the query is consumed so ordinary reloads return to the session behavior. Deep links and saved motion-off bypass the intro; system reduced motion uses a short, non-flashing static handoff.
-- System reduced motion takes priority over local preference `saad-motion`. Turning motion off completes typing, stops frame effects, removes the custom cursor, and preserves document layout and scroll position. There is no scroll pinning.
-- A shared `requestAnimationFrame` clock stops in hidden documents. Globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and roughly 40 / 24 render FPS targets. Slow-frame detection reduces the desktop render rate.
-- Cursor and 7px magnetic effects run only on fine-pointer screens above 900px. Photo tilt is bounded to 3.5 degrees. Mobile and reduced-motion views keep standard interactions.
+- System reduced motion takes priority over local preference `saad-motion`. Turning motion off completes typing, cancels Web Animations, disables CSS animation/transitions, stops frame effects, removes the custom cursor, and preserves document layout and scroll position. There is no scroll pinning.
+- A shared `requestAnimationFrame` clock stops in hidden documents. CSS animation play state pauses while hidden; globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and roughly 40 / 24 render FPS targets. Slow-frame detection reduces the desktop render rate. Phase 6 standardizes hover/reveal/page tokens and removes rotating status text and per-letter hero animation.
+- The custom cursor and 3.5px magnetic text effect run only on fine-pointer screens above 900px. Continuous photo/card tilt was removed to reduce per-frame work. Motion-off and reduced-motion remove the cursor and magnetic motion.
 - Source HTML remains readable without JavaScript; the SVG globe, biography, email, social links, and photos remain available. No-script navigation is provided. The enhanced gallery viewer and motion/copy controls require JavaScript.
 - Animation failure never gates content on a third-party library. Self-hosted fonts fall back to system fonts.
 
