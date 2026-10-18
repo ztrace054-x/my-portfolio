@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const root = path.join(__dirname, '..', 'js');
 
 class Element {
-  constructor() { this.listeners = {}; this.attrs = {}; this.dataset = {}; this.hidden = false; this.textContent = ''; this.open = false; this.inert = false; this.disabled = false; this.children = {}; this.all = {}; this.classes = new Set(); this.classList = { add: (...x) => x.forEach(v => this.classes.add(v)), remove: (...x) => x.forEach(v => this.classes.delete(v)), toggle: (v,on) => { if(on === undefined) on = !this.classes.has(v); on ? this.classes.add(v) : this.classes.delete(v); }, contains: v => this.classes.has(v) }; this.style = { removeProperty(key) { delete this[key]; } }; this.clientWidth=1000; this.clientHeight=800; }
+  constructor() { this.listeners = {}; this.attrs = {}; this.dataset = {}; this.hidden = false; this.textContent = ''; this.open = false; this.inert = false; this.disabled = false; this.children = {}; this.all = {}; this.classes = new Set(); this.classList = { add: (...x) => x.forEach(v => this.classes.add(v)), remove: (...x) => x.forEach(v => this.classes.delete(v)), toggle: (v,on) => { if(on === undefined) on = !this.classes.has(v); on ? this.classes.add(v) : this.classes.delete(v); }, contains: v => this.classes.has(v) }; this.style = { setProperty(key,value) { this[key] = value; }, removeProperty(key) { delete this[key]; } }; this.clientWidth=1000; this.clientHeight=800; }
   addEventListener(type, fn, options = {}) { (this.listeners[type] ||= []).push(fn); options.signal?.addEventListener('abort', () => this.removeEventListener(type, fn)); }
   removeEventListener(type, fn) { this.listeners[type] = (this.listeners[type] || []).filter(x => x !== fn); }
   emit(type, data = {}) { const event = { target: this, button: 0, preventDefault() { this.defaultPrevented = true; }, ...data }; for (const fn of this.listeners[type] || []) fn(event); return event; }
@@ -174,7 +174,26 @@ async function run() {
     assert.equal(toggle.getAttribute('aria-label'),'Open navigation');
     controller.dispose();f.advance(100);assert.equal(f.timers.size,0);checks++;
   }
-  console.log(`PASS: ${checks} interaction checks (timeline, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
+  {
+    const f=fixture(), timeline=new Element();
+    timeline.doc=f.doc;
+    timeline.style.setProperty('--journey-progress','0%');
+    timeline.getBoundingClientRect=()=>({top:1000-f.win.scrollY,bottom:2000-f.win.scrollY,height:1000,left:0,right:500,width:500});
+    const fill=new Element();timeline.children['[data-journey-progress]']=fill;
+    const cards=[0,1,2].map(i=>{const card=new Element();card.getBoundingClientRect=()=>({top:1050+i*350-f.win.scrollY,bottom:1150+i*350-f.win.scrollY,height:100,left:0,right:400,width:400});return card;});
+    timeline.all['.phase-card']=cards;f.doc.children['[data-journey-timeline]']=timeline;
+    const mod=await f.load('journey.js'),controller=mod.initJourney({motionAllowed:true});
+    assert.equal(timeline.style['--journey-progress'],'0.00%');
+    f.win.scrollY=1000;f.win.emit('scroll');f.advance(16);
+    const mid=Number.parseFloat(timeline.style['--journey-progress']);
+    assert(mid>0&&mid<100);assert.equal(timeline.dataset.progress,String(Math.round(mid)));
+    assert(cards[1].classes.has('is-active'));assert(!cards[0].classes.has('is-active'));
+    controller.setMotion(false);assert(timeline.classes.has('motion-off'));
+    f.win.scrollY=3000;f.win.emit('scroll');f.advance(16);
+    assert.equal(timeline.style['--journey-progress'],'100.00%');
+    controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
+  }
+  console.log(`PASS: ${checks} interaction checks (timeline scroll progress, active phase, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
 }
 // A stalled promise must fail, rather than letting Node exit with a misleading zero code.
 const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);
