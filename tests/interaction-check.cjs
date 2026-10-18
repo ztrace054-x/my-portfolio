@@ -77,6 +77,8 @@ async function run() {
     const tokens=fs.readFileSync(path.join(__dirname,'..','css','tokens.css'),'utf8');
     assert.match(tokens,/--motion-reveal-duration:\s*560ms/);
     assert.match(tokens,/--motion-cursor-follow:\s*95ms/);
+    assert.match(tokens,/--motion-intro-duration:\s*5\.2s/);
+    assert.match(motionCss,/animation-duration:\s*var\(--motion-intro-duration\)/);
     assert.match(motionCss,/html\.motion-off/);
     assert.match(motionCss,/prefers-reduced-motion:\s*reduce/);
     assert.match(motionCss,/page-paused/);
