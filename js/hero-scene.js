@@ -8,6 +8,7 @@ export function initHeroScene({ clock, motionAllowed }) {
   const events = new AbortController();
   const small = matchMedia('(max-width: 600px)');
   const fine = matchMedia('(pointer: fine) and (hover: hover)');
+  const coarse = matchMedia('(pointer: coarse) and (max-width: 900px)');
   let enabled = motionAllowed, visible = false, unsubscribe, size = 1, angle = -.35, time = 0, frame = 0;
   let px = 0, py = 0, tx = 0, ty = 0, points = [], edges = [], slowFrames = 0, lowPower = false;
   const cpu = document.querySelector('[data-telemetry="cpu"]');
@@ -92,10 +93,19 @@ export function initHeroScene({ clock, motionAllowed }) {
   stage.addEventListener('pointermove', event => {
     if (!enabled || !fine.matches || small.matches || event.pointerType !== 'mouse') return;
     const rect = stage.getBoundingClientRect();
-    tx = ((event.clientX - rect.left) / rect.width - .5) * .32;
-    ty = ((event.clientY - rect.top) / rect.height - .5) * .2;
+    tx = ((event.clientX - rect.left) / rect.width - .5) * .18;
+    ty = ((event.clientY - rect.top) / rect.height - .5) * .1;
   }, { passive: true, signal: events.signal });
   stage.addEventListener('pointerleave', () => { tx = 0; ty = 0; }, { signal: events.signal });
+  function onOrientation(event) {
+    if (!enabled || !coarse.matches || !Number.isFinite(event.gamma) || !Number.isFinite(event.beta)) return;
+    const clamp = value => Math.max(-1, Math.min(1, value));
+    tx = clamp(event.gamma / 45) * .08;
+    ty = clamp(event.beta / 90) * .045;
+  }
+  // Optional device tilt is passive and never requests sensor permission.
+  window.addEventListener('deviceorientation', onOrientation, { passive: true, signal: events.signal });
+
   const changed = () => { resize(); };
   small.addEventListener('change', changed);
   resize(); canvas.hidden = false; fallback.hidden = true; fallback.style.display = 'none'; reconcile();
