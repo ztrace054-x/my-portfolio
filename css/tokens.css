@@ -149,6 +149,7 @@
   --motion-hover-duration: var(--duration-fast);
   --motion-reveal-duration: 560ms;
   --motion-page-duration: var(--duration-cinematic);
+  --motion-intro-duration: 5.2s;
   --motion-glitch-duration: 560ms;
   --motion-cue-duration: 720ms;
   --motion-stagger: 80ms;
