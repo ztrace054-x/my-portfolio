@@ -72,6 +72,15 @@ async function run() {
     assert.match(site,/id="workbench"/);
     assert.match(site,/href="#workbench"/);
     assert.match(site,/portfolio-refresh\.css\?v=20261018\.3/);
+    assert.match(site,/motion-polish\.css\?v=20261018\.5/);
+    const motionCss=fs.readFileSync(path.join(__dirname,'..','css','motion-polish.css'),'utf8');
+    const tokens=fs.readFileSync(path.join(__dirname,'..','css','tokens.css'),'utf8');
+    assert.match(tokens,/--motion-reveal-duration:\s*560ms/);
+    assert.match(tokens,/--motion-cursor-follow:\s*95ms/);
+    assert.match(motionCss,/html\.motion-off/);
+    assert.match(motionCss,/prefers-reduced-motion:\s*reduce/);
+    assert.match(motionCss,/page-paused/);
+    assert.match(motionCss,/animation-iteration-count:\s*1/);
     assert.match(site,/Authorized lab journal/);
     checks++;
   }
