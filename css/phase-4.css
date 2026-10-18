@@ -1,0 +1,343 @@
+/* Phase 4 — About and Journey only. Keep the remaining sections unchanged. */
+
+/* Portrait: restrained green duotone and a single scan pass on hover/focus. */
+.identity-photo {
+  overflow: hidden;
+  border: 1px solid rgba(var(--accent-rgb), .12);
+  box-shadow: 0 18px 55px rgba(var(--black-rgb), .14);
+  transition: transform .35s var(--ease-out), border-color .35s, box-shadow .35s;
+}
+.identity-photo img {
+  filter: grayscale(1) contrast(1.08) brightness(.94);
+  transition: filter .38s var(--ease-standard), transform .6s var(--ease-out);
+}
+.identity-photo::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), .3), rgba(12, 22, 17, .08) 55%, rgba(120, 151, 222, .13));
+  mix-blend-mode: color;
+  transition: opacity .38s var(--ease-standard);
+}
+.identity-photo:hover,
+.identity-photo:focus-within {
+  transform: translateY(-3px);
+  border-color: rgba(var(--accent-rgb), .42);
+  box-shadow: 0 24px 65px rgba(var(--black-rgb), .24);
+}
+.identity-photo:hover img,
+.identity-photo:focus-within img {
+  filter: grayscale(1) sepia(1) hue-rotate(78deg) saturate(1.45) contrast(1.12);
+  transform: scale(1.015);
+}
+.identity-photo:hover::before,
+.identity-photo:focus-within::before { opacity: 1; }
+.identity-photo:hover .photo-scan::after,
+.identity-photo:focus-within .photo-scan::after {
+  animation: phase4-scan-pass 1.05s var(--ease-out) both;
+}
+.identity-photo:hover .photo-stamp,
+.identity-photo:focus-within .photo-stamp {
+  border-color: rgba(var(--accent-rgb), .8);
+}
+@keyframes phase4-scan-pass {
+  from { transform: translateY(-105%); }
+  to { transform: translateY(105%); }
+}
+.identity-portrait figcaption span:first-child {
+  transition: color .25s var(--ease-standard), transform .25s var(--ease-out);
+}
+.identity-portrait:hover figcaption span:first-child {
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+/* Vertical roadmap: the progress fill follows scroll position through the timeline. */
+.journey-stage { position: relative; }
+.journey-timeline {
+  position: relative;
+  margin-top: 24px;
+  --journey-progress: 0%;
+}
+.journey-track {
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 17px;
+  width: 2px;
+  height: auto;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+}
+.journey-track > span {
+  position: absolute;
+  inset: 0 0 auto;
+  display: block;
+  width: 100%;
+  height: var(--journey-progress, 0%);
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--accent), rgba(var(--accent-rgb), .45));
+  transform: none;
+  transition: height .14s linear;
+}
+.journey-timeline.motion-off .journey-track > span { transition: none; }
+.phase-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  padding-left: 52px;
+}
+.phase-card {
+  position: relative;
+  display: block;
+  min-height: 0;
+  padding: clamp(24px, 3.5vw, 38px);
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, rgba(20, 28, 32, .9), rgba(9, 14, 17, .97));
+  transition: transform .28s var(--ease-out), border-color .28s, background .28s, box-shadow .28s;
+}
+.phase-card:hover,
+.phase-card:focus-within {
+  transform: translateX(3px);
+  border-color: rgba(var(--accent-rgb), .48);
+  background: linear-gradient(145deg, rgba(20, 32, 27, .96), rgba(9, 14, 17, .98));
+  box-shadow: 0 16px 44px rgba(var(--black-rgb), .14);
+}
+.phase-card.is-active { border-color: rgba(var(--accent-rgb), .38); }
+.phase-number {
+  position: absolute;
+  left: -53px;
+  top: 26px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--muted);
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0;
+  transition: color .25s, border-color .25s, background .25s, box-shadow .25s;
+}
+.phase-card.is-active .phase-number,
+.phase-card:hover .phase-number,
+.phase-card:focus-within .phase-number {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), .68);
+  background: #0b1510;
+  box-shadow: 0 0 0 5px rgba(var(--accent-rgb), .055);
+}
+.phase-body { padding-top: 0; max-width: 68ch; }
+.phase-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+  margin-bottom: 18px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font: 500 10px/1.3 var(--font-mono);
+  letter-spacing: .015em;
+  text-transform: none;
+}
+.phase-status .status-dot {
+  flex: 0 0 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+}
+.phase-status--progress {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), .35);
+  background: rgba(var(--accent-rgb), .075);
+}
+.phase-status--planned {
+  color: var(--text-soft);
+  background: rgba(var(--white-rgb), .025);
+}
+.phase-status--long-term {
+  color: #a9bce0;
+  border-color: rgba(169, 188, 224, .28);
+  background: rgba(169, 188, 224, .055);
+}
+.phase-card h3 { font-size: clamp(26px, 3vw, 34px); }
+.phase-card ul { max-width: 56ch; }
+.phase-note {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 10px/1.7 var(--font-mono);
+}
+
+/* Four honest, equal-status tool cards — no ratings, meters, or skill bars. */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 174px;
+  padding: 17px;
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, rgba(20, 28, 32, .8), rgba(9, 14, 17, .96));
+  transition: transform .25s var(--ease-out), border-color .25s, background .25s, box-shadow .25s;
+}
+.tool-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--accent-rgb), .48);
+  background: linear-gradient(145deg, rgba(22, 36, 29, .92), rgba(9, 14, 17, .98));
+  box-shadow: 0 14px 34px rgba(var(--black-rgb), .15);
+}
+.tool-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-color: rgba(var(--accent-rgb), .5);
+}
+.tool-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.tool-card-index {
+  color: var(--muted);
+  font: 9px/1.4 var(--font-mono);
+  letter-spacing: .06em;
+}
+.tool-card-symbol {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(var(--accent-rgb), .28);
+  border-radius: 9px;
+  background: rgba(var(--accent-rgb), .06);
+  color: var(--accent);
+  font: 500 13px/1 var(--font-mono);
+}
+.tool-card h4 {
+  margin: 0 0 5px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -.025em;
+}
+.tool-card p {
+  margin: 0 0 16px;
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.tool-exploration {
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+  padding: 6px 8px;
+  border: 1px solid rgba(var(--accent-rgb), .2);
+  border-radius: var(--radius-pill);
+  background: rgba(var(--accent-rgb), .045);
+  color: var(--accent);
+  font: 9px/1.4 var(--font-mono);
+}
+
+/* Certificates are outlined goals, deliberately not styled as earned awards. */
+.credential-list {
+  display: grid;
+  gap: 10px;
+}
+.credential-list li {
+  padding: 15px 16px;
+  border: 1px dashed rgba(var(--accent-rgb), .27);
+  border-radius: var(--radius-sm);
+  background: rgba(var(--white-rgb), .015);
+  transition: border-color .25s, background .25s, transform .25s var(--ease-out);
+}
+.credential-list li:hover {
+  transform: translateX(2px);
+  border-color: rgba(var(--accent-rgb), .52);
+  background: rgba(var(--accent-rgb), .035);
+}
+.credential-list span {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.credential-list small {
+  color: var(--muted);
+  font: 9px/1.6 var(--font-mono);
+  letter-spacing: .015em;
+}
+
+/* Keyboard and reduced-motion support. */
+.identity-photo:hover .photo-brackets i,
+.identity-photo:focus-within .photo-brackets i { border-color: var(--accent); }
+.phase-card:focus-within,
+.tool-card:focus-visible,
+.credential-list li:focus-within { outline-color: var(--accent); }
+@media (max-width: 900px) {
+  .journey-track { left: 16px; }
+  .phase-grid { padding-left: 48px; }
+  .phase-number { left: -49px; }
+  .phase-card { padding: 24px; }
+}
+@media (max-width: 600px) {
+  .journey-timeline { margin-top: 12px; }
+  .journey-track { left: 13px; top: 24px; bottom: 24px; }
+  .phase-grid { padding-left: 40px; gap: 16px; }
+  .phase-card { padding: 22px 17px; }
+  .phase-number { left: -41px; top: 23px; width: 28px; height: 28px; font-size: 10px; }
+  .phase-status { font-size: 9px; padding: 7px 9px; }
+  .tool-card { min-height: 164px; padding: 14px; }
+  .tool-card h4 { font-size: 14px; }
+  .tool-exploration { font-size: 8px; }
+  .credential-list li { padding: 14px 12px; }
+}
+@media (max-width: 360px) {
+  .tool-grid { grid-template-columns: 1fr; }
+  .phase-grid { padding-left: 36px; }
+  .phase-number { left: -37px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .identity-photo,
+  .identity-photo img,
+  .identity-photo::before,
+  .identity-portrait figcaption span:first-child,
+  .phase-card,
+  .phase-number,
+  .tool-card,
+  .credential-list li,
+  .journey-track > span {
+    animation: none !important;
+    transition: none !important;
+  }
+  .identity-photo:hover,
+  .identity-photo:focus-within,
+  .phase-card:hover,
+  .phase-card:focus-within,
+  .tool-card:hover,
+  .credential-list li:hover { transform: none; }
+  .identity-photo:hover .photo-scan::after,
+  .identity-photo:focus-within .photo-scan::after { animation: none; }
+}

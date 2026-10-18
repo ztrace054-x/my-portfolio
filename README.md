@@ -14,6 +14,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `css/tokens.css` | Self-hosted fonts and centralized color, type, spacing, radius, glow, layer, grain, and motion tokens |
 | `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
 | `css/phase-3.css` | Phase 3 glass navbar, magnetic nav labels, hero glitch reveal, animated grid, and scroll cue |
+| `css/phase-4.css` | Phase 4 portrait duotone/scan hover, vertical learning timeline, tool cards, and future-goal credentials |
 | `style-tile.html` / `css/style-tile.css` | Standalone visual approval page for palette, type, buttons, cards, grid, glass, and grain |
 | `assets/mark-hood-minimal.svg` | Original minimal hooded-figure SVG concept mark (not yet inserted into the live navigation) |
 | `css/style.css` | Desktop and shared component styles |
@@ -25,6 +26,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `js/intro-timeline.js` | Testable display-only timeline and intro eligibility |
 | `js/intro.js` | Intro state, skip, focus, session state, matrix rain, fail-safe |
 | `js/hero-scene.js` | Canvas2D globe, subtle mouse/device-tilt parallax, synthetic packets, static SVG fallback |
+| `js/journey.js` | Scroll-driven roadmap progress and active learning phase |
 | `js/animations.js` | Native Web Animations, headline glitch, typing reveal, and intersection reveals |
 | `js/terminal.js` | Optional three-command identity sequence |
 | `js/navigation.js` | Anchor navigation, active-section tracking, accessible mobile menu, overlay locks |

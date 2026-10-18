@@ -8,9 +8,10 @@ import { initHeroScene } from './hero-scene.js?v=20261018.3';
 import { initCursor } from './cursor.js?v=20261016.1';
 import { initAnimations } from './animations.js?v=20261018.3';
 import { initTerminal } from './terminal.js?v=20261016.1';
+import { initJourney } from './journey.js?v=20261018.4';
 
 const root = document.documentElement;
-root.dataset.release = '20261018.3';
+root.dataset.release = '20261018.4';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
@@ -23,6 +24,7 @@ const navigation = initNavigation({ getScroll: () => null, getMotion: () => moti
 initGallery({ overlays });
 const contact = initContact({ motionAllowed, clock });
 const terminal = initTerminal({ clock, motionAllowed });
+const journey = initJourney({ motionAllowed });
 document.getElementById('year').textContent = String(new Date().getFullYear());
 function controls() {
   root.classList.toggle('motion-off', !motionAllowed);
@@ -46,7 +48,7 @@ try { scene = initHeroScene({ clock, motionAllowed: false }); } catch { /* Acces
 function setMotion() {
   motionAllowed = getAllowed(); controls();
   if (!motionAllowed) intro.cancel();
-  scene?.setMotion(motionAllowed && entered);
+  scene?.setMotion(motionAllowed && entered); journey.setMotion(motionAllowed);
   animations?.setMotion(motionAllowed); terminal.setMotion(motionAllowed); contact.setMotion(motionAllowed); setCursor();
 }
 document.querySelectorAll('[data-motion-toggle]').forEach(button => button.addEventListener('click', () => {
@@ -62,5 +64,5 @@ intro.entryStarted.then(() => {
   scene?.setMotion(motionAllowed); setCursor();
 });
 intro.completed.then(() => { if (location.hash) navigation.goTo(location.hash, false); });
-window.addEventListener('beforeprint', () => { intro.cancel(); scene?.setMotion(false); animations?.setMotion(false); terminal.setMotion(false); contact.setMotion(false); cursor?.dispose(); cursor = null; });
+window.addEventListener('beforeprint', () => { intro.cancel(); scene?.setMotion(false); animations?.setMotion(false); terminal.setMotion(false); journey.setMotion(false); contact.setMotion(false); cursor?.dispose(); cursor = null; });
 window.addEventListener('afterprint', setMotion);
