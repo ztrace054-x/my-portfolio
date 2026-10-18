@@ -71,7 +71,7 @@ async function run() {
     const site=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
     assert.match(site,/id="workbench"/);
     assert.match(site,/href="#workbench"/);
-    assert.match(site,/portfolio-refresh\.css\?v=20261017\.4/);
+    assert.match(site,/portfolio-refresh\.css\?v=20261018\.3/);
     assert.match(site,/Authorized lab journal/);
     checks++;
   }
@@ -145,6 +145,34 @@ async function run() {
   }
   {
     const f=fixture(),mod=await f.load('navigation.js'),manager=mod.createOverlayManager({getScroll:()=>null,refresh(){}});f.win.scrollY=1200;const owner={};manager.lock(owner);assert(f.doc.getElementById('page').inert);assert(manager.locked);manager.unlock({});assert(manager.locked);manager.unlock(owner);assert(!manager.locked);assert(!f.doc.getElementById('page').inert);assert.equal(f.win.scrollY,1200);checks++;
+  }
+  {
+    const f=fixture();
+    const ids=['home','about','journey','workbench','gallery','contact'];
+    const sections=ids.map((id,i)=>{const node=new Element();node.id=id;node.top=i===0?0:700+i*50;return node;});
+    f.doc.all['main>section[id]']=sections;
+    const desktop=ids.map(id=>{const node=new Element();node.attrs.href='#'+id;return node;});
+    const mobile=ids.map(id=>{const node=new Element();node.attrs.href='#'+id;return node;});
+    f.doc.all['.desktop-nav a, .mobile-menu nav a']=[...desktop,...mobile];
+    f.doc.getElementById('site-header').offsetHeight=80;
+    const menu=f.doc.getElementById('mobile-menu');menu.children['nav a']=new Element();
+    const toggle=f.doc.getElementById('menu-toggle');
+    const mod=await f.load('navigation.js'),overlays=mod.createOverlayManager({getScroll:()=>null,refresh(){}});
+    const controller=mod.initNavigation({getScroll:()=>null,getMotion:()=>false,overlays});
+    f.advance(16);
+    assert.equal(desktop[0].getAttribute('aria-current'),'location');
+    assert.equal(mobile[0].getAttribute('aria-current'),'location');
+    sections[0].top=-900;sections[1].top=-120;sections[2].top=500;
+    f.win.scrollY=900;f.win.emit('scroll');f.advance(16);
+    assert.equal(desktop[1].getAttribute('aria-current'),'location');
+    assert.equal(mobile[1].getAttribute('aria-current'),'location');
+    toggle.emit('click');
+    assert.equal(toggle.getAttribute('aria-expanded'),'true');
+    assert.equal(toggle.getAttribute('aria-label'),'Close navigation');
+    menu.emit('cancel');
+    assert.equal(toggle.getAttribute('aria-expanded'),'false');
+    assert.equal(toggle.getAttribute('aria-label'),'Open navigation');
+    controller.dispose();f.advance(100);assert.equal(f.timers.size,0);checks++;
   }
   console.log(`PASS: ${checks} interaction checks (timeline, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
 }
