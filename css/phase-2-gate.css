@@ -433,6 +433,7 @@
 .phase2-gate.is-login-ready .phase2-gate__login-card { opacity: 1; transform: translateY(0) scale(1); box-shadow: 0 0 68px rgba(0, 0, 0, .55), 0 0 36px rgba(42, 174, 203, .14), inset 0 0 36px rgba(72, 240, 223, .045); }
 .phase2-gate.is-login-ready .phase2-gate__counter { animation: p2-counter-breathe 5s ease-in-out infinite; }
 .phase2-gate.is-transitioning .phase2-gate__transition-scan { opacity: 1; animation: p2-scan-through 850ms ease-in-out both; }
+.phase2-gate.is-transitioning .phase2-gate__skip { opacity: 0; pointer-events: none; transition: opacity 180ms ease; }
 .phase2-gate.is-transitioning .phase2-gate__login-card { opacity: 0; transform: perspective(800px) rotateX(18deg) scale(.7); filter: blur(8px); transition: transform 560ms cubic-bezier(.65,0,.9,.25), opacity 480ms ease, filter 480ms ease; }
 .phase2-gate.is-transitioning .phase2-gate__scene { filter: blur(0) brightness(1.15); transform: scale(1.09); opacity: .96; transition-duration: 950ms; }
 .phase2-gate.is-transitioning .phase2-gate__login-side,
