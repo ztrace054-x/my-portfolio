@@ -14,8 +14,9 @@ export function createRouter({ routes = {}, fallback = "profile", onRoute = () =
   }
 
   function normalizeHash() {
-    if (routeIds.has(requestedId())) return;
-    const target = "#/" + fallback;
+    const requested = requestedId();
+    const target = "#/" + (routeIds.has(requested) ? requested : fallback);
+    if (window.location.hash === target) return;
     try {
       window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search + target);
     } catch {
