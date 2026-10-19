@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - mega-update
+      - phase-2-intro-login
   pull_request:
     branches:
       - main
@@ -33,6 +34,8 @@ jobs:
           done
       - name: Run foundation component and data checks
         run: node tests/foundation-check.cjs
+      - name: Run Phase 2 HUD gate checks
+        run: node tests/phase2-gate-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
       - name: Run interaction and accessibility-state tests
