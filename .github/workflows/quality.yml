@@ -37,6 +37,8 @@ jobs:
         run: node tests/foundation-check.cjs
       - name: Run Phase 2 HUD gate checks
         run: node tests/phase2-gate-check.cjs
+      - name: Run Phase 3 dashboard shell checks
+        run: node --experimental-vm-modules tests/phase3-shell-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
       - name: Run interaction and accessibility-state tests
