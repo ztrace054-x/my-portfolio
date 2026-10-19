@@ -67,7 +67,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   let lastClockSecond = -1;
   let frameId = 0;
   let transitionTimer = 0;
-  let focusReturn = null;
+  let clockTimer = 0;
 
   const enteredPreviously = safeSessionGet(ENTERED_KEY) === "1";
   const shouldShowGate = replay || !enteredPreviously;
@@ -157,6 +157,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     done = true;
     transitioning = false;
     clearTimeout(transitionTimer);
+    clearInterval(clockTimer);
     stopFrameLoop();
     events.abort();
     root.hidden = true;
@@ -182,6 +183,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     if (done || transitioning || loginReady) return;
     loginReady = true;
     completeTelemetry();
+    stopFrameLoop();
     root.classList.remove("is-booting");
     root.classList.add("is-login-ready");
     loginLayer.inert = false;
@@ -196,7 +198,6 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   function enter() {
     if (done || transitioning || !loginReady) return;
     transitioning = true;
-    focusReturn = document.activeElement;
     loginButton.disabled = true;
     loginButton.querySelector("[data-p2-login-label]").textContent = "ACCESS GRANTED";
     loginButton.setAttribute("aria-label", "Access granted. Opening profile.");
@@ -206,20 +207,19 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
 
   function tick(now) {
     frameId = 0;
-    if (done || document.hidden) return;
+    if (done || document.hidden || loginReady) return;
     const delta = lastFrame === null ? 0 : Math.min(80, Math.max(0, now - lastFrame));
     lastFrame = now;
-    syncClock();
     if (!loginReady && !transitioning) {
       elapsed += delta;
       updateBoot();
       if (elapsed >= BOOT_DURATION) showLogin();
     }
-    if (!done) frameId = requestAnimationFrame(tick);
+    if (!done && !loginReady && !document.hidden) frameId = requestAnimationFrame(tick);
   }
 
   function startFrameLoop() {
-    if (done || document.hidden || frameId) return;
+    if (done || loginReady || document.hidden || frameId) return;
     frameId = requestAnimationFrame(tick);
   }
 
@@ -248,7 +248,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       return;
     }
     if (event.key === "Tab") {
-      const focusables = loginReady ? [skipButton, loginButton].filter(Boolean) : [skipButton].filter(Boolean);
+      const focusables = loginReady ? [loginButton, skipButton].filter(Boolean) : [skipButton].filter(Boolean);
       if (!focusables.length) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -293,6 +293,9 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   loginLayer.inert = true;
   loginLayer.setAttribute("aria-hidden", "true");
   syncClock(true);
+  clockTimer = window.setInterval(() => {
+    if (!document.hidden && !done) syncClock();
+  }, 1000);
   skipButton?.focus({ preventScroll: true });
 
   if (reducedMotion.matches || !motionAllowed) {
@@ -314,6 +317,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       events.abort();
       stopFrameLoop();
       clearTimeout(transitionTimer);
+      clearInterval(clockTimer);
       if (!done) {
         root.hidden = true;
         loginLayer.inert = true;
