@@ -150,13 +150,14 @@ function phase2Fixture({ search = '', entered = false, storageBlocked = false } 
   root.children['[data-p2-decode]'] = decodeReadout;
   root.descendants = [skip, loginButton, loginLayer];
   const bar = new Element(); bar.dataset.p2Bar = '64';
-  const fill = new Element(), barValue = new Element();
+  const fill = new Element(), networkFill = new Element(), barValue = new Element();
+  networkFill.dataset.p2Fill = '78';
   bar.children['.phase2-gate__fill'] = fill;
   bar.children['[data-p2-bar-value]'] = barValue;
   const counter = new Element(); counter.dataset.p2Count = '0'; counter.dataset.p2Digits = '3';
   const ring = new Element(); ring.dataset.p2Ring = '72'; ring.children['[data-p2-ring-value]'] = new Element();
   root.all['[data-p2-bar]'] = [bar];
-  root.all['[data-p2-fill]'] = [fill];
+  root.all['[data-p2-fill]'] = [networkFill];
   root.all['[data-p2-count]'] = [counter];
   root.all['[data-p2-ring]'] = [ring];
   if (entered) f.sessionValues.set('ztrace-phase2-entered', '1');
@@ -164,7 +165,7 @@ function phase2Fixture({ search = '', entered = false, storageBlocked = false } 
     f.context.sessionStorage.getItem = () => { throw new Error('storage blocked'); };
     f.context.sessionStorage.setItem = () => { throw new Error('storage blocked'); };
   }
-  return { ...f, root, page, skip, loginButton, loginLabel, loginLayer, fill, barValue, counter, ring };
+  return { ...f, root, page, skip, loginButton, loginLabel, loginLayer, fill, networkFill, barValue, counter, ring };
 }
 async function clockFor(f) { return (await f.load('motion.js')).createClock(); }
 function contactFixture() { const f=fixture(); f.doc.getElementById('copy-email').children.span=new Element(); return f; }
