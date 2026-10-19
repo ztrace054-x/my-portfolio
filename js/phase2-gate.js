@@ -264,7 +264,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
 
   skipButton?.addEventListener("click", () => showLogin(), { signal: events.signal });
   loginButton?.addEventListener("click", enter, { signal: events.signal });
-  root.addEventListener("keydown", onKeydown, { signal: events.signal });
+  document.addEventListener("keydown", onKeydown, { signal: events.signal });
   document.addEventListener("visibilitychange", onVisibilityChange, { signal: events.signal });
   reducedMotion.addEventListener?.("change", event => {
     if (event.matches) showLogin();
