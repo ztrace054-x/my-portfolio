@@ -38,7 +38,7 @@ async function run() {
   for (const phrase of [
     "Portrait of Saad", "@ZTRACE", "SSC student", "Cybersecurity beginner",
     "Beginner", "Learning in public", "Byte Capsule", "Ethical Hacking for Beginners",
-    "networking", "Linux", "reconnaissance", "ethics", "InshaAllah",
+    "networking", "Linux", "reconnaissance", "Ethics", "InshaAllah",
     "I'm choosing to make my beginning visible.", "Learn responsibly. Practice with permission.",
     "whoami", "cat status.txt", "data-copy-email", "GitHub", "TryHackMe", "ZeroDayTest", "Instagram"
   ]) assert.ok(profileHtml.includes(phrase), "Profile is missing required content: " + phrase);
