@@ -4,13 +4,13 @@ import { escapeHTML } from "../utils.js?v=20261016.1";
 
 export function render() {
   const chips = profile.statusChips.map((chip, index) =>
-    `<span class="profile-status-chip profile-status-chip--${{index + 1}">${{escapeHTML(chip)}</span>`
+    `<span class="profile-status-chip profile-status-chip--${index + 1}">${escapeHTML(chip)}</span>`
   ).join("");
   const story = profile.story.map(paragraph =>
-    `<p class="profile-story-line">${{escapeHTML(paragraph)}</p>`
+    `<p class="profile-story-line">${escapeHTML(paragraph)}</p>`
   ).join("");
   const focus = profile.focus.map(item =>
-    `<li class="focus-chip">${{escapeHTML(item)}</li>`
+    `<li class="focus-chip">${escapeHTML(item)}</li>`
   ).join("");
   const publicLinks = [
     ["GitHub", links.github],
@@ -18,7 +18,7 @@ export function render() {
     ["ZeroDayTest", links.zeroDayTest],
     ["Instagram", links.instagram]
   ].map(([label, href]) =>
-    `<a class="profile-link" href="${{escapeHTML(href)}" target="_blank" rel="noopener noreferrer"><span>${{escapeHTML(label)}</span><span aria-hidden="true">↗</span></a>`
+    `<a class="profile-link" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer"><span>${escapeHTML(label)}</span><span aria-hidden="true">↗</span></a>`
   ).join("");
   return `
     <section class="view-page profile-view" aria-labelledby="view-heading">
@@ -34,29 +34,29 @@ export function render() {
         </div>
         <div class="profile-hero-copy">
           <p class="view-eyebrow">IDENTITY / LEARNING CONSOLE</p>
-          <h2 id="profile-name">${{escapeHTML(profile.name)}</h2>
-          <p class="profile-hero-handle">@${{escapeHTML(profile.handle)}</p>
-          <p class="profile-role">${{escapeHTML(profile.education)} <span aria-hidden="true">/</span> ${{escapeHTML(profile.level)}</p>
-          <div class="profile-status-chips" aria-label="Profile status">${{chips}</div>
+          <h2 id="profile-name">${escapeHTML(profile.name)}</h2>
+          <p class="profile-hero-handle">@${escapeHTML(profile.handle)}</p>
+          <p class="profile-role">${escapeHTML(profile.education)} <span aria-hidden="true">/</span> ${escapeHTML(profile.level)}</p>
+          <div class="profile-status-chips" aria-label="Profile status">${chips}</div>
           <p class="profile-hero-line">I'm choosing to make my beginning visible.</p>
         </div>
       </section>
       <div class="profile-content-grid">
         <section class="hud-panel profile-about-card" aria-labelledby="profile-about-title">
           <div class="hud-panel-heading"><h3 id="profile-about-title">ABOUT / THE BEGINNING</h3><span class="view-code">STORY / 01</span></div>
-          ${{story}
+          ${story}
         </section>
         <section class="hud-panel profile-current-card" aria-labelledby="profile-focus-title">
           <div class="hud-panel-heading"><h3 id="profile-focus-title">CURRENTLY LEARNING</h3><span class="badge badge--cyan">FOUNDATIONS</span></div>
-          <p class="profile-card-lead">${{escapeHTML(profile.course)}</p>
-          <p class="profile-course-source">COURSE / ${{escapeHTML(profile.learningPlatform)}</p>
-          <ul class="focus-chip-list">${{focus}</ul>
+          <p class="profile-card-lead">${escapeHTML(profile.course)}</p>
+          <p class="profile-course-source">COURSE / ${escapeHTML(profile.learningPlatform)}</p>
+          <ul class="focus-chip-list">${focus}</ul>
           <p class="profile-card-note">Learning step by step, without presenting study topics as completed milestones.</p>
         </section>
         <section class="hud-panel profile-approach-card" aria-labelledby="profile-approach-title">
           <div class="hud-panel-heading"><h3 id="profile-approach-title">MY APPROACH</h3><span class="view-code">PRINCIPLE / 01</span></div>
           <div class="profile-approach-mark" aria-hidden="true">✓</div>
-          <p class="profile-approach-statement">${{escapeHTML(profile.principle)}</p>
+          <p class="profile-approach-statement">${escapeHTML(profile.principle)}</p>
           <p class="profile-card-note">Curiosity is important; consent, responsibility, and permission come first.</p>
         </section>
         <section class="hud-panel profile-terminal-card" aria-labelledby="profile-terminal-title">
@@ -77,9 +77,9 @@ Status: Beginning, InshaAllah</pre>
         <section class="hud-panel profile-links-panel" aria-labelledby="profile-links-title">
           <div class="hud-panel-heading"><h3 id="profile-links-title">FIND ME ELSEWHERE</h3><span class="view-code">PUBLIC LINKS</span></div>
           <div class="profile-links-grid">
-            ${{publicLinks}
+            ${publicLinks}
             <div class="profile-email-row">
-              <a class="profile-link" href="${{escapeHTML(links.email)}"><span>Email</span><span aria-hidden="true">↗</span></a>
+              <a class="profile-link" href="${escapeHTML(links.email)}"><span>Email</span><span aria-hidden="true">↗</span></a>
               <button class="profile-copy-button" type="button" data-copy-email aria-label="Copy email address"><span data-copy-label>Copy email</span><span aria-hidden="true">⧉</span></button>
             </div>
           </div>

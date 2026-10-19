@@ -1,9 +1,9 @@
 import { createRouter } from "./router.js?v=20261019.1";
 import { safeStorage } from "./utils.js?v=20261016.1";
 import { MotionController } from "./motion.js?v=20261016.1";
-import { viewRegistry } from "./views/index.js?v=20261019.1";
-import * as profileView from "./views/profile.js?v=20261019.1";
-import * as dashboardView from "./views/dashboard.js?v=20261019.1";
+import { viewRegistry } from "./views/index.js?v=20261019.2";
+import * as profileView from "./views/profile.js?v=20261019.2";
+import * as dashboardView from "./views/dashboard.js?v=20261019.2";
 import * as attackSurfaceView from "./views/attack-surface.js?v=20261019.1";
 import * as skillProgressView from "./views/skill-progress.js?v=20261019.1";
 import * as learningPathView from "./views/learning-path.js?v=20261019.1";
@@ -44,6 +44,7 @@ export function initDashboardShell() {
   let panelTrigger = null;
   let routeTimer = 0;
   let routeToken = 0;
+  let disposeView = null;
 
   const sidebar = shell.querySelector("[data-app-sidebar]");
   const viewRoot = shell.querySelector("[data-view-root]");
@@ -193,9 +194,15 @@ export function initDashboardShell() {
 
     const paint = () => {
       if (token !== routeToken || !viewRoot) return;
+      disposeView?.();
+      disposeView = null;
+      const activeView = view || ROUTES.profile;
       try {
-        viewRoot.innerHTML = (view || ROUTES.profile).render();
+        viewRoot.innerHTML = activeView.render();
+        disposeView = typeof activeView.mount === "function" ? activeView.mount(viewRoot, { motion }) : null;
       } catch {
+        disposeView?.();
+        disposeView = null;
         viewRoot.innerHTML = '<section class="view-page"><h1 id="view-heading" tabindex="-1">View unavailable</h1><p class="view-intro">This local view could not be rendered. Please choose another section.</p></section>';
       }
       viewRoot.classList.remove("is-view-leaving");
@@ -291,6 +298,8 @@ export function initDashboardShell() {
   }
 
   function dispose() {
+    disposeView?.();
+    disposeView = null;
     if (router) router.dispose();
     if (events) events.abort();
     if (motion) {
