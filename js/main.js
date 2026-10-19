@@ -9,9 +9,10 @@ import { initCursor } from './cursor.js?v=20261018.5';
 import { initAnimations } from './animations.js?v=20261018.5';
 import { initTerminal } from './terminal.js?v=20261016.1';
 import { initJourney } from './journey.js?v=20261018.4';
+import { initDashboardShell } from './dashboard-shell.js?v=20261019.1';
 
 const root = document.documentElement;
-root.dataset.release = '20261019.2';
+root.dataset.release = '20261019.3';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
@@ -59,13 +60,17 @@ reduced.addEventListener('change', setMotion);
 fine.addEventListener('change', setCursor);
 intro.entryStarted.then(() => {
   entered = true;
+  // Phase 3 replaces the legacy one-page view after the gate; keep its source intact,
+  // but do not start background animation loops for content that is no longer visible.
+  if (document.getElementById('app-shell')) return;
   root.classList.add('hero-motion-ready');
   try { animations = initAnimations({ clock, motionAllowed, heroEntry: !location.hash && window.scrollY < 20 }); } catch { /* Source content stays readable. */ }
   scene?.setMotion(motionAllowed); setCursor();
 });
+let dashboard;
 intro.completed.then(() => {
-  if (location.hash === '#/profile') navigation.goTo('#about', false);
-  else if (location.hash) navigation.goTo(location.hash, false);
+  if (!dashboard) dashboard = initDashboardShell();
+  dashboard.activate();
 });
 window.addEventListener('beforeprint', () => { intro.cancel(); scene?.setMotion(false); animations?.setMotion(false); terminal.setMotion(false); journey.setMotion(false); contact.setMotion(false); cursor?.dispose(); cursor = null; });
 window.addEventListener('afterprint', setMotion);
