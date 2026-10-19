@@ -106,8 +106,9 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     });
     counters.forEach(counter => {
       const target = Number(counter.dataset.p2Count) || 0;
+      const digits = Number(counter.dataset.p2Digits) || 3;
       const current = Math.round(target * eased);
-      counter.textContent = String(current).padStart(3, "0");
+      counter.textContent = String(current).padStart(digits, "0");
     });
     rings.forEach(ring => {
       const target = Number(ring.dataset.p2Ring) || 0;
@@ -115,6 +116,27 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       ring.style.setProperty("--ring-value", String(current));
       const label = ring.querySelector("[data-p2-ring-value]");
       if (label) label.textContent = String(current).padStart(2, "0");
+    });
+  }
+
+  function completeTelemetry() {
+    barRows.forEach(row => {
+      const target = Number(row.dataset.p2Bar) || 0;
+      const fill = row.querySelector(".phase2-gate__fill");
+      const value = row.querySelector("[data-p2-bar-value]");
+      if (fill) fill.style.width = target + "%";
+      if (value) value.textContent = String(target).padStart(2, "0") + "%";
+    });
+    counters.forEach(counter => {
+      const target = Number(counter.dataset.p2Count) || 0;
+      const digits = Number(counter.dataset.p2Digits) || 3;
+      counter.textContent = String(target).padStart(digits, "0");
+    });
+    rings.forEach(ring => {
+      const target = Number(ring.dataset.p2Ring) || 0;
+      ring.style.setProperty("--ring-value", String(target));
+      const label = ring.querySelector("[data-p2-ring-value]");
+      if (label) label.textContent = String(target).padStart(2, "0");
     });
   }
 
@@ -153,6 +175,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   function showLogin({ focus = true } = {}) {
     if (done || transitioning || loginReady) return;
     loginReady = true;
+    completeTelemetry();
     root.classList.remove("is-booting");
     root.classList.add("is-login-ready");
     loginLayer.inert = false;
@@ -242,8 +265,10 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   }, { signal: events.signal });
 
   if (!shouldShowGate) {
+    done = true;
     root.hidden = true;
     page.inert = false;
+    events.abort();
     resolveEntry();
     resolveCompleted();
     return {
