@@ -40,7 +40,7 @@ assert.ok(html.includes("Next step: recon basics"), "Recon learning notification
 assert.ok(html.includes("Learning in public"), "Learning-in-public notification is missing.");
 assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
-assert.ok(html.includes("./css/dashboard-shell.css?v=20261019.2"), "Dashboard stylesheet cache key must match the current shell CSS.");
+assert.ok(html.includes("./css/dashboard-shell.css?v=20261019.3"), "Dashboard stylesheet cache key must match the current shell CSS.");
 assert.ok(main.includes("./dashboard-shell.js?v=20261019.2"), "Dashboard shell module cache key must match the current shell JS.");
 assert.ok(html.includes("./js/main.js?v=20261019.5"), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
@@ -49,7 +49,7 @@ assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling 
 for (const selector of [
   ".app-sidebar", ".app-nav-link[aria-current=\"page\"]", ".app-shell.is-collapsed",
   ".app-period { position: relative;", ".app-period svg { top: 50%; right: 0;",
-  ".app-shell.is-sidebar-open", ".app-view-root.is-view-entering", "@keyframes app-view-scan",
+  ".app-shell.is-sidebar-open", ".app-view-root.is-view-entering", ".app-view-root.is-view-leaving { opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity 100ms ease", "@keyframes app-view-scan",
   ".app-side-panel", ".app-setting-select", "@media (max-width: 900px)",
   "@media (max-width: 650px)", "@media (prefers-reduced-motion: reduce)"
 ]) assert.ok(css.includes(selector), "Missing shell layout/motion rule: " + selector);
