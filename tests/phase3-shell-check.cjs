@@ -155,8 +155,8 @@ async function checkViews() {
   }
   assert.ok(rendered.profile.includes("Learn responsibly. Practice with permission."), "Profile must preserve the existing ethical-practice principle.");
   assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
-  assert.equal((rendered.dashboard.match(/class="stat-number">0<\/p>/g) || []).length, 4, "Dashboard should display four honest zero-state metrics.");
-  assert.ok(rendered.dashboard.includes("No activity recorded yet"), "Dashboard must not invent recent activity.");
+  assert.equal((rendered.dashboard.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard should display five honest zero-state metrics.");
+  assert.ok(rendered.dashboard.includes("No data yet — I'm just starting"), "Dashboard must not invent recent activity.");
   assert.ok(rendered["attack-surface"].includes("No live targets"), "Attack Surface placeholder must not imply a live scan.");
   assert.ok(rendered.certificates.includes("No credentials are marked as earned"), "Certificates placeholder must remain honest.");
 }
