@@ -1,6 +1,6 @@
 import { CONTENT, storage } from './config.js?v=20261016.1';
 import { createClock } from './motion.js?v=20261016.1';
-import { initPhase2Gate } from './phase2-gate.js?v=20261019.1';
+import { initPhase2Gate } from './phase2-gate.js?v=20261019.2';
 import { initContact } from './contact.js?v=20261016.1';
 import { createOverlayManager, initNavigation } from './navigation.js?v=20261018.3';
 import { initGallery } from './gallery.js?v=20261016.1';
@@ -11,7 +11,7 @@ import { initTerminal } from './terminal.js?v=20261016.1';
 import { initJourney } from './journey.js?v=20261018.4';
 
 const root = document.documentElement;
-root.dataset.release = '20261019.1';
+root.dataset.release = '20261019.2';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
