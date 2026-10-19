@@ -6,6 +6,7 @@ on:
       - main
       - mega-update
       - phase-2-intro-login
+      - phase-3-dashboard-shell
   pull_request:
     branches:
       - main
