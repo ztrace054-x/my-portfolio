@@ -179,3 +179,31 @@
     --header-height: 72px;
   }
 }
+
+
+/* SAAD.ztrace_ HUD namespace — additive so the current portfolio remains visually stable. */
+:root {
+  --hud-bg: #03090b;
+  --hud-bg-soft: #061215;
+  --hud-panel: rgba(8, 30, 32, 0.72);
+  --hud-panel-solid: #081e20;
+  --hud-panel-raised: rgba(11, 40, 42, 0.86);
+  --hud-line: #1b6f6b;
+  --hud-line-soft: rgba(27, 111, 107, 0.34);
+  --hud-cyan: #35f2e0;
+  --hud-cyan-2: #19b8d6;
+  --hud-text: #bfeee9;
+  --hud-muted: #6f9c98;
+  --hud-amber: #ffb347;
+  --hud-danger: #ff5d5d;
+  --hud-display: "Orbitron", "Space Grotesk", sans-serif;
+  --hud-body: "Rajdhani", "Space Grotesk", sans-serif;
+  --hud-mono: "Share Tech Mono", "JetBrains Mono", monospace;
+  --hud-grid-size: 28px;
+  --hud-chamfer: 12px;
+  --hud-glow-soft: 0 0 22px rgba(53, 242, 224, 0.10);
+  --hud-glow: 0 0 28px rgba(53, 242, 224, 0.18);
+  --hud-glow-strong: 0 0 36px rgba(53, 242, 224, 0.26);
+  --hud-motion-duration: 280ms;
+  --hud-motion-glow: 0.18;
+}
