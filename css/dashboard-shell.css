@@ -106,7 +106,7 @@ body.app-shell-active { overflow: hidden; }
 .app-view-root::after { position: absolute; top: 0; right: 0; left: 0; z-index: 3; height: 120px; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(53, 242, 224, .045), transparent); opacity: 0; content: ""; }
 .app-view-root.is-view-entering::after { animation: app-view-scan 560ms ease-out both; }
 @keyframes app-view-scan { 0% { opacity: 0; transform: translateY(-80px); } 28% { opacity: .9; } 100% { opacity: 0; transform: translateY(280px); } }
-.app-view-root.is-view-leaving { opacity: 0; transform: translate3d(0, 8px, 0); }
+.app-view-root.is-view-leaving { opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity 100ms ease, transform 100ms ease; }
 .app-view-root.is-view-entering { opacity: 0; transform: translate3d(0, 12px, 0); transition: opacity var(--hud-motion-duration, 280ms) ease, transform var(--hud-motion-duration, 280ms) ease; }
 .app-view-root.is-view-entering.is-view-ready { opacity: 1; transform: translate3d(0, 0, 0); }
 .app-view-loading { display: flex; min-height: 45vh; align-items: center; justify-content: center; gap: 12px; color: var(--hud-muted); font: 11px var(--hud-mono, "JetBrains Mono", monospace); }
