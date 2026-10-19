@@ -22,6 +22,7 @@ for (const selector of [
 
 assert.ok(!html.includes('id="intro" class="intro"'), "Legacy intro overlay must not run alongside the Phase 2 gate.");
 assert.ok(html.includes("./css/phase-2-gate.css?v=20261019.1"), "Phase 2 stylesheet must be linked.");
+assert.ok(html.includes("./js/main.js?v=20261019.2"), "Main module cache key must be bumped for Phase 2.");
 assert.ok(main.includes("initPhase2Gate"), "Main startup must initialize the Phase 2 gate.");
 assert.ok(main.includes("location.hash === '#/profile'"), "Profile route alias must be handled by the current site navigation.");
 
@@ -33,6 +34,10 @@ for (const behavior of [
   'document.addEventListener("visibilitychange"',
   'event.key === "Escape"',
   'event.key === "Enter"',
+  "window.setInterval(",
+  "clearInterval(clockTimer)",
+  "const focusables = loginReady ? [loginButton, skipButton].filter(Boolean) : [skipButton].filter(Boolean)",
+  "if (!done && !loginReady && !document.hidden) frameId = requestAnimationFrame(tick)",
   'root.classList.add("is-transitioning")',
   'url.hash = "/profile"'
 ]) assert.ok(gate.includes(behavior), "Missing gate behavior: " + behavior);
