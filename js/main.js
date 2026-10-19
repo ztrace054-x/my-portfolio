@@ -49,6 +49,9 @@ try { scene = initHeroScene({ clock, motionAllowed: false }); } catch { /* Acces
 function setMotion() {
   motionAllowed = getAllowed(); controls();
   intro.setMotion(motionAllowed);
+  // Once the dashboard shell is active, keep legacy-page visual controllers dormant.
+  const appShell = document.getElementById('app-shell');
+  if (appShell && !appShell.hidden) return;
   scene?.setMotion(motionAllowed && entered); journey.setMotion(motionAllowed);
   animations?.setMotion(motionAllowed); terminal.setMotion(motionAllowed); contact.setMotion(motionAllowed); setCursor();
 }
