@@ -22,11 +22,11 @@
 <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
 <link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="./assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<script type="module" src="./js/main.js?v=20261019.2"></script>
-<link rel="stylesheet" href="./css/tokens.css?v=20261018.5"><link rel="stylesheet" href="./css/style.css?v=20261018.6"><link rel="stylesheet" href="./css/intro.css?v=20261018.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261018.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261018.5">
+<script type="module" src="./js/main.js?v=20261019.3"></script>
+<link rel="stylesheet" href="./css/tokens.css?v=20261018.5"><link rel="stylesheet" href="./css/base.css?v=20261019.1"><link rel="stylesheet" href="./css/components.css?v=20261019.1"><link rel="stylesheet" href="./css/motion.css?v=20261019.1"><link rel="stylesheet" href="./css/style.css?v=20261018.6"><link rel="stylesheet" href="./css/intro.css?v=20261018.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261018.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261018.5">
   
   <link rel="stylesheet" href="./css/motion-polish.css?v=20261018.5">
-  <link rel="stylesheet" href="./css/phase-2-gate.css?v=20261019.1"><meta name="color-scheme" content="dark"><script type="application/ld+json">
+  <link rel="stylesheet" href="./css/phase-2-gate.css?v=20261019.1"><link rel="stylesheet" href="./css/dashboard-shell.css?v=20261019.1"><meta name="color-scheme" content="dark"><script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -219,6 +219,115 @@
   <footer class="site-footer container">
     <span class="footer-credit"><span aria-hidden="true">&gt;</span> Training at Byte Capsule</span><span>© <span id="year">2026</span> Saad / Learning in public</span><span class="online-status"><span class="status-dot" aria-hidden="true"></span>Portfolio online</span>
   <a class="replay-link text-link" href="?intro=1">Replay intro <span aria-hidden="true">↻</span></a></footer>
+</div>
+<div id="app-shell" class="app-shell hud-body" data-app-shell hidden>
+  <button class="app-sidebar-backdrop" type="button" data-sidebar-backdrop hidden aria-label="Close navigation drawer"></button>
+  <aside class="app-sidebar" data-app-sidebar aria-label="ZTRACE workspace sidebar">
+    <div class="app-sidebar__brand-row">
+      <a class="app-brand" href="#/profile" aria-label="SAAD ZTRACE profile">
+        <span class="app-brand__mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 3.5 34 11.5v17L20 36.5 6 28.5v-17L20 3.5Z" stroke="currentColor" stroke-width="1.4"/><path d="M11 15.2c2.7-3 5.7-4.5 9-4.5s6.3 1.5 9 4.5c-2.7 3-5.7 4.5-9 4.5s-6.3-1.5-9-4.5Z" stroke="currentColor" stroke-width="1.2"/><circle cx="20" cy="15.2" r="2.4" fill="currentColor"/><path d="m14 25 4 4 8-8" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg></span>
+        <span class="app-brand__word">SAAD<span>.ztrace_</span></span>
+      </a>
+      <button class="app-icon-button app-collapse-button" type="button" data-sidebar-collapse aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M9 4v16m7-11-3 3 3 3"/></svg>
+      </button>
+    </div>
+    <div class="app-sidebar__section-label"><span>MENU</span><span class="app-sidebar__section-line"></span></div>
+    <nav class="app-nav" aria-label="Workspace views">
+      <a class="app-nav-link" href="#/profile" data-nav-item data-route="profile" aria-label="Profile" title="Profile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.6-3.6 3-5.5 7-5.5s6.4 1.9 7 5.5"/></svg><span class="app-nav-label">Profile</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/dashboard" data-nav-item data-route="dashboard" aria-label="Dashboard" title="Dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg><span class="app-nav-label">Dashboard</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/attack-surface" data-nav-item data-route="attack-surface" aria-label="Attack Surface" title="Attack Surface">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 3.5v17M3.5 12h17M12 12l6-6"/></svg><span class="app-nav-label">Attack Surface</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/skill-progress" data-nav-item data-route="skill-progress" aria-label="Skill Progress" title="Skill Progress">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12m5 8V7m5 13V10m5 10V4M2.5 20.5h19"/></svg><span class="app-nav-label">Skill Progress</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/learning-path" data-nav-item data-route="learning-path" aria-label="Learning Path" title="Learning Path">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><circle cx="15" cy="5" r="2"/><path d="M7 6h3a5 5 0 0 1 5 5v5m0 0h2"/></svg><span class="app-nav-label">Learning Path</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/write-ups" data-nav-item data-route="write-ups" aria-label="Write-ups" title="Write-ups">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6m-6 3.5h6"/></svg><span class="app-nav-label">Write-ups</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/automation" data-nav-item data-route="automation" aria-label="Automation" title="Automation">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="6" height="5" rx="1"/><rect x="14.5" y="15" width="6" height="5" rx="1"/><path d="M9.5 6.5h3a3 3 0 0 1 3 3V15M12.5 12l3 3 3-3"/></svg><span class="app-nav-label">Automation</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/certificates" data-nav-item data-route="certificates" aria-label="Certificates" title="Certificates">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1 7 4.5-2.5 4.5 2.5-1-7M9.5 9l1.7 1.7L14.5 7.5"/></svg><span class="app-nav-label">Certificates</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/gallery" data-nav-item data-route="gallery" aria-label="Gallery" title="Gallery">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 17 5-5 3 3 3.5-4 4.5 5"/></svg><span class="app-nav-label">Gallery</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="app-nav-link" href="#/contact" data-nav-item data-route="contact" aria-label="Contact" title="Contact">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 7 8 6 8-6"/></svg><span class="app-nav-label">Contact</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </a>
+      <p class="app-nav-empty" data-nav-empty hidden>No matching menu items.</p>
+    </nav>
+    <div class="app-sidebar__bottom">
+      <button class="app-nav-link app-nav-action" type="button" data-panel-open="notifications" aria-label="Open notifications, 3 unread">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="app-nav-label">Notification</span><span class="app-notification-count" data-notification-count>3</span>
+      </button>
+      <button class="app-nav-link app-nav-action" type="button" data-panel-open="settings" aria-label="Open settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#03090b"/><circle cx="15" cy="12" r="2" fill="#03090b"/><circle cx="7" cy="18" r="2" fill="#03090b"/></svg><span class="app-nav-label">Settings</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
+      </button>
+      <div class="app-sidebar__foot"><span class="status-dot" aria-hidden="true"></span><span class="app-nav-label">LEARNING MODE / LOCAL</span></div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="app-topbar__identity">
+        <button class="app-icon-button app-mobile-menu" type="button" data-sidebar-toggle aria-label="Open navigation" aria-controls="app-sidebar" aria-expanded="false" title="Open navigation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="app-title-stack"><p class="app-topbar-eyebrow">ZTRACE WORKSPACE / LOCAL</p><h1 data-view-title>Profile</h1></div>
+        <div class="app-period" aria-label="Learning to date, display only"><span>LEARNING TO DATE</span><strong>Learning in public</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></div>
+      </div>
+      <label class="app-search" aria-label="Search workspace navigation">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" data-nav-search placeholder="Search menu..." autocomplete="off" spellcheck="false">
+        <kbd>⌕</kbd>
+      </label>
+      <div class="app-topbar__actions">
+        <button class="app-icon-button app-topbar-bell" type="button" data-panel-open="notifications" aria-label="Open notifications, 3 unread" title="Notifications">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="app-bell-dot" data-notification-count>3</span>
+        </button>
+        <button class="app-motion-toggle" type="button" data-shell-motion-toggle aria-pressed="true" aria-label="Turn motion off"><span class="app-motion-dot" aria-hidden="true"></span><span data-shell-motion-label>MOTION ON</span></button>
+        <a class="app-avatar" href="#/profile" aria-label="Open Saad profile" title="Open Profile"><img src="./assets/saad-golden.jpg" alt="" width="40" height="40"><span>SAAD</span></a>
+      </div>
+    </header>
+
+    <main class="app-view-stage" aria-label="Workspace content">
+      <div id="app-view-root" class="app-view-root" data-view-root tabindex="-1" aria-live="polite">
+        <div class="app-view-loading"><span class="status-dot" aria-hidden="true"></span> Preparing local workspace…</div>
+      </div>
+      <footer class="app-statusbar"><span><i class="status-dot" aria-hidden="true"></i> LOCAL SESSION / LEARNING MODE</span><span>NO LIVE SCANS <b>·</b> AUTHORIZED PRACTICE ONLY</span></footer>
+    </main>
+  </div>
+
+  <button class="app-panel-backdrop" type="button" data-panel-backdrop hidden aria-label="Close open panel"></button>
+  <aside class="app-side-panel app-notifications-panel" data-app-panel="notifications" role="dialog" aria-modal="true" aria-labelledby="notifications-title" aria-hidden="true" hidden>
+    <header class="app-panel-header"><div><p class="view-eyebrow">LOCAL FEED / 003</p><h2 id="notifications-title">Notifications</h2></div><button class="app-icon-button" type="button" data-panel-close aria-label="Close notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+    <div class="app-panel-summary"><span class="app-panel-summary-dot" aria-hidden="true"></span><span>WORKSPACE NOTES</span><span class="app-panel-summary-line"></span><strong>3 ITEMS</strong></div>
+    <ol class="app-notification-list">
+      <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 14.8 8.7 21 9.6l-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></span><div><p class="app-notification-kicker">WELCOME / WORKSPACE</p><h3>Welcome</h3><p>Visitor access is local and decorative. No account or authentication service is connected.</p></div></li>
+      <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5V5m0 14.5h16M7.5 15l3.5-4 3 2 5-6"/></svg></span><div><p class="app-notification-kicker">JOURNEY / NOTE</p><h3>Learning in public</h3><p>This workspace records the current learning journey. Empty counts are intentional until verified entries exist.</p></div></li>
+      <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></span><div><p class="app-notification-kicker">NEXT STEP / LEARNING</p><h3>Next step: recon basics</h3><p>Continue with reconnaissance fundamentals in authorized practice environments.</p></div></li>
+    </ol>
+    <button class="hud-btn app-mark-read" type="button" data-mark-read>Mark all as read <span aria-hidden="true">✓</span></button>
+    <p class="app-panel-footnote">These are static workspace notes, not live alerts.</p>
+  </aside>
+
+  <aside class="app-side-panel app-settings-panel" data-app-panel="settings" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-hidden="true" hidden>
+    <header class="app-panel-header"><div><p class="view-eyebrow">PREFERENCES / LOCAL</p><h2 id="settings-title">Settings</h2></div><button class="app-icon-button" type="button" data-panel-close aria-label="Close settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+    <section class="app-setting-group" aria-labelledby="motion-setting-title"><div class="app-setting-heading"><div><h3 id="motion-setting-title">Interface motion</h3><p>Control transitions and decorative animation.</p></div><button class="app-setting-toggle" type="button" data-shell-motion-toggle aria-pressed="true" aria-label="Turn motion off"><span class="app-setting-toggle-dot" aria-hidden="true"></span><span data-shell-motion-label>MOTION ON</span></button></div><p class="app-setting-status" data-motion-status>MOTION SYSTEM ACTIVE</p></section>
+    <section class="app-setting-group"><label class="app-setting-label" for="motion-intensity">MOTION INTENSITY</label><select id="motion-intensity" class="app-setting-select" data-motion-intensity><option value="low">LOW</option><option value="medium">MEDIUM</option><option value="high">HIGH</option></select><p class="app-setting-help">Intensity changes the speed of supported UI transitions. It does not add extra effects.</p></section>
+    <section class="app-setting-group app-setting-replay"><div><h3>Replay intro</h3><p>Run the ZTRACE boot sequence and visitor gate again.</p></div><button class="hud-btn" type="button" data-replay-intro>Replay intro <span aria-hidden="true">↻</span></button></section>
+    <p class="app-panel-footnote">Preferences are saved in this browser when local storage is available. System reduced-motion preferences are respected.</p>
+  </aside>
 </div>
 <div id="phase2-gate" class="phase2-gate" role="dialog" aria-modal="true" aria-label="ZTRACE intro and visitor access" hidden>
   <div class="phase2-gate__scene" aria-hidden="true">
