@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03090b">
+  <meta name="description" content="SAAD.ztrace_ design system preview: an original teal cybersecurity HUD component kit.">
+  <title>SAAD.ztrace_ — HUD Design System</title>
+  <!-- Use the repository's self-hosted fonts; the preview works offline and makes no remote font requests. -->
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/motion.css">
+</head>
+<body class="hud-body">
+  <header class="hud-container" style="padding-block:28px 22px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <a href="./index.html" aria-label="Return to portfolio" style="font-family:var(--hud-display);font-weight:700;letter-spacing:.1em;text-decoration:none">SAAD<span style="color:var(--hud-cyan)">.</span><small style="display:block;color:var(--hud-muted);font: .7rem var(--hud-mono);letter-spacing:.2em">ztrace_ / DESIGN SYSTEM</small></a>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <button class="hud-btn" type="button" data-motion-toggle aria-pressed="true"><span aria-hidden="true">◉</span><span data-motion-label>Motion on</span></button>
+        <label class="dropdown" style="min-width:132px">Motion intensity
+          <select data-motion-intensity aria-label="Motion intensity"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
+        </label>
+      </div>
+    </div>
+  </header>
+  <main class="hud-container" style="padding-bottom:72px">
+    <section class="hud-panel" style="margin-bottom:24px;overflow:hidden" data-reveal>
+      <div class="hud-scanline" aria-hidden="true"></div>
+      <p class="hud-eyebrow">SYS // 01 · FOUNDATION PREVIEW</p>
+      <h1 class="section-title" style="margin:14px 0 12px">A quieter kind of <span>cyber HUD.</span></h1>
+      <p class="hud-muted" style="max-width:66ch;margin:0">A premium, low-noise component system for SAAD.ztrace_. Teal telemetry, thin technical borders, generous spacing, and restrained motion. Display-only preview; no scanning or live system data.</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px">
+        <span class="badge badge--cyan">DESIGN SYSTEM / P1</span><span class="badge badge--amber">SIMULATED VISUALS</span><span class="badge badge--neutral">AUTHORIZED PRACTICE ONLY</span>
+      </div>
+      <p class="hud-mono hud-muted" data-motion-status style="font-size:.7rem;margin:18px 0 0">MOTION SYSTEM ACTIVE</p>
+    </section>
+
+    <section style="margin-block:34px" data-reveal>
+      <p class="hud-eyebrow">SYS // 02 · TYPOGRAPHY & PALETTE</p>
+      <h2 class="section-title" style="margin:8px 0 18px">Type, signal, contrast.</h2>
+      <div class="hud-four-column-grid">
+        <article class="hud-panel hud-panel--tight"><p class="hud-eyebrow">BACKGROUND</p><div style="height:42px;margin:12px 0;background:#03090b;border:1px solid #1b6f6b"></div><p class="hud-mono" style="margin:0">#03090B</p></article>
+        <article class="hud-panel hud-panel--tight"><p class="hud-eyebrow">PRIMARY SIGNAL</p><div style="height:42px;margin:12px 0;background:#35f2e0"></div><p class="hud-mono" style="margin:0">#35F2E0</p></article>
+        <article class="hud-panel hud-panel--tight"><p class="hud-eyebrow">SECONDARY SIGNAL</p><div style="height:42px;margin:12px 0;background:#19b8d6"></div><p class="hud-mono" style="margin:0">#19B8D6</p></article>
+        <article class="hud-panel hud-panel--tight"><p class="hud-eyebrow">MUTED TEXT</p><div style="height:42px;margin:12px 0;background:#6f9c98"></div><p class="hud-mono" style="margin:0">#6F9C98</p></article>
+      </div>
+      <div class="hud-panel" style="margin-top:14px"><p class="hud-eyebrow">ORBITRON / HEADINGS</p><h3 style="font:600 clamp(1.2rem,3vw,2rem) var(--hud-display);margin:8px 0 18px">SIGNAL OVER NOISE</h3><p class="hud-eyebrow">RAJDHANI / BODY</p><p style="font-size:1.25rem;margin:6px 0 18px">Clear hierarchy, readable content, and room for each detail.</p><p class="hud-eyebrow">SHARE TECH MONO / DATA</p><p class="hud-mono" style="margin:6px 0">SYS.STATUS // SIMULATED // 00:00:00</p></div>
+    </section>
+
+    <section style="margin-block:34px" data-reveal>
+      <p class="hud-eyebrow">SYS // 03 · BUTTONS & BADGES</p><h2 class="section-title" style="margin:8px 0 18px">Control surfaces.</h2>
+      <div class="hud-panel"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><button class="hud-btn hud-btn--primary" type="button">Initialize view ↗</button><button class="hud-btn" type="button">Secondary action</button><button class="hud-btn" type="button" disabled>Unavailable</button><span class="badge badge--cyan">IN PROGRESS</span><span class="badge badge--amber">PLANNED</span><span class="badge badge--danger">ATTENTION</span><span class="badge badge--neutral">NOT STARTED</span></div><p class="hud-muted" style="margin:18px 0 0">Hover or focus the buttons to see the subtle charge-up effect.</p></div>
+    </section>
+
+    <section style="margin-block:34px" data-reveal>
+      <p class="hud-eyebrow">SYS // 04 · METRICS</p><h2 class="section-title" style="margin:8px 0 18px">Stat cards / zero state.</h2>
+      <div class="stat-grid">
+        <article class="stat-card"><div class="stat-card-top"><span class="stat-icon" aria-hidden="true">⌁</span><span class="badge badge--neutral">0 CHANGE</span></div><p class="stat-label">Authorized labs</p><p class="stat-number" data-count-target>0</p><div class="stat-foot"><span>Verified entries</span><span>SIMULATED</span></div></article>
+        <article class="stat-card"><div class="stat-card-top"><span class="stat-icon" aria-hidden="true">⌘</span><span class="badge badge--neutral">0 CHANGE</span></div><p class="stat-label">Write-ups</p><p class="stat-number">0</p><div class="stat-foot"><span>Published notes</span><span>EMPTY</span></div></article>
+        <article class="stat-card"><div class="stat-card-top"><span class="stat-icon" aria-hidden="true">◎</span><span class="badge badge--neutral">0 CHANGE</span></div><p class="stat-label">Skills in progress</p><p class="stat-number">0</p><div class="stat-foot"><span>Tracked milestones</span><span>EMPTY</span></div></article>
+        <article class="stat-card"><div class="stat-card-top"><span class="stat-icon" aria-hidden="true">◇</span><span class="badge badge--neutral">0 CHANGE</span></div><p class="stat-label">Certificates</p><p class="stat-number">0</p><div class="stat-foot"><span>Earned credentials</span><span>NONE</span></div></article>
+      </div>
+      <button class="hud-btn" type="button" data-count-demo style="margin-top:14px">Replay count-up helper</button>
+    </section>
+
+    <section class="hud-two-column-grid" style="margin-block:34px" data-reveal>
+      <div class="hud-panel"><p class="hud-eyebrow">SYS // 05 · PROGRESS</p><h2 class="section-title" style="margin:8px 0 20px">Learning indicator.</h2><div class="progress"><div class="progress-head"><span>FOUNDATIONS / IN PROGRESS</span><strong>0%</strong></div><div class="progress-track" role="progressbar" aria-label="Foundations progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" style="--progress:0%"></div></div></div><p class="hud-muted" style="margin:18px 0 0">Progress remains at zero until real data is supplied.</p></div>
+      <div class="hud-panel"><p class="hud-eyebrow">SYS // 06 · TOOLTIPS & DROPDOWNS</p><h2 class="section-title" style="margin:8px 0 20px">Context on demand.</h2><div style="display:flex;align-items:center;gap:14px;margin-bottom:20px"><button class="tooltip" type="button" aria-label="About simulated metrics">i<span role="tooltip">Illustrative UI only. No live telemetry.</span></button><span class="hud-muted">Focus or hover the info icon.</span></div><label class="dropdown">Reporting window<select aria-label="Reporting window"><option>Current view</option><option>Last 7 days</option><option>All time</option></select></label></div>
+    </section>
+
+    <section style="margin-block:34px" data-reveal>
+      <p class="hud-eyebrow">SYS // 07 · DATA TABLE</p><h2 class="section-title" style="margin:8px 0 18px">Searchable-table foundation.</h2>
+      <div class="hud-panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px"><p class="hud-muted" style="margin:0">Illustrative rows only — not real findings.</p><label class="dropdown" style="min-width:180px">Filter status<select aria-label="Filter table status"><option>All statuses</option><option>In progress</option><option>Planned</option></select></label></div><div class="data-table-wrap"><table class="data-table"><caption class="hud-muted" style="padding:10px;text-align:left">Sample design-system data</caption><thead><tr><th scope="col">Track</th><th scope="col">Status</th><th scope="col">Progress</th><th scope="col">Entries</th></tr></thead><tbody><tr><td>Recon foundations</td><td><span class="badge badge--cyan">In progress</span></td><td>0%</td><td>0</td></tr><tr><td>Linux & networking</td><td><span class="badge badge--amber">Planned</span></td><td>0%</td><td>0</td></tr><tr><td>Authorized lab journal</td><td><span class="badge badge--neutral">Planned</span></td><td>0%</td><td>0</td></tr></tbody></table></div></div>
+    </section>
+
+    <section style="margin-block:34px" data-reveal>
+      <p class="hud-eyebrow">SYS // 08 · EMPTY STATES & DECODE</p><h2 class="section-title" style="margin:8px 0 18px">Honest by default.</h2>
+      <div class="hud-panel"><div class="empty-state"><div class="empty-state-icon" aria-hidden="true">∅</div><h3>No certificate</h3><p>No certificates earned yet. Future goals remain clearly marked as goals, not achievements.</p><span class="badge badge--neutral">NO RECORDS</span></div><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px"><p class="hud-mono" data-decode-target style="margin:0;color:var(--hud-cyan)">AUTHORIZED PRACTICE ONLY</p><button class="hud-btn" type="button" data-decode-demo>Replay decode helper</button></div></div>
+    </section>
+    <footer class="hud-divider" style="padding-top:18px;margin-top:46px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap"><span class="hud-mono hud-muted">SAAD.ztrace_ // PHASE 1 FOUNDATION</span><a href="./index.html">← Return to portfolio</a><span class="hud-mono hud-muted">NO LIVE SCANNING · DISPLAY ONLY</span></footer>
+  </main>
+  <script type="module" src="./js/views/styleguide.js"></script>
+</body>
+</html>
