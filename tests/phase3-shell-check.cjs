@@ -140,7 +140,7 @@ async function checkRouter() {
 }
 
 async function checkViews() {
-  const context = vm.createContext({ console });
+  const context = vm.createContext({ console, EventTarget, Event, URL, URLSearchParams, setTimeout, clearTimeout, performance });
   const cache = new Map();
   const viewFiles = [
     "profile", "dashboard", "attack-surface", "skill-progress", "learning-path",
