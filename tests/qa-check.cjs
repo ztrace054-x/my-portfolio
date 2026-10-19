@@ -101,7 +101,7 @@ checks++;
 const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map(match => match[1]);
 const idSet = new Set(ids);
 assert.equal(idSet.size, ids.length, 'HTML IDs must be unique');
-const internalAnchors = [...html.matchAll(/<a\b[^>]*\bhref=["']#([^"']+)["'][^>]*>/gi)].map(match => match[1]).filter(Boolean);
+const internalAnchors = [...html.matchAll(/<a\b[^>]*\bhref=["']#([^"']+)["'][^>]*>/gi)].map(match => match[1]).filter(id => id && !id.startsWith('/'));
 for (const id of internalAnchors) assert(idSet.has(decodeURIComponent(id)), 'Broken in-page link: #' + id);
 for (const match of html.matchAll(/\b(?:aria-labelledby|aria-describedby|aria-controls|aria-owns|for)=["']([^"']+)["']/gi)) {
   for (const id of match[1].trim().split(/\s+/)) assert(idSet.has(id), 'ARIA/label reference points to missing ID: ' + id);
