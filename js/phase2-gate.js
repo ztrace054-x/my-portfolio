@@ -48,6 +48,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   const bootStatus = root.querySelector("[data-p2-boot-status]");
   const decodeReadout = root.querySelector("[data-p2-decode]");
   const barRows = [...root.querySelectorAll("[data-p2-bar]")];
+  const fills = [...root.querySelectorAll("[data-p2-fill]")];
   const counters = [...root.querySelectorAll("[data-p2-count]")];
   const rings = [...root.querySelectorAll("[data-p2-ring]")];
   const replay = new URLSearchParams(window.location.search).get("intro") === "1";
@@ -104,6 +105,10 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       if (fill) fill.style.width = current + "%";
       if (value) value.textContent = String(current).padStart(2, "0") + "%";
     });
+    fills.forEach(fill => {
+      const target = Number(fill.dataset.p2Fill) || 0;
+      fill.style.width = Math.round(target * eased) + "%";
+    });
     counters.forEach(counter => {
       const target = Number(counter.dataset.p2Count) || 0;
       const digits = Number(counter.dataset.p2Digits) || 3;
@@ -127,6 +132,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       if (fill) fill.style.width = target + "%";
       if (value) value.textContent = String(target).padStart(2, "0") + "%";
     });
+    fills.forEach(fill => { fill.style.width = (Number(fill.dataset.p2Fill) || 0) + "%"; });
     counters.forEach(counter => {
       const target = Number(counter.dataset.p2Count) || 0;
       const digits = Number(counter.dataset.p2Digits) || 3;
