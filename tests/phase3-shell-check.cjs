@@ -41,7 +41,7 @@ assert.ok(html.includes("Learning in public"), "Learning-in-public notification 
 assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
 assert.ok(html.includes("./css/dashboard-shell.css?v=20261019.1"), "Dashboard stylesheet must be linked.");
-assert.ok(html.includes("./js/main.js?v=20261019.3"), "Main module cache key must be bumped.");
+assert.ok(html.includes("./js/main.js?v=20261019.4"), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
 assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling must not intercept dashboard hash routes.");
 
