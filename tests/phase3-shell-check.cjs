@@ -153,7 +153,7 @@ async function checkViews() {
     rendered[id] = module.namespace.render();
     assert.ok(rendered[id].includes('id="view-heading"'), "View heading missing for " + id);
   }
-  assert.ok(rendered.profile.includes("Authorized practice only"), "Profile must preserve the existing ethical-practice principle.");
+  assert.ok(rendered.profile.includes("Learn responsibly. Practice with permission."), "Profile must preserve the existing ethical-practice principle.");
   assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
   assert.equal((rendered.dashboard.match(/class="stat-number">0<\/p>/g) || []).length, 4, "Dashboard should display four honest zero-state metrics.");
   assert.ok(rendered.dashboard.includes("No activity recorded yet"), "Dashboard must not invent recent activity.");

@@ -1,7 +1,7 @@
-/* The shell exposes all ten views; later phases fill in the staged sections. */
+/* Phase 4 completes the Profile and Dashboard views; later phases fill the remaining sections. */
 export const viewRegistry = Object.freeze([
-  { id: "profile", label: "Profile", phase: 3, built: true },
-  { id: "dashboard", label: "Dashboard", phase: 3, built: true },
+  { id: "profile", label: "Profile", phase: 4, built: true },
+  { id: "dashboard", label: "Dashboard", phase: 4, built: true },
   { id: "attack-surface", label: "Attack Surface", phase: 5, built: false },
   { id: "skill-progress", label: "Skill Progress", phase: 5, built: false },
   { id: "learning-path", label: "Learning Path", phase: 5, built: false },
