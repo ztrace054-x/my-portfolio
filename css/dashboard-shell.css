@@ -79,7 +79,7 @@ body.app-shell-active { overflow: hidden; }
 .app-topbar__identity { display: flex; min-width: 0; align-items: center; gap: 16px; }
 .app-title-stack { min-width: 0; }
 .app-topbar-eyebrow { margin: 0 0 4px; color: #507c7b; font: 9px/1.4 var(--hud-mono, "JetBrains Mono", monospace); letter-spacing: .14em; }
-.app-title-stack h1 { overflow: hidden; margin: 0; color: #e2fffa; font: 600 clamp(19px, 1.8vw, 25px)/1.15 var(--hud-display, "Space Grotesk", sans-serif); letter-spacing: .015em; text-overflow: ellipsis; white-space: nowrap; }
+.app-title-stack [data-view-title] { overflow: hidden; margin: 0; color: #e2fffa; font: 600 clamp(19px, 1.8vw, 25px)/1.15 var(--hud-display, "Space Grotesk", sans-serif); letter-spacing: .015em; text-overflow: ellipsis; white-space: nowrap; }
 .app-period { display: grid; min-width: 145px; gap: 4px; margin-left: auto; padding: 5px 0 5px 18px; border-left: 1px solid rgba(53, 242, 224, .16); color: var(--hud-muted); }
 .app-period > span { color: #507c7b; font: 8px/1.2 var(--hud-mono, "JetBrains Mono", monospace); letter-spacing: .12em; }
 .app-period strong { color: #bfeee9; font: 500 11px/1.25 var(--hud-body, "Space Grotesk", sans-serif); }
@@ -289,7 +289,7 @@ body.app-shell-active { overflow: hidden; }
   .app-mobile-menu { display: inline-grid; }
   .app-topbar { grid-template-columns: minmax(0, 1fr) minmax(150px, 230px) auto; min-height: 78px; }
   .app-topbar__identity { gap: 11px; }
-  .app-title-stack h1 { font-size: 21px; }
+  .app-title-stack [data-view-title] { font-size: 21px; }
   .app-search { height: 39px; }
   .app-motion-toggle { width: 39px; min-width: 39px; justify-content: center; padding: 0; }
   .app-motion-toggle [data-shell-motion-label] { display: none; }
@@ -304,7 +304,7 @@ body.app-shell-active { overflow: hidden; }
   .app-topbar__identity { grid-area: identity; min-width: 0; }
   .app-topbar__actions { grid-area: actions; }
   .app-search { grid-area: search; width: 100%; }
-  .app-title-stack h1 { font-size: 19px; }
+  .app-title-stack [data-view-title] { font-size: 19px; }
   .app-topbar-eyebrow { font-size: 8px; }
   .app-topbar-bell { width: 34px; height: 34px; flex-basis: 34px; }
   .app-motion-toggle { width: 34px; min-width: 34px; height: 34px; min-height: 34px; }
@@ -337,7 +337,7 @@ body.app-shell-active { overflow: hidden; }
   .app-shell { font-size: 13px; }
   .app-topbar { padding-inline: 10px; }
   .app-topbar__identity { gap: 7px; }
-  .app-title-stack h1 { font-size: 17px; }
+  .app-title-stack [data-view-title] { font-size: 17px; }
   .app-topbar-eyebrow { letter-spacing: .06em; }
   .app-topbar__actions { gap: 4px; }
   .app-view-root { padding-inline: 11px; }
