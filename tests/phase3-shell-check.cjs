@@ -47,6 +47,7 @@ assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling 
 
 for (const selector of [
   ".app-sidebar", ".app-nav-link[aria-current=\"page\"]", ".app-shell.is-collapsed",
+  ".app-period { position: relative;", ".app-period svg { top: 50%; right: 0;",
   ".app-shell.is-sidebar-open", ".app-view-root.is-view-entering", "@keyframes app-view-scan",
   ".app-side-panel", ".app-setting-select", "@media (max-width: 900px)",
   "@media (max-width: 650px)", "@media (prefers-reduced-motion: reduce)"
@@ -54,6 +55,7 @@ for (const selector of [
 
 for (const behavior of [
   'createRouter({ routes: ROUTES, fallback: "profile", onRoute: renderRoute })',
+  'event.key === "Escape" && shell.classList.contains("is-sidebar-open")',
   'new MotionController()',
   'storage.set("notifications-read", "on")',
   'motion.setEnabled(!motion.enabled)',
