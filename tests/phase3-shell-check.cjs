@@ -35,7 +35,7 @@ assert.ok(html.includes('id="app-shell"'), "App shell root is missing.");
 assert.ok(html.includes('id="app-sidebar"'), "Mobile drawer target ID is missing.");
 assert.ok(html.includes('data-view-title'), "Top bar must expose the active view title.");
 assert.ok(html.includes('data-nav-search'), "Search input is missing.");
-assert.ok(html.includes("Learning to date"), "Decorative learning-to-date control is missing.");
+assert.ok(html.includes("LEARNING TO DATE"), "Decorative learning-to-date control is missing.");
 assert.ok(html.includes("Next step: recon basics"), "Recon learning notification is missing.");
 assert.ok(html.includes("Learning in public"), "Learning-in-public notification is missing.");
 assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
