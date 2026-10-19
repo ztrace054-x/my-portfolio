@@ -12,7 +12,7 @@ import { initJourney } from './journey.js?v=20261018.4';
 import { initDashboardShell } from './dashboard-shell.js?v=20261019.1';
 
 const root = document.documentElement;
-root.dataset.release = '20261019.3';
+root.dataset.release = '20261019.4';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
