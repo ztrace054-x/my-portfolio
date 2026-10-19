@@ -135,7 +135,14 @@ export function initDashboardShell() {
   }
 
   function onPanelKeydown(event) {
-    if (!activePanel) return;
+    if (!activePanel) {
+      if (event.key === "Escape" && shell.classList.contains("is-sidebar-open")) {
+        event.preventDefault();
+        setSidebarOpen(false);
+        sidebarToggle?.focus({ preventScroll: true });
+      }
+      return;
+    }
     if (event.key === "Escape") {
       event.preventDefault();
       closePanel();
