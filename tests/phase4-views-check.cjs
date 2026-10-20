@@ -189,7 +189,7 @@ async function run() {
   activityPeriod.value = "Last Month";
   listeners.change({ target: activityPeriod });
   assert.equal(activityLabel.textContent, "No data yet — I'm just starting · Last Month", "Activity period must update its own label.");
-  assert.equal(progressLabel.textContent, "No data yet — I'm just starting · Last Month", "Activity period must not change the progress label.");
+  assert.equal(progressLabel.textContent, "No data yet — I'm just starting · Weekly", "Activity period must not change the progress label.");
   activityPeriod.value = "Weekly";
   listeners.change({ target: activityPeriod });
   assert.equal(activityLabel.textContent, "No data yet — I'm just starting · Weekly");
