@@ -1,4 +1,5 @@
-import { PHOTOS } from './config.js?v=20261016.1';
+import { PHOTOS } from './config.js?v=20261020.3';
+const LEGACY_GALLERY_PHOTOS = PHOTOS.slice(1);
 
 export function initGallery({ overlays }) {
   const events = new AbortController();
@@ -10,18 +11,18 @@ export function initGallery({ overlays }) {
   let index = 0;
   let opener;
   function display(next) {
-    index = (next + PHOTOS.length) % PHOTOS.length;
-    const photo = PHOTOS[index];
+    index = (next + LEGACY_GALLERY_PHOTOS.length) % LEGACY_GALLERY_PHOTOS.length;
+    const photo = LEGACY_GALLERY_PHOTOS[index];
     image.src = photo.src;
     image.alt = photo.alt;
     image.width = photo.width;
     image.height = photo.height;
     caption.textContent = photo.title;
-    number.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(PHOTOS.length).padStart(2, '0');
+    number.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(LEGACY_GALLERY_PHOTOS.length).padStart(2, '0');
   }
   const dismiss = () => { if (dialog.open) dialog.close(); };
   document.querySelectorAll('[data-gallery-item]').forEach(button => button.addEventListener('click', () => {
-    if (typeof dialog.showModal !== 'function') { window.open(PHOTOS[Number(button.dataset.galleryItem)].src, '_blank', 'noopener'); return; }
+    if (typeof dialog.showModal !== 'function') { window.open(LEGACY_GALLERY_PHOTOS[Number(button.dataset.galleryItem)].src, '_blank', 'noopener'); return; }
     opener = button;
     display(Number(button.dataset.galleryItem));
     overlays.lock(dialog);
