@@ -424,6 +424,16 @@ body.app-shell-active { overflow: hidden; }
 .chart-empty-line { fill:none; stroke:rgba(53,242,224,.2); stroke-dasharray:5 6; stroke-width:2; }
 .chart-pulse { fill:var(--app-cyan); filter:drop-shadow(0 0 5px rgba(53,242,224,.7)); animation:chart-pulse-travel 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
 .chart-pulse--line { animation-duration:4.2s; }
+.dashboard-chart-visual { position:relative; min-width:0; }
+.chart-tooltip { position:absolute; top:12px; right:12px; z-index:2; padding:6px 9px; border:1px solid rgba(53,242,224,.28); color:#d8fffa; background:rgba(2,9,11,.96); font:9px/1.4 var(--hud-mono,"JetBrains Mono",monospace); letter-spacing:.04em; opacity:0; transform:translateY(4px); pointer-events:none; transition:opacity var(--hud-motion-duration,280ms) ease,transform var(--hud-motion-duration,280ms) ease; }
+.dashboard-chart-visual:hover .chart-tooltip,.dashboard-chart-visual:focus-within .chart-tooltip { opacity:1; transform:translateY(0); }
+.chart-pulse:focus-visible { stroke:var(--app-cyan); stroke-width:2; }
+html[data-intensity="low"] { --app-chart-pulse-duration:4.8s; }
+html[data-intensity="medium"] { --app-chart-pulse-duration:3.2s; }
+html[data-intensity="high"] { --app-chart-pulse-duration:2.4s; }
+.chart-pulse { animation-duration:var(--app-chart-pulse-duration,3.2s); }
+.chart-pulse--line { animation-duration:calc(var(--app-chart-pulse-duration,3.2s) * 1.3125); }
+html[data-motion="off"] .chart-pulse { animation:none !important; }
 .chart-axis-labels { fill:#527d79; font:8px var(--hud-mono,"JetBrains Mono",monospace); text-anchor:middle; }
 .chart-empty-label { margin:0; color:#d4f8f3; font:500 11px/1.6 var(--hud-mono,"JetBrains Mono",monospace); }
 .chart-footnote { margin:6px 0 0; color:#638d89; font-size:9px; line-height:1.6; }
@@ -477,4 +487,4 @@ body.app-shell-active { overflow: hidden; }
   .profile-email-row { flex-wrap:wrap; }
   .profile-copy-button { min-height:38px; }
 }
-@media (prefers-reduced-motion:reduce) { .chart-pulse { animation:none !important; } }
+@media (prefers-reduced-motion:reduce) { .chart-pulse { animation:none !important; } .chart-tooltip { transition:none !important; transform:none; } }

@@ -2,8 +2,8 @@ import { createRouter } from "./router.js?v=20261019.1";
 import { safeStorage } from "./utils.js?v=20261016.1";
 import { MotionController } from "./motion.js?v=20261016.1";
 import { viewRegistry } from "./views/index.js?v=20261019.2";
-import * as profileView from "./views/profile.js?v=20261019.2";
-import * as dashboardView from "./views/dashboard.js?v=20261019.2";
+import * as profileView from "./views/profile.js?v=20261020.1";
+import * as dashboardView from "./views/dashboard.js?v=20261020.1";
 import * as attackSurfaceView from "./views/attack-surface.js?v=20261019.1";
 import * as skillProgressView from "./views/skill-progress.js?v=20261019.1";
 import * as learningPathView from "./views/learning-path.js?v=20261019.1";
@@ -183,6 +183,10 @@ export function initDashboardShell() {
 
   function renderRoute({ id, view, previous }) {
     const token = ++routeToken;
+    window.clearTimeout(routeTimer);
+    routeTimer = 0;
+    disposeView?.();
+    disposeView = null;
     const metadata = viewRegistry.find(item => item.id === id);
     if (viewTitle) viewTitle.textContent = metadata?.label || "Profile";
     navLinks.forEach(link => {
@@ -194,8 +198,6 @@ export function initDashboardShell() {
 
     const paint = () => {
       if (token !== routeToken || !viewRoot) return;
-      disposeView?.();
-      disposeView = null;
       const activeView = view || ROUTES.profile;
       try {
         viewRoot.innerHTML = activeView.render();

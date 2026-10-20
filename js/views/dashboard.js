@@ -13,34 +13,40 @@ function renderActivityChart() {
     { x: 222, height: 66 }, { x: 282, height: 49 }, { x: 342, height: 31 },
     { x: 402, height: 57 }
   ].map(bar => `
-    <g class="chart-hover-target" tabindex="0" role="img" aria-label="No data yet">
+    <g class="chart-hover-target" tabindex="0" role="img" aria-label="No data yet" aria-describedby="activity-chart-tooltip">
       <title>No data yet</title>
       <rect class="chart-ghost-bar" x="${bar.x}" y="${124 - bar.height}" width="27" height="${bar.height}" rx="2"></rect>
     </g>`
   ).join("");
   return `
-    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty learning activity bar chart">
+    <div class="dashboard-chart-visual">
+    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty learning activity bar chart" aria-describedby="activity-chart-tooltip">
       <desc>Decorative ghost bars only. No learning activity data has been recorded.</desc>
       <g class="chart-grid-lines" aria-hidden="true"><path d="M20 28H450 M20 60H450 M20 92H450 M20 124H450"></path></g>
       ${bars}
       <path class="chart-axis" d="M20 124H450"></path>
-      <circle class="chart-pulse" cx="28" cy="124" r="4" aria-label="No data yet"><title>No data yet</title></circle>
+      <circle class="chart-pulse" cx="28" cy="124" r="4" tabindex="0" role="img" aria-label="No data yet" aria-describedby="activity-chart-tooltip"><title>No data yet</title></circle>
       <g class="chart-axis-labels" aria-hidden="true">
         <text x="55" y="146">M</text><text x="115" y="146">T</text><text x="175" y="146">W</text>
         <text x="235" y="146">T</text><text x="295" y="146">F</text><text x="355" y="146">S</text><text x="415" y="146">S</text>
       </g>
-    </svg>`;
+    </svg>
+    <span class="chart-tooltip" id="activity-chart-tooltip" role="tooltip">No data yet</span>
+    </div>`;
 }
 function renderProgressChart() {
   return `
-    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty progress over time line chart">
+    <div class="dashboard-chart-visual">
+    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty progress over time line chart" aria-describedby="progress-chart-tooltip">
       <desc>A flat baseline and moving pulse are decorative. No progress history has been recorded.</desc>
       <g class="chart-grid-lines" aria-hidden="true"><path d="M20 28H450 M20 60H450 M20 92H450 M20 124H450"></path></g>
       <path class="chart-axis" d="M20 124H450"></path>
-      <path class="chart-empty-line chart-hover-target" d="M28 98H442" tabindex="0" role="img" aria-label="No data yet"><title>No data yet</title></path>
-      <circle class="chart-pulse chart-pulse--line" cx="28" cy="98" r="4" aria-label="No data yet"><title>No data yet</title></circle>
+      <path class="chart-empty-line chart-hover-target" d="M28 98H442" tabindex="0" role="img" aria-label="No data yet" aria-describedby="progress-chart-tooltip"><title>No data yet</title></path>
+      <circle class="chart-pulse chart-pulse--line" cx="28" cy="98" r="4" tabindex="0" role="img" aria-label="No data yet" aria-describedby="progress-chart-tooltip"><title>No data yet</title></circle>
       <g class="chart-axis-labels" aria-hidden="true"><text x="28" y="146">START</text><text x="225" y="146">IN PROGRESS</text><text x="423" y="146">NOW</text></g>
-    </svg>`;
+    </svg>
+    <span class="chart-tooltip" id="progress-chart-tooltip" role="tooltip">No data yet</span>
+    </div>`;
 }
 const metricCards = [
   { label: "Labs Completed", value: stats.labsCompleted, mark: "01", note: "No verified labs yet" },
