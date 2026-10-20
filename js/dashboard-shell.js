@@ -1,7 +1,7 @@
 import { createRouter } from "./router.js?v=20261019.1";
 import { safeStorage } from "./utils.js?v=20261016.1";
 import { MotionController } from "./motion.js?v=20261016.1";
-import { viewRegistry } from "./views/index.js?v=20261020.2";
+import { viewRegistry } from "./views/index.js?v=20261020.3";
 import * as profileView from "./views/profile.js?v=20261020.1";
 import * as dashboardView from "./views/dashboard.js?v=20261020.1";
 import * as attackSurfaceView from "./views/attack-surface.js?v=20261020.2";
@@ -10,8 +10,8 @@ import * as learningPathView from "./views/learning-path.js?v=20261020.2";
 import * as writeUpsView from "./views/write-ups.js?v=20261020.2";
 import * as automationView from "./views/automation.js?v=20261020.2";
 import * as certificatesView from "./views/certificates.js?v=20261020.2";
-import * as galleryView from "./views/gallery.js?v=20261019.1";
-import * as contactView from "./views/contact.js?v=20261019.1";
+import * as galleryView from "./views/gallery.js?v=20261020.3";
+import * as contactView from "./views/contact.js?v=20261020.3";
 
 const ROUTES = Object.freeze({
   profile: profileView,

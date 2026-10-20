@@ -6,7 +6,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` currently loads the shared stylesheets plus `css/phase-2-gate.css`, `css/dashboard-shell.css`, and `css/phase-5.css`; its versioned entry module is `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The dashboard shell loads the versioned modules under `js/`, including the hash router, view registry, data modules, and view renderers. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below and verify the active imports before removing any legacy file.
+`index.html` currently loads the shared stylesheets plus `css/phase-2-gate.css`, `css/dashboard-shell.css`, `css/phase-5.css`, and `css/phase-6.css`; its versioned entry module is `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The dashboard shell loads the versioned modules under `js/`, including the hash router, view registry, data modules, and view renderers. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below and verify the active imports before removing any legacy file.
 
 | Path | Purpose |
 | --- | --- |
@@ -32,10 +32,13 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `css/phase-2-gate.css` | Intro/access-gate presentation and responsive behavior |
 | `css/dashboard-shell.css` | Dashboard navigation, HUD panels, layout, and responsive shell |
 | `css/phase-5.css` | Six Phase 5 views, empty states, status cards, and reduced-motion styling |
+| `css/phase-6.css` | Responsive Gallery/Contact layouts, accessible lightbox, and motion-aware reveals |
 | `js/router.js` | Static hash router with route fallback and listener cleanup |
 | `js/views/index.js` / `js/views/*.js` | View registry and data-driven view renderers |
-| `js/data/*.js` | Separated portfolio, learning, scope, automation, and credential content |
-| `tests/phase2-gate-check.cjs` through `tests/phase5-views-check.cjs` | Regression checks for the gated intro, dashboard shell, Phase 4 views, and Phase 5 views |
+| `js/views/phase6-view.js` | Shared Phase 6 header and MotionController-aware reveal lifecycle |
+| `js/data/gallery.js` | Three local portrait assets with captions, alt text, and dimensions |
+| `js/data/*.js` | Separated portfolio, learning, scope, automation, credential, and gallery content |
+| `tests/phase2-gate-check.cjs` through `tests/phase6-views-check.cjs` | Regression checks for the gated intro, dashboard shell, and Phase 2-6 views |
 | `js/hero-scene.js` | Canvas2D globe, subtle mouse/device-tilt parallax, synthetic packets, static SVG fallback |
 | `js/journey.js` | Scroll-driven roadmap progress and active learning phase |
 | `js/animations.js` | Token-driven native Web Animations, concise hero choreography, typing reveal, and intersection reveals |
@@ -54,11 +57,11 @@ No framework, backend, analytics, CDN script, package installation, or productio
 
 ## Content and identity
 
-Keep the SSC student / beginner positioning truthful. Edit the biography, course, learning roadmap, and four **Future goal · Not yet earned** credential labels in `index.html`. The identity terminal appears in About. The Workbench section shows three honest learning tracks: recon foundations, Linux/networking, and a planned authorized lab journal. They are not presented as completed professional projects. Gallery retains the two distinct original portraits.
+Keep the SSC student / beginner positioning truthful. Edit the biography, course, learning roadmap, and four **Future goal · Not yet earned** credential labels in `index.html`. The identity terminal appears in About. The Workbench section shows three honest learning tracks: recon foundations, Linux/networking, and a planned authorized lab journal. They are not presented as completed professional projects. The legacy static gallery retains two original portraits; the Phase 6 dashboard Gallery route uses three local portrait assets with descriptive alt text and a keyboard-friendly viewer.
 
 The original GitHub, TryHackMe, ZeroDayTest, Instagram, and email URLs remain intact. The ZeroDayTest URL is the originally supplied dashboard/profile URL; a visitor may need to sign in there. Do not invent a replacement public handle.
 
-To change the email, update `CONTENT.email` in `js/config.js` and the accessible address and `mailto:` URLs in `index.html`. Update `PHOTOS` and image alternative text if replacing a gallery portrait. Keep image dimensions to reserve layout space.
+To change the email, update `CONTENT.email` in `js/config.js` and the accessible address and `mailto:` URLs in `index.html`; the dashboard Contact route reads that same config value and the public URLs from `js/data/links.js`. For the dashboard Gallery route, update `js/data/gallery.js`; for the legacy static gallery, update `PHOTOS` and its image alternative text. Keep image dimensions to reserve layout space.
 
 ## Motion and fallbacks
 
@@ -78,9 +81,10 @@ Run with Node 20 or newer:
 ```sh
 node tests/qa-check.cjs
 node --experimental-vm-modules tests/interaction-check.cjs
+node --experimental-vm-modules tests/phase6-views-check.cjs
 ```
 
-The GitHub Actions quality workflow runs both suites and JavaScript module syntax checks on pull requests to `main` and pushes to `main`.
+The GitHub Actions quality workflow runs foundation, Phase 2-6 regression, static QA, interaction, and JavaScript module syntax checks on pushes to the named phase branches and pull requests to `main`.
 
 The suite checks the 5.2-second timeline, automatic completion, Skip/Escape/Enter/cancellation, repeat visits, replay, deep links, reduced-motion handoff, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
 
