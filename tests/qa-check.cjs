@@ -126,7 +126,7 @@ assert.match(html, /<a\b[^>]*class=["'][^"']*skip-link[^"']*["'][^>]*href=["']#m
 assert.match(html, /<main\b[^>]*\bid=["']main["']/i, 'Main landmark should have the skip-link target');
 assert.match(html, /id="intro-live-status"[^>]*role="status"[^>]*aria-live="polite"[^>]*aria-atomic="true"/i, 'Intro status should announce major simulated login states politely');
 const notFoundCss = fs.readFileSync(path.join(root, 'css/404.css'), 'utf8');
-for (const href of [...notFound.matchAll(/(?:href|src)="\/my-portfolio\/([^"]+)"/g)].map(match => match[1].split('?')[0])) assert(fs.existsSync(path.join(root, href)), 'Missing 404 asset: ' + href);
+for (const href of [...notFound.matchAll(/(?:href|src)="\/my-portfolio\/([^"]+)"/g)].map(match => match[1].split(/[?#]/)[0])) assert(fs.existsSync(path.join(root, href)), 'Missing 404 asset: ' + href);
 assert.match(notFoundCss, /:focus-visible|:focus\b/, '404 page must keep visible keyboard focus');
 const activeCssText = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0])
   .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean)
