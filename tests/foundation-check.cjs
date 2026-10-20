@@ -4,7 +4,7 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const required = [
-  "index.html", "styleguide.html",
+  "index.html", "styleguide.html", "404.html", "css/404.css", "css/phase-7.css",
   "css/tokens.css", "css/base.css", "css/components.css", "css/motion.css",
   "js/main.js", "js/motion.js", "js/router.js", "js/utils.js",
   "js/data/profile.js", "js/data/stats.js", "js/data/roadmap.js",

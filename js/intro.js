@@ -1,4 +1,4 @@
-import { INTRO_CONFIG, INTRO_DURATION, INTRO_KEY, STAGES, stageAt, shouldPlayIntro } from './intro-timeline.js?v=20261017.2';
+import { INTRO_CONFIG, INTRO_DURATION, INTRO_KEY, STAGES, stageAt, shouldPlayIntro } from './intro-timeline.js?v=20261020.1';
 
 export function initIntro({ clock, motionAllowed, reducedMotion }) {
   if (reducedMotion === undefined) reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -8,6 +8,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion }) {
   const title = document.getElementById('intro-title');
   const message = document.getElementById('intro-message');
   const status = document.getElementById('intro-status');
+  const liveStatus = document.getElementById('intro-live-status');
   const percent = document.getElementById('intro-percent');
   const progress = root.querySelector('.intro-progress');
   const bar = progress.querySelector('span');
@@ -95,6 +96,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion }) {
     title.textContent = 'WELCOME, OPERATOR';
     message.textContent = 'REDUCED MOTION // STATIC HANDOFF';
     status.textContent = 'PROFILE READY';
+    if (liveStatus) liveStatus.textContent = 'Reduced-motion mode. Entering the portfolio.';
     percent.textContent = '100%';
     progress.setAttribute('aria-valuenow', '100');
     bar.style.transform = 'scaleX(1)';
@@ -140,7 +142,7 @@ export function initIntro({ clock, motionAllowed, reducedMotion }) {
       columns[index] = (y + movement) % (height + 180);
       const x = index * (mobile ? 36 : 24);
       for (let tail = 0; tail < 7; tail++) {
-        ctx.fillStyle = 'rgba(125,255,154,' + ((1 - tail / 7) * 0.38) + ')';
+        ctx.fillStyle = 'rgba(53,242,224,' + ((1 - tail / 7) * 0.38) + ')';
         ctx.fillText('01A7F3'[(index + tail + Math.floor(elapsed / 280)) % 6], x, y - tail * 14);
       }
     });
@@ -151,6 +153,14 @@ export function initIntro({ clock, motionAllowed, reducedMotion }) {
     title.textContent = heading;
     message.textContent = detail;
     status.textContent = index >= 10 ? 'PROFILE UNLOCKED' : index >= 7 ? 'IDENTITY VERIFICATION' : 'SIMULATED NETWORK';
+    const announcements = {
+      0: 'Intro started. This is a fictional visual sequence; you can skip it at any time.',
+      4: 'Simulated access warning. No real authentication or network activity is taking place.',
+      9: 'Simulated access denied. The fictional sequence will continue locally.',
+      10: 'Simulated access granted. No account or system was accessed.',
+      11: 'Welcome to Saad’s cybersecurity learning portfolio.'
+    };
+    if (liveStatus && announcements[index]) liveStatus.textContent = announcements[index];
     percent.textContent = String(amount).padStart(2, '0') + '%';
     progress.setAttribute('aria-valuenow', String(amount));
     bar.style.transform = 'scaleX(' + (amount / 100) + ')';
