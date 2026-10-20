@@ -6,7 +6,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,hud-integration,motion-polish,phase-7}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Phase 7 removed the confirmed orphan files `css/dark-web.css`, `css/cyber-overrides.css`, `js/ambient-field.js`, `js/smooth-scroll.js`, and `js/viewport.js`. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,hud-integration,motion-polish,phase-7}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. The live page uses the canonical styles under `css/` and modules under `js/`. Phase 7 removes confirmed unreferenced legacy root-level CSS/JS duplicates and orphan files; the styleguide’s separate assets remain because `styleguide.html` actively uses them. Edit the canonical paths below.
 
 | Path | Purpose |
 | --- | --- |
@@ -74,7 +74,7 @@ The files under `js/data/` are intentionally staged for future data-driven dashb
 
 ### Image budget and responsive sizing
 
-All current raster assets already meet the repository’s 250 KB per-image budget: portrait JPEGs are about 104–135 KiB each and the social preview is about 169 KiB. No lossy re-encode was necessary for this pass. If the portfolio grows or is served to slower mobile connections, consider adding a `srcset` with a 480×640 WebP portrait for small cards and an 810×1080 WebP for full-size portrait viewing; retain the original JPEG as a fallback. For the social preview, use a 1200×630 image and keep it under 200 KB where visual quality allows. Preserve intrinsic `width`/`height`, meaningful `alt`, `loading="lazy"`, and `decoding="async"` for below-the-fold imagery.
+All raster assets already meet the 250 KiB-per-image budget: `saad-golden.jpg` is 137,833 bytes, `saad-dark.jpg` 126,504 bytes, `saad-formal.jpg` 106,111 bytes, and `og-image.jpg` 172,738 bytes. No lossy re-encode was needed. For future responsive WebP variants, preserve aspect ratios: target about 480×600 for the 4:5 golden portrait and 480×640 for the 3:4 dark/formal portraits, with full-size versions preserving their originals (864×1080 and 810×1080). Keep the social preview at 1200×630 and under 200 KiB where visual quality allows. Preserve intrinsic `width`/`height`, meaningful `alt`, `loading="lazy"`, and `decoding="async"` for below-the-fold imagery.
 
 ## Motion and fallbacks
 
@@ -82,7 +82,7 @@ All current raster assets already meet the repository’s 250 KB per-image budge
 - Skip is available immediately; Enter/Space activates the focused native button, and Escape also skips. A 7.2-second wall-clock fail-safe releases the page even if animation callbacks stall. Hidden tabs can therefore finish without replaying the remaining effect.
 - Session key `saad-intro-v4` skips subsequent visits. `?intro=1` explicitly replays; the query is consumed so ordinary reloads return to the session behavior. Deep links and saved motion-off bypass the intro; system reduced motion uses a short, non-flashing static handoff.
 - System reduced motion takes priority over local preference `saad-motion`. Turning motion off completes typing, cancels Web Animations, disables CSS animation/transitions, stops frame effects, removes the custom cursor, and preserves document layout and scroll position. There is no scroll pinning.
-- A shared `requestAnimationFrame` clock stops in hidden documents. CSS animation play state pauses while hidden; globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and roughly 40 / 24 render FPS targets. Slow-frame detection reduces the desktop render rate. Phase 6 standardizes hover/reveal/page tokens and removes rotating status text and per-letter hero animation.
+- A shared `requestAnimationFrame` clock stops in hidden documents. CSS animation play state pauses while hidden; globe rendering and terminal typing also pause offscreen. The globe uses 82 desktop / 44 mobile nodes, capped DPR 1.5 / 1, and targets up to 60 desktop / 30 mobile render FPS. Actual frame rates depend on the device and browser. Slow-frame detection reduces the desktop render rate. Phase 6 standardizes hover/reveal/page tokens and removes rotating status text and per-letter hero animation.
 - The custom cursor and 3.5px magnetic text effect run only on fine-pointer screens above 900px. Continuous photo/card tilt was removed to reduce per-frame work. Motion-off and reduced-motion remove the cursor and magnetic motion.
 - Source HTML remains readable without JavaScript; the SVG globe, biography, email, social links, and photos remain available. No-script navigation is provided. The enhanced gallery viewer and motion/copy controls require JavaScript.
 - Animation failure never gates content on a third-party library. Self-hosted fonts fall back to system fonts.
