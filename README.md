@@ -6,7 +6,7 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 
 ## Source of truth
 
-`index.html` loads `css/{tokens,style,intro,responsive,portfolio-refresh,design-system,phase-3,phase-4,motion-polish}.css` and `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The entry module uses the versioned modules in `js/`. Phase 7 removed the confirmed orphan files `css/dark-web.css`, `css/cyber-overrides.css`, `js/ambient-field.js`, `js/smooth-scroll.js`, and `js/viewport.js`. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below.
+`index.html` currently loads the shared stylesheets plus `css/phase-2-gate.css`, `css/dashboard-shell.css`, and `css/phase-5.css`; its versioned entry module is `js/main.js`. The standalone `style-tile.html` page is the visual approval surface for the token system. The dashboard shell loads the versioned modules under `js/`, including the hash router, view registry, data modules, and view renderers. Older root-level CSS/JS duplicates remain as archival compatibility artifacts, but are **not loaded by the portfolio**. Edit the canonical paths below and verify the active imports before removing any legacy file.
 
 | Path | Purpose |
 | --- | --- |
@@ -17,8 +17,8 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `css/tokens.css` | Self-hosted fonts and centralized color, type, spacing, radius, glow, layer, grain, and motion tokens |
 | `css/design-system.css` | Shared buttons, focus states, grid utility, glass surface, and grain toggle hook |
 | `css/phase-3.css` | Phase 3 glass navbar, magnetic nav labels, hero glitch reveal, animated grid, and scroll cue |
-| `css/phase-4.css` | Phase 4 portrait duotone/scan hover, vertical learning timeline, tool cards, and future-goal credentials |
-| `css/motion-polish.css` | Phase 6 shared timing, hover consistency, hidden-tab pause, and reduced-motion hard stop |
+| `css/phase-4.css` | Phase 4 profile/dashboard view styling and shared dashboard patterns |
+| `css/motion-polish.css` | Shared timing, hover consistency, hidden-tab pause, and reduced-motion behavior |
 | `style-tile.html` / `css/style-tile.css` | Standalone visual approval page for palette, type, buttons, cards, grid, glass, and grain |
 | `assets/mark-hood-minimal.svg` | Original minimal hooded-figure SVG concept mark (not yet inserted into the live navigation) |
 | `css/style.css` | Desktop and shared component styles |
@@ -27,8 +27,15 @@ A static portfolio for an SSC student and cybersecurity beginner. A simulated te
 | `css/portfolio-refresh.css` | Layout refinements, console hero, workbench cards, responsive polish |
 | `js/main.js` | Core startup, preference controls, optional visual initialization |
 | `js/motion.js` | Shared frame clock; hidden-tab suspension |
-| `js/intro-timeline.js` | Testable display-only timeline and intro eligibility |
-| `js/intro.js` | Intro state, skip, focus, session state, matrix rain, fail-safe |
+| `js/phase2-gate.js` | Simulated intro/access gate, skip handling, session state, focus handling, and fail-safe |
+| `js/dashboard-shell.js` | Dashboard shell, route navigation, view rendering, and per-view cleanup |
+| `css/phase-2-gate.css` | Intro/access-gate presentation and responsive behavior |
+| `css/dashboard-shell.css` | Dashboard navigation, HUD panels, layout, and responsive shell |
+| `css/phase-5.css` | Six Phase 5 views, empty states, status cards, and reduced-motion styling |
+| `js/router.js` | Static hash router with route fallback and listener cleanup |
+| `js/views/index.js` / `js/views/*.js` | View registry and data-driven view renderers |
+| `js/data/*.js` | Separated portfolio, learning, scope, automation, and credential content |
+| `tests/phase2-gate-check.cjs` through `tests/phase5-views-check.cjs` | Regression checks for the gated intro, dashboard shell, Phase 4 views, and Phase 5 views |
 | `js/hero-scene.js` | Canvas2D globe, subtle mouse/device-tilt parallax, synthetic packets, static SVG fallback |
 | `js/journey.js` | Scroll-driven roadmap progress and active learning phase |
 | `js/animations.js` | Token-driven native Web Animations, concise hero choreography, typing reveal, and intersection reveals |
