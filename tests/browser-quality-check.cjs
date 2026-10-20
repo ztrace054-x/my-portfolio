@@ -34,7 +34,7 @@ async function run(){
     for(const image of images){assert(image.alt&&image.width&&image.height,'Image missing alt/dimensions: '+JSON.stringify(image));if(image.complete)assert(image.naturalWidth>0,'Image failed to decode: '+image.src);}
     const toggle=page.locator('[data-motion-toggle]');assert.equal(await toggle.getAttribute('aria-pressed'),'false');await toggle.click();assert.equal(await toggle.getAttribute('aria-pressed'),'true','Motion toggle did not enable motion');await toggle.click();assert.equal(await toggle.getAttribute('aria-pressed'),'false','Motion toggle did not disable motion');
    }else{
-    await page.screenshot({path:path.join(artifactDir,'viewport-'+width+'.png')});const toggle=page.locator('[data-motion-toggle]');assert.equal(await toggle.getAttribute('aria-disabled'),'true',width+'px: reduced-motion preference must disable toggle');await toggle.click();assert.equal(await toggle.getAttribute('aria-pressed'),'false',width+'px: reduced motion must not be overridden');
+    await page.screenshot({path:path.join(artifactDir,'viewport-'+width+'.png')});const toggle=page.locator('[data-motion-toggle]');assert.equal(await toggle.getAttribute('aria-disabled'),'true',width+'px: reduced-motion preference must disable toggle');assert.equal(await toggle.isDisabled(),true,width+'px: reduced-motion toggle should not be actionable');assert.equal(await toggle.getAttribute('aria-pressed'),'false',width+'px: reduced motion must remain off');
    }
    if(width<=900){
     const menuButton=page.locator('#menu-toggle');await menuButton.click();await page.waitForFunction(()=>document.querySelector('#mobile-menu').open);assert.equal(await menuButton.getAttribute('aria-expanded'),'true');
