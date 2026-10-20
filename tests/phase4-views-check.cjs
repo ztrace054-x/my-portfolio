@@ -106,14 +106,14 @@ async function run() {
   for (const column of ["Topic", "Status", "Level", "Notes"]) assert.ok(dashboardHtml.includes('scope="col">' + column), "Learning Log column missing: " + column);
   for (const topic of ["Linux fundamentals", "Networking basics", "Recon concepts", "Authorized labs", "Beginner CTFs", "Certifications"]) assert.ok(dashboardHtml.includes(topic), "Learning Log topic missing: " + topic);
   assert.equal(dataModule.namespace.learningLog.length, 6, "Learning Log should contain six honest starter rows.");
-  assert.deepEqual(dataModule.namespace.learningLog.map(({ topic, status, level, notes }) => [topic, status, level, notes]), [
+  assert.equal(JSON.stringify(dataModule.namespace.learningLog.map(({ topic, status, level, notes }) => [topic, status, level, notes])), JSON.stringify([
     ["Linux fundamentals", "In progress", "Foundation", "Building familiarity with Linux basics."],
     ["Networking basics", "Building", "Foundation", "Learning how systems connect and communicate."],
     ["Recon concepts", "In progress", "Beginner", "Studying foundational reconnaissance concepts."],
     ["Authorized labs", "Planned", "Planned", "Permission-based practice only."],
     ["Beginner CTFs", "Planned", "Beginner", "Planned practice after the fundamentals."],
     ["Certifications", "Future goal", "Future goal", "Long-term goal; none earned yet."]
-  ], "Learning Log starter rows must match the approved truthful content.");
+  ]), "Learning Log starter rows must match the approved truthful content.");
 
   const search = mockTarget("[data-learning-log-search]", { value: "" });
   const filter = mockTarget("[data-learning-log-filter]", { value: "all" });
