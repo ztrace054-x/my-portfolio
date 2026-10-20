@@ -13,6 +13,8 @@
 #intro{--green:var(--hud-cyan)}
 .copy-button[aria-busy="true"]{cursor:progress;opacity:.78}
 .copy-button:disabled{pointer-events:none}
+/* Keep the hero grid bleed inside the viewport at narrow desktop widths. */
+.hero-grid{inset:var(--header-height) max(-80px,calc(-1 * var(--gutter))) 0}
 img{max-width:100%}
 @media(min-width:1600px){.hero-main{gap:clamp(48px,5vw,96px)}.hero-visual{min-height:640px}}
 @media(max-width:600px){.mobile-menu{width:min(420px,94vw);padding:20px var(--gutter)}}
