@@ -1,6 +1,6 @@
 import { escapeHTML } from "../utils.js?v=20261016.1";
 export function renderPhase5Header(copy) {
- return \`<header class="view-heading-block phase5-heading"><p class="view-eyebrow">${escapeHTML(copy.eyebrow)}</p><div class="view-title-row"><h1 id="view-heading" tabindex="-1">${escapeHTML(copy.title)}</h1><span class="badge badge--cyan">${escapeHTML(copy.badge)}</span></div><p class="view-intro">${escapeHTML(copy.intro)}</p></header>\`;
+ return `<header class="view-heading-block phase5-heading"><p class="view-eyebrow">${escapeHTML(copy.eyebrow)}</p><div class="view-title-row"><h1 id="view-heading" tabindex="-1">${escapeHTML(copy.title)}</h1><span class="badge badge--cyan">${escapeHTML(copy.badge)}</span></div><p class="view-intro">${escapeHTML(copy.intro)}</p></header>`;
 }
 export function mountPhase5View(root,{motion=null}={}) {
  const view=root?.querySelector?.(".phase5-view"); if(!view)return ()=>{};
