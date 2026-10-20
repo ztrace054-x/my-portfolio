@@ -8,7 +8,7 @@
 
 ## Result
 
-The GitHub Actions `Portfolio quality checks` workflow passed at commit `019fcd9c69744da15e4d45b37915d0e1f9e6a0c8`. This run includes the final CSS overflow fix and passed the static, interaction, and real-browser checks. The final report/legacy-file cleanup is on the same PR branch and triggers a fresh PR check.
+The GitHub Actions `Portfolio quality checks` workflow passed at the final Phase 7 branch head `48f6b45701936108917e4f5d372c71ca6dab90d6` ([run 39470666739](https://github.com/ztrace054-x/my-portfolio/actions/runs/39470666739)). Static checks, interaction tests, and real-browser checks all passed, including the final report and legacy-asset cleanup. The browser run passed at all five required widths.
 
 ## Responsive browser coverage
 
