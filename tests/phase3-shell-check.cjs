@@ -40,9 +40,9 @@ assert.ok(html.includes("Next step: recon basics"), "Recon learning notification
 assert.ok(html.includes("Learning in public"), "Learning-in-public notification is missing.");
 assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
-assert.ok(html.includes("./css/dashboard-shell.css?v=20261020.1"), "Dashboard stylesheet cache key must match the current shell CSS.");
-assert.ok(main.includes("./dashboard-shell.js?v=20261020.1"), "Dashboard shell module cache key must match the current shell JS.");
-assert.ok(html.includes("./js/main.js?v=20261020.1"), "Main module cache key must be bumped.");
+assert.ok(html.includes("./css/dashboard-shell.css?v=20261020.2"), "Dashboard stylesheet cache key must match the current shell CSS.");
+assert.ok(main.includes("./dashboard-shell.js?v=20261020.2"), "Dashboard shell module cache key must match the current shell JS.");
+assert.ok(html.includes("./js/main.js?v=20261020.2"), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
 assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling must not intercept dashboard hash routes.");
 
@@ -157,8 +157,10 @@ async function checkViews() {
   assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
   assert.equal((rendered.dashboard.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard should display five honest zero-state metrics.");
   assert.ok(rendered.dashboard.includes("No data yet — I'm just starting"), "Dashboard must not invent recent activity.");
-  assert.ok(rendered["attack-surface"].includes("No live targets"), "Attack Surface placeholder must not imply a live scan.");
-  assert.ok(rendered.certificates.includes("No credentials are marked as earned"), "Certificates placeholder must remain honest.");
+  assert.ok(rendered["attack-surface"].includes("Authorized practice only"), "Attack Surface must show its authorization banner.");
+  assert.ok(rendered["attack-surface"].includes("NO DATA"), "Attack Surface radar must remain empty.");
+  assert.ok(rendered.certificates.includes("No Certificate"), "Certificate cards must remain unearned.");
+  assert.ok(rendered.certificates.includes("Future goal"), "Certificate cards must be marked as future goals.");
 }
 (async () => {
   await checkRouter();

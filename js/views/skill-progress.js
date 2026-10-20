@@ -1,10 +1,9 @@
-import { renderPlaceholder } from "./placeholder.js?v=20261019.1";
-
-export function render() {
-  return renderPlaceholder({
-    title: "Skill Progress",
-    phase: 5,
-    description: "Skill metrics will be introduced only when verified learning milestones and their criteria are available.",
-    code: "SKILLS / STAGED"
-  });
+import {skillProgressContent} from "../data/skill-progress.js?v=20261020.2";
+import {escapeHTML} from "../utils.js?v=20261016.1";
+import {mountPhase5View,renderPhase5Header} from "./phase5-view.js?v=20261020.2";
+export function render(){
+ const baseline=skillProgressContent.skills.length?Math.min(...skillProgressContent.skills.map(s=>Math.max(0,Number(s.value)||0))):0;
+ const cards=skillProgressContent.skills.map((skill,index)=>{const value=Math.min(100,Math.max(0,Number(skill.value)||0));const statusClass=skill.status.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");return \`<article class="hud-panel phase5-skill-card phase5-reveal" style="--phase5-delay:${index*55}ms"><div class="phase5-skill-heading"><div><p class="phase5-skill-kicker">${escapeHTML(skillProgressContent.valueLabel)}</p><h2>${escapeHTML(skill.name)}</h2></div><span class="phase5-status phase5-status--${statusClass}">${escapeHTML(skill.status)}</span></div><p class="phase5-skill-note">${escapeHTML(skill.note)}</p><div class="phase5-skill-meter" role="progressbar" aria-label="${escapeHTML(skill.name)} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${value}"><span style="width:${value}%"></span></div><div class="phase5-skill-footer"><strong>${value}%</strong><span>${escapeHTML(skillProgressContent.valueLabel)}</span></div></article>\`;}).join("");
+ return \`<section class="view-page phase5-view phase5-skills" aria-labelledby="view-heading">${renderPhase5Header(skillProgressContent)}<div class="phase5-skill-intro phase5-reveal"><span class="phase5-skill-intro-mark">${baseline}%</span><div><p class="view-eyebrow">${escapeHTML(skillProgressContent.baselineEyebrow)}</p><p>${escapeHTML(skillProgressContent.baselineNote)}</p></div></div><div class="phase5-skill-grid">${cards}</div></section>\`;
 }
+export function mount(root,options={}){return mountPhase5View(root,options);}
