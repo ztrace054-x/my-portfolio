@@ -10,8 +10,9 @@ import * as learningPathView from "./views/learning-path.js?v=20261020.2";
 import * as writeUpsView from "./views/write-ups.js?v=20261020.2";
 import * as automationView from "./views/automation.js?v=20261020.2";
 import * as certificatesView from "./views/certificates.js?v=20261020.2";
-import * as galleryView from "./views/gallery.js?v=20261019.1";
-import * as contactView from "./views/contact.js?v=20261019.1";
+import * as galleryView from "./views/gallery.js?v=20261020.3";
+import * as contactView from "./views/contact.js?v=20261020.3";
+import { initWorkspaceMotion } from "./workspace-motion.js?v=20261020.3";
 
 const ROUTES = Object.freeze({
   profile: profileView,
@@ -45,6 +46,7 @@ export function initDashboardShell() {
   let routeTimer = 0;
   let routeToken = 0;
   let disposeView = null;
+  let workspaceMotion = null;
 
   const sidebar = shell.querySelector("[data-app-sidebar]");
   const viewRoot = shell.querySelector("[data-view-root]");
@@ -187,6 +189,7 @@ export function initDashboardShell() {
     routeTimer = 0;
     disposeView?.();
     disposeView = null;
+    workspaceMotion?.mountView(null);
     const metadata = viewRegistry.find(item => item.id === id);
     if (viewTitle) viewTitle.textContent = metadata?.label || "Profile";
     navLinks.forEach(link => {
@@ -202,6 +205,7 @@ export function initDashboardShell() {
       try {
         viewRoot.innerHTML = activeView.render();
         disposeView = typeof activeView.mount === "function" ? activeView.mount(viewRoot, { motion }) : null;
+        workspaceMotion?.mountView(viewRoot);
       } catch {
         disposeView?.();
         disposeView = null;
@@ -246,6 +250,7 @@ export function initDashboardShell() {
     shell.classList.add("is-entering");
 
     motion = new MotionController();
+    workspaceMotion = initWorkspaceMotion(shell, motion);
     events = new AbortController();
     motion.addEventListener("change", syncMotion);
 
@@ -302,6 +307,8 @@ export function initDashboardShell() {
   function dispose() {
     disposeView?.();
     disposeView = null;
+    workspaceMotion?.dispose();
+    workspaceMotion = null;
     if (router) router.dispose();
     if (events) events.abort();
     if (motion) {

@@ -121,3 +121,8 @@ Before a significant release, manually check Chrome and Firefox on desktop plus 
 GitHub Pages serves **main / root**. The existing Pages workflow publishes merged changes; the live URL remains the same. Original assets and repository history are retained.
 
 The pre-redesign version is commit `2dd55465135c63dbb568a15e01e6375654e5a06b`. To roll back, revert the redesign merge commit and push the revert to `main`; the Pages workflow will publish that revision. Do not force-push or delete repository history.
+
+
+## Phase 6 — Gallery, Contact and motion
+
+The active dashboard includes a three-photo accessible gallery/lightbox, direct email and social actions, and a dashboard-only motion polish layer. It reuses the existing MotionController, saved `saad-motion` / `saad-motion-intensity` preferences, system reduced-motion setting and hidden-tab state. Contact has no data-collection form, backend, analytics or added network request. See `css/phase-6.css`, `js/workspace-motion.js`, `js/views/gallery.js`, `js/views/contact.js` and `tests/phase6-views-check.cjs`. Automated checks do not replace manual browser and screen-reader verification.

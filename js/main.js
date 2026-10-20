@@ -9,10 +9,10 @@ import { initCursor } from './cursor.js?v=20261018.5';
 import { initAnimations } from './animations.js?v=20261018.5';
 import { initTerminal } from './terminal.js?v=20261016.1';
 import { initJourney } from './journey.js?v=20261018.4';
-import { initDashboardShell } from './dashboard-shell.js?v=20261020.2';
+import { initDashboardShell } from './dashboard-shell.js?v=20261020.3';
 
 const root = document.documentElement;
-root.dataset.release = '20261020.2';
+root.dataset.release = '20261020.3';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');

@@ -9,6 +9,7 @@ on:
       - phase-3-dashboard-shell
       - phase-4-profile-dashboard
       - phase-5-learning-sections
+      - phase-6-gallery-contact-motion
   pull_request:
     branches:
       - main
@@ -45,6 +46,8 @@ jobs:
         run: node --experimental-vm-modules tests/phase4-views-check.cjs
       - name: Run Phase 5 remaining-view regression checks
         run: node --experimental-vm-modules tests/phase5-views-check.cjs
+      - name: Run Phase 6 Gallery, Contact, and motion checks
+        run: node --experimental-vm-modules tests/phase6-views-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
       - name: Run interaction and accessibility-state tests
