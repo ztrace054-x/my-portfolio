@@ -205,7 +205,7 @@ async function run() {
     f.advance(1000);
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
-    assert.equal(f.sessionValues.get('ztrace-phase2-entered'), '1');
+    assert.equal(f.sessionValues.has('ztrace-phase2-entered'), false, 'Completing the intro must not store a visit flag.');
     assert.equal(f.context.location.hash, '#/profile');
     assert.equal(f.timers.size, 0);
     checks++;
@@ -231,8 +231,10 @@ async function run() {
   {
     const f = phase2Fixture({ entered: true }), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(f.root.hidden && !f.page.inert);
+    assert(!f.root.hidden && f.page.inert && f.skip.focused, 'A previous visit flag must not suppress the intro on refresh.');
+    controller.cancel();
     await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
     assert.equal(f.timers.size, 0);
     checks++;
   }
