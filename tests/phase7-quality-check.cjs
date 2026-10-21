@@ -21,6 +21,6 @@ assert.match(phase7,/min-height:44px/);assert.match(phase7,/width:min\(420px,92v
 assert.match(notFound,/name="robots" content="noindex,follow"/);assert.match(notFound,/\/my-portfolio\/assets\/favicon\.svg/);assert.match(read('css/404.css'),/prefers-reduced-motion/);
 for(const width of [1920,1366,1024,768,390]) assert(responsive.includes('<option>'+width+'</option>')||responsive.includes('<option selected>'+width+'</option>'),'Missing responsive preset '+width);
 assert.match(readme,/js\/data\/stats\.js/);assert.match(readme,/js\/data\/certificates\.js/);assert.match(readme,/not imported by the live one-page portfolio/i);assert.match(readme,/1920\/1366\/1024\/768\/390px/);
-assert.match(report,/379,319 B/);assert.match(report,/611,934 B/);assert.match(report,/1920.*1366.*1024.*768.*390/);assert.match(report,/not merged, not deployed/i);
+assert.match(report,/379,319 B/);assert.match(report,/611,934 B/);assert.match(report,/1920.*1366.*1024.*768.*390/);assert.match(report,/merged and deployed/i);assert.match(report,/https:\/\/ztrace054-x\.github\.io\/my-portfolio\//);
 assert.match(workflow,/tests\/phase7-quality-check\.cjs/);assert.match(workflow,/tests\/browser-quality-check\.cjs/);assert.match(workflow,/upload-artifact@v4/);
 console.log('Phase 7 static checks passed: SEO/share metadata, 404, HUD accessibility, touch targets, motion targets, responsive presets, data-editing docs, and browser QA wiring.');
