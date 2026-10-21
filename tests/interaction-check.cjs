@@ -125,6 +125,7 @@ const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
 
 function phase2Fixture({ search = '', entered = false, storageBlocked = false } = {}) {
   const f = fixture();
+  f.doc.documentElement.classList.add('intro-pending');
   if (search) {
     const url = new URL(search, f.context.location.href);
     f.context.location.search = url.search;
@@ -206,6 +207,7 @@ async function run() {
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
     assert.equal(f.sessionValues.has('ztrace-phase2-entered'), false, 'Completing the intro must not store a visit flag.');
+    assert(!f.doc.documentElement.classList.contains('intro-pending'), 'Completing the intro must release the initial page visibility guard.');
     assert.equal(f.context.location.hash, '#/profile');
     assert.equal(f.timers.size, 0);
     checks++;

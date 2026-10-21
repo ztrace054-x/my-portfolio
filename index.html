@@ -2,6 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>
+(() => {
+  const root = document.documentElement;
+  root.classList.add("intro-pending");
+  const revealLegacyPage = () => {
+    root.classList.remove("intro-pending");
+    document.getElementById("page")?.removeAttribute("inert");
+  };
+  window.addEventListener("error", event => {
+    if (event.target?.type === "module" || event.target === window) revealLegacyPage();
+  }, true);
+  window.addEventListener("unhandledrejection", revealLegacyPage, { once: true });
+})();
+</script>
+<style id="intro-critical-visibility">
+html.intro-pending #page { visibility: hidden !important; }
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07090c">
 <title>Saad — A cybersecurity journey</title>
@@ -22,7 +39,7 @@
 <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
 <link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="./assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<script type="module" src="./js/main.js?v=20261021.1"></script>
+<script type="module" src="./js/main.js?v=20261021.2"></script>
 <link rel="stylesheet" href="./css/tokens.css?v=20261018.5"><link rel="stylesheet" href="./css/base.css?v=20261019.1"><link rel="stylesheet" href="./css/components.css?v=20261019.1"><link rel="stylesheet" href="./css/motion.css?v=20261019.1"><link rel="stylesheet" href="./css/style.css?v=20261018.6"><link rel="stylesheet" href="./css/intro.css?v=20261018.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261018.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261018.5">
   
   <link rel="stylesheet" href="./css/motion-polish.css?v=20261018.5">
@@ -51,7 +68,7 @@
 </head>
 <body data-design="workbench-v4">
 <a class="skip-link" href="#main">Skip to content</a>
-<div id="page">
+<div id="page" inert>
   <header class="site-header" id="site-header">
     <div class="header-inner container">
       <a class="wordmark" href="#home" aria-label="Saad, home">SAAD<span>.</span><small>ztrace_</small></a>
@@ -329,7 +346,7 @@
     <p class="app-panel-footnote">Preferences are saved in this browser when local storage is available. System reduced-motion preferences are respected.</p>
   </aside>
 </div>
-<div id="phase2-gate" class="phase2-gate" role="dialog" aria-modal="true" aria-label="ZTRACE intro and visitor access" hidden>
+<div id="phase2-gate" class="phase2-gate" role="dialog" aria-modal="true" aria-label="ZTRACE intro and visitor access">
   <div class="phase2-gate__scene" aria-hidden="true">
     <div class="phase2-gate__grid"></div><div class="phase2-gate__scanlines"></div>
     <i class="phase2-gate__corner phase2-gate__corner--tl"></i><i class="phase2-gate__corner phase2-gate__corner--tr"></i><i class="phase2-gate__corner phase2-gate__corner--bl"></i><i class="phase2-gate__corner phase2-gate__corner--br"></i>

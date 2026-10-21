@@ -29,6 +29,8 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   const root = document.getElementById("phase2-gate");
   const page = document.getElementById("page");
   if (!root || !page) {
+    document.documentElement.classList.remove("intro-pending");
+    if (page) page.inert = false;
     return { completed: Promise.resolve(), entryStarted: Promise.resolve(), cancel() {}, setMotion() {}, dispose() {} };
   }
 
@@ -152,6 +154,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     root.hidden = true;
     root.classList.remove("is-booting", "is-login-ready", "is-transitioning");
     document.documentElement.classList.remove("phase2-active", "phase2-paused");
+    document.documentElement.classList.remove("intro-pending");
     loginLayer.inert = true;
     loginLayer.setAttribute("aria-hidden", "true");
     page.inert = false;
@@ -295,6 +298,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
         loginLayer.inert = true;
         page.inert = false;
         document.documentElement.classList.remove("phase2-active", "phase2-paused");
+        document.documentElement.classList.remove("intro-pending");
       }
     }
   };
