@@ -8,7 +8,7 @@ const summarize=resources=>{const totals={total:0,document:0,stylesheet:0,script
 async function assertTouchTargets(page,selector,label){const items=await page.locator(selector).evaluateAll(elements=>elements.filter(element=>{const style=getComputedStyle(element),box=element.getBoundingClientRect();return style.display!=='none'&&style.visibility!=='hidden'&&box.width>0&&box.height>0;}).map(element=>{const box=element.getBoundingClientRect();return{text:(element.innerText||element.getAttribute('aria-label')||String(element.className)||label).trim().slice(0,50),width:box.width,height:box.height};}));for(const item of items)assert(item.width>=44&&item.height>=44,label+' target is smaller than 44×44 px: '+JSON.stringify(item));}
 async function run(){
  await new Promise((resolve,reject)=>server.listen(0,'127.0.0.1',error=>error?reject(error):resolve()));
- const port=server.address().port,base='http://127.0.0.1:'+port+'/',widths=[1920,1366,1024,768,390],results=[],failures=[];let measuredPayload=null;
+ const port=server.address().port,base='http://127.0.0.1:'+port+'/',widths=[1920,1366,1024,768,390,320],results=[],failures=[];let measuredPayload=null;
  const browser=await chromium.launch({headless:true,args:['--disable-dev-shm-usage']});
  try{
   for(const width of widths){
