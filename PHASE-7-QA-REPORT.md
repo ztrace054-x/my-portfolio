@@ -8,7 +8,7 @@
 
 ## Result
 
-The GitHub Actions `Portfolio quality checks` workflow passed at the final Phase 7 branch head `48f6b45701936108917e4f5d372c71ca6dab90d6` ([run 39470666739](https://github.com/ztrace054-x/my-portfolio/actions/runs/39470666739)). Static checks, interaction tests, and real-browser checks all passed, including the final report and legacy-asset cleanup. The browser run passed at all five required widths.
+The GitHub Actions `Portfolio quality checks` workflow passed at implementation commit `d40361b23d0127b43e7d3de4339a84ed3f603467` ([run 39578248227](https://github.com/ztrace054-x/my-portfolio/actions/runs/39578248227)). Static checks, interaction tests, and real-browser checks all passed at all six tested widths, including the 320px stress case. Screenshot review exposed a keyboard-focus overlap between the skip link and Motion control at 320px; the skip link is now compacted at widths up to 360px while retaining a 44px minimum height, and the browser suite asserts that they do not overlap.
 
 ## Responsive browser coverage
 
@@ -21,6 +21,7 @@ Chromium ran the site over local HTTP at all required viewport widths:
 | 1024 px | PASS | Desktop navigation and three-column workbench layout |
 | 768 px | PASS | Mobile drawer, keyboard close/focus return, responsive workbench |
 | 390 px | PASS | Mobile drawer, single-column workbench, touch targets |
+| 320 px | PASS | Extra-narrow stress case; skip link and Motion control do not overlap; drawer, gallery, and touch targets |
 
 The browser run reported no uncaught JavaScript errors and no failed local asset requests.
 
@@ -33,6 +34,7 @@ The browser run reported no uncaught JavaScript errors and no failed local asset
 5. **Clipboard feedback needed a clear in-progress/failure state.** The copy button now announces “Copying…”, exposes `aria-busy`, and resets cleanly after success or failure.
 6. **SEO/share metadata and not-found handling needed a consistent final pass.** Title, description, Open Graph/Twitter fields, theme color, favicon, and a project-path-safe `noindex` 404 page are aligned with the portfolio’s dark teal/cyan design.
 7. **Legacy duplicate files obscured the active source of truth.** Confirmed unreferenced root-level CSS/JS duplicates are removed; active portfolio and styleguide assets remain in their canonical folders.
+8. **320px keyboard-focus overlap.** The focused skip link overlapped the Motion control on very narrow screens. The skip link now uses compact horizontal padding and text sizing at widths up to 360px while keeping a 44px minimum height; Playwright checks the bounding boxes to prevent regression.
 
 ## Accessibility and interaction checks
 
@@ -74,7 +76,7 @@ No lossy recompression was applied because the assets already meet the budget. T
 
 ## Final manual release checklist
 
-- [ ] Review 1920, 1366, 1024, 768, 390 px, plus the optional 320 px stress case.
+- [x] Automated Chromium layout/interaction review at 1920, 1366, 1024, 768, 390, and 320 px stress case (PASS).
 - [ ] Verify drawer focus with Tab/Shift+Tab, Escape, and focus return on a physical keyboard.
 - [ ] Test gallery navigation and focus return using mouse, keyboard, and touch.
 - [ ] Test clipboard with permission granted and denied.

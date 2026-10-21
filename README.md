@@ -105,7 +105,7 @@ The GitHub Actions quality workflow runs both suites and JavaScript module synta
 
 The suite checks the 5.2-second timeline, automatic completion, Skip/Escape/Enter/cancellation, repeat visits, replay, deep links, reduced-motion handoff, unavailable storage, fail-safe release, hidden-tab frame suspension, terminal completion/focus behavior, clipboard success/rejection, gallery wrapping/focus return, and overlay scroll locks. A real-time watchdog fails stalled tests rather than silently reporting success.
 
-`tests/responsive.html` displays the actual site in 1920/1366/1024/768/390px iframe viewports, with 320px as an extra narrow-screen stress case. `tests/browser-quality-check.cjs` runs the required widths in Chromium against a local HTTP server; it also reports raw response-body sizes before and after lazy images load. These figures are source-response estimates before HTTP compression, not Lighthouse scores or guaranteed wire bytes. Use HTTP serving for browser QA; ES modules do not work correctly from a direct file URL.
+`tests/responsive.html` displays the actual site in 1920/1366/1024/768/390px iframe viewports, with 320px as an extra narrow-screen stress case. `tests/browser-quality-check.cjs` runs the required widths plus a 320px stress case in Chromium against a local HTTP server; it also reports raw response-body sizes before and after lazy images load. These figures are source-response estimates before HTTP compression, not Lighthouse scores or guaranteed wire bytes. Use HTTP serving for browser QA; ES modules do not work correctly from a direct file URL.
 
 ## Fonts
 
