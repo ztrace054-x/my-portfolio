@@ -22,15 +22,15 @@ for (const selector of [
 
 assert.ok(!html.includes('id="intro" class="intro"'), "Legacy intro overlay must not run alongside the Phase 2 gate.");
 assert.ok(html.includes("./css/phase-2-gate.css?v=20261019.1"), "Phase 2 stylesheet must be linked.");
-assert.ok(html.includes("./js/main.js?v=20261020.3"), "Main module cache key must be bumped for Phase 2.");
+assert.ok(html.includes("./js/main.js?v=20261021.1"), "Main module cache key must be bumped for Phase 2.");
 assert.ok(main.includes("initPhase2Gate"), "Main startup must initialize the Phase 2 gate.");
 assert.ok(main.includes("initDashboardShell"), "Main startup must initialize the Phase 3 workspace after the gate.");
 assert.ok(main.includes("dashboard.activate()"), "The workspace must activate after the visitor gate completes.");
 
+assert.ok(!gate.includes("sessionStorage"), "The intro must not be suppressed by a stored visit flag; it should appear on every page load.");
+assert.ok(!gate.includes("shouldShowGate") && !gate.includes("enteredPreviously"), "Every page load must show the intro regardless of prior visits.");
+assert.ok(gate.includes("removeReplayQuery();") && gate.includes("root.hidden = false;") && gate.includes("page.inert = true;"), "The gate must activate on each page load.");
 for (const behavior of [
-  'new URLSearchParams(window.location.search).get("intro") === "1"',
-  'sessionStorage.getItem(key)',
-  'sessionStorage.setItem(key, value)',
   'window.matchMedia?.(REDUCED_MOTION_QUERY)',
   'document.addEventListener("visibilitychange"',
   'event.key === "Escape"',
@@ -52,4 +52,4 @@ for (const cssRule of [
 
 assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(gate), "The decorative gate must not make network/authentication requests.");
 assert.ok(/readonly tabindex="-1"/.test(html), "Decorative input fields must not accept user edits or steal keyboard focus.");
-console.log("Phase 2 gate checks passed: markup, scene components, route/session controls, reduced motion, responsive rules, and no-auth behavior.");
+console.log("Phase 2 gate checks passed: markup, scene components, per-load intro, reduced motion, responsive rules, and no-auth behavior.");

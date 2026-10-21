@@ -1,15 +1,8 @@
 /* Phase 2 — original HUD boot sequence and decorative visitor gate. No authentication or network activity. */
 const BOOT_DURATION = 3600;
-const ENTERED_KEY = "ztrace-phase2-entered";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-/<>[]";
 
-function safeSessionGet(key) {
-  try { return sessionStorage.getItem(key); } catch { return null; }
-}
-function safeSessionSet(key, value) {
-  try { sessionStorage.setItem(key, value); } catch { /* Session storage may be unavailable in private contexts. */ }
-}
 function removeReplayQuery() {
   try {
     const url = new URL(window.location.href);
@@ -51,7 +44,6 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   const fills = [...root.querySelectorAll("[data-p2-fill]")];
   const counters = [...root.querySelectorAll("[data-p2-count]")];
   const rings = [...root.querySelectorAll("[data-p2-ring]")];
-  const replay = new URLSearchParams(window.location.search).get("intro") === "1";
   const reducedMotion = window.matchMedia?.(REDUCED_MOTION_QUERY) ?? { matches: false, addEventListener() {}, removeEventListener() {} };
 
   let resolveCompleted;
@@ -68,9 +60,6 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   let frameId = 0;
   let transitionTimer = 0;
   let clockTimer = 0;
-
-  const enteredPreviously = safeSessionGet(ENTERED_KEY) === "1";
-  const shouldShowGate = replay || !enteredPreviously;
 
   function syncClock(force = false) {
     const now = new Date();
@@ -166,7 +155,6 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     loginLayer.inert = true;
     loginLayer.setAttribute("aria-hidden", "true");
     page.inert = false;
-    safeSessionSet(ENTERED_KEY, "1");
     try {
       const url = new URL(window.location.href);
       url.searchParams.delete("intro");
@@ -269,22 +257,6 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   reducedMotion.addEventListener?.("change", event => {
     if (event.matches) showLogin();
   }, { signal: events.signal });
-
-  if (!shouldShowGate) {
-    done = true;
-    root.hidden = true;
-    page.inert = false;
-    events.abort();
-    resolveEntry();
-    resolveCompleted();
-    return {
-      completed,
-      entryStarted,
-      cancel: finish,
-      setMotion() {},
-      dispose() { events.abort(); stopFrameLoop(); }
-    };
-  }
 
   removeReplayQuery();
   root.hidden = false;

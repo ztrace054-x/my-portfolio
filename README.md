@@ -2,7 +2,7 @@
 
 **Live website:** https://ztrace054-x.github.io/my-portfolio/
 
-A static, client-side cybersecurity learning portfolio and dashboard for Saad. The site transitions from a simulated intro/visitor gate into a routed workspace. It uses vanilla JavaScript, HTML and CSS; there is no backend, real authentication, analytics, or live security telemetry.
+A static, client-side cybersecurity learning portfolio and dashboard for Saad. The simulated intro/visitor gate runs on every page load or refresh before opening the routed workspace. It uses vanilla JavaScript, HTML and CSS; there is no backend, real authentication, analytics, or live security telemetry.
 
 ## Dashboard sections
 
