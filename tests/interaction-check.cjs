@@ -25,43 +25,147 @@ class Element {
   close() { this.open = false; this.emit('close'); }
 }
 function fixture() {
+  const scripts = [];
   const doc = new Element();
   const nodes = new Map();
-  doc.getElementById = id => { if(!nodes.has(id)){ const el = new Element(); el.doc = doc; nodes.set(id,el); } return nodes.get(id); };
+  doc.hidden = false;
+  doc.getElementById = id => {
+    if (!nodes.has(id)) { const el = new Element(); el.doc = doc; nodes.set(id, el); }
+    return nodes.get(id);
+  };
   doc.documentElement = new Element();
   doc.head = { append: el => scripts.push(el) };
   doc.createElement = () => new Element();
   doc.createRange = () => ({ selectNodeContents(el) { doc.selected = el.textContent; } });
-  let time=0, next=1;
+  let time = 0, next = 1, reducedMotion = false;
   const timers = new Map();
-  const setTimeout = (fn,delay=0) => { const id=next++;timers.set(id,{at:time+delay,fn});return id; };
-  const clearTimeout = id => timers.delete(id);
-  const advance = duration => { const limit=time+duration; let guard=0; while(true){ const entry=[...timers].filter(([,t])=>t.at<=limit).sort((a,b)=>a[1].at-b[1].at)[0]; if(!entry)break; assert(++guard<5000); const [id,t]=entry;time=t.at;timers.delete(id);t.fn(); }time=limit; };
+  const setTimeout = (fn, delay = 0) => { const id = next++; timers.set(id, { at: time + delay, fn }); return id; };
+  const setInterval = (fn, delay = 1000) => {
+    const id = next++, interval = Math.max(1, Number(delay) || 1);
+    timers.set(id, { at: time + interval, fn, interval });
+    return id;
+  };
+  const clearTimer = id => timers.delete(id);
+  const advance = duration => {
+    const limit = time + duration;
+    let guard = 0;
+    while (true) {
+      const entry = [...timers].filter(([, timer]) => timer.at <= limit).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!entry) break;
+      assert(++guard < 10000);
+      const [id, timer] = entry;
+      time = timer.at;
+      if (timer.interval) { timer.at += timer.interval; timers.set(id, timer); }
+      else timers.delete(id);
+      timer.fn();
+    }
+    time = limit;
+  };
   const values = new Map(), sessionValues = new Map();
-  const observers=[];
-  class IO { constructor(callback){ this.callback=callback; observers.push(this); } observe(target){this.target=target;} unobserve(){} disconnect(){this.disconnected=true;} send(ratio){this.callback([{target:this.target,intersectionRatio:ratio,isIntersecting:ratio>0}]);} }
+  const location = { hash: '', search: '', pathname: '/my-portfolio/', href: 'https://example.test/my-portfolio/' };
+  const setLocation = value => {
+    const url = new URL(value, location.href);
+    location.hash = url.hash; location.search = url.search; location.pathname = url.pathname; location.href = url.href;
+  };
+  const history = {
+    state: null,
+    pushState(_state, _title, url) { setLocation(url); },
+    replaceState(_state, _title, url) { setLocation(url); }
+  };
+  const mediaListeners = new Set();
+  const matchMedia = query => query.includes('prefers-reduced-motion')
+    ? { get matches() { return reducedMotion; }, addEventListener(type, fn) { if (type === 'change') mediaListeners.add(fn); }, removeEventListener(type, fn) { mediaListeners.delete(fn); } }
+    : { matches: false, addEventListener() {}, removeEventListener() {} };
+  const setReducedMotion = value => {
+    reducedMotion = value;
+    for (const listener of mediaListeners) listener({ matches: value });
+  };
+  const observers = [];
+  class IO {
+    constructor(callback) { this.callback = callback; observers.push(this); }
+    observe(target) { this.target = target; }
+    unobserve() {}
+    disconnect() { this.disconnected = true; }
+    send(ratio) { this.callback([{ target: this.target, intersectionRatio: ratio, isIntersecting: ratio > 0 }]); }
+  }
   const win = new Element();
-  win.scrollY=0;
-  win.innerHeight=900; win.innerWidth=1300;
-  win.scrollTo = ({top}) => { win.scrollY=top; };
-  win.getSelection = () => ({ removeAllRanges(){},addRange(){} });
-  win.IntersectionObserver=IO;
-  const scripts=[];
-  const context = vm.createContext({ matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),window:win,document:doc,navigator:{clipboard:{writeText:async()=>{}}},location:{hash:'',search:'',pathname:'/my-portfolio/'},history:{pushState(){},replaceState(){}},URLSearchParams,performance:{now:()=>time},AbortController,EventTarget,Event,console,setTimeout,clearTimeout,IntersectionObserver:IO,localStorage:{getItem:key=>values.get(key)||null,setItem:(key,v)=>values.set(key,v)},sessionStorage:{getItem:key=>sessionValues.get(key)||null,setItem:(key,v)=>sessionValues.set(key,v)},requestAnimationFrame:fn=>setTimeout(()=>fn(time),16),cancelAnimationFrame:clearTimeout,matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}) });
+  win.scrollY = 0; win.innerHeight = 900; win.innerWidth = 1300;
+  win.scrollTo = ({ top }) => { win.scrollY = top; };
+  win.getSelection = () => ({ removeAllRanges() {}, addRange() {} });
+  win.location = location; win.history = history;
+  win.setTimeout = setTimeout; win.clearTimeout = clearTimer;
+  win.setInterval = setInterval; win.clearInterval = clearTimer;
+  win.matchMedia = matchMedia;
+  win.requestAnimationFrame = fn => setTimeout(() => fn(time), 16);
+  win.cancelAnimationFrame = clearTimer;
+  win.IntersectionObserver = IO;
+  const context = vm.createContext({
+    matchMedia, window: win, document: doc, navigator: { clipboard: { writeText: async () => {} } },
+    location, history, URL, URLSearchParams, performance: { now: () => time },
+    AbortController, EventTarget, Event, console, setTimeout, clearTimeout: clearTimer,
+    setInterval, clearInterval: clearTimer, IntersectionObserver: IO,
+    localStorage: { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value) },
+    sessionStorage: { getItem: key => sessionValues.get(key) || null, setItem: (key, value) => sessionValues.set(key, value) },
+    requestAnimationFrame: fn => setTimeout(() => fn(time), 16), cancelAnimationFrame: clearTimer
+  });
   const cache = new Map();
-  async function loadModule(file) { if(cache.has(file))return cache.get(file); let source=fs.readFileSync(path.join(root,file),'utf8'); const mod=new vm.SourceTextModule(source,{context,identifier:file});cache.set(file,mod); await mod.link(relative=>loadModule(path.basename(relative).split('?')[0]));await mod.evaluate();return mod; }
+  async function loadModule(file) {
+    if (cache.has(file)) return cache.get(file);
+    const source = fs.readFileSync(path.join(root, file), 'utf8');
+    const mod = new vm.SourceTextModule(source, { context, identifier: file });
+    cache.set(file, mod);
+    await mod.link(relative => loadModule(path.basename(relative).split('?')[0]));
+    await mod.evaluate();
+    return mod;
+  }
   const load = async file => (await loadModule(file)).namespace;
-  return {doc,nodes,win,values,sessionValues,timers,advance,observers,scripts,load,context};
+  return { doc, nodes, win, values, sessionValues, timers, advance, observers, scripts, load, context, setReducedMotion };
 }
 const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
 
-function introFixture() {
-  const f=fixture(), intro=f.doc.getElementById('intro'), skip=f.doc.getElementById('skip-intro');
-  intro.hidden=true; intro.descendants=[skip];
-  const progress=new Element(); progress.children.span=new Element(); intro.children['.intro-progress']=progress;
-  intro.all['.intro-nodes>span']=Array.from({length:7},()=>new Element());
-  intro.all['#intro-log p']=Array.from({length:3},()=>new Element());
-  return f;
+function phase2Fixture({ search = '', entered = false, storageBlocked = false } = {}) {
+  const f = fixture();
+  if (search) {
+    const url = new URL(search, f.context.location.href);
+    f.context.location.search = url.search;
+    f.context.location.href = url.href;
+  }
+  const root = f.doc.getElementById('phase2-gate');
+  const page = f.doc.getElementById('page');
+  root.hidden = true;
+  const skip = new Element(); skip.doc = f.doc;
+  const loginButton = new Element(); loginButton.doc = f.doc;
+  const loginLabel = new Element();
+  loginButton.children['[data-p2-login-label]'] = loginLabel;
+  const loginLayer = new Element(); loginLayer.inert = true; loginLayer.setAttribute('aria-hidden', 'true');
+  const clockReadout = new Element(), widgetClock = new Element(), widgetDate = new Element();
+  const bootStatus = new Element(), decodeReadout = new Element();
+  root.children['[data-p2-skip]'] = skip;
+  root.children['[data-p2-login]'] = loginButton;
+  root.children['[data-p2-login-layer]'] = loginLayer;
+  root.children['[data-p2-clock]'] = clockReadout;
+  root.children['[data-p2-widget-clock]'] = widgetClock;
+  root.children['[data-p2-widget-date]'] = widgetDate;
+  root.children['[data-p2-boot-status]'] = bootStatus;
+  root.children['[data-p2-decode]'] = decodeReadout;
+  root.descendants = [skip, loginButton, loginLayer];
+  const bar = new Element(); bar.dataset.p2Bar = '64';
+  const fill = new Element(), networkFill = new Element(), barValue = new Element();
+  networkFill.dataset.p2Fill = '78';
+  bar.children['.phase2-gate__fill'] = fill;
+  bar.children['[data-p2-bar-value]'] = barValue;
+  const counter = new Element(); counter.dataset.p2Count = '0'; counter.dataset.p2Digits = '3';
+  const ring = new Element(); ring.dataset.p2Ring = '72'; ring.children['[data-p2-ring-value]'] = new Element();
+  root.all['[data-p2-bar]'] = [bar];
+  root.all['[data-p2-fill]'] = [networkFill];
+  root.all['[data-p2-count]'] = [counter];
+  root.all['[data-p2-ring]'] = [ring];
+  if (entered) f.sessionValues.set('ztrace-phase2-entered', '1');
+  if (storageBlocked) {
+    f.context.sessionStorage.getItem = () => { throw new Error('storage blocked'); };
+    f.context.sessionStorage.setItem = () => { throw new Error('storage blocked'); };
+  }
+  return { ...f, root, page, skip, loginButton, loginLabel, loginLayer, fill, networkFill, barValue, counter, ring };
 }
 async function clockFor(f) { return (await f.load('motion.js')).createClock(); }
 function contactFixture() { const f=fixture(); f.doc.getElementById('copy-email').children.span=new Element(); return f; }
@@ -87,43 +191,102 @@ async function run() {
     checks++;
   }
   {
-    const f=fixture(),mod=await f.load('intro-timeline.js');
-    assert.equal(mod.INTRO_CONFIG.duration,5200);assert.equal(mod.INTRO_CONFIG.exitAt,4550);assert.equal(mod.INTRO_DURATION,5200);assert.equal(mod.stageAt(0),0);assert.equal(mod.STAGES[mod.stageAt(3500)][1],'ACCESS DENIED');assert.equal(mod.STAGES[mod.stageAt(3850)][1],'ACCESS GRANTED');assert.equal(mod.STAGES[mod.stageAt(4100)][1],'WELCOME, OPERATOR');
-    assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:false,hash:''}),false);assert.equal(mod.shouldPlayIntro({motionAllowed:true,seen:true,replay:true,hash:''}),true);checks++;
+    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    assert(f.page.inert && !f.root.hidden && f.skip.focused);
+    f.advance(3700);
+    assert(f.root.classList.contains('is-login-ready'));
+    assert(!f.loginLayer.inert && f.loginButton.focused);
+    assert.equal(f.fill.style.width, '64%');
+    assert.equal(f.counter.textContent, '000');
+    f.loginButton.emit('click');
+    assert(f.loginButton.disabled);
+    assert.equal(f.loginLabel.textContent, 'ACCESS GRANTED');
+    f.advance(1000);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
+    assert.equal(f.sessionValues.get('ztrace-phase2-entered'), '1');
+    assert.equal(f.context.location.hash, '#/profile');
+    assert.equal(f.timers.size, 0);
+    checks++;
   }
   {
-    const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'); const controller=mod.initIntro({motionAllowed:true,clock});
-    assert(f.doc.getElementById('page').inert); assert(!f.doc.getElementById('intro').hidden);assert(f.doc.getElementById('skip-intro').focused);
-    f.advance(3500);assert.equal(f.doc.getElementById('intro-percent').textContent,'88%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS DENIED');
-    f.advance(350);assert.equal(f.doc.getElementById('intro-percent').textContent,'100%');assert.equal(f.doc.getElementById('intro-title').textContent,'ACCESS GRANTED');
-    f.advance(470);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
-    f.advance(1200);await controller.completed;
-    assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.sessionValues.get('saad-intro-v4'),'seen');assert.equal(f.timers.size,0);assert(f.doc.getElementById('hero-title').focused);clock.dispose();checks++;
-  }
-  for (const method of ['click','escape','enter','cancel']) {
-    const f=introFixture(),clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.advance(300);
-    if(method==='click')f.doc.getElementById('skip-intro').emit('click');if(method==='escape')f.doc.emit('keydown',{key:'Escape'});if(method==='enter')f.doc.emit('keydown',{key:'Enter'});if(method==='cancel')controller.cancel();
-    await controller.completed;controller.cancel();f.advance(10000);assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.timers.size,0);clock.dispose();checks++;
-  }
-  for (const mode of ['return','deep','motion-off']) {
-    const f=introFixture();if(mode==='return')f.sessionValues.set('saad-intro-v4','seen');if(mode==='deep')f.context.location.hash='#contact';
-    const clock=await clockFor(f),mod=await f.load('intro.js');await mod.initIntro({motionAllowed:mode!=='motion-off',clock}).completed;
-    assert(f.doc.getElementById('intro').hidden);assert.equal(f.timers.size,0);clock.dispose();checks++;
-  }
-  {
-    const f=introFixture(),mod=await f.load('intro.js');
-    const controller=mod.initIntro({motionAllowed:false,reducedMotion:true,clock:{subscribe(){return()=>{};}}});
-    assert(!f.doc.getElementById('intro').hidden);assert.equal(f.doc.getElementById('intro-title').textContent,'WELCOME, OPERATOR');
-    f.advance(500);await controller.completed;assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);assert.equal(f.timers.size,0);checks++;
+    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    f.doc.emit('keydown', { key: 'Escape' });
+    assert(f.root.classList.contains('is-login-ready') && !f.loginLayer.inert);
+    f.doc.activeElement = f.skip;
+    f.doc.emit('keydown', { key: 'Tab' });
+    assert.equal(f.doc.activeElement, f.loginButton);
+    f.doc.emit('keydown', { key: 'Tab', shiftKey: true });
+    assert.equal(f.doc.activeElement, f.skip);
+    f.doc.emit('keydown', { key: 'Enter' });
+    assert(f.root.classList.contains('is-transitioning'));
+    assert.equal(f.loginLabel.textContent, 'ACCESS GRANTED');
+    f.advance(1000);
+    await controller.completed;
+    assert(f.root.hidden && f.context.location.hash === '#/profile');
+    checks++;
   }
   {
-    const f=introFixture();f.sessionValues.set('saad-intro-v4','seen');f.context.location.search='?intro=1';const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});assert(!f.doc.getElementById('intro').hidden);controller.cancel();clock.dispose();checks++;
+    const f = phase2Fixture({ entered: true }), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    assert(f.root.hidden && !f.page.inert);
+    await controller.completed;
+    assert.equal(f.timers.size, 0);
+    checks++;
   }
   {
-    const f=introFixture(),mod=await f.load('intro.js');const controller=mod.initIntro({motionAllowed:true,clock:{subscribe(){return()=>{};}}});f.advance(9600);await controller.completed;assert(f.doc.getElementById('intro').hidden && !f.doc.getElementById('page').inert);checks++;
+    const f = phase2Fixture({ entered: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    assert(!f.root.hidden);
+    assert.equal(f.context.location.search, '');
+    controller.cancel();
+    await controller.completed;
+    assert(f.root.hidden && f.timers.size === 0);
+    checks++;
   }
   {
-    const f=introFixture();f.context.sessionStorage.getItem=()=>{throw Error('blocked')};f.context.sessionStorage.setItem=()=>{throw Error('blocked')};const clock=await clockFor(f),mod=await f.load('intro.js'),controller=mod.initIntro({motionAllowed:true,clock});f.doc.emit('keydown',{key:'Tab'});assert(f.doc.getElementById('skip-intro').focused);controller.cancel();assert(!f.doc.getElementById('page').inert);clock.dispose();checks++;
+    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    f.setReducedMotion(true);
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    assert(f.root.classList.contains('is-login-ready'));
+    assert.equal(f.timers.size, 1);
+    controller.cancel();
+    await controller.completed;
+    assert.equal(f.timers.size, 0);
+    checks++;
+  }
+  {
+    const f = phase2Fixture({ storageBlocked: true }), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    f.doc.emit('keydown', { key: 'Escape' });
+    f.loginButton.emit('click');
+    f.advance(1000);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
+    assert.equal(f.timers.size, 0);
+    checks++;
+  }
+  {
+    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    f.advance(500);
+    const before = f.fill.style.width;
+    f.doc.hidden = true;
+    f.doc.emit('visibilitychange');
+    assert(f.doc.documentElement.classList.contains('phase2-paused'));
+    f.advance(1000);
+    assert.equal(f.fill.style.width, before);
+    f.doc.hidden = false;
+    f.doc.emit('visibilitychange');
+    assert(!f.doc.documentElement.classList.contains('phase2-paused'));
+    f.advance(3300);
+    assert(f.root.classList.contains('is-login-ready'));
+    controller.cancel();
+    await controller.completed;
+    assert.equal(f.timers.size, 0);
+    checks++;
   }
   {
     const f=fixture(),clock=await clockFor(f);let frames=0;const un=clock.subscribe(()=>frames++);f.advance(32);assert.equal(frames,2);
@@ -200,7 +363,7 @@ async function run() {
     assert.equal(timeline.style['--journey-progress'],'100%');
     controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
   }
-  console.log(`PASS: ${checks} interaction checks (timeline scroll progress, active phase, auto completion, skip, replay, session, deep link, reduced motion, storage failure, fail-safe, hidden tab, terminal, clipboard, gallery, overlay locks).`);
+  console.log(`PASS: ${checks} interaction checks (Phase 2 boot/login/keyboard/replay/session/reduced-motion/storage/visibility plus timeline, terminal, clipboard, gallery, and navigation).`);
 }
 // A stalled promise must fail, rather than letting Node exit with a misleading zero code.
 const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);

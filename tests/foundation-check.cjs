@@ -4,11 +4,12 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const required = [
-  "index.html", "styleguide.html", "404.html", "css/404.css", "css/phase-7.css",
+  "index.html", "styleguide.html",
   "css/tokens.css", "css/base.css", "css/components.css", "css/motion.css",
   "js/main.js", "js/motion.js", "js/router.js", "js/utils.js",
   "js/data/profile.js", "js/data/stats.js", "js/data/roadmap.js",
-  "js/data/tools.js", "js/data/certificates.js", "js/data/links.js",
+  "js/data/tools.js", "js/data/certificates.js", "js/data/attack-surface.js",
+  "js/data/skill-progress.js", "js/data/learning-path.js", "js/data/write-ups.js", "js/data/automation.js", "js/data/links.js",
   "js/views/index.js", "js/views/styleguide.js",
   "assets/saad-golden.jpg", "assets/saad-dark.jpg", "assets/saad-formal.jpg", "assets/og-image.jpg"
 ];
@@ -32,7 +33,8 @@ assert.match(stats, /writeUps:\s*0/);
 assert.match(stats, /skillsInProgress:\s*0/);
 assert.match(stats, /certificatesEarned:\s*0/);
 const certificates = fs.readFileSync(path.join(root, "js/data/certificates.js"), "utf8");
-assert.match(certificates, /Future goal · Not yet earned/);
+assert.match(certificates, /No Certificate/);
+assert.match(certificates, /Future goal/);
 const guideStyles = fs.readFileSync(path.join(root, "css/base.css"), "utf8");
 assert.match(guideStyles, /\.hud-body::before/);
 assert.match(guideStyles, /::-webkit-scrollbar/);

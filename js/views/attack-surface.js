@@ -1,0 +1,16 @@
+import {attackSurface} from "../data/attack-surface.js?v=20261020.2";
+import {escapeHTML} from "../utils.js?v=20261016.1";
+import {mountPhase5View,renderPhase5Header} from "./phase5-view.js?v=20261020.2";
+export function render(){
+ const stats=attackSurface.stats.map((item,index)=>`<article class="hud-panel phase5-stat-card phase5-reveal" style="--phase5-delay:${index*55}ms"><div class="phase5-stat-top"><span class="phase5-stat-mark">${escapeHTML(item.mark)}</span><span class="phase5-micro">${escapeHTML(attackSurface.metricTag)}</span></div><p class="phase5-stat-label">${escapeHTML(item.label)}</p><p class="phase5-stat-number">${Number(item.value)||0}</p><p class="phase5-stat-note">${escapeHTML(item.note)}</p></article>`).join("");
+ const guidance=attackSurface.guidance.map((item,index)=>`<article class="phase5-guidance-card phase5-reveal" style="--phase5-delay:${index*55}ms"><span class="phase5-guidance-index" aria-hidden="true">${escapeHTML(item.number)}</span><div><h3>${escapeHTML(item.label)}</h3><p>${escapeHTML(item.text)}</p></div></article>`).join("");
+ const chart=attackSurface.chart;
+ return `<section class="view-page phase5-view phase5-attack" aria-labelledby="view-heading">${renderPhase5Header(attackSurface)}
+ <div class="phase5-authorized-banner phase5-reveal" role="note"><span class="phase5-banner-mark" aria-hidden="true">!</span><div><strong>${escapeHTML(attackSurface.banner)}</strong><p>${escapeHTML(attackSurface.bannerDetail)}</p></div></div>
+ <div class="phase5-stat-grid" aria-label="${escapeHTML(attackSurface.statsAriaLabel)}">${stats}</div><div class="phase5-attack-lower">
+ <section class="hud-panel phase5-radar-panel phase5-reveal" aria-labelledby="phase5-radar-heading"><div class="hud-panel-heading"><h3 id="phase5-radar-heading">${escapeHTML(chart.heading)}</h3><span class="phase5-micro">${escapeHTML(chart.simulatedLabel)}</span></div>
+ <svg class="phase5-radar-svg" viewBox="0 0 300 260" role="img" aria-label="${escapeHTML(chart.ariaLabel)}"><title>${escapeHTML(chart.heading)}</title><desc>${escapeHTML(chart.description)}</desc><g class="phase5-radar-grid" aria-hidden="true">
+ <polygon points="150,42 224,85 224,171 150,214 76,171 76,85"></polygon><polygon points="150,64 205,96 205,160 150,192 95,160 95,96"></polygon><polygon points="150,86 186,107 186,149 150,170 114,149 114,107"></polygon><polygon points="150,108 167,118 167,138 150,148 133,138 133,118"></polygon><path d="M150 128V42 M150 128 224 85 M150 128 224 171 M150 128V214 M150 128 76 171 M150 128 76 85"></path></g><text class="phase5-radar-simulated" x="150" y="23" text-anchor="middle">${escapeHTML(chart.simulatedLabel)}</text><text class="phase5-radar-empty" x="150" y="132" text-anchor="middle">${escapeHTML(chart.emptyLabel)}</text></svg><p class="phase5-chart-note">${escapeHTML(chart.description)}</p></section>
+ <section class="phase5-guidance" aria-labelledby="phase5-guidance-heading"><div class="phase5-section-heading"><div><p class="view-eyebrow">${escapeHTML(attackSurface.guidanceEyebrow)}</p><h2 id="phase5-guidance-heading">${escapeHTML(attackSurface.guidanceHeading)}</h2></div></div>${guidance}</section></div></section>`;
+}
+export function mount(root,options={}){return mountPhase5View(root,options);}

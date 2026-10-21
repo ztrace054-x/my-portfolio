@@ -73,6 +73,7 @@ export class MotionController extends EventTarget {
     const root = this.document.documentElement;
     root.dataset.motion = this.motionAllowed ? "on" : "off";
     root.dataset.intensity = this.intensity;
+    root.classList.toggle("motion-off", !this.motionAllowed);
     root.classList.toggle("page-paused", this.paused);
     this.dispatchEvent(new Event("change"));
   }

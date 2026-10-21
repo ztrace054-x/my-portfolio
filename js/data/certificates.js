@@ -1,7 +1,13 @@
-/* These are aspirations only; none are represented as earned credentials. */
+/* These entries are future goals only; no credential is represented as earned. */
+export const certificateContent = Object.freeze({
+ title:"Certificates",eyebrow:"CREDENTIALS / FUTURE GOALS",badge:"NO CREDENTIALS EARNED",
+ intro:"These are future learning goals, not earned credentials. A certificate will be shown as earned only after it is actually obtained and verified.",
+ earnedLabel:"Certificates earned",emptyLabel:"No Certificate",goalLabel:"Future goal",
+ note:"Credential status will change only when an earned certificate can be verified."
+});
 export const certificates = Object.freeze([
-  { id: "junior-penetration-tester", name: "Junior Penetration Tester Certificate", status: "Future goal · Not yet earned" },
-  { id: "senior-penetration-tester", name: "Senior Penetration Tester Certificate", status: "Future goal · Not yet earned" },
-  { id: "ceh", name: "CEH", status: "Future goal · Not yet earned" },
-  { id: "oscp", name: "OSCP", status: "Future goal · Not yet earned" }
+ Object.freeze({id:"junior-penetration-tester",name:"Junior Penetration Tester Certificate",emptyLabel:"No Certificate",status:"Future goal"}),
+ Object.freeze({id:"senior-penetration-tester",name:"Senior Penetration Tester Certificate",emptyLabel:"No Certificate",status:"Future goal"}),
+ Object.freeze({id:"ceh",name:"CEH",emptyLabel:"No Certificate",status:"Future goal"}),
+ Object.freeze({id:"oscp",name:"OSCP",emptyLabel:"No Certificate",status:"Future goal"})
 ]);

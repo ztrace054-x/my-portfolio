@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+      - mega-update
+      - phase-2-intro-login
+      - phase-3-dashboard-shell
+      - phase-4-profile-dashboard
+      - phase-5-learning-sections
+      - phase-6-gallery-contact-motion
   pull_request:
     branches:
       - main
@@ -15,7 +21,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -32,23 +38,17 @@ jobs:
           done
       - name: Run foundation component and data checks
         run: node tests/foundation-check.cjs
+      - name: Run Phase 2 HUD gate checks
+        run: node tests/phase2-gate-check.cjs
+      - name: Run Phase 3 dashboard shell checks
+        run: node --experimental-vm-modules tests/phase3-shell-check.cjs
+      - name: Run Phase 4 Profile and Dashboard view checks
+        run: node --experimental-vm-modules tests/phase4-views-check.cjs
+      - name: Run Phase 5 remaining-view regression checks
+        run: node --experimental-vm-modules tests/phase5-views-check.cjs
+      - name: Run Phase 6 Gallery, Contact, and motion checks
+        run: node --experimental-vm-modules tests/phase6-views-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
-      - name: Run Phase 7 final-quality checks
-        run: node tests/phase7-quality-check.cjs
       - name: Run interaction and accessibility-state tests
         run: node --experimental-vm-modules tests/interaction-check.cjs
-      - name: Install test-only Playwright and Chromium
-        run: |
-          npm install --no-save --no-package-lock playwright@1.56.1
-          npx playwright install --with-deps chromium
-      - name: Run real-browser responsive and interaction checks
-        run: node tests/browser-quality-check.cjs
-      - name: Upload Phase 7 browser QA report and screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: phase7-browser-qa
-          path: artifacts/phase7/
-          if-no-files-found: ignore
-          retention-days: 7
