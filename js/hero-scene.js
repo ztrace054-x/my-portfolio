@@ -75,7 +75,7 @@ export function initHeroScene({ clock, motionAllowed }) {
     px += (tx - px) * (1 - Math.exp(-dt / 400)); py += (ty - py) * (1 - Math.exp(-dt / 400));
     if (dt > 42) slowFrames++; else slowFrames = Math.max(0, slowFrames - .2);
     if (slowFrames > 35) lowPower = true;
-    if (frame >= (small.matches || lowPower ? 1000 / 24 : 1000 / 40)) { frame = 0; draw(); }
+    if (frame >= (small.matches || lowPower ? 1000 / 30 : 1000 / 60)) { frame = 0; draw(); }
     if (time - lastTelemetry > 2500) {
       lastTelemetry = time;
       cpu.textContent = Math.round(42 + Math.sin(time / 6000) * 8) + '%';
