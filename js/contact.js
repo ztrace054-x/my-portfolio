@@ -35,8 +35,9 @@ export function initContact({ motionAllowed, clock }) {
     if (pending) return;
     pending = true;
     copy.disabled = true;
+    copy.setAttribute('aria-busy', 'true');
     clearTimeout(resetTimer);
-    label.textContent = 'Copy';
+    label.textContent = 'Copying…';
     copy.classList.remove('is-copied');
     feedback.textContent = '';
     try {
@@ -53,6 +54,8 @@ export function initContact({ motionAllowed, clock }) {
       }, TIMING.copyReset);
     } catch {
       if (disposed) return;
+      label.textContent = 'Copy';
+      copy.classList.remove('is-copied');
       completeTyping();
       const selection = window.getSelection();
       const range = document.createRange();
@@ -62,7 +65,10 @@ export function initContact({ motionAllowed, clock }) {
       feedback.textContent = 'Copy unavailable. The address is selected; use your device’s copy command.';
     } finally {
       pending = false;
-      if (!disposed) copy.disabled = false;
+      if (!disposed) {
+        copy.disabled = false;
+        copy.removeAttribute('aria-busy');
+      }
     }
   }, { signal: events.signal });
   return {

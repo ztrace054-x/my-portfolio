@@ -5,7 +5,7 @@ export const INTRO_CONFIG = Object.freeze({
   failSafeAt: 7200,
   reducedMotionHold: 120,
   reducedMotionFade: 260,
-  colors: Object.freeze({ background: '#030503', green: '#7dff9a', red: '#ff2a2a' }),
+  colors: Object.freeze({ background: '#03090b', green: '#35f2e0', red: '#ff5d5d' }),
   copy: Object.freeze({ denied: 'ACCESS DENIED', granted: 'ACCESS GRANTED', welcome: 'WELCOME, OPERATOR' }),
 });
 export const INTRO_DURATION = INTRO_CONFIG.duration;

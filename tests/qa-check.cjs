@@ -67,6 +67,12 @@ const canonical = canonicalTag.match(/\bhref=["']([^"']+)["']/i)?.[1];
 assert.equal(canonical, baseUrl, 'Canonical must equal the production URL');
 assert.equal(metaByProperty('og:url'), canonical, 'Open Graph URL must match canonical');
 assert.equal(metaByProperty('og:title'), title, 'Open Graph title must match page title');
+assert.equal(metaByName('twitter:title'), title, 'Twitter title must match page title');
+assert.equal(metaByName('twitter:description'), metaByName('description'), 'Twitter and page descriptions must match');
+assert.equal(metaByProperty('og:description'), metaByName('description'), 'Open Graph and page descriptions must match');
+assert.equal(metaByProperty('og:locale'), 'en_US', 'Open Graph locale should be explicit');
+assert.equal(metaByName('theme-color'), '#03090b', 'Browser chrome should match the dark HUD palette');
+assert.equal(metaByName('twitter:image:alt'), metaByProperty('og:image:alt'), 'Twitter and Open Graph image alt text must match');
 assert(metaByProperty('og:description').length > 0, 'Open Graph description must not be empty');
 assert.equal(metaByName('twitter:card'), 'summary_large_image', 'Use a large social preview card');
 assert.equal(metaByName('twitter:image'), metaByProperty('og:image'), 'Twitter and Open Graph images must match');
@@ -79,6 +85,11 @@ assert(fs.statSync(ogImageFile).size <= 250 * 1024, 'Open Graph image should rem
 const favicon = path.join(root, 'assets/favicon.svg');
 assert(fs.existsSync(favicon), 'SVG favicon file must exist');
 assert.match(fs.readFileSync(favicon, 'utf8'), /<svg\b[^>]*viewBox=/i, 'Favicon must be a valid SVG document');
+assert.match(fs.readFileSync(favicon, 'utf8'), /#35f2e0/i, 'Favicon accent should match the teal HUD palette');
+const notFound = fs.readFileSync(path.join(root, '404.html'), 'utf8');
+assert.match(notFound, /<title>404[^<]*<\/title>/i, '404 page must have a descriptive title');
+assert.match(notFound, /name="robots" content="noindex,follow"/i, '404 page must not be indexed');
+assert.match(notFound, /\/my-portfolio\/css\/404\.css/, '404 page must load its dedicated stylesheet');
 const jsonLdScript = requiredMatch(/<script\b(?=[^>]*type=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/i, html, 'JSON-LD Person block');
 const person = JSON.parse(jsonLdScript[1]);
 assert.equal(person['@context'], 'https://schema.org');
@@ -113,6 +124,10 @@ for (let i = 1; i < headingLevels.length; i++) {
 }
 assert.match(html, /<a\b[^>]*class=["'][^"']*skip-link[^"']*["'][^>]*href=["']#main["']/i, 'Keyboard skip link should target main');
 assert.match(html, /<main\b[^>]*\bid=["']main["']/i, 'Main landmark should have the skip-link target');
+assert.match(html, /id="intro-live-status"[^>]*role="status"[^>]*aria-live="polite"[^>]*aria-atomic="true"/i, 'Intro status should announce major simulated login states politely');
+const notFoundCss = fs.readFileSync(path.join(root, 'css/404.css'), 'utf8');
+for (const href of [...notFound.matchAll(/(?:href|src)="\/my-portfolio\/([^"]+)"/g)].map(match => match[1].split(/[?#]/)[0])) assert(fs.existsSync(path.join(root, href)), 'Missing 404 asset: ' + href);
+assert.match(notFoundCss, /:focus-visible|:focus\b/, '404 page must keep visible keyboard focus');
 const activeCssText = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0])
   .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean)
   .map(href => fs.readFileSync(relativeFile(href), 'utf8')).join('\n');

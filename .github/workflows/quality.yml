@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - mega-update
   pull_request:
     branches:
       - main
@@ -16,7 +15,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -35,5 +34,21 @@ jobs:
         run: node tests/foundation-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
+      - name: Run Phase 7 final-quality checks
+        run: node tests/phase7-quality-check.cjs
       - name: Run interaction and accessibility-state tests
         run: node --experimental-vm-modules tests/interaction-check.cjs
+      - name: Install test-only Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run real-browser responsive and interaction checks
+        run: node tests/browser-quality-check.cjs
+      - name: Upload Phase 7 browser QA report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase7-browser-qa
+          path: artifacts/phase7/
+          if-no-files-found: ignore
+          retention-days: 7
