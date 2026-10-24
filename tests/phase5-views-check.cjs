@@ -15,7 +15,7 @@ async function run(){
  const projectData=(await load("js/data/projects.js",context,cache)).namespace.projects;
  assert.equal(projectData.length,1,"Only repository-supported projects should be listed.");
  assert.equal(projectData[0].status,"In progress","The portfolio project must not be presented as completed.");
- for(const phrase of ["ZTRACE Cybersecurity Learning Portfolio","Source repository","Public website","No backend","No projects or results are invented"]) assert.ok(rendered.projects.includes(phrase),"Project view is missing evidence or truthful scope copy: "+phrase);
+ for(const phrase of ["ZTRACE Cybersecurity Learning Portfolio","Source repository","Public website","No backend","authentication service"]) assert.ok(rendered.projects.includes(phrase),"Project view is missing evidence or truthful scope copy: "+phrase);
  assert.ok(rendered.projects.includes("https://github.com/ztrace054-x/my-portfolio"),"Project source link must point to the actual repository.");
  const attack=(await load("js/data/attack-surface.js",context,cache)).namespace.attackSurface;
  assert.deepEqual(Array.from(attack.stats,x=>[x.label,x.value]),[["Authorized Labs",0],["Scopes Reviewed",0],["Targets In Scope",0]]);
