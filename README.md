@@ -43,6 +43,8 @@ The design direction uses deep black, mint green, Space Grotesk, JetBrains Mono,
 
 ## Validation
 
+See [Phase 10 QA report](PHASE-10-QA-REPORT.md) for the latest automated run and the remaining manual-review limitations.
+
 The quality workflow runs JavaScript module syntax checks, foundation/data checks, intro checks, shell/routing checks, dashboard/profile checks, remaining-view checks, Gallery/Contact/motion checks, static SEO/link/accessibility/asset checks, and interaction-state tests.
 
 Run the same checks locally with Node.js 20:
