@@ -1,44 +1,49 @@
-# ZTRACE — Cybersecurity Learning Dashboard
+# ZTRACE — Security is a practice.
 
-**Live website:** https://ztrace054-x.github.io/my-portfolio/
+**Current production website (unchanged during this redesign):** https://ztrace054-x.github.io/my-portfolio/  
+**Redesign branch:** `redesign/ztrace-premium-portfolio`
 
-A static, client-side cybersecurity learning portfolio and dashboard for Saad. The simulated intro/visitor gate runs on every page load or refresh before opening the routed workspace. It uses vanilla JavaScript, HTML and CSS; there is no backend, real authentication, analytics, or live security telemetry.
+A static, client-side cybersecurity learning portfolio for Saad. The introductory experience leads into a hash-routed workspace. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
 
-## Dashboard sections
+The design direction uses deep black, mint green, Space Grotesk, JetBrains Mono, an illustrative network globe, and a restrained terminal motif. The interface is English-only and aims to keep project claims, learning states, and credentials evidence-based.
 
-- **Profile** — learning identity and profile links
-- **Dashboard** — learning overview and honest progress data
-- **Attack Surface** — introductory learning view; not a real scanner
-- **Skill Progress** — current learning topics
+## Workspace sections
+
+- **Profile** — CSE student and cybersecurity learner identity, learning focus, and verified public links
+- **Dashboard** — honest zero-state metrics, useful shortcuts, and explicit empty states until records exist
+- **Projects** — repository-backed project evidence with an explicit in-progress status
+- **Attack Surface** — educational illustration, not a real scanner
+- **Skill Progress** — current learning topics and recorded status
 - **Learning Path** — roadmap and next steps
-- **Write-ups** — learning notes and planned practice
-- **Automation** — learning concepts and planned work
-- **Certificates** — earned/goal states clearly distinguished
-- **Gallery** — three existing personal portraits with an accessible lightbox
-- **Contact** — existing GitHub, TryHackMe, ZeroDayTest, Instagram and email actions
+- **Write-ups** — an empty published-notes state and a planned authorized lab journal template
+- **Automation** — learning concepts and planned work; no completed scripts are fabricated
+- **Certificates** — planned credentials are distinguished from earned credentials
+- **Gallery** — three existing personal portraits with keyboard-accessible lightbox controls
+- **Contact** — existing GitHub, TryHackMe, ZeroDayTest, Instagram, and email actions
 
 ## Architecture
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | SEO metadata, original landing content, intro gate and dashboard shell markup |
-| `js/phase2-gate.js` | Simulated intro and visitor handoff; **not** a real login or security boundary |
-| `js/dashboard-shell.js` | Workspace activation, route rendering, sidebar, panels and view lifecycle |
+| `index.html` | SEO metadata, progressive fallback content, intro, sidebar, and workspace markup |
+| `js/phase2-gate.js` | Simulated intro and workspace handoff; **not** a login or security boundary |
+| `js/dashboard-shell.js` | Workspace activation, hash routing integration, panels, sidebar, and view lifecycle |
 | `js/router.js` | Hash-based dashboard navigation |
 | `js/motion.js` | Shared motion controller, reduced-motion and visibility handling |
 | `js/workspace-motion.js` | Dashboard-specific motion polish |
-| `js/views/` | Profile, dashboard, Phase 5 learning views, Gallery and Contact |
-| `js/data/` | Honest profile, learning, links, roadmap and metric data |
-| `css/tokens.css` | Shared color, typography and spacing tokens |
-| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation and workspace surfaces |
-| `css/phase-2-gate.css` | Simulated intro/access transition |
-| `css/phase-5.css`, `css/phase-6.css` | Learning views, Gallery/Contact and interaction polish |
-| `tests/` | Foundation, phase-specific, accessibility-state, interaction and SEO/link checks |
-| `.github/workflows/quality.yml` | JavaScript syntax and regression checks for Phases 2–6 |
+| `js/views/` | Profile, dashboard, Projects, learning views, Gallery, Contact, and certificates |
+| `js/data/` | Profile, project evidence, learning records, links, roadmap, and metric data |
+| `css/tokens.css` | Shared color, typography, and spacing tokens |
+| `css/premium-redesign.css` | Additive premium design layer and responsive refinements |
+| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation, and workspace surfaces |
+| `css/phase-2-gate.css` | Intro visual and workspace transition |
+| `css/phase-5.css`, `css/phase-6.css` | Learning views, Gallery/Contact, and interaction polish |
+| `tests/` | Foundation, route, view, accessibility-state, interaction, and SEO/link checks |
+| `.github/workflows/quality.yml` | JavaScript syntax and regression checks for the redesign and established phases |
 
 ## Validation
 
-The quality workflow runs JavaScript module syntax checks, foundation/data checks, Phase 2 gate tests, Phase 3 shell tests, Phase 4 view tests, Phase 5 regression checks, Phase 6 Gallery/Contact/motion checks, static SEO/link/accessibility/asset checks, and interaction-state tests.
+The quality workflow runs JavaScript module syntax checks, foundation/data checks, intro checks, shell/routing checks, dashboard/profile checks, remaining-view checks, Gallery/Contact/motion checks, static SEO/link/accessibility/asset checks, and interaction-state tests.
 
 Run the same checks locally with Node.js 20:
 
@@ -56,10 +61,16 @@ node tests/qa-check.cjs
 node --experimental-vm-modules tests/interaction-check.cjs
 ```
 
-## Important limitations
+## Truthfulness and limitations
 
-- The intro/access animation is decorative and does not authenticate visitors.
-- Security-themed charts, network visuals and counters are presentation-only; the site does not run scans or measure live infrastructure.
-- Learning and credential states must remain truthful. Do not present planned certificates or projects as earned/completed.
-- The Contact section does not collect submissions or send data to a server.
+- The intro is a simulated visual experience and does not authenticate visitors.
+- The globe and terminal are illustrative; the site does not run scans or measure live infrastructure.
+- Dashboard metrics remain at verified zero-state values until real records exist. Decorative ghost charts and fabricated unread counts are not used.
+- Project and lab claims must be backed by actual source, screenshots, and reproducible evidence.
+- Planned credentials are not represented as earned certificates.
+- The Contact section opens direct email/profile links; it does not collect form submissions or send data to a server.
 - GitHub Pages serves a static frontend only.
+
+## Redesign release boundary
+
+All redesign work is kept on `redesign/ztrace-premium-portfolio`. The default branch must not be modified directly, and the redesign must not be merged or deployed until the owner explicitly approves the completed review.
