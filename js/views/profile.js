@@ -1,4 +1,4 @@
-import { profile } from "../data/profile.js?v=20261019.2";
+import { profile } from "../data/profile.js?v=20261024.3";
 import { links } from "../data/links.js?v=20261016.1";
 import { escapeHTML } from "../utils.js?v=20261016.1";
 
