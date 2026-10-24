@@ -65,7 +65,7 @@ export function render() {
             <div class="profile-terminal-top"><span><i aria-hidden="true"></i> saad@ztrace:~</span><span>SESSION / LOCAL</span></div>
             <div class="profile-terminal-body">
               <p><span class="terminal-prompt">$</span> whoami</p>
-              <pre>saad — SSC student / cybersecurity beginner</pre>
+              <pre>saad — CSE student / cybersecurity learner</pre>
               <p><span class="terminal-prompt">$</span> cat status.txt</p>
               <pre>Course: Ethical Hacking for Beginners
 Learning: Linux, networking, recon
