@@ -3,11 +3,11 @@
 **Repository:** `ztrace054-x/my-portfolio`  
 **Review branch:** `redesign/ztrace-premium-portfolio`  
 **Base branch:** `main`  
-**Exact application source commit rendered and performance-tested:** `dd14c746351ab74ba34992a0060303f1c5c20c2a`  
-**Successful push workflow for that exact commit:** [Run 40094265258](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258)  
-**Successful pull-request workflow:** [Run 40094269087](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094269087)  
-**Rendered screenshots and JSON:** [Download visual QA artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12560257601)  
-**Lighthouse HTML/JSON reports:** [Download performance artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12559749688)  
+**Exact application source commit rendered and performance-tested:** `aa74f412fbdde8d684d98eeb4946a53448c9da51`  
+**Successful push workflow for that exact commit:** [Run 40095138101](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258)  
+**Successful pull-request workflow:** [Run 40095141609](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094269087)  
+**Rendered screenshots and JSON:** [Download visual QA artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12560312485)  
+**Lighthouse HTML/JSON reports:** [Download performance artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12560372297)  
 **Production deployment:** Not performed  
 **PR #16:** Open, draft, not merged
 
@@ -17,13 +17,13 @@
 - Actual rendered Chromium visual QA: **passed**.
 - Lighthouse desktop and simulated-mobile reports: **generated**.
 - Safe public preview deployment: **not created**; no authorized preview-hosting integration is configured/connected.
-- Release recommendation: **keep PR #16 in draft; do not deploy to production yet**. Mobile lab LCP remains 4.2 seconds, and production-hosting behavior and field Core Web Vitals are unverified.
+- Release recommendation: **keep PR #16 in draft; do not deploy to production yet**. Mobile lab LCP was 4.7 seconds in the latest run, and production-hosting behavior and field Core Web Vitals are unverified.
 
 ## Exact commit and evidence provenance
 
 The branch push workflow `40094265258` checked out and tested the exact branch commit `dd14c746351ab74ba34992a0060303f1c5c20c2a`. The visual artifact's `visual-qa-report.json` independently records that exact `head_sha`. All three jobs—`validate`, `visual-qa`, and `performance-qa`—completed successfully.
 
-The pull-request workflow `40094269087` also passed all three jobs. Because GitHub's `pull_request` event checks out a synthetic merge commit (`ad338078d8f0bdecc742c29d8fd6fc7348786c81`), the push workflow and its artifacts are the authoritative evidence for the exact branch-head commit.
+The pull-request workflow `40095141609` also passed all three jobs. Because GitHub's `pull_request` event checks out a synthetic merge commit, the push workflow and its artifacts are the authoritative evidence for the exact branch-head commit.
 
 ## Rendered visual QA method and coverage
 
@@ -67,22 +67,22 @@ Lighthouse **12.8.2** ran on the GitHub Actions Ubuntu runner with HeadlessChrom
 
 | Metric | Desktop | Mobile |
 | --- | ---: | ---: |
-| Performance score | 98 | 79 |
+| Performance score | 97 | 75 |
 | Accessibility score | 100 | 100 |
 | Best Practices score | 100 | 100 |
 | SEO score | 100 | 100 |
-| First Contentful Paint (FCP) | 0.8 s | 3.3 s |
-| Largest Contentful Paint (LCP) | 1.0 s | 4.2 s |
+| First Contentful Paint (FCP) | 0.8 s | 3.5 s |
+| Largest Contentful Paint (LCP) | 1.1 s | 4.7 s |
 | Cumulative Layout Shift (CLS) | 0.01 | 0 |
-| Total Blocking Time (TBT) | 0 ms | 0 ms |
-| Speed Index | 0.8 s | 3.3 s |
+| Total Blocking Time (TBT) | 0 ms | 10 ms |
+| Speed Index | 0.8 s | 3.5 s |
 
-Compared with the previous run (97 desktop / 78 mobile; mobile LCP 4.4 seconds), this run measured 98 / 79 and 4.2 seconds. Treat this as a small repeat-run improvement, not a confirmed code-level gain.
+Repeated Lighthouse runs on unchanged application code vary: the latest run measured 97 desktop / 75 mobile and 4.7-second mobile LCP; the immediately prior run measured 98 / 79 and 4.2 seconds. This is run-to-run lab variability, not a code regression or improvement, because the intervening commit changed only this QA report.
 
 ### Performance limitations and optimization decision
 
-- Mobile Performance remains 79, and mobile lab LCP remains 4.2 seconds: a release caution.
-- The mobile LCP element is the intro's `ZTRACE` wordmark. Lighthouse attributes approximately 89% of its LCP time to render delay during the intro experience.
+- The latest mobile Performance score is 75 and mobile lab LCP is 4.7 seconds: a release caution. Across recent unchanged-code runs, mobile Performance varied from 75 to 79 and LCP from 4.2 to 4.7 seconds.
+- The mobile LCP element is the intro's `ZTRACE` wordmark. Lighthouse attributes approximately 90% of the latest LCP time to render delay during the intro experience.
 - Lighthouse flags render-blocking CSS, unused CSS, and image format/responsive sizing opportunities. Some CSS is deliberately available at first paint to avoid an unstyled or flashing intro/workspace. Splitting or deferring it could affect the visual transition; image conversion would require a separate visual regression pass.
 - No isolated low-risk code optimization was justified in this final verification pass. The intro animation was not shortened solely to chase a lab score.
 - The local Python static server does not reproduce GitHub Pages CDN compression, cache headers, or production network conditions. These lab results should not be treated as a production-hosted performance measurement.
@@ -101,10 +101,10 @@ The repository is a static HTML/CSS/JavaScript site. The existing workflow creat
 - Planned credentials are not represented as earned.
 - Contact actions are direct links; no backend form submission is claimed.
 
-At the time of this report, branch `redesign/ztrace-premium-portfolio` was 87 commits ahead of `main` and 0 commits behind. PR #16 targets `main`, remains a draft, and is not merged. No direct `main` edits, GitHub Pages deployment, DNS changes, or production-setting changes were made.
+At the time of the tested application-source commit, branch `redesign/ztrace-premium-portfolio` was 88 commits ahead of `main` and 0 commits behind. PR #16 targets `main`, remains a draft, and is not merged. No direct `main` edits, GitHub Pages deployment, DNS changes, or production-setting changes were made.
 
 ## Release recommendation
 
-**The exact redesign branch commit `dd14c746351ab74ba34992a0060303f1c5c20c2a` passed validation, rendered Chromium QA, and Lighthouse performance QA.** The Gallery defect is fixed, and all 44 route/viewport checks passed.
+**The exact application-source commit `aa74f412fbdde8d684d98eeb4946a53448c9da51` passed validation, rendered Chromium QA, and Lighthouse performance QA.** The Gallery defect is fixed, and all 44 route/viewport checks passed.
 
 **Do not approve production release yet.** Mobile lab LCP is 4.2 seconds; production-hosting behavior and field Core Web Vitals remain unverified; no public preview host is currently connected. Keep PR #16 as a draft until those limitations are accepted or addressed.
