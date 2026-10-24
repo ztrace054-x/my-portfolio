@@ -10,6 +10,7 @@ on:
       - phase-4-profile-dashboard
       - phase-5-learning-sections
       - phase-6-gallery-contact-motion
+      - redesign/ztrace-premium-portfolio
   pull_request:
     branches:
       - main
