@@ -292,11 +292,4 @@
 .hud-body a.hud-btn--primary { color: #001b1a; }
 
 
-/* Visual QA correction: the second gallery portrait is materially underexposed. */
-.phase6-gallery-trigger[data-gallery-open="1"] .phase6-gallery-image-wrap img {
-  filter: brightness(3.2) saturate(.92) contrast(1.08);
-}
-.phase6-gallery-trigger[data-gallery-open="1"]:hover .phase6-gallery-image-wrap img,
-.phase6-gallery-trigger[data-gallery-open="1"]:focus-visible .phase6-gallery-image-wrap img {
-  filter: brightness(3.2) saturate(1) contrast(1.1);
-}
+/* Keep the middle gallery portrait at its natural exposure; no special brightness override. */
