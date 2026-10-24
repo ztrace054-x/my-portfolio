@@ -26,7 +26,6 @@ const ROUTES = [
   ["gallery", "Gallery"],
   ["contact", "Contact"]
 ];
-const LONG_ROUTES = new Set(["projects", "learning-path", "write-ups", "certificates", "gallery", "contact"]);
 const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -122,6 +121,8 @@ async function collectLayout(page, expectedHeading) {
       stageClientWidth: stage ? stage.clientWidth : null,
       stageHeight: stage ? stage.scrollHeight : null,
       stageClientHeight: stage ? stage.clientHeight : null,
+      viewHeight: root ? root.scrollHeight : null,
+      viewClientHeight: root ? root.clientHeight : null,
       viewWidth: root ? root.scrollWidth : null,
       viewClientWidth: root ? root.clientWidth : null,
       heading: heading ? heading.innerText.trim() : "",
@@ -333,18 +334,16 @@ async function main() {
           if (ratio !== null && ratio < 4.5) issue("contact-cta-low-contrast", "Send email label does not meet 4.5:1 text contrast.", contactCTA);
         }
         viewportRecord.routes.push({ id: route, expectedHeading, actualHeading: title, layout, images, contactCTA });
-        await page.locator(".app-view-stage").evaluate(el => { el.scrollTop = 0; });
+        await page.locator("[data-view-root]").evaluate(el => { el.scrollTop = 0; });
         await screenshot(page, "route-" + route + "-top.png");
-        if (LONG_ROUTES.has(route)) {
-          const scroll = await page.locator(".app-view-stage").evaluate(el => {
-            el.scrollTop = el.scrollHeight;
-            return { scrollHeight: el.scrollHeight, clientHeight: el.clientHeight };
-          });
-          if (scroll.scrollHeight > scroll.clientHeight + 2) {
-            await page.waitForTimeout(100);
-            await screenshot(page, "route-" + route + "-bottom.png");
-            await page.locator(".app-view-stage").evaluate(el => { el.scrollTop = 0; });
-          }
+        const scroll = await page.locator("[data-view-root]").evaluate(el => {
+          el.scrollTop = el.scrollHeight;
+          return { scrollHeight: el.scrollHeight, clientHeight: el.clientHeight };
+        });
+        if (scroll.scrollHeight > scroll.clientHeight + 2) {
+          await page.waitForTimeout(100);
+          await screenshot(page, "route-" + route + "-bottom.png");
+          await page.locator("[data-view-root]").evaluate(el => { el.scrollTop = 0; });
         }
       }
       await checkGalleryKeyboard(page);
