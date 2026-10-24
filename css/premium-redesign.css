@@ -267,10 +267,13 @@
 }
 
 
-/* Phase 10 visual QA fix: keep the mobile drawer off-canvas and above its backdrop. */
+/* Phase 10 visual QA fix: keep the mobile drawer off-canvas and above its backdrop.
+   ID-level state selectors override the shell's higher-specificity entrance transform. */
 @media (max-width: 900px) {
-  .app-shell .app-sidebar { position: absolute; z-index: 5; }
-  .app-shell .app-sidebar-backdrop { z-index: 4; }
+  #app-shell .app-sidebar { position: absolute; z-index: 5; }
+  #app-shell:not(.is-sidebar-open) .app-sidebar { transform: translateX(-105%); }
+  #app-shell.is-sidebar-open .app-sidebar { transform: translateX(0); }
+  #app-shell .app-sidebar-backdrop { z-index: 4; }
 }
 
 
