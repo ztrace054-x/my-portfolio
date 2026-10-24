@@ -38,11 +38,14 @@ assert.ok(html.includes('data-nav-search'), "Search input is missing.");
 assert.ok(html.includes("LEARNING TO DATE"), "Decorative learning-to-date control is missing.");
 assert.ok(html.includes("Next step: recon basics"), "Recon learning notification is missing.");
 assert.ok(html.includes("Learning in public"), "Learning-in-public notification is missing.");
-assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
+assert.ok(html.includes(">Welcome</h3>"), "Welcome workspace note is missing.");
+assert.ok(html.includes("Workspace notes"), "The notes panel must use an honest static-notes label.");
+assert.ok(!html.includes("data-notification-count") && !html.includes("3 unread"), "Static notes must not display fabricated unread counts.");
+assert.ok(!shell.includes('storage.set("notifications-read", "on")'), "Static workspace notes must not simulate unread state.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
 assert.ok(html.includes("./css/dashboard-shell.css?v=20261020.2"), "Dashboard stylesheet cache key must match the current shell CSS.");
 assert.ok(main.includes("./dashboard-shell.js?v=20261020.3"), "Dashboard shell module cache key must match the current shell JS.");
-assert.ok(html.includes("./js/main.js?v=20261021.2"), "Main module cache key must be bumped.");
+assert.ok(html.includes("./js/main.js?v=20261024.1"), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
 assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling must not intercept dashboard hash routes.");
 
@@ -58,7 +61,6 @@ for (const behavior of [
   'createRouter({ routes: ROUTES, fallback: "profile", onRoute: renderRoute })',
   'event.key === "Escape" && shell.classList.contains("is-sidebar-open")',
   'new MotionController()',
-  'storage.set("notifications-read", "on")',
   'motion.setEnabled(!motion.enabled)',
   'motion.setIntensity(intensitySelect.value)',
   'url.searchParams.set("intro", "1")',
@@ -165,7 +167,7 @@ async function checkViews() {
 (async () => {
   await checkRouter();
   await checkViews();
-  console.log("Phase 3 shell checks passed: 10 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, notifications, and no network calls.");
+  console.log("Phase 3 shell checks passed: 10 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, workspace notes, and no network calls.");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
