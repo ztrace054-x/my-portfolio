@@ -13,7 +13,7 @@ assert.match(htmlSource, /js\/main\.js\?v=20261024\.2/, "The main module cache k
 assert.match(htmlSource, /dashboard-shell\.css\?v=20261020\.2/, "The shell CSS cache key must be current.");
 assert.match(mainSource, /dashboard-shell\.js\?v=20261024\.2/, "The shell module cache key must be current.");
 assert.match(mainSource, /dataset\.release = '20261024\.2'/, "The release marker must match this update.");
-assert.match(shellSource, /views\/profile\.js\?v=20261020\.1/, "Profile module cache key must be current.");
+assert.match(shellSource, /views\/profile\.js\?v=20261024\.3/, "Profile module cache key must be current.");
 assert.match(shellSource, /views\/dashboard\.js\?v=20261024\.2/, "Dashboard module cache key must be current.");
 assert.ok(workflowSource.includes("phase-4-profile-dashboard"), "Quality workflow must run on the Phase 4 branch.");
 assert.ok(workflowSource.includes("node --experimental-vm-modules tests/phase4-views-check.cjs"), "Quality workflow must execute the Phase 4 regression checks.");
