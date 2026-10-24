@@ -8,6 +8,7 @@
   root.classList.add("intro-pending");
   const revealLegacyPage = () => {
     root.classList.remove("intro-pending");
+    document.getElementById("phase2-gate")?.setAttribute("hidden", "");
     document.getElementById("page")?.removeAttribute("inert");
   };
   window.addEventListener("error", event => {
@@ -19,6 +20,7 @@
 <style id="intro-critical-visibility">
 html.intro-pending #page { visibility: hidden !important; }
 </style>
+<noscript><style>.phase2-gate{display:none!important}</style></noscript>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07090c">
 <title>Saad — A cybersecurity journey</title>
@@ -43,7 +45,7 @@ html.intro-pending #page { visibility: hidden !important; }
 <link rel="stylesheet" href="./css/tokens.css?v=20261018.5"><link rel="stylesheet" href="./css/base.css?v=20261019.1"><link rel="stylesheet" href="./css/components.css?v=20261019.1"><link rel="stylesheet" href="./css/motion.css?v=20261019.1"><link rel="stylesheet" href="./css/style.css?v=20261018.6"><link rel="stylesheet" href="./css/intro.css?v=20261018.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261018.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261018.5">
   
   <link rel="stylesheet" href="./css/motion-polish.css?v=20261018.5">
-  <link rel="stylesheet" href="./css/phase-2-gate.css?v=20261019.1"><link rel="stylesheet" href="./css/dashboard-shell.css?v=20261020.2"><link rel="stylesheet" href="./css/phase-5.css?v=20261020.2"><link rel="stylesheet" href="./css/phase-6.css?v=20261020.3"><meta name="color-scheme" content="dark"><script type="application/ld+json">
+  <link rel="stylesheet" href="./css/phase-2-gate.css?v=20261024.1"><link rel="stylesheet" href="./css/dashboard-shell.css?v=20261020.2"><link rel="stylesheet" href="./css/phase-5.css?v=20261020.2"><link rel="stylesheet" href="./css/phase-6.css?v=20261020.3"><link rel="stylesheet" href="./css/premium-redesign.css?v=20261024.1"><meta name="color-scheme" content="dark"><script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -68,7 +70,7 @@ html.intro-pending #page { visibility: hidden !important; }
 </head>
 <body data-design="workbench-v4">
 <a class="skip-link" href="#main">Skip to content</a>
-<div id="page" inert>
+<div id="page">
   <header class="site-header" id="site-header">
     <div class="header-inner container">
       <a class="wordmark" href="#home" aria-label="Saad, home">SAAD<span>.</span><small>ztrace_</small></a>
@@ -346,7 +348,7 @@ html.intro-pending #page { visibility: hidden !important; }
     <p class="app-panel-footnote">Preferences are saved in this browser when local storage is available. System reduced-motion preferences are respected.</p>
   </aside>
 </div>
-<div id="phase2-gate" class="phase2-gate" role="dialog" aria-modal="true" aria-label="ZTRACE intro and visitor access">
+<div id="phase2-gate" class="phase2-gate" role="dialog" aria-modal="true" aria-label="ZTRACE introduction">
   <div class="phase2-gate__scene" aria-hidden="true">
     <div class="phase2-gate__grid"></div><div class="phase2-gate__scanlines"></div>
     <i class="phase2-gate__corner phase2-gate__corner--tl"></i><i class="phase2-gate__corner phase2-gate__corner--tr"></i><i class="phase2-gate__corner phase2-gate__corner--bl"></i><i class="phase2-gate__corner phase2-gate__corner--br"></i>
@@ -358,55 +360,44 @@ html.intro-pending #page { visibility: hidden !important; }
     <div class="phase2-gate__layout">
       <aside class="phase2-gate__side phase2-gate__side--left">
         <section class="phase2-gate__panel">
-          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">LEARNING STATS</p><span class="phase2-gate__sub-label">ILLUSTRATIVE PROGRESS</span></div><span class="phase2-gate__sim">SIMULATED</span></div>
-          <div class="phase2-gate__bar-list">
-            <div class="phase2-gate__bar-row" data-p2-bar="64"><div class="phase2-gate__bar-label"><span>LINUX</span><span data-p2-bar-value>00%</span></div><div class="phase2-gate__track"><div class="phase2-gate__fill"></div></div></div>
-            <div class="phase2-gate__bar-row" data-p2-bar="42"><div class="phase2-gate__bar-label"><span>NETWORKING</span><span data-p2-bar-value>00%</span></div><div class="phase2-gate__track"><div class="phase2-gate__fill"></div></div></div>
-            <div class="phase2-gate__bar-row" data-p2-bar="28"><div class="phase2-gate__bar-label"><span>RECON</span><span data-p2-bar-value>00%</span></div><div class="phase2-gate__track"><div class="phase2-gate__fill"></div></div></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;gap:12px;margin-top:17px;padding-top:11px;border-top:1px solid rgba(49,192,190,.12);font:9px/1.3 var(--font-mono,'JetBrains Mono',monospace);color:var(--p2-muted)"><span>MODULES LOADED</span><strong style="color:var(--p2-text);font-weight:500" data-p2-count="4" data-p2-digits="2">00</strong></div>
+          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">LEARNING FOCUS</p><span class="phase2-gate__sub-label">CURRENT STUDY TOPICS</span></div><span class="phase2-gate__sim">IN PROGRESS</span></div>
+          <ul class="phase2-gate__focus-list"><li>Linux fundamentals</li><li>Networking basics</li><li>Reconnaissance</li></ul>
         </section>
         <section class="phase2-gate__panel">
-          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">SYS MONITOR</p><span class="phase2-gate__sub-label">LOCAL VISUAL ONLY</span></div><span class="phase2-gate__sim">SIMULATED</span></div>
-          <div class="phase2-gate__radar-row"><div class="phase2-gate__radar"><i class="phase2-gate__blip phase2-gate__blip--one"></i><i class="phase2-gate__blip phase2-gate__blip--two"></i></div><div class="phase2-gate__gauge-copy"><strong class="phase2-gate__gauge-number"><span data-p2-count="72" data-p2-digits="2">00</span>%</strong><span class="phase2-gate__gauge-caption">VISUAL LOAD</span><span class="phase2-gate__gauge-caption">NO LIVE SENSORS</span></div></div>
+          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">WORKING PRINCIPLES</p><span class="phase2-gate__sub-label">AUTHORIZED PRACTICE</span></div><span class="phase2-gate__sim">ETHICS FIRST</span></div>
+          <div class="phase2-gate__status"><i class="phase2-gate__status-dot"></i><div><strong>PERMISSION BEFORE TESTING</strong><small>Respect scope, consent, and privacy.</small></div></div>
         </section>
       </aside>
       <div class="phase2-gate__center">
-        <svg class="phase2-gate__emblem" viewBox="0 0 320 320" role="img" aria-label="Original animated ZTRACE eye and hexagonal iris emblem">
-          <defs>
-            <linearGradient id="p2-eye-stroke" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48f0df"/><stop offset="1" stop-color="#2aaecb"/></linearGradient>
-            <radialGradient id="p2-iris-fill"><stop offset="0" stop-color="#48f0df" stop-opacity=".3"/><stop offset="1" stop-color="#2aaecb" stop-opacity=".02"/></radialGradient>
-          </defs>
-          <circle cx="160" cy="160" r="143" fill="none" stroke="#48f0df" stroke-opacity=".12"/>
-          <circle cx="160" cy="160" r="132" fill="none" stroke="#48f0df" stroke-opacity=".22" stroke-dasharray="2 8"/>
-          <g class="phase2-gate__orbit"><circle cx="160" cy="160" r="116" fill="none" stroke="url(#p2-eye-stroke)" stroke-opacity=".62" stroke-width="1.4" stroke-dasharray="70 18 12 20"/><path d="M160 37l8 8-8 8-8-8z" fill="#48f0df"/><path d="M160 267l5 5-5 5-5-5z" fill="#2aaecb"/></g>
-          <g class="phase2-gate__orbit--reverse"><circle cx="160" cy="160" r="98" fill="none" stroke="#2aaecb" stroke-opacity=".48" stroke-dasharray="2 6"/><path d="M62 160h15m181 0h-15M160 62v15m0 181v-15" stroke="#48f0df" stroke-width="2"/></g>
-          <path d="M47 160c29-43 67-65 113-65s84 22 113 65c-29 43-67 65-113 65S76 203 47 160z" fill="rgba(4,22,25,.72)" stroke="url(#p2-eye-stroke)" stroke-width="2"/>
-          <g class="phase2-gate__iris"><path d="M160 112l37 21v42l-37 21-37-21v-42z" fill="url(#p2-iris-fill)" stroke="#48f0df" stroke-width="1.6"/><circle cx="160" cy="154" r="27" fill="none" stroke="#2aaecb" stroke-width="1.2"/><circle cx="160" cy="154" r="17" fill="#071a1e" stroke="#48f0df" stroke-width="1.5"/><circle cx="160" cy="154" r="7" fill="#48f0df"/><circle cx="160" cy="154" r="3" fill="#e4fffc"/></g>
-          <g class="phase2-gate__eye-scan"><path d="M160 70a90 90 0 0 1 90 90" fill="none" stroke="#48f0df" stroke-width="2.5" stroke-linecap="round"/><path d="M250 160l-9-4 3 10z" fill="#48f0df"/></g>
-          <path d="M30 160h24m212 0h24M160 20v18m0 244v18" stroke="#48f0df" stroke-opacity=".62" stroke-width="1"/>
-        </svg>
+        <svg class="phase2-gate__emblem" viewBox="0 0 320 320" role="img" aria-label="Illustrative network globe representing cybersecurity learning">
+          <defs><radialGradient id="p2-globe-glow"><stop stop-color="#85e9ad" stop-opacity=".2"/><stop offset="1" stop-color="#85e9ad" stop-opacity="0"/></radialGradient></defs>
+          <circle cx="160" cy="160" r="145" fill="url(#p2-globe-glow)"/>
+          <g class="phase2-gate__orbit" fill="none" stroke="#85e9ad" stroke-width="1.3" stroke-opacity=".72">
+            <circle cx="160" cy="160" r="112"/><ellipse cx="160" cy="160" rx="54" ry="112"/><ellipse cx="160" cy="160" rx="84" ry="112"/>
+            <ellipse cx="160" cy="160" rx="112" ry="39"/><ellipse cx="160" cy="160" rx="112" ry="76"/>
+            <path d="M48 160h224M160 48v224M82 82l156 156M238 82 82 238" stroke="#35f2e0" stroke-opacity=".65"/>
+          </g>
+          <g fill="#b7ffd0" stroke="#05090c" stroke-width="2"><circle cx="82" cy="82" r="4"/><circle cx="238" cy="82" r="4"/><circle cx="272" cy="160" r="4"/><circle cx="238" cy="238" r="4"/><circle cx="82" cy="238" r="4"/><circle cx="48" cy="160" r="4"/><circle cx="160" cy="48" r="4"/><circle cx="160" cy="272" r="4"/></g>
+          <circle cx="160" cy="160" r="6" fill="#35f2e0"/></svg>
         <p class="phase2-gate__wordmark">ZTRACE</p>
-        <p class="phase2-gate__center-caption"><strong data-p2-decode>LEARNING MODE / INITIALIZING</strong><br>AUTHORIZED PRACTICE ONLY</p>
-        <div class="phase2-gate__rings">
-          <div class="phase2-gate__ring-item"><div class="phase2-gate__ring" data-p2-ring="82" style="--ring-value:0"><span data-p2-ring-value>00</span></div><span>MODULE A / SIMULATED</span></div>
-          <div class="phase2-gate__ring-item"><div class="phase2-gate__ring" data-p2-ring="57" style="--ring-value:0"><span data-p2-ring-value>00</span></div><span>MODULE B / SIMULATED</span></div>
-          <div class="phase2-gate__ring-item"><div class="phase2-gate__ring" data-p2-ring="36" style="--ring-value:0"><span data-p2-ring-value>00</span></div><span>MODULE C / SIMULATED</span></div>
+        <h1 class="phase2-gate__manifesto">Security is a practice.</h1>
+        <p class="phase2-gate__center-caption"><strong data-p2-decode>LEARNING MODE / INITIALIZING</strong><br>ILLUSTRATIVE VISUAL / NOT LIVE DATA</p>
+        <div class="phase2-gate__terminal" aria-label="Illustrative terminal showing current learning focus">
+          <div class="phase2-gate__terminal-top"><span><i aria-hidden="true"></i> saad@ztrace:~</span><span>LOCAL / READ-ONLY</span></div>
+          <p class="phase2-gate__terminal-command"><span aria-hidden="true">$</span> cat focus.txt</p>
+          <pre><span>FOCUS</span> Linux · Networking · Recon
+<span>RULE</span> Practice with permission
+<span>MODE</span> Learning in public</pre>
         </div>
       </div>
       <aside class="phase2-gate__side phase2-gate__side--right">
         <section class="phase2-gate__panel">
-          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">NETWORK DATA</p><span class="phase2-gate__sub-label">DISPLAY-ONLY TELEMETRY</span></div><span class="phase2-gate__sim">SIMULATED</span></div>
-          <div style="display:grid;gap:14px">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="phase2-gate__gauge-caption">NODES</span><strong class="phase2-gate__gauge-number" style="font-size:18px"><span data-p2-count="7" data-p2-digits="2">00</span></strong></div>
-            <div class="phase2-gate__track"><div class="phase2-gate__fill" style="width:0" data-p2-fill="78"></div></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="phase2-gate__gauge-caption">ROUTE INTEGRITY</span><strong class="phase2-gate__gauge-number" style="font-size:18px"><span data-p2-count="96" data-p2-digits="2">00</span>%</strong></div>
-            <div class="phase2-gate__track"><div class="phase2-gate__fill" style="width:0" data-p2-fill="96"></div></div>
-          </div>
+          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">WORKSPACE / SECTIONS</p><span class="phase2-gate__sub-label">LEARNING AREAS</span></div><span class="phase2-gate__sim">LOCAL</span></div>
+          <ul class="phase2-gate__focus-list"><li>Profile and overview</li><li>Projects and labs</li><li>Skills and roadmap</li><li>Write-ups and certificates</li></ul>
         </section>
         <section class="phase2-gate__panel">
-          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">SYSTEM STATUS</p><span class="phase2-gate__sub-label">LOCAL EXPERIENCE</span></div><span class="phase2-gate__sim">SIMULATED</span></div>
-          <div class="phase2-gate__status"><i class="phase2-gate__status-dot"></i><div><strong>STATUS: LEARNING MODE</strong><small>NO LIVE SCANNING / NO NETWORK ACCESS</small></div></div>
+          <div class="phase2-gate__panel-head"><div><p class="phase2-gate__eyebrow">SYSTEM STATUS</p><span class="phase2-gate__sub-label">LOCAL EXPERIENCE</span></div><span class="phase2-gate__sim">STATIC SITE</span></div>
+          <div class="phase2-gate__status"><i class="phase2-gate__status-dot"></i><div><strong>LEARNING MODE</strong><small>NO LIVE SCANNING / NO NETWORK ACCESS</small></div></div>
         </section>
       </aside>
     </div>
@@ -414,7 +405,7 @@ html.intro-pending #page { visibility: hidden !important; }
   </div>
   <div class="phase2-gate__login-layer" data-p2-login-layer aria-hidden="true" inert>
     <svg class="phase2-gate__map" viewBox="0 0 1400 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <defs><pattern id="p2-map-dots" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#48f0df" fill-opacity=".62"/></pattern><linearGradient id="p2-map-fade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48f0df" stop-opacity=".1"/><stop offset="1" stop-color="#2aaecb" stop-opacity=".025"/></linearGradient></defs>
+      <defs><pattern id="p2-map-dots" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#85e9ad" fill-opacity=".62"/></pattern><linearGradient id="p2-map-fade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#85e9ad" stop-opacity=".1"/><stop offset="1" stop-color="#35f2e0" stop-opacity=".025"/></linearGradient></defs>
       <path class="phase2-gate__map-shape" d="M122 198l35-38 51-17 44 15 26 27-12 28-36 10-21 35-27 5-14 36-26 8-13-26-25-6-15-28-22-5-9-25zM258 333l35-20 39 15 24 39-7 45-21 42-13 51-23 27-18-38-2-50-17-37-19-30zM407 185l45-30 65 5 32 25 58-6 37 25 48-2 31 25 58 1 22 23 53-1 31 24-18 27-48 1-26 25-37-4-14 31-35 8-17 29-32 7-20-18-37 8-27-19-34 10-18-27-33-1-14-31-24-12-3-31-25-19-28-3-12-25-31-9zM501 355l33-18 46 15 23 33 16 43-7 48-25 28-9 38-31 13-14-34-20-21-1-36-20-28-7-42zM684 379l31-17 32 7 13 23 30-1 22 23 31 8 20 25 32 9 16 29-18 27-35-3-18-22-32-1-20-23-35-1-20-23-24-4-12-22zM880 230l36-24 54 4 35 20 53-7 35 26-5 23-39 9-21 22-36-3-18 28-31 8-25-18-29 8-24-19-30-6-11-24-29-11zM1041 368l38-13 33 15 18 28 39 7 14 29-26 20-29-12-21 10-24-23-26-5-18-24zM1174 475l32-12 24 22-8 29-24 8-24-19z" fill="url(#p2-map-fade)"/>
       <path class="phase2-gate__map-arc" d="M165 310Q430 50 694 300T1205 260M290 500Q710 120 1105 490M185 235Q700 670 1180 230M420 160Q800 520 1135 300"/>
       <circle class="phase2-gate__map-node" cx="165" cy="310" r="4"/><circle class="phase2-gate__map-node" cx="694" cy="300" r="4"/><circle class="phase2-gate__map-node" cx="1205" cy="260" r="4"/><circle class="phase2-gate__map-node" cx="290" cy="500" r="3"/><circle class="phase2-gate__map-node" cx="1105" cy="490" r="3"/><circle class="phase2-gate__map-node" cx="700" cy="410" r="3"/>
@@ -423,21 +414,19 @@ html.intro-pending #page { visibility: hidden !important; }
       <aside class="phase2-gate__login-side">
         <section class="phase2-gate__widget"><p class="phase2-gate__widget-title">LOCAL TIME // DEVICE</p><p class="phase2-gate__widget-clock" data-p2-widget-clock>--:--:--</p><p class="phase2-gate__widget-date" data-p2-widget-date>LOCAL DATE</p></section>
       </aside>
-      <section class="phase2-gate__login-card" aria-label="Decorative visitor login panel">
-        <p class="phase2-gate__login-kicker">ZTRACE // VISITOR ACCESS</p>
-        <h2 class="phase2-gate__login-title">[ <span>LOGIN</span> ]</h2>
-        <div class="phase2-gate__field"><label for="p2-visitor-name">IDENTITY</label><input id="p2-visitor-name" type="text" value="visitor@ztrace" readonly tabindex="-1" aria-label="Decorative visitor identity field" autocomplete="off"></div>
-        <div class="phase2-gate__field"><label for="p2-visitor-key">ACCESS KEY</label><input id="p2-visitor-key" type="text" value="••••••••" readonly tabindex="-1" aria-label="Decorative access key field" autocomplete="off"></div>
-        <button class="phase2-gate__login-button" type="button" data-p2-login><span data-p2-login-label>LOGIN</span><span aria-hidden="true">↗</span></button>
-        <p class="phase2-gate__visitor-note">Visitor access — no account needed</p>
-      </section>
+      <section class="phase2-gate__login-card" aria-label="Workspace entry">
+        <p class="phase2-gate__login-kicker">ZTRACE // WORKSPACE ENTRY</p>
+        <h2 class="phase2-gate__login-title">[ <span>WELCOME</span> ]</h2>
+        <p class="phase2-gate__entry-copy">Explore the learning journey, current study topics, and planned practice areas.</p>
+        <button class="phase2-gate__login-button" type="button" data-p2-login><span data-p2-login-label>Enter workspace</span><span aria-hidden="true">↗</span></button>
+        <p class="phase2-gate__visitor-note">This introduction is illustrative, not authentication. No account is needed.</p></section>
       <aside class="phase2-gate__login-side">
         <section class="phase2-gate__widget"><p class="phase2-gate__widget-title">LEARNING FOCUS</p><ul class="phase2-gate__focus-list"><li>Linux</li><li>Networking</li><li>Recon</li></ul><p class="phase2-gate__widget-date" style="margin-top:14px">SIMULATED UI / LEARNING MODE</p></section>
       </aside>
     </div>
-    <div class="phase2-gate__counter"><strong class="phase2-gate__counter-number" data-p2-count="0">000</strong><span class="phase2-gate__counter-label">LABS COMPLETED — JUST STARTING</span></div>
+    <div class="phase2-gate__counter"><span class="phase2-gate__counter-label">LEARNING IN PUBLIC · PERMISSION FIRST</span></div>
   </div>
-  <button class="phase2-gate__skip" type="button" data-p2-skip aria-label="Skip intro and show the visitor login gate">Skip Intro <kbd>ESC</kbd></button>
+  <button class="phase2-gate__skip" type="button" data-p2-skip aria-label="Skip intro and enter the workspace">Skip Intro <kbd>ESC</kbd></button>
   <div class="phase2-gate__transition-scan" aria-hidden="true"></div>
 </div>
 <dialog class="mobile-menu" id="mobile-menu" aria-label="Navigation" data-lenis-prevent>
