@@ -7,7 +7,8 @@ const root = path.resolve(__dirname, "..");
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 const required = [
   "index.html", "css/dashboard-shell.css", "js/dashboard-shell.js", "js/router.js",
-  "js/views/index.js", "js/views/profile.js", "js/views/dashboard.js",
+  "js/views/index.js", "js/views/profile.js", "js/views/dashboard.js", "js/views/projects.js",
+  "js/data/projects.js",
   "js/views/attack-surface.js", "js/views/skill-progress.js", "js/views/learning-path.js",
   "js/views/write-ups.js", "js/views/automation.js", "js/views/certificates.js",
   "js/views/gallery.js", "js/views/contact.js", "tests/phase3-shell-check.cjs"
@@ -23,7 +24,7 @@ const navigation = read("js/navigation.js");
 const registrySource = read("js/views/index.js");
 
 for (const route of [
-  "profile", "dashboard", "attack-surface", "skill-progress", "learning-path",
+  "profile", "dashboard", "projects", "attack-surface", "skill-progress", "learning-path",
   "write-ups", "automation", "certificates", "gallery", "contact"
 ]) {
   assert.ok(html.includes('href="#/' + route + '"'), "Missing sidebar route: " + route);
@@ -38,11 +39,14 @@ assert.ok(html.includes('data-nav-search'), "Search input is missing.");
 assert.ok(html.includes("LEARNING TO DATE"), "Decorative learning-to-date control is missing.");
 assert.ok(html.includes("Next step: recon basics"), "Recon learning notification is missing.");
 assert.ok(html.includes("Learning in public"), "Learning-in-public notification is missing.");
-assert.ok(html.includes(">Welcome</h3>"), "Welcome notification is missing.");
+assert.ok(html.includes(">Welcome</h3>"), "Welcome workspace note is missing.");
+assert.ok(html.includes("Workspace notes"), "The notes panel must use an honest static-notes label.");
+assert.ok(!html.includes("data-notification-count") && !html.includes("3 unread"), "Static notes must not display fabricated unread counts.");
+assert.ok(!shell.includes('storage.set("notifications-read", "on")'), "Static workspace notes must not simulate unread state.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
 assert.ok(html.includes("./css/dashboard-shell.css?v=20261020.2"), "Dashboard stylesheet cache key must match the current shell CSS.");
-assert.ok(main.includes("./dashboard-shell.js?v=20261020.3"), "Dashboard shell module cache key must match the current shell JS.");
-assert.ok(html.includes("./js/main.js?v=20261021.2"), "Main module cache key must be bumped.");
+assert.ok(main.includes("./dashboard-shell.js?v=20261024.2"), "Dashboard shell module cache key must match the current shell JS.");
+assert.ok(html.includes("./js/main.js?v=20261024.2"), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
 assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling must not intercept dashboard hash routes.");
 
@@ -58,7 +62,6 @@ for (const behavior of [
   'createRouter({ routes: ROUTES, fallback: "profile", onRoute: renderRoute })',
   'event.key === "Escape" && shell.classList.contains("is-sidebar-open")',
   'new MotionController()',
-  'storage.set("notifications-read", "on")',
   'motion.setEnabled(!motion.enabled)',
   'motion.setIntensity(intensitySelect.value)',
   'url.searchParams.set("intro", "1")',
@@ -143,7 +146,7 @@ async function checkViews() {
   const context = vm.createContext({ console, EventTarget, Event, URL, URLSearchParams, setTimeout, clearTimeout, performance });
   const cache = new Map();
   const viewFiles = [
-    "profile", "dashboard", "attack-surface", "skill-progress", "learning-path",
+    "profile", "dashboard", "projects", "attack-surface", "skill-progress", "learning-path",
     "write-ups", "automation", "certificates", "gallery", "contact"
   ];
   const rendered = {};
@@ -156,16 +159,17 @@ async function checkViews() {
   assert.ok(rendered.profile.includes("Learn responsibly. Practice with permission."), "Profile must preserve the existing ethical-practice principle.");
   assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
   assert.equal((rendered.dashboard.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard should display five honest zero-state metrics.");
-  assert.ok(rendered.dashboard.includes("No data yet — I'm just starting"), "Dashboard must not invent recent activity.");
+  assert.ok(rendered.dashboard.includes("NO ACTIVITY RECORDED") && rendered.dashboard.includes("NO VERIFIED MILESTONES"), "Dashboard must show evidence-based empty states.");
+  assert.ok(!rendered.dashboard.includes("chart-pulse") && !rendered.dashboard.includes("chart-ghost-bar"), "Dashboard must not render fabricated chart activity.");
   assert.ok(rendered["attack-surface"].includes("Authorized practice only"), "Attack Surface must show its authorization banner.");
   assert.ok(rendered["attack-surface"].includes("NO DATA"), "Attack Surface radar must remain empty.");
-  assert.ok(rendered.certificates.includes("No Certificate"), "Certificate cards must remain unearned.");
-  assert.ok(rendered.certificates.includes("Future goal"), "Certificate cards must be marked as future goals.");
+  assert.ok(rendered.certificates.includes("Not earned yet"), "Certificate cards must remain unearned.");
+  assert.ok(rendered.certificates.includes("Planned"), "Certificate cards must be marked as planned.");
 }
 (async () => {
   await checkRouter();
   await checkViews();
-  console.log("Phase 3 shell checks passed: 10 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, notifications, and no network calls.");
+  console.log("Phase 3 shell checks passed: 11 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, workspace notes, and no network calls.");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

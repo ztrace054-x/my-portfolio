@@ -1,9 +1,10 @@
 import { createRouter } from "./router.js?v=20261019.1";
 import { safeStorage } from "./utils.js?v=20261016.1";
 import { MotionController } from "./motion.js?v=20261016.1";
-import { viewRegistry } from "./views/index.js?v=20261020.2";
-import * as profileView from "./views/profile.js?v=20261020.1";
-import * as dashboardView from "./views/dashboard.js?v=20261020.1";
+import { viewRegistry } from "./views/index.js?v=20261024.3";
+import * as profileView from "./views/profile.js?v=20261024.3";
+import * as dashboardView from "./views/dashboard.js?v=20261024.2";
+import * as projectsView from "./views/projects.js?v=20261020.2";
 import * as attackSurfaceView from "./views/attack-surface.js?v=20261020.2";
 import * as skillProgressView from "./views/skill-progress.js?v=20261020.2";
 import * as learningPathView from "./views/learning-path.js?v=20261020.2";
@@ -17,6 +18,7 @@ import { initWorkspaceMotion } from "./workspace-motion.js?v=20261020.3";
 const ROUTES = Object.freeze({
   profile: profileView,
   dashboard: dashboardView,
+  projects: projectsView,
   "attack-surface": attackSurfaceView,
   "skill-progress": skillProgressView,
   "learning-path": learningPathView,
@@ -61,22 +63,7 @@ export function initDashboardShell() {
   const motionButtons = [...shell.querySelectorAll("[data-shell-motion-toggle]")];
   const intensitySelect = shell.querySelector("[data-motion-intensity]");
   const motionStatus = shell.querySelector("[data-motion-status]");
-  const notificationCount = [...shell.querySelectorAll("[data-notification-count]")];
-  const notificationTriggers = [...shell.querySelectorAll('[data-panel-open="notifications"]')];
-  const markReadButton = shell.querySelector("[data-mark-read]");
   const skipLink = document.querySelector(".skip-link");
-
-  function syncNotifications() {
-    const read = storage.get("notifications-read", "off") === "on";
-    notificationCount.forEach(badge => {
-      badge.textContent = read ? "" : "3";
-      badge.hidden = read;
-    });
-    notificationTriggers.forEach(button => {
-      button.setAttribute("aria-label", read ? "Open notifications" : "Open notifications, 3 unread");
-    });
-    if (markReadButton) markReadButton.disabled = read;
-  }
 
   function syncMotion() {
     if (!motion) return;
@@ -287,17 +274,11 @@ export function initDashboardShell() {
     });
     panelBackdrop?.addEventListener("click", () => closePanel(), { signal: events.signal });
     document.addEventListener("keydown", onPanelKeydown, { signal: events.signal });
-    markReadButton?.addEventListener("click", () => {
-      storage.set("notifications-read", "on");
-      syncNotifications();
-    }, { signal: events.signal });
-
     motionButtons.forEach(button => button.addEventListener("click", () => motion.setEnabled(!motion.enabled), { signal: events.signal }));
     intensitySelect?.addEventListener("change", () => motion.setIntensity(intensitySelect.value), { signal: events.signal });
     shell.querySelector("[data-replay-intro]")?.addEventListener("click", replayIntro, { signal: events.signal });
 
     router = createRouter({ routes: ROUTES, fallback: "profile", onRoute: renderRoute });
-    syncNotifications();
     syncMotion();
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => shell.classList.add("is-ready"));

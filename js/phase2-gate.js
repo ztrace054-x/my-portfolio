@@ -81,8 +81,8 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       : elapsed < 1650
         ? "CALIBRATING LEARNING SYSTEMS"
         : elapsed < 2600
-          ? "MAPPING SIMULATED NETWORK DATA"
-          : "PREPARING VISITOR ACCESS";
+          ? "PREPARING THE LEARNING WORKSPACE"
+          : "PREPARING WORKSPACE";
     if (bootStatus) bootStatus.textContent = "SIMULATED // " + message;
     if (decodeReadout) {
       const target = elapsed >= BOOT_DURATION - 360 ? "LEARNING MODE / READY" : "LEARNING MODE / INITIALIZING";
@@ -161,7 +161,9 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     try {
       const url = new URL(window.location.href);
       url.searchParams.delete("intro");
-      url.hash = "/profile";
+      const allowedRoutes = new Set(["profile", "dashboard", "projects", "attack-surface", "skill-progress", "learning-path", "write-ups", "automation", "certificates", "gallery", "contact"]);
+      const requestedRoute = url.hash.match(/^#\/([a-z-]+)/)?.[1];
+      url.hash = "/" + (allowedRoutes.has(requestedRoute) ? requestedRoute : "profile");
       history.replaceState(history.state, "", url.pathname + url.search + url.hash);
     } catch {
       window.location.hash = "/profile";
@@ -179,7 +181,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     root.classList.add("is-login-ready");
     loginLayer.inert = false;
     loginLayer.setAttribute("aria-hidden", "false");
-    if (bootStatus) bootStatus.textContent = "SIMULATED // VISITOR GATE READY";
+    if (bootStatus) bootStatus.textContent = "SIMULATED // WORKSPACE READY";
     if (decodeReadout) decodeReadout.textContent = "LEARNING MODE / READY";
     if (focus && (document.activeElement === skipButton || !root.contains(document.activeElement))) {
       loginButton?.focus({ preventScroll: true });
@@ -190,8 +192,8 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     if (done || transitioning || !loginReady) return;
     transitioning = true;
     loginButton.disabled = true;
-    loginButton.querySelector("[data-p2-login-label]").textContent = "ACCESS GRANTED";
-    loginButton.setAttribute("aria-label", "Access granted. Opening profile.");
+    loginButton.querySelector("[data-p2-login-label]").textContent = "OPENING WORKSPACE";
+    loginButton.setAttribute("aria-label", "Opening the learning workspace.");
     root.classList.add("is-transitioning");
     transitionTimer = window.setTimeout(finish, 920);
   }

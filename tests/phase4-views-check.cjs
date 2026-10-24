@@ -9,12 +9,12 @@ const mainSource = read("js/main.js");
 const shellSource = read("js/dashboard-shell.js");
 const workflowSource = read(".github/workflows/quality.yml");
 assert.ok(fs.existsSync(path.join(rootDir, "assets/saad-golden.jpg")), "The existing profile portrait asset must exist.");
-assert.match(htmlSource, /js\/main\.js\?v=20261021\.2/, "The main module cache key must be current.");
+assert.match(htmlSource, /js\/main\.js\?v=20261024\.2/, "The main module cache key must be current.");
 assert.match(htmlSource, /dashboard-shell\.css\?v=20261020\.2/, "The shell CSS cache key must be current.");
-assert.match(mainSource, /dashboard-shell\.js\?v=20261020\.3/, "The shell module cache key must be current.");
-assert.match(mainSource, /dataset\.release = '20261021\.2'/, "The release marker must match this update.");
-assert.match(shellSource, /views\/profile\.js\?v=20261020\.1/, "Profile module cache key must be current.");
-assert.match(shellSource, /views\/dashboard\.js\?v=20261020\.1/, "Dashboard module cache key must be current.");
+assert.match(mainSource, /dashboard-shell\.js\?v=20261024\.2/, "The shell module cache key must be current.");
+assert.match(mainSource, /dataset\.release = '20261024\.2'/, "The release marker must match this update.");
+assert.match(shellSource, /views\/profile\.js\?v=20261024\.3/, "Profile module cache key must be current.");
+assert.match(shellSource, /views\/dashboard\.js\?v=20261024\.2/, "Dashboard module cache key must be current.");
 assert.ok(workflowSource.includes("phase-4-profile-dashboard"), "Quality workflow must run on the Phase 4 branch.");
 assert.ok(workflowSource.includes("node --experimental-vm-modules tests/phase4-views-check.cjs"), "Quality workflow must execute the Phase 4 regression checks.");
 const routeBlock = shellSource.slice(shellSource.indexOf("function renderRoute"), shellSource.indexOf("function replayIntro"));
@@ -76,7 +76,7 @@ async function run() {
   const dashboardHtml = dashboardModule.namespace.render();
 
   for (const phrase of [
-    "Portrait of Saad", "@ZTRACE", "SSC student", "Cybersecurity beginner",
+    "Portrait of Saad", "@ZTRACE", "CSE student", "Cybersecurity beginner",
     "Beginner", "Learning in public", "Byte Capsule", "Ethical Hacking for Beginners",
     "networking", "Linux", "reconnaissance", "Ethics", "InshaAllah",
     "I'm choosing to make my beginning visible.", "Learn responsibly. Practice with permission.",
@@ -91,18 +91,13 @@ async function run() {
 
   assert.equal((dashboardHtml.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard must show five zero-valued metric cards.");
   for (const label of ["Labs Completed", "CTF Challenges", "Write-ups", "Certificates", "Rooms Completed"]) assert.ok(dashboardHtml.includes(label), "Dashboard metric missing: " + label);
-  assert.equal((dashboardHtml.match(/class="chart-pulse/g) || []).length, 2, "Both empty charts need an animated pulse.");
-  assert.ok(dashboardHtml.includes("No data yet — I'm just starting"), "Charts must state that there is no data.");
-  assert.ok((dashboardHtml.match(/<title>No data yet<\/title>/g) || []).length >= 8, "Chart hover targets must expose No data yet tooltips.");
-  for (const id of ["activity-chart-tooltip", "progress-chart-tooltip"]) {
-    assert.ok(dashboardHtml.includes('id="' + id + '" role="tooltip">No data yet</span>'), "Missing visible empty-state tooltip: " + id);
-    assert.ok(dashboardHtml.includes('aria-describedby="' + id + '"'), "Chart targets must reference their accessible tooltip: " + id);
-  }
-  const shellCss = read("css/dashboard-shell.css");
-  assert.match(shellCss, /\.dashboard-chart-visual:hover \.chart-tooltip,\s*\.dashboard-chart-visual:focus-within \.chart-tooltip/, "Tooltips must appear on hover and keyboard focus.");
-  assert.match(shellCss, /html\[data-motion="off"\] \.chart-pulse/, "Chart pulses must respect the dashboard motion setting.");
-  assert.match(shellCss, /prefers-reduced-motion:reduce[^}]*chart-pulse/, "Chart pulses must respect reduced-motion preferences.");
-  assert.ok(dashboardHtml.includes('data-chart-period="activity"') && dashboardHtml.includes('data-chart-period="progress"'), "Both chart period controls must be present.");
+  assert.ok(!dashboardHtml.includes("chart-ghost-bar") && !dashboardHtml.includes("chart-pulse"), "Dashboard must not draw fabricated chart marks.");
+  assert.ok(dashboardHtml.includes("NO ACTIVITY RECORDED") && dashboardHtml.includes("NO VERIFIED MILESTONES"), "Both dashboard panels must use truthful empty states.");
+  assert.ok(!dashboardHtml.includes("data-chart-period"), "Empty charts must not expose inert period controls.");
+  for (const route of ["#/projects", "#/skill-progress", "#/learning-path", "#/write-ups", "#/certificates"]) assert.ok(dashboardHtml.includes(route), "Dashboard shortcut missing: " + route);
+  const premiumCss = read("css/premium-redesign.css");
+  assert.match(premiumCss, /dashboard-chart-empty/, "Dashboard empty states need dedicated presentation.");
+  assert.match(premiumCss, /dashboard-shortcuts__grid/, "Dashboard shortcuts need responsive layout styling.");
   for (const column of ["Topic", "Status", "Level", "Notes"]) assert.ok(dashboardHtml.includes('scope="col">' + column), "Learning Log column missing: " + column);
   for (const topic of ["Linux fundamentals", "Networking basics", "Recon concepts", "Authorized labs", "Beginner CTFs", "Certifications"]) assert.ok(dashboardHtml.includes(topic), "Learning Log topic missing: " + topic);
   assert.equal(dataModule.namespace.learningLog.length, 6, "Learning Log should contain six honest starter rows.");
@@ -119,10 +114,6 @@ async function run() {
   const filter = mockTarget("[data-learning-log-filter]", { value: "all" });
   const rows = dataModule.namespace.learningLog.map(item => ({ textContent: [item.topic, item.status, item.level, item.notes].join(" "), dataset: { status: item.status }, hidden: false }));
   const empty = { hidden: true }, count = { textContent: "" };
-  const activityLabel = { textContent: "No data yet — I'm just starting · Weekly" };
-  const progressLabel = { textContent: "No data yet — I'm just starting · Weekly" };
-  const activityPeriod = mockTarget("[data-chart-period]", { value: "Weekly", dataset: { chartPeriod: "activity" } });
-  const progressPeriod = mockTarget("[data-chart-period]", { value: "Weekly", dataset: { chartPeriod: "progress" } });
   const counters = Array.from({ length: 5 }, (_, index) => ({ dataset: { countUp: "0" }, textContent: String(index) }));
   const listeners = {};
   const motionListeners = new Map();
@@ -152,8 +143,6 @@ async function run() {
       if (selector === "[data-learning-log-filter]") return filter;
       if (selector === "[data-learning-log-empty]") return empty;
       if (selector === "[data-learning-log-count]") return count;
-      if (selector.includes('data-period-label="activity"')) return activityLabel;
-      if (selector.includes('data-period-label="progress"')) return progressLabel;
       return null;
     }
   };
@@ -186,18 +175,6 @@ async function run() {
   filter.value = "Future goal";
   listeners.change({ target: filter });
   assert.equal(rows.filter(row => !row.hidden).length, 1, "Future goal status filter should work.");
-  activityPeriod.value = "Last Month";
-  listeners.change({ target: activityPeriod });
-  assert.equal(activityLabel.textContent, "No data yet — I'm just starting · Last Month", "Activity period must update its own label.");
-  assert.equal(progressLabel.textContent, "No data yet — I'm just starting · Weekly", "Activity period must not change the progress label.");
-  activityPeriod.value = "Weekly";
-  listeners.change({ target: activityPeriod });
-  assert.equal(activityLabel.textContent, "No data yet — I'm just starting · Weekly");
-  assert.equal(progressLabel.textContent, "No data yet — I'm just starting · Weekly");
-  progressPeriod.value = "Last Month";
-  listeners.change({ target: progressPeriod });
-  assert.equal(progressLabel.textContent, "No data yet — I'm just starting · Last Month", "Progress period must update its own label.");
-  assert.equal(activityLabel.textContent, "No data yet — I'm just starting · Weekly", "Progress period must not change the activity label.");
   disposeDashboard();
   assert.equal(Object.keys(listeners).length, 0, "Dashboard input/change listeners must be removed on unmount.");
   assert.equal(animationFrames.size, 0, "Count-up animation frames must be cancelled on unmount.");
@@ -237,6 +214,6 @@ async function run() {
   disposeErrorProfile();
   assert.equal(errorListeners.click, undefined, "Failed-copy view listener must also be removed on unmount.");
 
-  console.log("Phase 4 checks passed: truthful profile/assets/links, copy success and failure, zero metrics, accessible chart tooltips, independent periods, combined Learning Log filters, visible counts, and motion/listener cleanup.");
+  console.log("Phase 4 checks passed: truthful profile/assets/links, copy success and failure, zero metrics, evidence-based empty states, dashboard shortcuts, combined Learning Log filters, visible counts, and motion/listener cleanup.");
 }
 run().catch(error => { console.error(error); process.exitCode = 1; });

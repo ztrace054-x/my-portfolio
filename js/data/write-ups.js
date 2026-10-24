@@ -8,10 +8,13 @@ export const writeUpsContent = Object.freeze({
   title:"Authorized Lab Journal",status:"Planned template",
   description:"A planned structure for recording an authorized exercise after it has actually been completed. This is not a completed write-up.",
   sections:Object.freeze([
-   Object.freeze({id:"objective",number:"01",label:"Objective",text:"Describe the learning question or objective for the exercise."}),
-   Object.freeze({id:"permitted-scope",number:"02",label:"Permitted Scope",text:"Record the written permission, in-scope assets, and relevant limits."}),
-   Object.freeze({id:"observations",number:"03",label:"Observations",text:"Summarize evidence actually observed, removing sensitive information."}),
-   Object.freeze({id:"lessons",number:"04",label:"Lessons",text:"Note what was learned, what remains uncertain, and a safe next step."})
+   Object.freeze({id:"objective",number:"01",label:"Objective",text:"State the learning question and what a successful, safe investigation would establish."}),
+   Object.freeze({id:"authorization",number:"02",label:"Authorization and Environment",text:"Record written permission, in-scope assets, environment details, and explicit testing limits."}),
+   Object.freeze({id:"tools-method",number:"03",label:"Tools and Methodology",text:"List only tools actually used and explain the steps taken in the authorized environment."}),
+   Object.freeze({id:"technical-notes",number:"04",label:"Technical Explanation",text:"Explain the relevant concept in your own words and include commands or request examples when appropriate."}),
+   Object.freeze({id:"evidence",number:"05",label:"Evidence and Findings",text:"Attach real screenshots or diagrams, redact sensitive values, and separate observations from assumptions."}),
+   Object.freeze({id:"outcome",number:"06",label:"Outcome and Lessons",text:"Record the verified outcome, what was learned, what remains uncertain, and a safe next step."}),
+   Object.freeze({id:"references",number:"07",label:"References and Status",text:"Link the original lab or source, record the date and completion status, and do not claim completion without evidence."})
   ])
  })
 });

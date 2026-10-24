@@ -1,4 +1,4 @@
-import {writeUpsContent} from "../data/write-ups.js?v=20261020.2";
+import {writeUpsContent} from "../data/write-ups.js?v=20261024.3";
 import {escapeHTML} from "../utils.js?v=20261016.1";
 import {mountPhase5View,renderPhase5Header} from "./phase5-view.js?v=20261020.2";
 export function render(){

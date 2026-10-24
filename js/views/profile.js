@@ -1,4 +1,4 @@
-import { profile } from "../data/profile.js?v=20261019.2";
+import { profile } from "../data/profile.js?v=20261024.3";
 import { links } from "../data/links.js?v=20261016.1";
 import { escapeHTML } from "../utils.js?v=20261016.1";
 
@@ -65,7 +65,7 @@ export function render() {
             <div class="profile-terminal-top"><span><i aria-hidden="true"></i> saad@ztrace:~</span><span>SESSION / LOCAL</span></div>
             <div class="profile-terminal-body">
               <p><span class="terminal-prompt">$</span> whoami</p>
-              <pre>saad — SSC student / cybersecurity beginner</pre>
+              <pre>saad — CSE student / cybersecurity learner</pre>
               <p><span class="terminal-prompt">$</span> cat status.txt</p>
               <pre>Course: Ethical Hacking for Beginners
 Learning: Linux, networking, recon

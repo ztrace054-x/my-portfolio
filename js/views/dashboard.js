@@ -3,49 +3,22 @@ import { learningLog } from "../data/learning-log.js?v=20261019.1";
 import { escapeHTML } from "../utils.js?v=20261016.1";
 import { countUp } from "../motion.js?v=20261016.1";
 
-const PERIOD_OPTIONS = `
-  <option value="Weekly">Weekly</option>
-  <option value="Last Month">Last Month</option>`;
-
 function renderActivityChart() {
-  const bars = [
-    { x: 42, height: 34 }, { x: 102, height: 54 }, { x: 162, height: 42 },
-    { x: 222, height: 66 }, { x: 282, height: 49 }, { x: 342, height: 31 },
-    { x: 402, height: 57 }
-  ].map(bar => `
-    <g class="chart-hover-target" tabindex="0" role="img" aria-label="No data yet" aria-describedby="activity-chart-tooltip">
-      <title>No data yet</title>
-      <rect class="chart-ghost-bar" x="${bar.x}" y="${124 - bar.height}" width="27" height="${bar.height}" rx="2"></rect>
-    </g>`
-  ).join("");
   return `
-    <div class="dashboard-chart-visual">
-    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty learning activity bar chart" aria-describedby="activity-chart-tooltip">
-      <desc>Decorative ghost bars only. No learning activity data has been recorded.</desc>
-      <g class="chart-grid-lines" aria-hidden="true"><path d="M20 28H450 M20 60H450 M20 92H450 M20 124H450"></path></g>
-      ${bars}
-      <path class="chart-axis" d="M20 124H450"></path>
-      <circle class="chart-pulse" cx="28" cy="124" r="4" tabindex="0" role="img" aria-label="No data yet" aria-describedby="activity-chart-tooltip"><title>No data yet</title></circle>
-      <g class="chart-axis-labels" aria-hidden="true">
-        <text x="55" y="146">M</text><text x="115" y="146">T</text><text x="175" y="146">W</text>
-        <text x="235" y="146">T</text><text x="295" y="146">F</text><text x="355" y="146">S</text><text x="415" y="146">S</text>
-      </g>
-    </svg>
-    <span class="chart-tooltip" id="activity-chart-tooltip" role="tooltip">No data yet</span>
+    <div class="dashboard-chart-empty" role="status" aria-labelledby="activity-empty-title">
+      <p class="dashboard-chart-empty__eyebrow">NO ACTIVITY RECORDED</p>
+      <h3 id="activity-empty-title">Start with a real learning session</h3>
+      <p>Activity appears here only after a study session has been recorded. Nothing is estimated or filled in for appearance.</p>
+      <a href="#/learning-path">View learning path <span aria-hidden="true">↗</span></a>
     </div>`;
 }
 function renderProgressChart() {
   return `
-    <div class="dashboard-chart-visual">
-    <svg class="dashboard-chart-svg" viewBox="0 0 470 158" role="group" aria-label="Empty progress over time line chart" aria-describedby="progress-chart-tooltip">
-      <desc>A flat baseline and moving pulse are decorative. No progress history has been recorded.</desc>
-      <g class="chart-grid-lines" aria-hidden="true"><path d="M20 28H450 M20 60H450 M20 92H450 M20 124H450"></path></g>
-      <path class="chart-axis" d="M20 124H450"></path>
-      <path class="chart-empty-line chart-hover-target" d="M28 98H442" tabindex="0" role="img" aria-label="No data yet" aria-describedby="progress-chart-tooltip"><title>No data yet</title></path>
-      <circle class="chart-pulse chart-pulse--line" cx="28" cy="98" r="4" tabindex="0" role="img" aria-label="No data yet" aria-describedby="progress-chart-tooltip"><title>No data yet</title></circle>
-      <g class="chart-axis-labels" aria-hidden="true"><text x="28" y="146">START</text><text x="225" y="146">IN PROGRESS</text><text x="423" y="146">NOW</text></g>
-    </svg>
-    <span class="chart-tooltip" id="progress-chart-tooltip" role="tooltip">No data yet</span>
+    <div class="dashboard-chart-empty" role="status" aria-labelledby="progress-empty-title">
+      <p class="dashboard-chart-empty__eyebrow">NO VERIFIED MILESTONES</p>
+      <h3 id="progress-empty-title">Progress is earned, not estimated</h3>
+      <p>Verified milestones will appear when completed work has supporting evidence. Planned topics remain separate from completed work.</p>
+      <a href="#/write-ups">Explore the write-up format <span aria-hidden="true">↗</span></a>
     </div>`;
 }
 const metricCards = [
@@ -82,24 +55,24 @@ export function render() {
       <div class="stat-grid dashboard-stat-grid" aria-label="Verified learning totals">${metricCards}</div>
       <div class="dashboard-chart-grid">
         <section class="hud-panel dashboard-chart-card" aria-labelledby="learning-activity-title">
-          <div class="hud-panel-heading dashboard-chart-heading"><div><p class="view-eyebrow">ACTIVITY / 01</p><h2 id="learning-activity-title">Learning Activity</h2></div>
-            <label class="chart-period-control"><span class="sr-only">Learning activity period</span><select data-chart-period="activity" aria-label="Learning activity period">${PERIOD_OPTIONS}</select></label>
-          </div>
-          <div class="chart-legend"><span class="chart-legend-dot" aria-hidden="true"></span><span>LEARNING SESSIONS</span><span class="chart-empty-tag">EMPTY STATE / NOT DATA</span></div>
+          <div class="hud-panel-heading dashboard-chart-heading"><div><p class="view-eyebrow">ACTIVITY / 01</p><h2 id="learning-activity-title">Learning Activity</h2></div><span class="chart-empty-tag">NO RECORDS YET</span></div>
           ${renderActivityChart()}
-          <p class="chart-empty-label" data-period-label="activity" aria-live="polite">No data yet — I'm just starting · Weekly</p>
-          <p class="chart-footnote">The ghost bars are visual placeholders, not recorded activity.</p>
         </section>
         <section class="hud-panel dashboard-chart-card" aria-labelledby="progress-over-time-title">
-          <div class="hud-panel-heading dashboard-chart-heading"><div><p class="view-eyebrow">PROGRESS / 02</p><h2 id="progress-over-time-title">Progress Over Time</h2></div>
-            <label class="chart-period-control"><span class="sr-only">Progress chart period</span><select data-chart-period="progress" aria-label="Progress chart period">${PERIOD_OPTIONS.replace('value="Last Month"', 'value="Last Month" selected')}</select></label>
-          </div>
-          <div class="chart-legend"><span class="chart-legend-dot chart-legend-dot--line" aria-hidden="true"></span><span>VERIFIED MILESTONES</span><span class="chart-empty-tag">EMPTY STATE / NOT DATA</span></div>
+          <div class="hud-panel-heading dashboard-chart-heading"><div><p class="view-eyebrow">PROGRESS / 02</p><h2 id="progress-over-time-title">Progress Over Time</h2></div><span class="chart-empty-tag">NO VERIFIED HISTORY</span></div>
           ${renderProgressChart()}
-          <p class="chart-empty-label" data-period-label="progress" aria-live="polite">No data yet — I'm just starting · Last Month</p>
-          <p class="chart-footnote">A flat baseline is shown until real progress entries exist.</p>
         </section>
       </div>
+      <section class="dashboard-shortcuts" aria-labelledby="workspace-shortcuts-title">
+        <div class="dashboard-shortcuts__heading"><p class="view-eyebrow">NEXT / NAVIGATION</p><h2 id="workspace-shortcuts-title">Explore the workspace</h2><p>Move from learning plans to verified work, notes, and credentials.</p></div>
+        <nav class="dashboard-shortcuts__grid" aria-label="Workspace shortcuts">
+          <a class="dashboard-shortcut" href="#/projects"><span class="dashboard-shortcut__index">01</span><strong>Projects</strong><span>Work and evidence</span><b aria-hidden="true">↗</b></a>
+          <a class="dashboard-shortcut" href="#/skill-progress"><span class="dashboard-shortcut__index">02</span><strong>Skills</strong><span>Current learning status</span><b aria-hidden="true">↗</b></a>
+          <a class="dashboard-shortcut" href="#/learning-path"><span class="dashboard-shortcut__index">03</span><strong>Learning path</strong><span>Planned next steps</span><b aria-hidden="true">↗</b></a>
+          <a class="dashboard-shortcut" href="#/write-ups"><span class="dashboard-shortcut__index">04</span><strong>Write-ups</strong><span>Technical notes</span><b aria-hidden="true">↗</b></a>
+          <a class="dashboard-shortcut" href="#/certificates"><span class="dashboard-shortcut__index">05</span><strong>Certificates</strong><span>Credential status</span><b aria-hidden="true">↗</b></a>
+        </nav>
+      </section>
       <section class="hud-panel dashboard-log-panel" aria-labelledby="learning-log-title">
         <div class="hud-panel-heading dashboard-log-heading">
           <div><p class="view-eyebrow">PERSONAL RECORD / 03</p><h2 id="learning-log-title">Learning Log</h2><p class="dashboard-log-intro">A short list of current study topics and future plans—not a record of earned credentials or completed labs.</p></div>
@@ -147,12 +120,8 @@ export function mount(root, { motion = null } = {}) {
   function onInput(event) { if (event.target.matches?.("[data-learning-log-search]")) filterRows(); }
   function onChange(event) {
     if (event.target.matches?.("[data-learning-log-filter]")) filterRows();
-    if (event.target.matches?.("[data-chart-period]")) {
-      const label = root.querySelector(`[data-period-label="${event.target.dataset.chartPeriod}"]`);
-      if (label) label.textContent = `No data yet — I'm just starting · ${event.target.value}`;
-    }
   }
-  root.addEventListener("input", onInput);
+    root.addEventListener("input", onInput);
   root.addEventListener("change", onChange);
   filterRows();
   return () => {

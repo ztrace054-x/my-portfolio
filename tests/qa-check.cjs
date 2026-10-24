@@ -107,7 +107,10 @@ for (const match of html.matchAll(/\b(?:aria-labelledby|aria-describedby|aria-co
   for (const id of match[1].trim().split(/\s+/)) assert(idSet.has(id), 'ARIA/label reference points to missing ID: ' + id);
 }
 const headingLevels = [...html.matchAll(/<h([1-6])\b[^>]*>/gi)].map(match => Number(match[1]));
-assert.equal(headingLevels.filter(level => level === 1).length, 1, 'Page should have one primary h1');
+assert.equal(headingLevels.filter(level => level === 1).length, 2, 'Intro and fallback page each need one primary h1 in mutually exclusive states');
+assert.match(html, /<h1 class="phase2-gate__manifesto">Security is a practice\.<\/h1>/, 'Intro headline must be the primary heading while the intro is visible');
+assert.match(html, /<h1 id="hero-title"/, 'Fallback hero must retain its own primary heading');
+assert.match(html, /html\.intro-pending #page \{ visibility: hidden !important; \}/, 'Intro and fallback page must not be simultaneously visible');
 for (let i = 1; i < headingLevels.length; i++) {
   assert(headingLevels[i] <= headingLevels[i - 1] + 1, 'Heading level skipped from h' + headingLevels[i - 1] + ' to h' + headingLevels[i]);
 }
