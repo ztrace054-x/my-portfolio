@@ -53,3 +53,29 @@ jobs:
         run: node tests/qa-check.cjs
       - name: Run interaction and accessibility-state tests
         run: node --experimental-vm-modules tests/interaction-check.cjs
+
+
+  visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout redesign source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run local rendered visual QA
+        run: node tests/visual-qa.cjs
+      - name: Upload visual QA screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ztrace-visual-qa
+          path: artifacts/visual-qa/
+          if-no-files-found: warn
+          retention-days: 7
