@@ -1,67 +1,116 @@
-# Phase 10 — Final QA and Release Readiness
+# Phase 10 — Final Visual QA and Release Readiness
 
-**Repository:** `ztrace054-x/my-portfolio`  
-**Review branch:** `redesign/ztrace-premium-portfolio`  
-**Base branch:** `main`  
-**Implementation commit verified by CI:** `a2723c194f433135754e827a16dce1c26a0b6e48`  
-**CI run:** [Run 40085479363 — successful](https://github.com/ztrace054-x/my-portfolio/actions/runs/40085479363)  
+**Repository:** ztrace054-x/my-portfolio  
+**Review branch:** redesign/ztrace-premium-portfolio  
+**Base branch:** main  
+**Source commit tested:** 2fbae987978372e5e1e7220ccba1948ea7ca5284  
+**Final source CI:** [Run 40089944033 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033)  
+**PR validation:** [Run 40089948006 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089948006)  
+**Visual evidence:** [Download 97 Chromium screenshots and the JSON report](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033/artifacts/12558711800)  
+**Lighthouse reports:** [Download desktop and mobile HTML/JSON reports](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033/artifacts/12558731879)  
 **Production deployment:** Not performed  
 **Merge:** Not performed
 
-## Phase status
+## Final status
 
-| Phase | Status | Result |
-| --- | --- | --- |
-| 1 — Intro and hero | Implemented | Added the “Security is a practice.” headline, illustrative network globe, terminal-inspired focus panel, clear workspace entry, deep-link preservation, reduced-motion styling, and JavaScript/no-script fallbacks. The intro is explicitly not authentication. |
-| 2 — Workspace shell and navigation | Implemented | Applied the mint-on-black shell styling and changed simulated unread notifications into clearly labelled static workspace notes. Removed fabricated unread counts and the nonfunctional “mark as read” action. |
-| 3 — Dashboard overview | Implemented | Removed decorative ghost charts and inert period selectors. Added evidence-based empty states and shortcuts to Projects, Skills, Learning Path, Write-ups, and Certificates. |
-| 4 — Profile and identity | Implemented | Replaced outdated SSC wording with CSE student, aligned the profile terminal and hero headline, and updated title, description, Open Graph, Twitter, and structured-data metadata. |
-| 5 — Projects | Implemented | Added a Projects route, sidebar link, data module, and evidence-led card for the existing portfolio repository. The project remains marked In progress. |
-| 6 — Skills and roadmap | Implemented | Refined skill and roadmap hierarchy so current learning, recorded progress, and planned milestones remain distinct. No unsupported proficiency percentages were added. |
-| 7 — Write-ups | Implemented | Expanded the planned journal template to cover objective, authorization/environment, tools/methodology, technical explanation, evidence/findings, outcome/lessons, and references/status. No fictional write-ups were published. |
-| 8 — Certificates and gallery | Implemented | Changed future credential goals to Planned / Not earned yet and refined the gallery and lightbox presentation while retaining existing keyboard and focus behavior. |
-| 9 — Contact and interaction polish | Implemented | Refined contact styling, stable clipboard feedback space, focus treatment, and minimum touch-target sizing. No fake message-submission flow was added. |
-| 10 — Integrated QA | Automated checks pass; manual review remains | All current repository quality checks passed in CI. A rendered browser review and measured performance run were not available without a staging preview or production deployment. |
+- Automated regression suite: passed.
+- Rendered Playwright QA: passed with 0 recorded issues.
+- Lighthouse reports: generated for desktop and mobile.
+- Release decision: **not yet production-ready** because the mobile Lighthouse performance score is 75 and lab LCP is 4.8 seconds; hosting-level performance and field Core Web Vitals have not been verified.
 
-## Automated verification
+## Actual rendered visual QA
 
-All steps below passed in GitHub Actions on Node.js 20.20.2:
+A local static preview was served on the GitHub Actions runner. Chromium rendered the redesign without deploying it to GitHub Pages.
 
-- JavaScript module syntax checks across `js/`.
+| Viewport | Routed views checked | Result |
+| --- | ---: | --- |
+| Desktop, 1440 × 900 | 11 | Pass |
+| Tablet, 1024 × 768 | 11 | Pass |
+| Mobile, 390 × 844 | 11 | Pass |
+| Narrow mobile, 320 × 700 | 11 | Pass |
+| **Total** | **44 route/viewport checks** | **Pass** |
+
+The run captured 97 actual screenshots, including the intro, intro-ready state, transition, all 11 routes, scroll-bottom states where applicable, mobile drawer state, and reduced-motion screenshots. The screenshots are in the visual evidence artifact linked above.
+
+Checks completed in the rendered browser:
+
+- Intro, network globe, terminal, intro-to-workspace transition, and reduced-motion mode.
+- Sidebar and navigation at all four viewport sizes.
+- All 11 routes: Profile, Dashboard, Projects, Attack Surface, Skill Progress, Learning Path, Write-ups, Automation, Certificates, Gallery, and Contact.
+- Top and bottom scroll states for views with overflowable content.
+- Document and active-view horizontal overflow.
+- Browser JavaScript exceptions and console errors.
+- Failed local requests, HTTP asset errors, and broken images.
+- Image alternative text, route headings, and current navigation state.
+- Mobile drawer open/close and a real click on a route link.
+- Gallery keyboard activation, ArrowRight navigation, Escape close, and focus restoration.
+- Motion toggle and a browser context with prefers-reduced-motion enabled.
+- Mobile intro font sizes, footer clipping, and the visible Send email CTA contrast.
+
+Final visual report: 4 viewport configurations, 44 route checks, 97 screenshots, 0 recorded issues, 0 failed local assets, and 0 horizontal-overflow failures.
+
+## Verified defects found and fixed
+
+1. **Mobile sidebar initially visible / navigation click interception.** A more-specific workspace entrance transform overrode the mobile drawer's off-canvas transform, and the backdrop could cover the sidebar. The redesign branch now uses explicit state selectors and corrected stacking order. The drawer opens on request, receives pointer input, and closes after navigation.
+2. **Contact CTA label invisible.** A generic link-color rule overrode the primary button's dark foreground, making “Send email” blend into its mint background. The primary CTA now uses a dark foreground; measured text contrast is 11.01:1 in Chromium.
+3. **Narrow-mobile intro footer clipped.** The fixed 28px footer row could not contain wrapped text at 320px. The mobile footer now uses an automatic row height, readable 12px HUD text, and bottom spacing. The visual QA test checks for footer overflow.
+4. **Intro skip accessible-name mismatch.** The explicit aria-label did not include the visible “Skip intro” text. It was removed so the button's accessible name is derived from its visible label.
+
+These fixes were committed to the existing redesign branch only. The final visual run on the tested source commit passed.
+
+## Automated regression checks
+
+The passing validation job ran on Node.js 20 and covered:
+
+- JavaScript module syntax.
 - Foundation, required-path, design-token, component, data-integrity, and styleguide checks.
-- Intro markup, startup behavior, reduced-motion rules, and no-auth assertions.
-- Workspace shell and all 11 hash-routed view modules.
-- Profile, dashboard empty states, shortcuts, Learning Log filtering, and cleanup checks.
-- Seven data-driven learning/project views, including Projects and planned certificate/write-up states.
-- Gallery, Contact, clipboard fallback, and motion integration checks.
-- Static SEO, internal-link, accessibility-reference, contrast, and asset checks.
-- Interaction and accessibility-state regression tests.
+- Intro startup, reduced-motion, and no-auth assertions.
+- Workspace shell and all 11 hash-routed views.
+- Profile and Dashboard behavior, empty states, shortcuts, filters, and cleanup.
+- Projects, learning views, planned write-up/certificate states, Gallery, Contact, and motion.
+- Static SEO, internal links, accessibility references, contrast, assets, and interaction-state regressions.
 
-The passing run is available at [GitHub Actions run 40085479363](https://github.com/ztrace054-x/my-portfolio/actions/runs/40085479363).
+Both the push CI and pull-request validation passed on the tested source commit. The PR remains a draft.
 
-## Manual QA and measurement limitations
+## Lighthouse measurements
 
-These checks were **not** performed and must not be treated as passed:
+Lighthouse 12.8.2 ran in GitHub Actions on Ubuntu against the local static preview using HeadlessChrome 155.0.0.0. The desktop report used the desktop preset; the mobile report used Lighthouse's default simulated-mobile configuration. These are **lab measurements**, not field Core Web Vitals.
 
-- Rendered desktop, tablet, and mobile screenshots of the redesign.
-- Manual browser-console review against the redesigned branch.
-- Full keyboard-only and screen-reader review in a rendered browser.
-- Lighthouse or field performance measurement; no LCP, INP, or CLS values were recorded.
-- Live-site verification of the redesign, because production was intentionally not changed.
+| Metric | Desktop | Mobile |
+| --- | ---: | ---: |
+| Performance score | 97 | 75 |
+| Accessibility score | 100 | 100 |
+| Best Practices score | 100 | 100 |
+| SEO score | 100 | 100 |
+| First Contentful Paint (FCP) | 0.8 s | 3.6 s |
+| Largest Contentful Paint (LCP) | 1.1 s | 4.8 s |
+| Cumulative Layout Shift (CLS) | 0.01 | 0 |
+| Total Blocking Time (TBT) | 30 ms | 0 ms |
+| Speed Index | 0.9 s | 3.6 s |
+| Mobile text-size audit | N/A | 100% legible text |
+| Color-contrast audit | Pass | Pass |
 
-The automated suite checks responsive CSS rules, accessible references, reduced-motion behavior, focus/keyboard interactions, and data integrity. Those checks are useful but do not replace rendered visual QA. Before merging or deploying, review the draft PR and use a safe preview environment to inspect the actual layout at desktop and mobile sizes.
+### Performance limitations
 
-## Data-integrity and safety review
+- The mobile performance score of 75 and LCP of 4.8 seconds are a **release caution**, not a passing performance target.
+- The local Python static server does not provide production-like text compression or long-lived cache headers. Lighthouse therefore reports compression and cache-lifetime opportunities that are not a direct measurement of GitHub Pages CDN behavior.
+- Lighthouse also reports render-blocking CSS, unused CSS, and image sizing/format optimization opportunities. These remain performance work to consider before production release.
+- No real-user field data, INP, or field Core Web Vitals were collected. No Lighthouse result from the live GitHub Pages site was claimed.
+- No browser other than Chromium and no physical device were tested.
 
-- The intro is a simulated visitor experience, not a security boundary or authentication service.
-- The network globe and terminal are illustrative; no live scanner or security telemetry is claimed.
-- Dashboard activity and progress remain empty until real records exist.
-- The Projects page lists the existing portfolio as In progress, with real repository and public-site links.
-- Planned credentials are not presented as earned.
-- The Contact section uses direct links and does not claim to submit form data.
+## Truthfulness and release safety
+
+- The intro is a simulated visitor experience, not authentication.
+- The globe and terminal are illustrative; no live scanner or security telemetry is claimed.
+- Dashboard metrics remain empty until real evidence exists.
+- The Projects page lists the actual portfolio repository as In progress.
+- Planned credentials are not represented as earned.
+- Contact actions are direct links; no backend form submission is claimed.
+
+The redesign remains on redesign/ztrace-premium-portfolio. The default branch main was not modified directly, PR #16 was not merged, and GitHub Pages or production settings were not changed. No production deployment was performed.
 
 ## Release recommendation
 
-**Ready for owner review in a draft pull request; not approved for deployment.**
+**Visual and functional checks passed in headless Chromium at the four requested viewports. Automated regressions and Lighthouse accessibility, best-practices, and SEO categories passed.**
 
-The redesign branch is ahead of `main`; the default branch has not been modified directly. No merge or production deployment was performed. The owner retains the final approval decision.
+**Do not approve production release yet.** Review the mobile performance result (75 / 4.8s LCP), assess CSS delivery and image optimization, and measure performance in a safe hosting-equivalent preview before merging or deploying. A live-site comparison and field Core Web Vitals remain unverified.
