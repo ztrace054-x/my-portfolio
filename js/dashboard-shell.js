@@ -4,6 +4,7 @@ import { MotionController } from "./motion.js?v=20261016.1";
 import { viewRegistry } from "./views/index.js?v=20261020.2";
 import * as profileView from "./views/profile.js?v=20261020.1";
 import * as dashboardView from "./views/dashboard.js?v=20261024.2";
+import * as projectsView from "./views/projects.js?v=20261020.2";
 import * as attackSurfaceView from "./views/attack-surface.js?v=20261020.2";
 import * as skillProgressView from "./views/skill-progress.js?v=20261020.2";
 import * as learningPathView from "./views/learning-path.js?v=20261020.2";
@@ -17,6 +18,7 @@ import { initWorkspaceMotion } from "./workspace-motion.js?v=20261020.3";
 const ROUTES = Object.freeze({
   profile: profileView,
   dashboard: dashboardView,
+  projects: projectsView,
   "attack-surface": attackSurfaceView,
   "skill-progress": skillProgressView,
   "learning-path": learningPathView,
