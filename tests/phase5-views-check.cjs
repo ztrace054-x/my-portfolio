@@ -12,6 +12,11 @@ async function load(file,context,cache=new Map()){const normalized=path.posix.no
 async function run(){
  const context=vm.createContext({console,EventTarget,Event,URL,URLSearchParams,setTimeout,clearTimeout,performance}),cache=new Map(),ids=["projects","attack-surface","skill-progress","learning-path","write-ups","automation","certificates"],rendered={};
  for(const id of ids){const m=await load("js/views/"+id+".js",context,cache);assert.equal(typeof m.namespace.render,"function");assert.equal(typeof m.namespace.mount,"function");rendered[id]=m.namespace.render();assert.ok(rendered[id].includes('id="view-heading"'));assert.ok(rendered[id].includes("phase5-view"));assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(read("js/views/"+id+".js")));}
+ const projectData=(await load("js/data/projects.js",context,cache)).namespace.projects;
+ assert.equal(projectData.length,1,"Only repository-supported projects should be listed.");
+ assert.equal(projectData[0].status,"In progress","The portfolio project must not be presented as completed.");
+ for(const phrase of ["ZTRACE Cybersecurity Learning Portfolio","Source repository","Public website","No backend","No projects or results are invented"]) assert.ok(rendered.projects.includes(phrase),"Project view is missing evidence or truthful scope copy: "+phrase);
+ assert.ok(rendered.projects.includes("https://github.com/ztrace054-x/my-portfolio"),"Project source link must point to the actual repository.");
  const attack=(await load("js/data/attack-surface.js",context,cache)).namespace.attackSurface;
  assert.deepEqual(Array.from(attack.stats,x=>[x.label,x.value]),[["Authorized Labs",0],["Scopes Reviewed",0],["Targets In Scope",0]]);
  for(const phrase of ["Attack Surface — Authorized Labs","Authorized practice only","SIMULATED","NO DATA","Scope","Permission","Ethics"])assert.ok(rendered["attack-surface"].includes(phrase),"Missing attack surface content: "+phrase);
