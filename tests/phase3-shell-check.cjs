@@ -146,7 +146,7 @@ async function checkViews() {
   const context = vm.createContext({ console, EventTarget, Event, URL, URLSearchParams, setTimeout, clearTimeout, performance });
   const cache = new Map();
   const viewFiles = [
-    "profile", "dashboard", "attack-surface", "skill-progress", "learning-path",
+    "profile", "dashboard", "projects", "attack-surface", "skill-progress", "learning-path",
     "write-ups", "automation", "certificates", "gallery", "contact"
   ];
   const rendered = {};
@@ -159,7 +159,8 @@ async function checkViews() {
   assert.ok(rendered.profile.includes("Learn responsibly. Practice with permission."), "Profile must preserve the existing ethical-practice principle.");
   assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
   assert.equal((rendered.dashboard.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard should display five honest zero-state metrics.");
-  assert.ok(rendered.dashboard.includes("No data yet — I'm just starting"), "Dashboard must not invent recent activity.");
+  assert.ok(rendered.dashboard.includes("NO ACTIVITY RECORDED") && rendered.dashboard.includes("NO VERIFIED MILESTONES"), "Dashboard must show evidence-based empty states.");
+  assert.ok(!rendered.dashboard.includes("chart-pulse") && !rendered.dashboard.includes("chart-ghost-bar"), "Dashboard must not render fabricated chart activity.");
   assert.ok(rendered["attack-surface"].includes("Authorized practice only"), "Attack Surface must show its authorization banner.");
   assert.ok(rendered["attack-surface"].includes("NO DATA"), "Attack Surface radar must remain empty.");
   assert.ok(rendered.certificates.includes("Not earned yet"), "Certificate cards must remain unearned.");
