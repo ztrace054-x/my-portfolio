@@ -61,6 +61,19 @@ function issue(type, detail, extra = {}) {
   report.issues.push({ type, detail, viewport: currentViewport, route: currentRoute, ...extra });
 }
 
+function rgbLuminance(color) {
+  const values = color.match(/[\\d.]+/g);
+  if (!values || values.length < 3) return null;
+  const channels = values.slice(0, 3).map(value => Number(value) / 255).map(value =>
+    value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2));
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+function contrastRatio(foreground, background) {
+  const fg = rgbLuminance(foreground), bg = rgbLuminance(background);
+  if (fg === null || bg === null) return null;
+  return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+}
+
 const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, ORIGIN).pathname); }
@@ -295,7 +308,26 @@ async function main() {
         }
         const layout = await collectLayout(page, expectedHeading);
         const title = (await page.locator("[data-view-root] h1").first().innerText()).trim();
-        viewportRecord.routes.push({ id: route, expectedHeading, actualHeading: title, layout, images });
+        let contactCTA = null;
+        if (route === "contact") {
+          contactCTA = await page.locator("[data-send-email]").evaluate(el => {
+            const style = getComputedStyle(el);
+            return {
+              text: el.innerText.trim(),
+              color: style.color,
+              background: style.backgroundColor,
+              opacity: style.opacity,
+              visibility: style.visibility,
+              fontSize: style.fontSize
+            };
+          });
+          const ratio = contrastRatio(contactCTA.color, contactCTA.background);
+          contactCTA.contrastRatio = ratio;
+          if (!contactCTA.text) issue("contact-cta-label-missing", "Send email link has no visible label.", contactCTA);
+          if (contactCTA.visibility !== "visible" || Number(contactCTA.opacity) < 0.95) issue("contact-cta-not-visible", "Send email link is hidden or faded in the settled view.", contactCTA);
+          if (ratio !== null && ratio < 4.5) issue("contact-cta-low-contrast", "Send email label does not meet 4.5:1 text contrast.", contactCTA);
+        }
+        viewportRecord.routes.push({ id: route, expectedHeading, actualHeading: title, layout, images, contactCTA });
         await page.locator(".app-view-stage").evaluate(el => { el.scrollTop = 0; });
         await screenshot(page, "route-" + route + "-top.png");
         if (LONG_ROUTES.has(route)) {
