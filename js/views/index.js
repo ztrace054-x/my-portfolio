@@ -2,6 +2,7 @@
 export const viewRegistry = Object.freeze([
   { id: "profile", label: "Profile", phase: 4, built: true },
   { id: "dashboard", label: "Dashboard", phase: 4, built: true },
+  { id: "projects", label: "Projects", phase: 5, built: true },
   { id: "attack-surface", label: "Attack Surface", phase: 5, built: true },
   { id: "skill-progress", label: "Skill Progress", phase: 5, built: true },
   { id: "learning-path", label: "Learning Path", phase: 5, built: true },
