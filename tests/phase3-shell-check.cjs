@@ -7,7 +7,8 @@ const root = path.resolve(__dirname, "..");
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 const required = [
   "index.html", "css/dashboard-shell.css", "js/dashboard-shell.js", "js/router.js",
-  "js/views/index.js", "js/views/profile.js", "js/views/dashboard.js",
+  "js/views/index.js", "js/views/profile.js", "js/views/dashboard.js", "js/views/projects.js",
+  "js/data/projects.js",
   "js/views/attack-surface.js", "js/views/skill-progress.js", "js/views/learning-path.js",
   "js/views/write-ups.js", "js/views/automation.js", "js/views/certificates.js",
   "js/views/gallery.js", "js/views/contact.js", "tests/phase3-shell-check.cjs"
@@ -23,7 +24,7 @@ const navigation = read("js/navigation.js");
 const registrySource = read("js/views/index.js");
 
 for (const route of [
-  "profile", "dashboard", "attack-surface", "skill-progress", "learning-path",
+  "profile", "dashboard", "projects", "attack-surface", "skill-progress", "learning-path",
   "write-ups", "automation", "certificates", "gallery", "contact"
 ]) {
   assert.ok(html.includes('href="#/' + route + '"'), "Missing sidebar route: " + route);
@@ -167,7 +168,7 @@ async function checkViews() {
 (async () => {
   await checkRouter();
   await checkViews();
-  console.log("Phase 3 shell checks passed: 10 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, workspace notes, and no network calls.");
+  console.log("Phase 3 shell checks passed: 11 route modules, canonical hash routing, zero-state data, responsive shell rules, settings hooks, workspace notes, and no network calls.");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
