@@ -126,3 +126,27 @@
 @media (max-width: 1100px) { .dashboard-shortcuts__grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media (max-width: 650px) { .dashboard-chart-grid { grid-template-columns: minmax(0,1fr); } .dashboard-shortcuts__grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .dashboard-shortcut { min-height: 116px; } }
 @media (max-width: 360px) { .dashboard-shortcuts__grid { grid-template-columns: minmax(0,1fr); } .dashboard-shortcut { min-height: auto; } }
+
+
+/* Phase 5 — project storytelling with explicit status and evidence. */
+.project-card-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.project-card { display: flex; flex-direction: column; min-width: 0; padding: clamp(18px,2.4vw,28px); }
+.project-card__header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.project-card__index, .project-card__label { color: #85e9ad; font: 9px/1.4 var(--hud-mono); letter-spacing: .12em; text-transform: uppercase; }
+.project-card__type { margin: 0 0 7px; color: #8da9a0; font: 10px/1.5 var(--hud-mono); text-transform: uppercase; letter-spacing: .08em; }
+.project-card h2, .project-evidence-note h2, .project-empty-state h2 { margin: 0; color: #eaf5f2; font: 600 clamp(20px,2.3vw,28px)/1.2 var(--hud-display); letter-spacing: -.045em; }
+.project-card__summary { margin: 13px 0 20px; color: #9fb4ad; font-size: 13px; line-height: 1.75; }
+.project-card__section { margin-top: auto; }
+.project-card__label { margin: 0 0 10px; }
+.project-card__stack { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.project-card__stack li { padding: 6px 9px; border: 1px solid rgba(133,233,173,.16); border-radius: 5px; background: rgba(133,233,173,.045); color: #b7ffd0; font: 10px/1.3 var(--hud-mono); }
+.project-card__scope { margin: 18px 0; padding: 12px 13px; border-left: 2px solid rgba(133,233,173,.48); background: rgba(133,233,173,.035); color: #9fb4ad; font-size: 11px; line-height: 1.65; }
+.project-card__scope strong { display: block; margin-bottom: 3px; color: #eaf5f2; font-size: 11px; }
+.project-card__links { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 16px; border-top: 1px solid rgba(133,233,173,.12); }
+.project-card__links a, .project-evidence-note a, .project-empty-state a { display: inline-flex; align-items: center; gap: 8px; width: fit-content; color: #b7ffd0; font-size: 12px; font-weight: 600; text-decoration: none; }
+.project-card__links a:hover, .project-evidence-note a:hover, .project-empty-state a:hover { color: #35f2e0; text-decoration: underline; text-underline-offset: 4px; }
+.project-evidence-note, .project-empty-state { margin-top: 20px; padding: clamp(20px,3vw,30px); }
+.project-evidence-note h2, .project-empty-state h2 { margin: 6px 0 10px; font-size: clamp(20px,2.4vw,26px); }
+.project-evidence-note p:not(.view-eyebrow), .project-empty-state p:not(.view-eyebrow) { max-width: 72ch; color: #9fb4ad; font-size: 13px; line-height: 1.75; }
+.project-evidence-note a, .project-empty-state a { margin-top: 8px; }
+@media (max-width: 760px) { .project-card-grid { grid-template-columns: minmax(0,1fr); } }
