@@ -170,6 +170,37 @@ async function enterWorkspace(page) {
   await screenshot(page, "00-intro.png");
   const introHeading = await page.locator("#phase2-gate h1").first().innerText().catch(() => "");
   if (!introHeading.trim()) issue("intro-heading-missing", "Intro has no visible H1.");
+  const skipName = await page.locator("[data-p2-skip]").evaluate(el => ({
+    text: el.innerText.replace(/\\s+/g, " ").trim(),
+    ariaLabel: el.getAttribute("aria-label")
+  }));
+  if (skipName.ariaLabel && !skipName.text.toLowerCase().includes(skipName.ariaLabel.toLowerCase())) {
+    issue("intro-skip-name-mismatch", "Skip button accessible name does not include its visible text.", skipName);
+  }
+  const tickerMetrics = await page.locator(".phase2-gate__ticker").evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    const children = Array.from(el.children).filter(child => getComputedStyle(child).display !== "none").map(child => {
+      const childRect = child.getBoundingClientRect();
+      return { text: child.innerText.trim(), top: childRect.top, bottom: childRect.bottom, left: childRect.left, right: childRect.right };
+    });
+    return { top: rect.top, bottom: rect.bottom, clientHeight: el.clientHeight, scrollHeight: el.scrollHeight, viewportHeight: innerHeight, viewportWidth: innerWidth, children };
+  });
+  if (tickerMetrics.scrollHeight > tickerMetrics.clientHeight + 2
+      || tickerMetrics.children.some(child => child.bottom > tickerMetrics.bottom + 1 || child.bottom > tickerMetrics.viewportHeight + 1 || child.left < -1 || child.right > tickerMetrics.viewportWidth + 1)) {
+    issue("intro-footer-clipped", "Intro footer text overflows its footer or viewport.", tickerMetrics);
+  }
+  if (page.viewportSize().width <= 560) {
+    const smallText = await page.evaluate(() => [
+      ".phase2-gate__topbar", ".phase2-gate__ticker", ".phase2-gate__center-caption",
+      ".phase2-gate__terminal-top", ".phase2-gate__terminal-command", ".phase2-gate__terminal pre"
+    ].map(selector => {
+      const el = document.querySelector(selector);
+      return { selector, fontSize: el ? parseFloat(getComputedStyle(el).fontSize) : null };
+    }));
+    for (const item of smallText) if (item.fontSize !== null && item.fontSize < 12) {
+      issue("mobile-intro-small-text", "Intro text is below 12px on a mobile viewport.", item);
+    }
+  }
   const globeVisible = await page.locator("#phase2-gate .phase2-gate__globe, #phase2-gate .phase2-gate__visual, #phase2-gate svg").first().isVisible().catch(() => false);
   if (!globeVisible) issue("intro-globe-not-visible", "No visible SVG/globe element was found in the intro.");
   await page.locator("[data-p2-skip]").click();
