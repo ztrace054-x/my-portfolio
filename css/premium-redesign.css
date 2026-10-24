@@ -91,7 +91,7 @@
   .phase2-gate__topbar, .phase2-gate__ticker { font-size: 12px; line-height: 1.35; letter-spacing: .03em; gap: 8px; }
   .phase2-gate__topbar > span:nth-child(2), .phase2-gate__ticker span:first-child, .phase2-gate__ticker span:last-child { display: none; }
   .phase2-gate__clock { font-size: 12px; }
-  .phase2-gate__ticker { padding: 8px 0 0; }
+  .phase2-gate__ticker { padding: 8px 0 6px; }
   .phase2-gate__ticker span:nth-child(2) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; }
   .phase2-gate__emblem { width: min(44vw,190px); max-height: 20vh; }
   .phase2-gate__manifesto { font-size: clamp(1.3rem,6vw,1.8rem); }
