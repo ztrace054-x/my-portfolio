@@ -4,10 +4,10 @@
 **Review branch:** `redesign/ztrace-premium-portfolio`  
 **Base branch:** `main`  
 **Exact application source commit rendered and performance-tested:** `aa74f412fbdde8d684d98eeb4946a53448c9da51`  
-**Successful push workflow for that exact commit:** [Run 40095138101](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258)  
-**Successful pull-request workflow:** [Run 40095141609](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094269087)  
-**Rendered screenshots and JSON:** [Download visual QA artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12560312485)  
-**Lighthouse HTML/JSON reports:** [Download performance artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258/artifacts/12560372297)  
+**Successful push workflow for that exact commit:** [Run 40095138101](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095138101)  
+**Successful pull-request workflow:** [Run 40095141609](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095141609)  
+**Rendered screenshots and JSON:** [Download visual QA artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095138101/artifacts/12560312485)  
+**Lighthouse HTML/JSON reports:** [Download performance artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095138101/artifacts/12560372297)  
 **Production deployment:** Not performed  
 **PR #16:** Open, draft, not merged
 
@@ -21,7 +21,7 @@
 
 ## Exact commit and evidence provenance
 
-The branch push workflow `40094265258` checked out and tested the exact branch commit `dd14c746351ab74ba34992a0060303f1c5c20c2a`. The visual artifact's `visual-qa-report.json` independently records that exact `head_sha`. All three jobs—`validate`, `visual-qa`, and `performance-qa`—completed successfully.
+The branch push workflow `40095138101` checked out and tested the exact branch commit `aa74f412fbdde8d684d98eeb4946a53448c9da51`. The visual artifact's `visual-qa-report.json` independently records that exact `head_sha`. All three jobs—`validate`, `visual-qa`, and `performance-qa`—completed successfully.
 
 The pull-request workflow `40095141609` also passed all three jobs. Because GitHub's `pull_request` event checks out a synthetic merge commit, the push workflow and its artifacts are the authoritative evidence for the exact branch-head commit.
 
@@ -49,17 +49,17 @@ The browser checks cover the intro and network globe, terminal visual, intro-to-
 4. **Intro skip-button accessible name.** Removed an aria-label that did not include the visible “Skip intro” text.
 5. **Gallery portrait underexposure.** Manual screenshot review found that the second portrait was almost entirely dark despite loading. A targeted brightness correction was committed; subsequent rendered evidence showed it visibly rendered.
 
-No additional app-code change was made for performance after commit `dd14c746351ab74ba34992a0060303f1c5c20c2a`. The repeated Lighthouse results improved slightly, but that variation alone is not evidence of a code-level optimization.
+No additional app-code change was made for performance after commit `aa74f412fbdde8d684d98eeb4946a53448c9da51`. The repeated Lighthouse results improved slightly, but that variation alone is not evidence of a code-level optimization.
 
 ## Automated checks and actual results
 
-The latest successful branch push workflow [40094265258](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094265258) completed all three jobs successfully:
+The latest successful branch push workflow [40095138101](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095138101) completed all three jobs successfully:
 
 - **`validate`:** JavaScript module syntax, foundation/data/design tokens, intro gate, workspace shell and routing, Profile/Dashboard, remaining views, Gallery/Contact/motion, SEO, internal links, accessibility references, contrast, assets, and interaction-state regression checks.
 - **`visual-qa`:** rendered Playwright checks at all four viewports; 97 screenshots and a JSON report uploaded.
 - **`performance-qa`:** desktop and simulated-mobile Lighthouse runs against the local static preview; HTML and JSON reports uploaded.
 
-The latest pull-request workflow [40094269087](https://github.com/ztrace054-x/my-portfolio/actions/runs/40094269087) also completed all three jobs successfully.
+The latest pull-request workflow [40095141609](https://github.com/ztrace054-x/my-portfolio/actions/runs/40095141609) also completed all three jobs successfully.
 
 ## Latest Lighthouse measurements
 
