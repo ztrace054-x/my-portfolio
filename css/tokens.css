@@ -183,21 +183,21 @@
 
 /* SAAD.ztrace_ HUD namespace — additive so the current portfolio remains visually stable. */
 :root {
-  --hud-bg: #03090b;
-  --hud-bg-soft: #061215;
-  --hud-panel: rgba(8, 30, 32, 0.72);
-  --hud-panel-solid: #081e20;
-  --hud-panel-raised: rgba(11, 40, 42, 0.86);
-  --hud-line: #1b6f6b;
-  --hud-line-soft: rgba(27, 111, 107, 0.34);
-  --hud-cyan: #35f2e0;
-  --hud-cyan-2: #19b8d6;
-  --hud-text: #bfeee9;
-  --hud-muted: #6f9c98;
-  --hud-amber: #ffb347;
-  --hud-danger: #ff5d5d;
-  --hud-display: "Orbitron", "Space Grotesk", sans-serif;
-  --hud-body: "Rajdhani", "Space Grotesk", sans-serif;
+  --hud-bg: #05090c;
+  --hud-bg-soft: #0b1418;
+  --hud-panel: rgba(11, 20, 24, 0.9);
+  --hud-panel-solid: #0b1418;
+  --hud-panel-raised: #101d21;
+  --hud-line: #477c5c;
+  --hud-line-soft: rgba(133, 233, 173, 0.14);
+  --hud-cyan: #85e9ad;
+  --hud-cyan-2: #35f2e0;
+  --hud-text: #eaf5f2;
+  --hud-muted: #8da9a0;
+  --hud-amber: #f2cc85;
+  --hud-danger: #ff737d;
+  --hud-display: "Space Grotesk", Arial, sans-serif;
+  --hud-body: "Space Grotesk", Arial, sans-serif;
   --hud-mono: "Share Tech Mono", "JetBrains Mono", monospace;
   --hud-grid-size: 28px;
   --hud-chamfer: 12px;
