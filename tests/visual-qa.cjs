@@ -213,7 +213,12 @@ async function checkMobileNavigation(page) {
   if (!initiallyOpen && initial && initial.x + initial.width > 1) {
     issue("mobile-sidebar-visible-by-default", "The sidebar occupies the mobile viewport before the menu is opened.", initial);
   }
-  await toggle.click();
+  try {
+    await toggle.click({ timeout: 5000 });
+  } catch (error) {
+    issue("mobile-menu-toggle-unusable", "The mobile menu toggle could not receive a real click: " + error.message);
+    return;
+  }
   const expanded = await toggle.getAttribute("aria-expanded");
   if (expanded !== "true") issue("mobile-menu-did-not-open", "Expected aria-expanded=true, got " + expanded + ".");
   const layers = await page.evaluate(() => ({
