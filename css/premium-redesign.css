@@ -181,3 +181,24 @@
   .phase5-skill-heading { flex-wrap: wrap; }
   .phase5-timeline-card { padding: 17px; }
 }
+
+
+/* Phase 7 — readable technical notes and an honest planned-journal state. */
+.phase5-writeups .phase5-empty-state { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 18px; padding: clamp(20px,3vw,30px); border-color: rgba(133,233,173,.18); background: linear-gradient(110deg,rgba(133,233,173,.045),transparent 65%),rgba(11,20,24,.68); }
+.phase5-empty-icon { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(133,233,173,.2); border-radius: 9px; color: #85e9ad; font: 24px/1 var(--hud-mono); }
+.phase5-empty-state h2 { margin: 5px 0 8px; color: #eaf5f2; font: 600 clamp(20px,2.4vw,27px)/1.2 var(--hud-display); letter-spacing: -.04em; }
+.phase5-empty-state p:not(.view-eyebrow) { max-width: 70ch; margin: 0; color: #9fb4ad; font-size: 13px; line-height: 1.75; }
+.phase5-journal-plan { margin-top: 26px; }
+.phase5-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
+.phase5-section-heading h2 { margin: 5px 0 7px; color: #eaf5f2; font: 600 clamp(21px,2.5vw,28px)/1.2 var(--hud-display); letter-spacing: -.045em; }
+.phase5-section-heading p:not(.view-eyebrow) { max-width: 72ch; margin: 0; color: #9fb4ad; font-size: 13px; line-height: 1.7; }
+.phase5-journal-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.phase5-journal-section { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 13px; padding: 18px; border: 1px solid rgba(133,233,173,.13); border-radius: 10px; background: rgba(11,20,24,.55); }
+.phase5-journal-index { color: #85e9ad; font: 10px/1.4 var(--hud-mono); }
+.phase5-journal-section h3 { margin: 0 0 6px; color: #eaf5f2; font: 600 14px/1.4 var(--hud-display); }
+.phase5-journal-section p { margin: 0; color: #9fb4ad; font-size: 12px; line-height: 1.7; }
+@media (max-width: 680px) {
+  .phase5-writeups .phase5-empty-state { grid-template-columns: minmax(0,1fr); }
+  .phase5-section-heading { align-items: flex-start; flex-direction: column; }
+  .phase5-journal-grid { grid-template-columns: minmax(0,1fr); }
+}
