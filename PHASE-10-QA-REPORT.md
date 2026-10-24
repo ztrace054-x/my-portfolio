@@ -107,4 +107,4 @@ At the time of the tested application-source commit, branch `redesign/ztrace-pre
 
 **The exact application-source commit `aa74f412fbdde8d684d98eeb4946a53448c9da51` passed validation, rendered Chromium QA, and Lighthouse performance QA.** The Gallery defect is fixed, and all 44 route/viewport checks passed.
 
-**Do not approve production release yet.** Mobile lab LCP is 4.2 seconds; production-hosting behavior and field Core Web Vitals remain unverified; no public preview host is currently connected. Keep PR #16 as a draft until those limitations are accepted or addressed.
+**Do not approve production release yet.** Mobile lab LCP was 4.7 seconds in the latest run; production-hosting behavior and field Core Web Vitals remain unverified; no public preview host is currently connected. Keep PR #16 as a draft until those limitations are accepted or addressed.
