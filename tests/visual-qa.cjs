@@ -62,7 +62,7 @@ function issue(type, detail, extra = {}) {
 }
 
 function rgbLuminance(color) {
-  const values = color.match(/[\\d.]+/g);
+  const values = color.match(/[\d.]+/g);
   if (!values || values.length < 3) return null;
   const channels = values.slice(0, 3).map(value => Number(value) / 255).map(value =>
     value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2));
