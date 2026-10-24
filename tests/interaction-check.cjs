@@ -202,7 +202,7 @@ async function run() {
     assert.equal(f.counter.textContent, '000');
     f.loginButton.emit('click');
     assert(f.loginButton.disabled);
-    assert.equal(f.loginLabel.textContent, 'ACCESS GRANTED');
+    assert.equal(f.loginLabel.textContent, 'OPENING WORKSPACE');
     f.advance(1000);
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
@@ -224,7 +224,7 @@ async function run() {
     assert.equal(f.doc.activeElement, f.skip);
     f.doc.emit('keydown', { key: 'Enter' });
     assert(f.root.classList.contains('is-transitioning'));
-    assert.equal(f.loginLabel.textContent, 'ACCESS GRANTED');
+    assert.equal(f.loginLabel.textContent, 'OPENING WORKSPACE');
     f.advance(1000);
     await controller.completed;
     assert(f.root.hidden && f.context.location.hash === '#/profile');
@@ -367,7 +367,7 @@ async function run() {
     assert.equal(timeline.style['--journey-progress'],'100%');
     controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
   }
-  console.log(`PASS: ${checks} interaction checks (Phase 2 boot/login/keyboard/replay/session/reduced-motion/storage/visibility plus timeline, terminal, clipboard, gallery, and navigation).`);
+  console.log(`PASS: ${checks} interaction checks (Phase 2 boot/entry/keyboard/replay/session/reduced-motion/storage/visibility plus timeline, terminal, clipboard, gallery, and navigation).`);
 }
 // A stalled promise must fail, rather than letting Node exit with a misleading zero code.
 const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);
