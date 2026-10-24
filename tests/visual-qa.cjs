@@ -17,7 +17,7 @@ const ROUTES = [
   ["profile", "Profile"],
   ["dashboard", "Dashboard"],
   ["projects", "Projects"],
-  ["attack-surface", "Attack Surface"],
+  ["attack-surface", "Attack Surface — Authorized Labs"],
   ["skill-progress", "Skill Progress"],
   ["learning-path", "Learning Path"],
   ["write-ups", "Write-ups"],
@@ -190,17 +190,37 @@ async function checkGalleryKeyboard(page) {
 async function checkMobileNavigation(page) {
   currentRoute = "mobile-navigation";
   const toggle = page.locator("[data-sidebar-toggle]");
+  const sidebar = page.locator("[data-app-sidebar]");
   if (!(await toggle.isVisible().catch(() => false))) {
     issue("mobile-menu-toggle-missing", "Mobile workspace navigation toggle is not visible.");
     return;
   }
+  const initial = await sidebar.boundingBox();
+  const initiallyOpen = await page.locator("#app-shell").evaluate(el => el.classList.contains("is-sidebar-open"));
+  if (!initiallyOpen && initial && initial.x + initial.width > 1) {
+    issue("mobile-sidebar-visible-by-default", "The sidebar occupies the mobile viewport before the menu is opened.", initial);
+  }
   await toggle.click();
   const expanded = await toggle.getAttribute("aria-expanded");
   if (expanded !== "true") issue("mobile-menu-did-not-open", "Expected aria-expanded=true, got " + expanded + ".");
+  const layers = await page.evaluate(() => ({
+    sidebarZ: Number.parseInt(getComputedStyle(document.querySelector("[data-app-sidebar")).zIndex, 10) || 0,
+    backdropZ: Number.parseInt(getComputedStyle(document.querySelector("[data-sidebar-backdrop")).zIndex, 10) || 0,
+    sidebarOpen: document.querySelector("#app-shell").classList.contains("is-sidebar-open")
+  }));
+  if (!layers.sidebarOpen || layers.sidebarZ <= layers.backdropZ) {
+    issue("mobile-sidebar-layer-order", "The open sidebar must sit above its click-blocking backdrop.", layers);
+  }
+  await screenshot(page, "03-mobile-drawer-open.png");
   const projectLink = page.locator('[data-nav-item][data-route="projects"]');
-  await projectLink.click();
-  await page.waitForFunction(() => window.location.hash === "#/projects"
-    && document.querySelector('[data-nav-item][data-route="projects"]')?.getAttribute("aria-current") === "page");
+  try {
+    await projectLink.click({ timeout: 5000 });
+    await page.waitForFunction(() => window.location.hash === "#/projects"
+      && document.querySelector('[data-nav-item][data-route="projects"]')?.getAttribute("aria-current") === "page", null, { timeout: 5000 });
+  } catch (error) {
+    issue("mobile-nav-link-unusable", "A real click on the Projects link failed while the drawer was open: " + error.message);
+    return;
+  }
   const closed = await toggle.getAttribute("aria-expanded");
   if (closed !== "false") issue("mobile-menu-did-not-close", "Expected aria-expanded=false after navigation, got " + closed + ".");
 }
@@ -351,9 +371,22 @@ async function main() {
 
 main().catch(error => {
   console.error(error);
+  const fatalText = String(error.stack || error);
+  report.issues.push({ type: "fatal-test-error", detail: fatalText, viewport: currentViewport, route: currentRoute });
+  report.summary = {
+    viewportCount: report.viewports.length,
+    routeChecks: routeCheckCount,
+    screenshots: screenshotCount,
+    issueCount: report.issues.length,
+    issueTypes: report.issues.reduce((counts, item) => {
+      counts[item.type] = (counts[item.type] || 0) + 1;
+      return counts;
+    }, {})
+  };
   try {
     fs.mkdirSync(OUT, { recursive: true });
-    fs.writeFileSync(path.join(OUT, "visual-qa-fatal-error.txt"), String(error.stack || error));
+    fs.writeFileSync(path.join(OUT, "visual-qa-fatal-error.txt"), fatalText);
+    fs.writeFileSync(path.join(OUT, "visual-qa-report.json"), JSON.stringify(report, null, 2) + "\n");
   } catch {}
   process.exitCode = 1;
 });
