@@ -21,7 +21,7 @@ for (const selector of [
 
 assert.ok(!html.includes('id="intro" class="intro"'), "Legacy intro overlay must not run alongside the Phase 2 gate.");
 assert.ok(html.includes("./css/phase-2-gate.css?v=20261024.1"), "Phase 2 stylesheet must be linked.");
-assert.ok(html.includes("./js/main.js?v=20261024.1"), "Main module cache key must be current.");
+assert.ok(html.includes("./js/main.js?v=20261024.2"), "Main module cache key must be current.");
 assert.ok(/root\.classList\.add\("intro-pending"\)/.test(html), "The intro guard must activate in the head before the legacy page can paint.");
 assert.ok(html.includes("html.intro-pending #page { visibility: hidden !important; }"), "Critical CSS must hide the legacy page while the intro initializes.");
 assert.ok(html.includes('<div id="page">'), "Legacy content must remain usable when JavaScript is disabled.");
