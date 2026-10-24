@@ -87,13 +87,24 @@
 @media (max-width: 560px) {
   .app-view-root { padding: 14px 12px 24px; }
   .app-current-view { font-size: 18px; } .app-period { display: none; }
-  .phase2-gate__scene { padding: 12px 12px 10px; grid-template-rows: 36px minmax(0,1fr) 28px; }
-  .phase2-gate__topbar, .phase2-gate__ticker { font-size: 8px; letter-spacing: .07em; gap: 8px; }
-  .phase2-gate__topbar > span:nth-child(2), .phase2-gate__ticker span:first-child { display: none; }
+  .phase2-gate__scene { padding: 12px 12px 10px; grid-template-rows: 36px minmax(0,1fr) auto; }
+  .phase2-gate__topbar, .phase2-gate__ticker { font-size: 12px; line-height: 1.35; letter-spacing: .03em; gap: 8px; }
+  .phase2-gate__topbar > span:nth-child(2), .phase2-gate__ticker span:first-child, .phase2-gate__ticker span:last-child { display: none; }
+  .phase2-gate__clock { font-size: 12px; }
+  .phase2-gate__ticker { padding: 8px 0 0; }
+  .phase2-gate__ticker span:nth-child(2) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; }
   .phase2-gate__emblem { width: min(44vw,190px); max-height: 20vh; }
   .phase2-gate__manifesto { font-size: clamp(1.3rem,6vw,1.8rem); }
-  .phase2-gate__terminal { padding: 10px; } .phase2-gate__login-card { padding: 22px 18px; }
+  .phase2-gate__center-caption { font-size: 12px; line-height: 1.45; letter-spacing: .03em; }
+  .phase2-gate__terminal { padding: 10px; }
+  .phase2-gate__terminal-top { flex-wrap: wrap; font-size: 12px; line-height: 1.35; letter-spacing: .02em; gap: 6px; }
+  .phase2-gate__terminal-command { font-size: 12px; line-height: 1.4; }
+  .phase2-gate__terminal pre { font-size: 12px; line-height: 1.45; letter-spacing: .02em; }
+  .phase2-gate__login-card { padding: 22px 18px; }
   .phase2-gate__counter { bottom: 34px; }
+}
+@media (max-width: 380px) {
+  .phase2-gate__clock { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .workspace-ambient, .phase2-gate__orbit, .phase2-gate__orbit--reverse, .phase2-gate__eye-scan { animation: none !important; }
