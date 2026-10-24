@@ -286,8 +286,8 @@ html.intro-pending #page { visibility: hidden !important; }
       <p class="app-nav-empty" data-nav-empty hidden>No matching menu items.</p>
     </nav>
     <div class="app-sidebar__bottom">
-      <button class="app-nav-link app-nav-action" type="button" data-panel-open="notifications" aria-label="Open notifications, 3 unread">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="app-nav-label">Notification</span><span class="app-notification-count" data-notification-count>3</span>
+      <button class="app-nav-link app-nav-action" type="button" data-panel-open="notifications" aria-label="Open workspace notes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h14v15H5zM8 8h8M8 12h8M8 16h5"/></svg><span class="app-nav-label">Workspace notes</span>
       </button>
       <button class="app-nav-link app-nav-action" type="button" data-panel-open="settings" aria-label="Open settings" title="Settings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#03090b"/><circle cx="15" cy="12" r="2" fill="#03090b"/><circle cx="7" cy="18" r="2" fill="#03090b"/></svg><span class="app-nav-label">Settings</span><span class="app-nav-arrow" aria-hidden="true">↗</span>
@@ -311,8 +311,8 @@ html.intro-pending #page { visibility: hidden !important; }
         <kbd>⌕</kbd>
       </label>
       <div class="app-topbar__actions">
-        <button class="app-icon-button app-topbar-bell" type="button" data-panel-open="notifications" aria-label="Open notifications, 3 unread" title="Notifications">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="app-bell-dot" data-notification-count>3</span>
+        <button class="app-icon-button app-topbar-bell" type="button" data-panel-open="notifications" aria-label="Open workspace notes" title="Workspace notes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h14v15H5zM8 8h8M8 12h8M8 16h5"/></svg>
         </button>
         <button class="app-motion-toggle" type="button" data-shell-motion-toggle aria-pressed="true" aria-label="Turn motion off"><span class="app-motion-dot" aria-hidden="true"></span><span data-shell-motion-label>MOTION ON</span></button>
         <a class="app-avatar" href="#/profile" aria-label="Open Saad profile" title="Open Profile"><img src="./assets/saad-golden.jpg" alt="Portrait of Saad" width="40" height="40" loading="lazy" decoding="async"><span>SAAD</span></a>
@@ -328,15 +328,14 @@ html.intro-pending #page { visibility: hidden !important; }
   </div>
 
   <button class="app-panel-backdrop" type="button" data-panel-backdrop hidden aria-label="Close open panel"></button>
-  <aside class="app-side-panel app-notifications-panel" data-app-panel="notifications" role="dialog" aria-modal="true" aria-labelledby="notifications-title" aria-hidden="true" hidden>
-    <header class="app-panel-header"><div><p class="view-eyebrow">LOCAL FEED / 003</p><h2 id="notifications-title">Notifications</h2></div><button class="app-icon-button" type="button" data-panel-close aria-label="Close notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
-    <div class="app-panel-summary"><span class="app-panel-summary-dot" aria-hidden="true"></span><span>WORKSPACE NOTES</span><span class="app-panel-summary-line"></span><strong>3 ITEMS</strong></div>
+  <aside class="app-side-panel app-notifications-panel" data-app-panel="notifications" role="dialog" aria-modal="true" aria-labelledby="workspace-notes-title" aria-hidden="true" hidden>
+    <header class="app-panel-header"><div><p class="view-eyebrow">LOCAL REFERENCE / 03</p><h2 id="workspace-notes-title">Workspace notes</h2></div><button class="app-icon-button" type="button" data-panel-close aria-label="Close workspace notes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+    <div class="app-panel-summary"><span class="app-panel-summary-dot" aria-hidden="true"></span><span>STATIC REFERENCE</span><span class="app-panel-summary-line"></span><strong>3 NOTES</strong></div>
     <ol class="app-notification-list">
-      <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 14.8 8.7 21 9.6l-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></span><div><p class="app-notification-kicker">WELCOME / WORKSPACE</p><h3>Welcome</h3><p>Visitor access is local and decorative. No account or authentication service is connected.</p></div></li>
+      <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 14.8 8.7 21 9.6l-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></span><div><p class="app-notification-kicker">WELCOME / WORKSPACE</p><h3>Welcome</h3><p>This is a static learning portfolio. No account or authentication service is connected.</p></div></li>
       <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5V5m0 14.5h16M7.5 15l3.5-4 3 2 5-6"/></svg></span><div><p class="app-notification-kicker">JOURNEY / NOTE</p><h3>Learning in public</h3><p>This workspace records the current learning journey. Empty counts are intentional until verified entries exist.</p></div></li>
       <li class="app-notification-item"><span class="app-notification-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></span><div><p class="app-notification-kicker">NEXT STEP / LEARNING</p><h3>Next step: recon basics</h3><p>Continue with reconnaissance fundamentals in authorized practice environments.</p></div></li>
     </ol>
-    <button class="hud-btn app-mark-read" type="button" data-mark-read>Mark all as read <span aria-hidden="true">✓</span></button>
     <p class="app-panel-footnote">These are static workspace notes, not live alerts.</p>
   </aside>
 
