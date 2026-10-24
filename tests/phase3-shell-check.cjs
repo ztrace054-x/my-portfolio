@@ -162,8 +162,8 @@ async function checkViews() {
   assert.ok(rendered.dashboard.includes("No data yet — I'm just starting"), "Dashboard must not invent recent activity.");
   assert.ok(rendered["attack-surface"].includes("Authorized practice only"), "Attack Surface must show its authorization banner.");
   assert.ok(rendered["attack-surface"].includes("NO DATA"), "Attack Surface radar must remain empty.");
-  assert.ok(rendered.certificates.includes("No Certificate"), "Certificate cards must remain unearned.");
-  assert.ok(rendered.certificates.includes("Future goal"), "Certificate cards must be marked as future goals.");
+  assert.ok(rendered.certificates.includes("Not earned yet"), "Certificate cards must remain unearned.");
+  assert.ok(rendered.certificates.includes("Planned"), "Certificate cards must be marked as planned.");
 }
 (async () => {
   await checkRouter();
