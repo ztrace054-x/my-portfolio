@@ -233,3 +233,35 @@
 @media (max-width: 900px) { .phase6-gallery-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 560px) { .phase6-gallery-grid { grid-template-columns: minmax(0,1fr); } .phase6-gallery-meta { flex-direction: column; gap: 6px; } }
 @media (prefers-reduced-motion: reduce) { .phase6-gallery-image-wrap img { transition: none; } }
+
+
+/* Phase 9 — deliberate contact actions, touch targets, and stable feedback. */
+.phase6-contact-grid { gap: 16px; align-items: stretch; }
+.phase6-contact-primary, .phase6-contact-social { border-color: rgba(133,233,173,.15); border-radius: 12px; background: linear-gradient(145deg,rgba(133,233,173,.03),transparent 60%),rgba(11,20,24,.78); }
+.phase6-contact-primary { padding: clamp(20px,3vw,32px); }
+.phase6-contact-top { color: #8da9a0; }
+.phase6-contact-signal { color: #b7ffd0; border-color: rgba(133,233,173,.2); background: rgba(133,233,173,.06); }
+.phase6-contact-primary h2, .phase6-social-heading h2 { color: #eaf5f2; font-family: var(--hud-display); letter-spacing: -.045em; }
+.phase6-contact-description, .phase6-social-heading p:not(.view-eyebrow) { color: #9fb4ad; line-height: 1.75; }
+.phase6-email-address { border-color: rgba(133,233,173,.13); background: rgba(5,9,12,.42); }
+.phase6-email-address a { overflow-wrap: anywhere; color: #b7ffd0; }
+.phase6-email-actions { flex-wrap: wrap; gap: 10px; }
+.phase6-email-actions .hud-btn { min-height: 46px; justify-content: center; }
+.phase6-copy-status { min-height: 1.5em; color: #b7ffd0; font-size: 12px; line-height: 1.5; }
+.phase6-contact-social { padding: clamp(20px,3vw,30px); }
+.phase6-social-list { gap: 8px; }
+.phase6-social-link { min-height: 68px; border-color: rgba(133,233,173,.13); background: rgba(5,9,12,.42); }
+.phase6-social-link:hover { border-color: rgba(133,233,173,.4); background: rgba(133,233,173,.045); }
+.phase6-social-copy strong { color: #eaf5f2; }
+.phase6-social-copy small, .phase6-contact-footnote { color: #8da9a0; }
+.app-icon-button, .app-motion-toggle, .app-setting-toggle, .app-panel-close, .phase6-icon-button, .phase6-lightbox-nav { min-width: 44px; min-height: 44px; }
+.app-setting-toggle { display: inline-flex; align-items: center; justify-content: center; }
+.app-panel-close { display: inline-grid; place-items: center; }
+@media (max-width: 720px) {
+  .phase6-contact-grid { grid-template-columns: minmax(0,1fr); }
+  .phase6-email-actions > * { flex: 1 1 160px; }
+}
+@media (max-width: 360px) {
+  .phase6-email-actions > * { flex-basis: 100%; width: 100%; }
+  .phase6-social-link { grid-template-columns: 22px 28px minmax(0,1fr) 14px; gap: 8px; }
+}
