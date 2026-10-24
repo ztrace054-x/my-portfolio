@@ -150,3 +150,34 @@
 .project-evidence-note p:not(.view-eyebrow), .project-empty-state p:not(.view-eyebrow) { max-width: 72ch; color: #9fb4ad; font-size: 13px; line-height: 1.75; }
 .project-evidence-note a, .project-empty-state a { margin-top: 8px; }
 @media (max-width: 760px) { .project-card-grid { grid-template-columns: minmax(0,1fr); } }
+
+
+/* Phase 6 — distinguish current learning from planned milestones. */
+.phase5-skills .phase5-skill-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.phase5-skill-card { padding: clamp(18px,2.4vw,26px); }
+.phase5-skill-heading { align-items: flex-start; gap: 12px; }
+.phase5-skill-heading h2 { color: #eaf5f2; font-family: var(--hud-display); letter-spacing: -.035em; }
+.phase5-skill-kicker, .phase5-micro { color: #8da9a0; font-family: var(--hud-mono); letter-spacing: .09em; }
+.phase5-status { flex: 0 0 auto; border: 1px solid rgba(133,233,173,.2); border-radius: 4px; background: rgba(133,233,173,.06); color: #b7ffd0; }
+.phase5-status--planned, .phase5-status--long-term { border-color: rgba(141,169,160,.2); background: rgba(141,169,160,.045); color: #9fb4ad; }
+.phase5-skill-note { color: #9fb4ad; line-height: 1.7; }
+.phase5-skill-meter { height: 6px; overflow: hidden; border: 1px solid rgba(133,233,173,.12); border-radius: 99px; background: rgba(255,255,255,.035); }
+.phase5-skill-meter span { display: block; min-width: 0; border-radius: inherit; background: linear-gradient(90deg,#85e9ad,#35f2e0); box-shadow: 0 0 12px rgba(133,233,173,.16); }
+.phase5-skill-footer { color: #8da9a0; font-family: var(--hud-mono); }
+.phase5-skill-footer strong { color: #eaf5f2; }
+.phase5-learning-path .phase5-timeline { gap: 18px; }
+.phase5-timeline-node { border-color: rgba(133,233,173,.35); background: #05090c; color: #85e9ad; box-shadow: 0 0 18px rgba(133,233,173,.08); }
+.phase5-timeline-card { padding: clamp(18px,2.4vw,26px); }
+.phase5-timeline-card h2 { color: #eaf5f2; font-family: var(--hud-display); letter-spacing: -.04em; }
+.phase5-timeline-card p { color: #9fb4ad; line-height: 1.7; }
+.phase5-topic-list li::marker { color: #85e9ad; }
+.phase5-tool-card { padding: 20px; }
+.phase5-tool-symbol { border-color: rgba(133,233,173,.24); background: rgba(133,233,173,.07); color: #b7ffd0; }
+.phase5-tool-card h3 { color: #eaf5f2; font-family: var(--hud-display); }
+.phase5-tool-card p { color: #9fb4ad; line-height: 1.65; }
+.phase5-tool-status { color: #b7ffd0; border-color: rgba(133,233,173,.18); background: rgba(133,233,173,.04); }
+@media (max-width: 700px) {
+  .phase5-skills .phase5-skill-grid { grid-template-columns: minmax(0,1fr); }
+  .phase5-skill-heading { flex-wrap: wrap; }
+  .phase5-timeline-card { padding: 17px; }
+}
