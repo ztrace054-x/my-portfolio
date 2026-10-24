@@ -4,10 +4,10 @@
 **Review branch:** redesign/ztrace-premium-portfolio  
 **Base branch:** main  
 **Source commit tested:** 2fbae987978372e5e1e7220ccba1948ea7ca5284  
-**Final source CI:** [Run 40089944033 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033)  
-**PR validation:** [Run 40089948006 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089948006)  
-**Visual evidence:** [Download 97 Chromium screenshots and the JSON report](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033/artifacts/12558711800)  
-**Lighthouse reports:** [Download desktop and mobile HTML/JSON reports](https://github.com/ztrace054-x/my-portfolio/actions/runs/40089944033/artifacts/12558731879)  
+**Final source CI:** [Run 40090225019 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40090225019)  
+**PR validation:** [Run 40090228978 — passed](https://github.com/ztrace054-x/my-portfolio/actions/runs/40090228978)  
+**Visual evidence:** [Download 97 Chromium screenshots and the JSON report](https://github.com/ztrace054-x/my-portfolio/actions/runs/40090225019/artifacts/12558870996)  
+**Lighthouse reports:** [Download desktop and mobile HTML/JSON reports](https://github.com/ztrace054-x/my-portfolio/actions/runs/40090225019/artifacts/12558264552)  
 **Production deployment:** Not performed  
 **Merge:** Not performed
 
@@ -78,21 +78,21 @@ Lighthouse 12.8.2 ran in GitHub Actions on Ubuntu against the local static previ
 
 | Metric | Desktop | Mobile |
 | --- | ---: | ---: |
-| Performance score | 97 | 75 |
+| Performance score | 97 | 76 |
 | Accessibility score | 100 | 100 |
 | Best Practices score | 100 | 100 |
 | SEO score | 100 | 100 |
-| First Contentful Paint (FCP) | 0.8 s | 3.6 s |
-| Largest Contentful Paint (LCP) | 1.1 s | 4.8 s |
+| First Contentful Paint (FCP) | 0.8 s | 3.5 s |
+| Largest Contentful Paint (LCP) | 1.1 s | 4.7 s |
 | Cumulative Layout Shift (CLS) | 0.01 | 0 |
-| Total Blocking Time (TBT) | 30 ms | 0 ms |
-| Speed Index | 0.9 s | 3.6 s |
+| Total Blocking Time (TBT) | 30 ms | 10 ms |
+| Speed Index | 0.9 s | 3.5 s |
 | Mobile text-size audit | N/A | 100% legible text |
 | Color-contrast audit | Pass | Pass |
 
 ### Performance limitations
 
-- The mobile performance score of 75 and LCP of 4.8 seconds are a **release caution**, not a passing performance target.
+- The latest mobile performance score is 76 and LCP is 4.7 seconds; a repeated run measured 75 and 4.8 seconds. This small run-to-run variation is expected in simulated lab tests, but both results remain a **release caution**, not a passing performance target.
 - The local Python static server does not provide production-like text compression or long-lived cache headers. Lighthouse therefore reports compression and cache-lifetime opportunities that are not a direct measurement of GitHub Pages CDN behavior.
 - Lighthouse also reports render-blocking CSS, unused CSS, and image sizing/format optimization opportunities. These remain performance work to consider before production release.
 - No real-user field data, INP, or field Core Web Vitals were collected. No Lighthouse result from the live GitHub Pages site was claimed.
