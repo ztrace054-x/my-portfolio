@@ -79,3 +79,89 @@ jobs:
           path: artifacts/visual-qa/
           if-no-files-found: warn
           retention-days: 7
+
+
+  performance-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout redesign source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright and Lighthouse
+        run: npm install --no-save --package-lock=false playwright lighthouse
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Start safe local preview
+        run: |
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/ztrace-preview.log 2>&1 < /dev/null &
+          echo $! > /tmp/ztrace-preview.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/ztrace-preview.log
+          exit 1
+      - name: Measure desktop first-load performance
+        run: |
+          mkdir -p artifacts/performance
+          CHROME_PATH="$(node -e 'process.stdout.write(require("playwright").chromium.executablePath())')"
+          ./node_modules/.bin/lighthouse http://127.0.0.1:4173/ \
+            --chrome-path="$CHROME_PATH" \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --preset=desktop \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json --output=html \
+            --output-path=artifacts/performance/lighthouse-desktop \
+            --quiet
+      - name: Measure mobile first-load performance
+        run: |
+          CHROME_PATH="$(node -e 'process.stdout.write(require("playwright").chromium.executablePath())')"
+          ./node_modules/.bin/lighthouse http://127.0.0.1:4173/ \
+            --chrome-path="$CHROME_PATH" \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json --output=html \
+            --output-path=artifacts/performance/lighthouse-mobile \
+            --quiet
+      - name: Summarize Lighthouse metrics
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const dir = 'artifacts/performance';
+          if (!fs.existsSync(dir)) { console.log('No Lighthouse reports were produced.'); process.exit(0); }
+          for (const file of fs.readdirSync(dir).filter(name => name.endsWith('.json'))) {
+            try {
+              const r = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+              const score = id => r.categories && r.categories[id] ? Math.round(r.categories[id].score * 100) : null;
+              const metric = id => r.audits && r.audits[id] ? r.audits[id].displayValue || r.audits[id].numericValue || null : null;
+              console.log(JSON.stringify({
+                report: file,
+                lighthouseVersion: r.lighthouseVersion,
+                fetchTime: r.fetchTime,
+                performance: score('performance'),
+                accessibility: score('accessibility'),
+                bestPractices: score('best-practices'),
+                seo: score('seo'),
+                firstContentfulPaint: metric('first-contentful-paint'),
+                largestContentfulPaint: metric('largest-contentful-paint'),
+                cumulativeLayoutShift: metric('cumulative-layout-shift'),
+                totalBlockingTime: metric('total-blocking-time'),
+                speedIndex: metric('speed-index')
+              }));
+            } catch (error) { console.error(file + ': ' + error.message); }
+          }
+          NODE
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ztrace-lighthouse-reports
+          path: artifacts/performance/
+          if-no-files-found: warn
+          retention-days: 7
