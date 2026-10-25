@@ -156,8 +156,9 @@ async function checkViews() {
     rendered[id] = module.namespace.render();
     assert.ok(rendered[id].includes('id="view-heading"'), "View heading missing for " + id);
   }
-  assert.ok(rendered.profile.includes("Learn responsibly. Practice with permission."), "Profile must preserve the existing ethical-practice principle.");
-  assert.ok(rendered.profile.includes("Byte Capsule"), "Profile must use the existing course data.");
+  assert.ok(rendered.profile.includes("Be confident. Be kind. Respect boundaries."), "Profile must show the current personal principle.");
+  assert.ok(rendered.profile.includes("How to make a girlfriend"), "Profile must show the current focus.");
+  assert.ok(!rendered.profile.includes("Byte Capsule") && !rendered.profile.includes("Ethical Hacking for Beginners"), "Profile must hide course details while the course is off.");
   assert.equal((rendered.dashboard.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard should display five honest zero-state metrics.");
   assert.ok(rendered.dashboard.includes("NO ACTIVITY RECORDED") && rendered.dashboard.includes("NO VERIFIED MILESTONES"), "Dashboard must show evidence-based empty states.");
   assert.ok(!rendered.dashboard.includes("chart-pulse") && !rendered.dashboard.includes("chart-ghost-bar"), "Dashboard must not render fabricated chart activity.");
