@@ -164,7 +164,17 @@ async function ensureImages(page) {
 }
 
 async function enterWorkspace(page) {
+  currentRoute = "default-entry";
   await page.goto(ORIGIN, { waitUntil: "load" });
+  await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
+  await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
+  await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
+  const gateHiddenByDefault = await page.locator("#phase2-gate").evaluate(el => el.hidden);
+  if (!gateHiddenByDefault) issue("default-welcome-popup-visible", "The welcome popup should not appear on a normal site visit.");
+  await screenshot(page, "00-direct-entry.png");
+
+  currentRoute = "intro";
+  await page.goto(`${ORIGIN}?intro=1`, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
   await page.waitForSelector("#phase2-gate", { state: "visible", timeout: 7000 });
   await screenshot(page, "00-intro.png");
@@ -397,7 +407,7 @@ async function main() {
     reducedPage.on("response", response => {
       if (response.url().startsWith(ORIGIN) && response.status() >= 400) issue("asset-http-error", "Local resource returned an HTTP error.", { url: response.url(), status: response.status() });
     });
-    await reducedPage.goto(ORIGIN, { waitUntil: "load" });
+    await reducedPage.goto(`${ORIGIN}?intro=1`, { waitUntil: "load" });
     const prefersReducedMotion = await reducedPage.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (!prefersReducedMotion) issue("reduced-motion-not-detected", "Browser context did not expose prefers-reduced-motion: reduce.");
     await screenshot(reducedPage, "00-intro-reduced-motion.png");
