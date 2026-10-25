@@ -77,44 +77,20 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
 
   function buildPortrait() {
     if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback || !portraitImage.naturalWidth) return;
-    const sourceSize = Math.min(portraitImage.naturalWidth, portraitImage.naturalHeight);
-    const sourceX = (portraitImage.naturalWidth - sourceSize) / 2;
-    const sourceY = Math.min(portraitImage.naturalHeight - sourceSize, Math.round((portraitImage.naturalHeight - sourceSize) * 0.12));
+    const scale = Math.min(320 / portraitImage.naturalWidth, 320 / portraitImage.naturalHeight);
+    const drawWidth = portraitImage.naturalWidth * scale;
+    const drawHeight = portraitImage.naturalHeight * scale;
     portraitBufferContext.clearRect(0, 0, 320, 320);
-    portraitBufferContext.drawImage(portraitImage, sourceX, sourceY, sourceSize, sourceSize, 0, 0, 320, 320);
-    portraitBufferContext.globalCompositeOperation = "destination-in";
-    portraitBufferContext.fillStyle = "#fff";
-    portraitBufferContext.beginPath();
-    portraitBufferContext.moveTo(42, 320);
-    portraitBufferContext.bezierCurveTo(48, 278, 72, 256, 112, 240);
-    portraitBufferContext.bezierCurveTo(88, 217, 74, 181, 74, 139);
-    portraitBufferContext.bezierCurveTo(72, 122, 75, 107, 82, 96);
-    portraitBufferContext.lineTo(66, 102);
-    portraitBufferContext.lineTo(82, 88);
-    portraitBufferContext.lineTo(75, 72);
-    portraitBufferContext.lineTo(98, 80);
-    portraitBufferContext.lineTo(92, 58);
-    portraitBufferContext.lineTo(115, 74);
-    portraitBufferContext.lineTo(112, 48);
-    portraitBufferContext.lineTo(133, 67);
-    portraitBufferContext.lineTo(143, 27);
-    portraitBufferContext.lineTo(156, 62);
-    portraitBufferContext.lineTo(162, 4);
-    portraitBufferContext.lineTo(176, 62);
-    portraitBufferContext.lineTo(192, 31);
-    portraitBufferContext.lineTo(198, 66);
-    portraitBufferContext.lineTo(219, 43);
-    portraitBufferContext.lineTo(216, 71);
-    portraitBufferContext.lineTo(240, 63);
-    portraitBufferContext.lineTo(231, 84);
-    portraitBufferContext.lineTo(251, 91);
-    portraitBufferContext.bezierCurveTo(247, 107, 246, 123, 246, 139);
-    portraitBufferContext.bezierCurveTo(246, 181, 232, 217, 208, 240);
-    portraitBufferContext.bezierCurveTo(248, 256, 272, 278, 278, 320);
-    portraitBufferContext.closePath();
-    portraitBufferContext.fill();
-    portraitBufferContext.globalCompositeOperation = "source-over";
+    portraitBufferContext.drawImage(
+      portraitImage,
+      (320 - drawWidth) / 2,
+      (320 - drawHeight) / 2,
+      drawWidth,
+      drawHeight
+    );
 
+    // The supplied portrait has a transparent background, so use its real silhouette
+    // instead of the old hand-drawn mask. This keeps the crown spikes and shoulders natural.
     const pixels = portraitBufferContext.getImageData(0, 0, 320, 320).data;
     const step = matchMedia("(max-width: 700px)").matches ? 8 : 5;
     portraitPoints = [];
@@ -122,15 +98,25 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       for (let x = 0; x < 320; x += step) {
         const index = (y * 320 + x) * 4;
         if (pixels[index + 3] < 32) continue;
-        const luminance = Math.pow((pixels[index] * 0.24 + pixels[index + 1] * 0.62 + pixels[index + 2] * 0.14) / 255, 0.82);
-        const rgb = luminance > 0.68 ? "218,255,231" : luminance > 0.35 ? "133,233,173" : "64,135,98";
+        const r = pixels[index];
+        const g = pixels[index + 1];
+        const b = pixels[index + 2];
+        const luminance = Math.pow((r * 0.24 + g * 0.62 + b * 0.14) / 255, 0.82);
+        const isGold = r > 135 && g > 65 && r > g * 1.25 && g > b * 1.35;
+        const rgb = isGold
+          ? "255,190,92"
+          : luminance > 0.68
+            ? "218,255,231"
+            : luminance > 0.35
+              ? "133,233,173"
+              : "64,135,98";
         const alpha = Math.min(1, 0.38 + luminance * 0.62);
         portraitPoints.push({
           x: 160 + (Math.random() - 0.5) * 112,
           y: 160 + (Math.random() - 0.5) * 112,
           tx: x + (Math.random() - 0.5) * 1.4,
           ty: y + (Math.random() - 0.5) * 1.4,
-          size: 1.35 + luminance * 0.85,
+          size: isGold ? 1.6 + luminance * 0.95 : 1.35 + luminance * 0.85,
           color: "rgba(" + rgb + "," + alpha.toFixed(2) + ")"
         });
       }
@@ -138,7 +124,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     if (!portraitPoints.length) return;
     portraitReady = true;
     portraitCanvas.hidden = false;
-    portraitFallback.hidden = true;
+    portraitFallback.hidden = false;
     const progress = loginReady ? 1 : Math.max(0, Math.min(1, elapsed / BOOT_DURATION));
     drawPortrait(progress, performance.now(), true);
   }
@@ -165,7 +151,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       portraitCanvas.hidden = true;
       portraitFallback.hidden = false;
     };
-    portraitImage.src = "./assets/saad-crown.jpg";
+    portraitImage.src = "./assets/saad-crown-transparent.webp";
     if (portraitImage.complete && portraitImage.naturalWidth) buildPortrait();
   }
 
