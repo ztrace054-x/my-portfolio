@@ -1,6 +1,6 @@
 import { CONTENT, storage } from './config.js?v=20261016.1';
 import { createClock } from './motion.js?v=20261016.1';
-import { initPhase2Gate } from './phase2-gate.js?v=20261025.5';
+import { initPhase2Gate } from './phase2-gate.js?v=20261025.6';
 import { initContact } from './contact.js?v=20261016.1';
 import { createOverlayManager, initNavigation } from './navigation.js?v=20261018.3';
 import { initGallery } from './gallery.js?v=20261016.1';
@@ -12,7 +12,7 @@ import { initJourney } from './journey.js?v=20261018.4';
 import { initDashboardShell } from './dashboard-shell.js?v=20261025.6';
 
 const root = document.documentElement;
-root.dataset.release = '20261025.6';
+root.dataset.release = '20261025.7';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
@@ -74,6 +74,7 @@ let dashboard;
 intro.completed.then(() => {
   if (!dashboard) dashboard = initDashboardShell();
   dashboard.activate();
+  document.documentElement.classList.remove('intro-pending');
 });
 window.addEventListener('beforeprint', () => { intro.cancel(); scene?.setMotion(false); animations?.setMotion(false); terminal.setMotion(false); journey.setMotion(false); contact.setMotion(false); cursor?.dispose(); cursor = null; });
 window.addEventListener('afterprint', setMotion);
