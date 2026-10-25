@@ -97,21 +97,21 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     portraitBufferContext.globalCompositeOperation = "source-over";
 
     const pixels = portraitBufferContext.getImageData(0, 0, 320, 320).data;
-    const step = matchMedia("(max-width: 700px)").matches ? 8 : 6;
+    const step = matchMedia("(max-width: 700px)").matches ? 8 : 5;
     portraitPoints = [];
     for (let y = 0; y < 320; y += step) {
       for (let x = 0; x < 320; x += step) {
         const index = (y * 320 + x) * 4;
         if (pixels[index + 3] < 32) continue;
-        const luminance = (pixels[index] * 0.24 + pixels[index + 1] * 0.62 + pixels[index + 2] * 0.14) / 255;
-        const rgb = luminance > 0.7 ? "231,255,239" : luminance > 0.4 ? "157,242,189" : "77,145,106";
-        const alpha = Math.min(0.94, 0.26 + luminance * 0.58);
+        const luminance = Math.pow((pixels[index] * 0.24 + pixels[index + 1] * 0.62 + pixels[index + 2] * 0.14) / 255, 0.82);
+        const rgb = luminance > 0.68 ? "218,255,231" : luminance > 0.35 ? "133,233,173" : "64,135,98";
+        const alpha = Math.min(1, 0.38 + luminance * 0.62);
         portraitPoints.push({
           x: 160 + (Math.random() - 0.5) * 112,
           y: 160 + (Math.random() - 0.5) * 112,
           tx: x + (Math.random() - 0.5) * 1.4,
           ty: y + (Math.random() - 0.5) * 1.4,
-          size: 1.1 + luminance * 0.7,
+          size: 1.35 + luminance * 0.85,
           color: "rgba(" + rgb + "," + alpha.toFixed(2) + ")"
         });
       }
@@ -146,7 +146,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       portraitCanvas.hidden = true;
       portraitFallback.hidden = false;
     };
-    portraitImage.src = "./assets/saad-dark.jpg";
+    portraitImage.src = "./assets/saad-intro.jpg";
     if (portraitImage.complete && portraitImage.naturalWidth) buildPortrait();
   }
 
