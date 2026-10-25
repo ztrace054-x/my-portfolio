@@ -183,7 +183,7 @@ body.ready .hero{opacity:1;transform:translateY(0)}
   function draw(now){
     ctx.clearRect(0,0,W,H);
     var elapsed=now-startTime;
-    var intro=Math.max(0,Math.min(1,(elapsed-2250)/1450));
+    var intro=reduced?1:Math.max(0,Math.min(1,(elapsed-2250)/1450));
     var ease=1-Math.pow(1-intro,3);
     var time=now*.001;
     for(var i=0;i<particles.length;i++){
@@ -211,6 +211,7 @@ body.ready .hero{opacity:1;transform:translateY(0)}
     if(!reduced)requestAnimationFrame(draw);
   }
   function runLoader(){
+    startTime=performance.now();
     var duration=reduced?120:2250;
     function tick(now){
       var p=Math.min(100,Math.round(((now-startTime)/duration)*100));
