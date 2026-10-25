@@ -194,6 +194,14 @@ async function run() {
   {
     const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
+    assert(f.root.hidden && !f.page.inert, 'Normal page visits must bypass the welcome overlay.');
+    assert.equal(f.timers.size, 0, 'Default entry must not start intro animation timers.');
+    await controller.completed;
+    checks++;
+  }
+  {
+    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
+    const controller = mod.initPhase2Gate({ motionAllowed: true });
     assert(f.page.inert && !f.root.hidden && f.skip.focused);
     f.advance(3700);
     assert(f.root.classList.contains('is-login-ready'));
@@ -213,7 +221,7 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
     f.doc.emit('keydown', { key: 'Escape' });
     assert(f.root.classList.contains('is-login-ready') && !f.loginLayer.inert);
@@ -231,7 +239,7 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture({ entered: true }), mod = await f.load('phase2-gate.js');
+    const f = phase2Fixture({ entered: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
     assert(!f.root.hidden && f.page.inert && f.skip.focused, 'A previous visit flag must not suppress the intro on refresh.');
     controller.cancel();
@@ -251,7 +259,7 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
     f.setReducedMotion(true);
     const controller = mod.initPhase2Gate({ motionAllowed: true });
     assert(f.root.classList.contains('is-login-ready'));
@@ -262,7 +270,7 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture({ storageBlocked: true }), mod = await f.load('phase2-gate.js');
+    const f = phase2Fixture({ storageBlocked: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
     f.doc.emit('keydown', { key: 'Escape' });
     f.loginButton.emit('click');
@@ -273,7 +281,7 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
+    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
     const controller = mod.initPhase2Gate({ motionAllowed: true });
     f.advance(500);
     const before = f.fill.style.width;
