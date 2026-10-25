@@ -63,6 +63,94 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   let transitionTimer = 0;
   let clockTimer = 0;
 
+  const portraitCanvas = root.querySelector("[data-p2-portrait]");
+  const portraitFallback = root.querySelector("[data-p2-portrait-fallback]");
+  const portraitContext = portraitCanvas?.getContext("2d", { alpha: true }) ?? null;
+  const portraitBuffer = document.createElement("canvas");
+  portraitBuffer.width = 320;
+  portraitBuffer.height = 320;
+  const portraitBufferContext = portraitBuffer.getContext("2d", { willReadFrequently: true });
+  const portraitImage = new Image();
+  let portraitPoints = [];
+  let portraitReady = false;
+  let lastPortraitDraw = 0;
+
+  function buildPortrait() {
+    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback || !portraitImage.naturalWidth) return;
+    const sourceSize = Math.min(portraitImage.naturalWidth, portraitImage.naturalHeight);
+    const sourceX = (portraitImage.naturalWidth - sourceSize) / 2;
+    const sourceY = Math.min(portraitImage.naturalHeight - sourceSize, Math.round((portraitImage.naturalHeight - sourceSize) * 0.12));
+    portraitBufferContext.clearRect(0, 0, 320, 320);
+    portraitBufferContext.drawImage(portraitImage, sourceX, sourceY, sourceSize, sourceSize, 0, 0, 320, 320);
+    portraitBufferContext.globalCompositeOperation = "destination-in";
+    portraitBufferContext.fillStyle = "#fff";
+    portraitBufferContext.beginPath();
+    portraitBufferContext.moveTo(42, 320);
+    portraitBufferContext.bezierCurveTo(48, 278, 72, 256, 112, 240);
+    portraitBufferContext.bezierCurveTo(88, 217, 74, 181, 74, 139);
+    portraitBufferContext.bezierCurveTo(74, 70, 111, 18, 160, 18);
+    portraitBufferContext.bezierCurveTo(210, 18, 246, 70, 246, 139);
+    portraitBufferContext.bezierCurveTo(246, 181, 232, 217, 208, 240);
+    portraitBufferContext.bezierCurveTo(248, 256, 272, 278, 278, 320);
+    portraitBufferContext.closePath();
+    portraitBufferContext.fill();
+    portraitBufferContext.globalCompositeOperation = "source-over";
+
+    const pixels = portraitBufferContext.getImageData(0, 0, 320, 320).data;
+    const step = matchMedia("(max-width: 700px)").matches ? 8 : 6;
+    portraitPoints = [];
+    for (let y = 0; y < 320; y += step) {
+      for (let x = 0; x < 320; x += step) {
+        const index = (y * 320 + x) * 4;
+        if (pixels[index + 3] < 32) continue;
+        const luminance = (pixels[index] * 0.24 + pixels[index + 1] * 0.62 + pixels[index + 2] * 0.14) / 255;
+        const rgb = luminance > 0.7 ? "231,255,239" : luminance > 0.4 ? "157,242,189" : "77,145,106";
+        const alpha = Math.min(0.94, 0.26 + luminance * 0.58);
+        portraitPoints.push({
+          x: Math.random() * 320,
+          y: Math.random() * 320,
+          tx: x + (Math.random() - 0.5) * 1.4,
+          ty: y + (Math.random() - 0.5) * 1.4,
+          size: 1.1 + luminance * 0.7,
+          color: "rgba(" + rgb + "," + alpha.toFixed(2) + ")"
+        });
+      }
+    }
+    if (!portraitPoints.length) return;
+    portraitReady = true;
+    portraitCanvas.hidden = false;
+    portraitFallback.hidden = true;
+    const progress = loginReady ? 1 : Math.max(0, Math.min(1, elapsed / BOOT_DURATION));
+    drawPortrait(progress, performance.now(), true);
+  }
+
+  function drawPortrait(progress, now = performance.now(), force = false) {
+    if (!portraitReady || !portraitContext) return;
+    if (!force && now - lastPortraitDraw < 40 && progress < 1) return;
+    lastPortraitDraw = now;
+    const eased = 1 - Math.pow(1 - progress, 3);
+    portraitContext.clearRect(0, 0, 320, 320);
+    for (const point of portraitPoints) {
+      const x = point.x + (point.tx - point.x) * eased;
+      const y = point.y + (point.ty - point.y) * eased;
+      portraitContext.fillStyle = point.color;
+      portraitContext.fillRect(x, y, point.size, point.size);
+    }
+  }
+
+  function loadPortrait() {
+    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback) return;
+    portraitImage.decoding = "async";
+    portraitImage.onload = buildPortrait;
+    portraitImage.onerror = () => {
+      portraitCanvas.hidden = true;
+      portraitFallback.hidden = false;
+    };
+    portraitImage.src = "./assets/saad-dark.jpg";
+    if (portraitImage.complete && portraitImage.naturalWidth) buildPortrait();
+  }
+
+
   function syncClock(force = false) {
     const now = new Date();
     if (!force && now.getSeconds() === lastClockSecond) return;
@@ -73,7 +161,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     if (widgetDate) widgetDate.textContent = localDate(now);
   }
 
-  function updateBoot() {
+  function updateBoot(now = performance.now()) {
     const progress = Math.max(0, Math.min(1, elapsed / BOOT_DURATION));
     const eased = 1 - Math.pow(1 - progress, 3);
     const message = elapsed < 800
@@ -113,6 +201,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       const label = ring.querySelector("[data-p2-ring-value]");
       if (label) label.textContent = String(current).padStart(2, "0");
     });
+    drawPortrait(progress, now);
   }
 
   function completeTelemetry() {
@@ -175,6 +264,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   function showLogin({ focus = true } = {}) {
     if (done || transitioning || loginReady) return;
     loginReady = true;
+    drawPortrait(1, performance.now(), true);
     completeTelemetry();
     stopFrameLoop();
     root.classList.remove("is-booting");
@@ -205,7 +295,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     lastFrame = now;
     if (!loginReady && !transitioning) {
       elapsed += delta;
-      updateBoot();
+      updateBoot(now);
       if (elapsed >= BOOT_DURATION) showLogin();
     }
     if (!done && !loginReady && !document.hidden) frameId = requestAnimationFrame(tick);
@@ -264,6 +354,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   }, { signal: events.signal });
 
   removeReplayQuery();
+  loadPortrait();
   root.hidden = false;
   page.inert = true;
   document.documentElement.classList.add("phase2-active");
