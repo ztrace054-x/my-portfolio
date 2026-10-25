@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05090c">
+<title>Saad — Particle Intro Concept</title>
+<style>
+@font-face{font-family:Space Grotesk;src:url("./space-grotesk-latin.woff2") format("woff2");font-display:swap}
+@font-face{font-family:JetBrains Mono;src:url("./jetbrains-mono-latin.woff2") format("woff2");font-display:swap}
+:root{--bg:#05090c;--panel:#091116;--mint:#9df2bd;--mint-dim:#5ea77d;--text:#edf5f0;--muted:#8d9a96;--line:rgba(184,225,204,.15);--mono:"JetBrains Mono",monospace;--sans:"Space Grotesk",Arial,sans-serif}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 74% 46%,rgba(26,73,57,.16),transparent 38%),var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(173,224,195,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(173,224,195,.055) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,black,transparent 92%);z-index:0}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+.loader{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#05090c;transition:opacity .85s ease,visibility .85s ease}
+.loader-inner{width:min(460px,calc(100vw - 48px));font-family:var(--mono)}
+.loader-head,.loader-foot{display:flex;justify-content:space-between;gap:20px;font-size:10px;letter-spacing:.12em;color:#a8b8b0;text-transform:uppercase}
+.loader-title{margin:36px 0 12px;font-size:clamp(23px,4vw,36px);font-weight:500;letter-spacing:-.045em}
+.loader-title span{color:var(--mint)}
+.loader-track{height:2px;background:#1b2924;margin:24px 0 12px;overflow:hidden}
+.loader-bar{height:100%;width:0;background:var(--mint);box-shadow:0 0 22px rgba(157,242,189,.65);transition:width .08s linear}
+.loader-foot{font-size:10px;color:#6f8078}
+.loader-percent{font-size:13px;color:var(--mint)}
+body.ready .loader{opacity:0;visibility:hidden;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:auto;padding:26px clamp(22px,5vw,76px) 30px;min-height:100vh;display:flex;flex-direction:column}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding:0 0 19px;font:10px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:#9caaa3}
+.brand{display:flex;align-items:center;gap:10px;color:#e8f2eb}
+.brand-mark{width:23px;height:23px;border:1px solid var(--mint-dim);display:grid;place-items:center;color:var(--mint);font-size:12px}
+.nav-right{display:flex;align-items:center;gap:22px}
+.status{display:flex;align-items:center;gap:8px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}
+.hero{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.88fr);align-items:center;gap:clamp(20px,4vw,64px);padding:clamp(44px,7vh,90px) 0 40px;opacity:0;transform:translateY(12px);transition:opacity 1s ease .18s,transform 1s ease .18s}
+body.ready .hero{opacity:1;transform:translateY(0)}
+.kicker{display:flex;align-items:center;gap:10px;font:10px var(--mono);letter-spacing:.14em;color:var(--mint);text-transform:uppercase}
+.kicker:before{content:"";width:22px;height:1px;background:var(--mint)}
+.name{margin:22px 0 0;font-size:clamp(76px,12vw,164px);font-weight:600;line-height:.78;letter-spacing:-.105em;color:#f1f5f1}
+.name .period{color:var(--mint)}
+.role{margin:26px 0 0;font:clamp(14px,1.7vw,21px) var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.statement{margin:22px 0 0;font-size:clamp(25px,3.5vw,46px);line-height:1.02;letter-spacing:-.06em;font-weight:500;max-width:540px}
+.statement .outline{color:transparent;-webkit-text-stroke:1px rgba(230,243,235,.7)}
+.desc{max-width:490px;margin:24px 0 0;color:#aab8b0;font-size:15px;line-height:1.75}
+.actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:29px}
+.primary{display:inline-flex;align-items:center;gap:18px;padding:14px 17px;background:var(--mint);color:#07100b;font:11px var(--mono);letter-spacing:.04em}
+.primary .arrow{font-size:18px;line-height:10px}
+.secondary{font:11px var(--mono);color:#c7d4cc}
+.secondary span{color:var(--mint);margin-left:6px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:27px}
+.tag{padding:8px 10px;border:1px solid var(--line);color:#a5b3aa;font:9px var(--mono);letter-spacing:.08em}
+.visual{position:relative;min-width:0;display:flex;align-items:center;justify-content:center;isolation:isolate}
+.visual:before{content:"";position:absolute;width:75%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(111,226,158,.11),rgba(13,46,32,.045) 43%,transparent 70%);z-index:-1}
+.visual:after{content:"";position:absolute;width:88%;height:70%;border:1px solid rgba(157,242,189,.1);border-radius:50%;transform:rotate(-22deg);z-index:-1}
+#portrait{display:block;width:min(100%,520px);height:auto;aspect-ratio:4/5;filter:drop-shadow(0 0 28px rgba(120,230,164,.09))}
+.visual-label{position:absolute;top:3%;left:0;right:0;display:flex;justify-content:space-between;gap:12px;font:9px var(--mono);letter-spacing:.09em;color:#7f9387;text-transform:uppercase}
+.visual-label b{font-weight:400;color:var(--mint)}
+.visual-coordinate{position:absolute;right:0;bottom:12%;font:9px var(--mono);letter-spacing:.1em;color:#8ea398;writing-mode:vertical-rl}
+.crosshair{position:absolute;width:15px;height:15px;border:1px solid rgba(157,242,189,.45);border-radius:50%;right:15%;top:28%}
+.crosshair:before,.crosshair:after{content:"";position:absolute;background:rgba(157,242,189,.5)}
+.crosshair:before{width:25px;height:1px;left:-6px;top:6px}
+.crosshair:after{width:1px;height:25px;left:6px;top:-6px}
+.hud{border-top:1px solid var(--line);padding-top:17px;display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:20px;font-family:var(--mono);text-transform:uppercase}
+.hud-item{display:flex;flex-direction:column;gap:7px}
+.hud-label{font-size:9px;color:#687a70;letter-spacing:.12em}
+.hud-value{font-size:10px;color:#d4e1d8;letter-spacing:.04em}
+.hud-value strong{color:var(--mint);font-weight:400}
+.scroll{align-self:end;color:var(--mint);font-size:10px;letter-spacing:.1em}
+.footer-note{margin-top:10px;text-align:right;font:9px var(--mono);letter-spacing:.07em;color:#52645a}
+@media(max-width:900px){.wrap{padding:20px 22px 22px}.hero{grid-template-columns:1fr;gap:8px;padding:48px 0 28px}.copy{position:relative;z-index:2}.name{font-size:clamp(78px,17vw,140px)}.visual{max-width:560px;width:100%;margin:-8px auto 0}.visual-label{top:4%}.visual-coordinate{right:2%}.hud{grid-template-columns:1fr 1fr;gap:18px}.scroll{justify-self:start}.desc{max-width:600px}}
+@media(max-width:520px){.nav-right .nav-extra{display:none}.nav{font-size:9px}.hero{padding-top:40px}.name{font-size:clamp(76px,20vw,108px)}.role{font-size:13px}.statement{font-size:31px}.desc{font-size:14px}.actions{gap:17px}.visual{margin-top:-18px}.hud{grid-template-columns:1fr 1fr}.hud-value{font-size:9px}.loader-head,.loader-foot{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader" aria-label="Loading intro demo">
+  <div class="loader-inner">
+    <div class="loader-head"><span>ZTRACE / IDENTITY SYSTEM</span><span>DEMO 001</span></div>
+    <div class="loader-title">Building the <span>human signal.</span></div>
+    <div class="loader-track"><div class="loader-bar" id="loaderBar"></div></div>
+    <div class="loader-foot"><span id="loaderStatus">INITIALIZING PARTICLE FIELD</span><span class="loader-percent" id="loaderPercent">00%</span></div>
+  </div>
+</div>
+<main class="wrap">
+  <nav class="nav" aria-label="Demo navigation">
+    <div class="brand"><span class="brand-mark">Z</span><span>ZTRACE / SECURITY PORTFOLIO</span></div>
+    <div class="nav-right"><span class="nav-extra">INTRO CONCEPT / 01</span><span class="status"><i class="dot"></i> AUTHORIZED PRACTICE ONLY</span></div>
+  </nav>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="copy">
+      <div class="kicker">01 / Learning in public</div>
+      <h1 class="name" id="hero-title">SAAD<span class="period">.</span></h1>
+      <div class="role">Cybersecurity</div>
+      <h2 class="statement">Security is a practice.<br><span class="outline">Curiosity is the start.</span></h2>
+      <p class="desc">CSE student. Cybersecurity learner. Building a foundation in ethical hacking, Linux, networking and reconnaissance — one concept at a time.</p>
+      <div class="actions"><a class="primary" href="https://ztrace054-x.github.io/my-portfolio/#workbench">Explore my workbench <span class="arrow">↗</span></a><a class="secondary" href="https://ztrace054-x.github.io/my-portfolio/#about">Meet Saad <span>↗</span></a></div>
+      <div class="tags"><span class="tag">LINUX BASICS</span><span class="tag">NETWORKING</span><span class="tag">RECON FUNDAMENTALS</span></div>
+    </div>
+    <div class="visual">
+      <div class="visual-label"><span><b>●</b> Identity // Saad</span><span>Particle portrait / live render</span></div>
+      <canvas id="portrait" width="520" height="650" aria-label="Particle portrait of Saad"></canvas>
+      <span class="crosshair" aria-hidden="true"></span>
+      <span class="visual-coordinate">23° / CURIOUS BY DESIGN</span>
+    </div>
+  </section>
+  <section class="hud" aria-label="Profile status">
+    <div class="hud-item"><span class="hud-label">Identity</span><span class="hud-value">ZTRACE / <strong>SAAD</strong></span></div>
+    <div class="hud-item"><span class="hud-label">Current mode</span><span class="hud-value">LEARNING IN PUBLIC</span></div>
+    <div class="hud-item"><span class="hud-label">Learning path</span><span class="hud-value">LINUX → NETWORKING → SECURITY</span></div>
+    <a class="scroll" href="https://ztrace054-x.github.io/my-portfolio/#about">MEET THE PERSON ↓</a>
+  </section>
+  <div class="footer-note">CONCEPT PREVIEW ONLY — CURRENT HOMEPAGE IS UNCHANGED</div>
+</main>
+<script>
+(function(){
+  "use strict";
+  var canvas=document.getElementById("portrait");
+  var ctx=canvas.getContext("2d",{alpha:true});
+  var W=520,H=650,particles=[],streaks=[],startTime=performance.now(),revealed=false;
+  var image=new Image();
+  var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var off=document.createElement("canvas");off.width=W;off.height=H;
+  var octx=off.getContext("2d",{willReadFrequently:true});
+  var loaderBar=document.getElementById("loaderBar"),loaderPercent=document.getElementById("loaderPercent"),loaderStatus=document.getElementById("loaderStatus");
+  function makeMask(){
+    octx.save();
+    octx.globalCompositeOperation="destination-in";
+    octx.beginPath();
+    octx.moveTo(128,225);
+    octx.bezierCurveTo(94,197,88,142,100,94);
+    octx.bezierCurveTo(115,34,167,11,213,17);
+    octx.bezierCurveTo(270,24,299,72,298,127);
+    octx.bezierCurveTo(298,172,281,207,254,226);
+    octx.bezierCurveTo(319,235,371,264,405,317);
+    octx.bezierCurveTo(445,379,461,483,465,620);
+    octx.lineTo(54,620);
+    octx.bezierCurveTo(59,486,72,386,102,324);
+    octx.bezierCurveTo(126,277,158,247,190,230);
+    octx.closePath();
+    octx.fill();
+    octx.restore();
+  }
+  function makeFallback(){
+    octx.clearRect(0,0,W,H);
+    var grad=octx.createRadialGradient(260,210,25,260,300,310);
+    grad.addColorStop(0,"rgba(255,255,255,.9)");grad.addColorStop(1,"rgba(130,235,177,.35)");
+    octx.fillStyle=grad;octx.beginPath();octx.ellipse(260,145,105,132,0,0,Math.PI*2);octx.fill();
+    octx.beginPath();octx.moveTo(150,260);octx.quadraticCurveTo(260,220,370,260);octx.quadraticCurveTo(455,320,470,610);octx.lineTo(50,610);octx.quadraticCurveTo(65,320,150,260);octx.fill();
+  }
+  function buildParticles(){
+    var data=octx.getImageData(0,0,W,H).data;
+    particles=[];
+    var step=4;
+    for(var y=0;y<H;y+=step){
+      for(var x=0;x<W;x+=step){
+        var i=(y*W+x)*4,a=data[i+3];
+        if(a<32)continue;
+        var lum=(data[i]*.24+data[i+1]*.63+data[i+2]*.13);
+        if(Math.random()>.90)continue;
+        var brightness=Math.max(0,Math.min(1,lum/255));
+        var green=Math.random()>.84;
+        var targetX=x+(Math.random()-.5)*1.8,targetY=y+(Math.random()-.5)*1.8;
+        particles.push({
+          tx:targetX,ty:targetY,
+          x:Math.random()*W,y:Math.random()*H,
+          size:.55+Math.random()*(.6+brightness*.75),
+          alpha:.28+brightness*.62,
+          color:green?"157,242,189":(brightness>.65?"226,245,234":"155,192,173"),
+          phase:Math.random()*Math.PI*2,
+          drift:1+Math.random()*4
+        });
+      }
+    }
+  }
+  function initPortrait(){
+    octx.clearRect(0,0,W,H);
+    if(image.complete&&image.naturalWidth){
+      octx.drawImage(image,0,0,W,H);
+      makeMask();
+    }else makeFallback();
+    buildParticles();
+  }
+  function draw(now){
+    ctx.clearRect(0,0,W,H);
+    var elapsed=now-startTime;
+    var intro=Math.max(0,Math.min(1,(elapsed-2250)/1450));
+    var ease=1-Math.pow(1-intro,3);
+    var time=now*.001;
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      var jitter=revealed&&!reduced?Math.sin(time*p.drift+p.phase)*1.4:0;
+      var x=p.x+(p.tx-p.x)*ease+jitter;
+      var y=p.y+(p.ty-p.y)*ease+Math.cos(time*p.drift*.7+p.phase)*(.4+intro*.8);
+      var alpha=p.alpha*(.22+.78*ease);
+      ctx.beginPath();ctx.fillStyle="rgba("+p.color+","+alpha+")";
+      ctx.shadowColor=p.color==="157,242,189"?"rgba(157,242,189,.55)":"rgba(218,245,229,.18)";
+      ctx.shadowBlur=p.size>1.1?7:2;
+      ctx.arc(x,y,p.size,0,Math.PI*2);ctx.fill();
+    }
+    ctx.shadowBlur=0;
+    if(revealed&&!reduced){
+      if(Math.random()<.025&&streaks.length<3)streaks.push({x:-70,y:90+Math.random()*440,v:3+Math.random()*4,len:70+Math.random()*100,a:.55+Math.random()*.35});
+      for(var s=streaks.length-1;s>=0;s--){
+        var st=streaks[s];st.x+=st.v;
+        var g=ctx.createLinearGradient(st.x-st.len,st.y,st.x,st.y);
+        g.addColorStop(0,"rgba(157,242,189,0)");g.addColorStop(.8,"rgba(157,242,189,"+st.a+")");g.addColorStop(1,"rgba(245,255,248,.9)");
+        ctx.strokeStyle=g;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(st.x-st.len,st.y);ctx.lineTo(st.x,st.y);ctx.stroke();
+        if(st.x>W+80)streaks.splice(s,1);
+      }
+    }
+    if(!reduced)requestAnimationFrame(draw);
+  }
+  function runLoader(){
+    var duration=reduced?120:2250;
+    function tick(now){
+      var p=Math.min(100,Math.round(((now-startTime)/duration)*100));
+      loaderBar.style.width=p+"%";
+      loaderPercent.textContent=(p<10?"0":"")+p+"%";
+      loaderStatus.textContent=p<28?"INITIALIZING PARTICLE FIELD":p<62?"MAPPING IDENTITY POINTS":p<91?"SYNCHRONIZING HUMAN SIGNAL":"RENDER COMPLETE";
+      if(p<100)requestAnimationFrame(tick);
+      else{
+        revealed=true;
+        document.body.classList.add("ready");
+        if(reduced)draw(now);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  image.onload=function(){initPortrait();runLoader();};
+  image.onerror=function(){makeFallback();buildParticles();runLoader();};
+  image.src="./assets/saad-golden.jpg";
+  if(image.complete&&image.naturalWidth){initPortrait();runLoader();}
+  if(!reduced)requestAnimationFrame(draw);
+  else{ctx.clearRect(0,0,W,H);}
+})();
+</script>
+</body>
+</html>
