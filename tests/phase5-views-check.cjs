@@ -4,7 +4,7 @@ const required=["css/phase-5.css","js/views/phase5-view.js","js/data/attack-surf
 for(const file of required)assert.ok(fs.existsSync(path.join(root,file)),"Missing Phase 5 file: "+file);
 const html=read("index.html"),shell=read("js/dashboard-shell.js"),main=read("js/main.js"),registry=read("js/views/index.js"),workflow=read(".github/workflows/quality.yml"),css=read("css/phase-5.css");
 assert.ok(html.includes("./css/phase-5.css?v=20261020.2")&&/\.\/js\/main\.js\?v=\d{8}\.\d+/.test(html)&&html.includes("./css/dashboard-shell.css?v=20261020.2"),"Phase 5 cache keys missing.");
-assert.ok(main.includes("./dashboard-shell.js?v=20261025.6")&&main.includes("dataset.release = '20261025.6'"),"Shell cache key or release marker stale.");
+assert.ok(main.includes("./dashboard-shell.js?v=20261025.6")&&main.includes("dataset.release = '20261025.7'"),"Shell cache key or release marker stale.");
 assert.ok(workflow.includes("phase-5-learning-sections")&&workflow.includes("tests/phase5-views-check.cjs"),"CI does not run Phase 5 checks.");
 for(const id of ["projects","attack-surface","skill-progress","learning-path","write-ups","automation","certificates"]){assert.ok(shell.includes('./views/'+id+'.js?v=20261020.2'),"Stale route module: "+id);const start=registry.indexOf('id: "'+id+'"'),end=registry.indexOf(" },",start);assert.ok(registry.slice(start,end+2).includes("built: true"),"View is not marked built: "+id);}
 assert.match(css,/@media\s*\(max-width:\s*700px\)/);assert.match(css,/prefers-reduced-motion\s*:\s*reduce/i);assert.match(css,/html\[data-motion="off"\]/);
