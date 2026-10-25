@@ -34,6 +34,17 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     return { completed: Promise.resolve(), entryStarted: Promise.resolve(), cancel() {}, setMotion() {}, dispose() {} };
   }
 
+  // Show the welcome intro only when the visitor explicitly requests Replay intro.
+  // The default page load goes straight to the workspace.
+  const replayRequested = new URLSearchParams(window.location.search).get("intro") === "1";
+  if (!replayRequested) {
+    root.hidden = true;
+    page.inert = false;
+    document.documentElement.classList.remove("phase2-active", "phase2-paused");
+    const ready = Promise.resolve();
+    return { completed: ready, entryStarted: ready, cancel() {}, setMotion() {}, dispose() {} };
+  }
+
   const skipButton = root.querySelector("[data-p2-skip]");
   const loginButton = root.querySelector("[data-p2-login]");
   const loginLayer = root.querySelector("[data-p2-login-layer]");
