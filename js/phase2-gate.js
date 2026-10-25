@@ -70,13 +70,13 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   portraitBuffer.width = 320;
   portraitBuffer.height = 320;
   const portraitBufferContext = portraitBuffer.getContext("2d", { willReadFrequently: true });
-  const portraitImage = new Image();
+  const portraitImage = typeof Image === "function" ? new Image() : null;
   let portraitPoints = [];
   let portraitReady = false;
   let lastPortraitDraw = 0;
 
   function buildPortrait() {
-    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback || !portraitImage.naturalWidth) return;
+    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback || !portraitImage || !portraitImage.naturalWidth) return;
     const scale = Math.min(320 / portraitImage.naturalWidth, 320 / portraitImage.naturalHeight);
     const drawWidth = portraitImage.naturalWidth * scale;
     const drawHeight = portraitImage.naturalHeight * scale;
@@ -144,7 +144,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
   }
 
   function loadPortrait() {
-    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback) return;
+    if (!portraitCanvas || !portraitContext || !portraitBufferContext || !portraitFallback || !portraitImage) return;
     portraitImage.decoding = "async";
     portraitImage.onload = buildPortrait;
     portraitImage.onerror = () => {
