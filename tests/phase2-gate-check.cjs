@@ -34,7 +34,7 @@ assert.ok(main.includes("initDashboardShell"), "Main startup must initialize the
 assert.ok(main.includes("dashboard.activate()"), "The workspace must activate after the visitor gate completes.");
 
 assert.ok(!gate.includes("sessionStorage"), "The intro must not depend on stored visit flags.");
-assert.ok(gate.includes('new URLSearchParams(window.location.search).get("intro") === "1"), "The intro must require an explicit replay request.");
+assert.ok(gate.includes("new URLSearchParams(window.location.search).get(\"intro\") === \"1\""), "The intro must require an explicit replay request.");
 assert.ok(gate.includes("if (!replayRequested)") && gate.includes("root.hidden = true;") && gate.includes("page.inert = false;"), "The welcome gate must be bypassed on a normal page load.");
 assert.ok(gate.includes("removeReplayQuery();") && gate.includes("root.hidden = false;") && gate.includes("page.inert = true;"), "The intro must still activate when replay is explicitly requested.");
 for (const behavior of [
