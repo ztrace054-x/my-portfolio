@@ -594,3 +594,6 @@ html.phase2-active body { overscroll-behavior: none; }
  .phase2-gate__terminal { padding:10px; } .phase2-gate__login-card { padding:22px 18px; }
 }
 @media (prefers-reduced-motion:reduce) { .phase2-gate__orbit, .phase2-gate__orbit--reverse, .phase2-gate__eye-scan { animation:none!important; } .phase2-gate__scene { transition:none!important; } }
+
+/* The portrait is a lightweight canvas particle field; avoid a costly canvas filter. */
+.phase2-gate canvas.phase2-gate__portrait { filter: none; }
