@@ -597,3 +597,44 @@ html.phase2-active body { overscroll-behavior: none; }
 
 /* The portrait is a lightweight canvas particle field; avoid a costly canvas filter. */
 .phase2-gate canvas.phase2-gate__portrait { filter: none; }
+
+
+/* Fix the portrait canvas against legacy global canvas rules.
+   Keep it in the center column's normal layout, not pinned to the top. */
+.phase2-gate__center > .phase2-gate__portrait:not([hidden]) {
+  display: block !important;
+  position: relative !important;
+  inset: auto !important;
+  width: clamp(170px, 17vw, 255px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+  max-width: 100% !important;
+  max-height: min(31vh, 255px) !important;
+  margin: 0 auto;
+  opacity: 1 !important;
+  z-index: 1 !important;
+  filter: none !important;
+  pointer-events: none;
+  contain: none !important;
+}
+.phase2-gate__center > .phase2-gate__portrait[hidden] {
+  display: none !important;
+}
+.phase2-gate__center > .phase2-gate__portrait:not([hidden]) + svg[data-p2-portrait-fallback] {
+  display: none !important;
+}
+.phase2-gate__center > svg[data-p2-portrait-fallback][hidden] {
+  display: none !important;
+}
+@media (max-width: 700px) {
+  .phase2-gate__center > .phase2-gate__portrait:not([hidden]) {
+    width: clamp(145px, 43vw, 190px) !important;
+    max-height: 25vh !important;
+  }
+}
+@media (max-width: 560px) {
+  .phase2-gate__center > .phase2-gate__portrait:not([hidden]) {
+    width: min(44vw, 190px) !important;
+    max-height: 20vh !important;
+  }
+}
