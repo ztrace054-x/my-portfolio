@@ -1,4 +1,4 @@
-import { profile } from "../data/profile.js?v=20261024.3";
+import { profile } from "../data/profile.js?v=20261025.6";
 import { links } from "../data/links.js?v=20261016.1";
 import { escapeHTML } from "../utils.js?v=20261016.1";
 
@@ -25,12 +25,12 @@ export function render() {
       <header class="view-heading-block">
         <p class="view-eyebrow">OPERATOR PROFILE / 001</p>
         <div class="view-title-row"><h1 id="view-heading" tabindex="-1">Profile</h1><span class="badge badge--cyan">LEARNING IN PUBLIC</span></div>
-        <p class="view-intro">The person behind ZTRACE, the foundations being learned, and the principles guiding the journey.</p>
+        <p class="view-intro">The person behind Rofiqul, personal interests, and the values guiding the journey.</p>
       </header>
       <section class="hud-panel profile-hero" aria-labelledby="profile-name">
         <div class="profile-hero-media">
-          <img class="profile-hero-portrait" src="./assets/saad-golden.jpg" alt="Portrait of Saad" width="864" height="1080" fetchpriority="high" decoding="async">
-          <span class="profile-portrait-tag">LOCAL PROFILE / SAAD</span>
+          <img class="profile-hero-portrait" src="./assets/saad-golden.jpg" alt="Profile portrait" width="864" height="1080" fetchpriority="high" decoding="async">
+          <span class="profile-portrait-tag">PERSONAL PROFILE / REDOAN</span>
         </div>
         <div class="profile-hero-copy">
           <p class="view-eyebrow">IDENTITY / LEARNING CONSOLE</p>
@@ -38,7 +38,7 @@ export function render() {
           <p class="profile-hero-handle">@${escapeHTML(profile.handle)}</p>
           <p class="profile-role">${escapeHTML(profile.education)} <span aria-hidden="true">/</span> ${escapeHTML(profile.level)}</p>
           <div class="profile-status-chips" aria-label="Profile status">${chips}</div>
-          <p class="profile-hero-line">I'm choosing to make my beginning visible.</p>
+          <p class="profile-hero-line">I'm learning about myself and how to build genuine connections.</p>
         </div>
       </section>
       <div class="profile-content-grid">
@@ -47,30 +47,28 @@ export function render() {
           ${story}
         </section>
         <section class="hud-panel profile-current-card" aria-labelledby="profile-focus-title">
-          <div class="hud-panel-heading"><h3 id="profile-focus-title">CURRENTLY LEARNING</h3><span class="badge badge--cyan">FOUNDATIONS</span></div>
-          <p class="profile-card-lead">${escapeHTML(profile.course)}</p>
-          <p class="profile-course-source">COURSE / ${escapeHTML(profile.learningPlatform)}</p>
+          <div class="hud-panel-heading"><h3 id="profile-focus-title">CURRENT FOCUS</h3><span class="badge badge--cyan">PERSONAL GOAL</span></div>
           <ul class="focus-chip-list">${focus}</ul>
-          <p class="profile-card-note">Learning step by step, without presenting study topics as completed milestones.</p>
+          <p class="profile-card-note">Learning to communicate with confidence while treating others with respect.</p>
         </section>
         <section class="hud-panel profile-approach-card" aria-labelledby="profile-approach-title">
           <div class="hud-panel-heading"><h3 id="profile-approach-title">MY APPROACH</h3><span class="view-code">PRINCIPLE / 01</span></div>
           <div class="profile-approach-mark" aria-hidden="true">✓</div>
           <p class="profile-approach-statement">${escapeHTML(profile.principle)}</p>
-          <p class="profile-card-note">Curiosity is important; consent, responsibility, and permission come first.</p>
+          <p class="profile-card-note">Honesty, kindness, and respecting personal boundaries matter.</p>
         </section>
         <section class="hud-panel profile-terminal-card" aria-labelledby="profile-terminal-title">
           <div class="hud-panel-heading"><h3 id="profile-terminal-title">MINI TERMINAL</h3><span class="view-code">LOCAL / READ-ONLY</span></div>
           <div class="profile-terminal" aria-label="Decorative terminal showing current learning status">
-            <div class="profile-terminal-top"><span><i aria-hidden="true"></i> saad@ztrace:~</span><span>SESSION / LOCAL</span></div>
+            <div class="profile-terminal-top"><span><i aria-hidden="true"></i> redoan@rofiqul:~</span><span>SESSION / LOCAL</span></div>
             <div class="profile-terminal-body">
               <p><span class="terminal-prompt">$</span> whoami</p>
-              <pre>saad — CSE student / cybersecurity learner</pre>
+              <pre>redoan — Class 10 student / girls lover</pre>
               <p><span class="terminal-prompt">$</span> cat status.txt</p>
-              <pre>Course: Ethical Hacking for Beginners
-Learning: Linux, networking, recon
-Ethics: Practice with permission
-Status: Beginning, InshaAllah</pre>
+              <pre>Course: Off
+Focus: How to make a girlfriend
+Approach: Confidence, kindness, respect
+Status: Learning, InshaAllah</pre>
             </div>
           </div>
         </section>

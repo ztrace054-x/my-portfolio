@@ -1,18 +1,17 @@
 export const profile = Object.freeze({
-  name: "Saad",
-  brand: "SAAD.ztrace_",
-  handle: "ZTRACE",
-  education: "CSE student",
-  level: "Cybersecurity beginner",
-  course: "Ethical Hacking for Beginners",
-  learningPlatform: "Byte Capsule",
-  statusChips: ["Beginner", "Learning in public", "Byte Capsule"],
-  focus: ["Linux basics", "Networking fundamentals", "Reconnaissance basics"],
+  name: "Redoan",
+  brand: "Rofiqul",
+  handle: "rofiqul",
+  education: "Class 10 student",
+  level: "Girls lover",
+  course: "",
+  learningPlatform: "",
+  statusChips: ["Class 10 Student", "Girls Lover", "Personal Goals"],
+  focus: ["How to make a girlfriend", "Starting conversations", "Building confidence"],
   story: [
-    "I'm Saad, a CSE student taking my first steps into cybersecurity. I'm starting with the fundamentals and being honest about where I am today.",
-    "Through Byte Capsule's Ethical Hacking for Beginners course, I'm building my understanding of Linux, networking, and reconnaissance—one concept at a time.",
-    "Ethics come first. I want to learn responsibly, practice only with permission, and understand the work rather than rush ahead.",
-    "I'm choosing to make my beginning visible. I'll document the learning honestly and keep going, InshaAllah."
+    "I'm Redoan, a Class 10 student who is interested in girls and women.",
+    "I'm learning how to start conversations, build confidence, and get to know someone in a respectful, genuine way.",
+    "I believe honesty, kindness, and respect are important when building a real connection. I'm learning step by step, InshaAllah."
   ],
-  principle: "Learn responsibly. Practice with permission."
+  principle: "Be confident. Be kind. Respect boundaries."
 });
