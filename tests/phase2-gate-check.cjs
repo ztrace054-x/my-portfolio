@@ -27,15 +27,16 @@ assert.ok(html.includes("html.intro-pending #page { visibility: hidden !importan
 assert.ok(html.includes('<div id="page">'), "Legacy content must remain usable when JavaScript is disabled.");
 assert.ok(html.includes("<noscript><style>.phase2-gate{display:none!important}</style></noscript>"), "The gate must be bypassed when JavaScript is disabled.");
 assert.ok(html.includes('document.getElementById("phase2-gate")?.setAttribute("hidden", "");'), "Module failure must reveal the legacy page instead of trapping visitors.");
-assert.ok(!/<div id="phase2-gate"[^>]*\shidden(?:\s|>)/.test(html), "The intro overlay must be visible before the module finishes loading.");
+assert.ok(/<div id="phase2-gate"[^>]*\shidden(?:\s|>)/.test(html), "The welcome overlay must be hidden on the default page load.");
 assert.ok(gate.includes('document.documentElement.classList.remove("intro-pending")'), "The intro must release the initial visibility guard when it completes.");
 assert.ok(main.includes("initPhase2Gate"), "Main startup must initialize the Phase 2 gate.");
 assert.ok(main.includes("initDashboardShell"), "Main startup must initialize the Phase 3 workspace after the gate.");
 assert.ok(main.includes("dashboard.activate()"), "The workspace must activate after the visitor gate completes.");
 
-assert.ok(!gate.includes("sessionStorage"), "The intro must not be suppressed by a stored visit flag; it should appear on every page load.");
-assert.ok(!gate.includes("shouldShowGate") && !gate.includes("enteredPreviously"), "Every page load must show the intro regardless of prior visits.");
-assert.ok(gate.includes("removeReplayQuery();") && gate.includes("root.hidden = false;") && gate.includes("page.inert = true;"), "The gate must activate on each page load.");
+assert.ok(!gate.includes("sessionStorage"), "The intro must not depend on stored visit flags.");
+assert.ok(gate.includes('new URLSearchParams(window.location.search).get("intro") === "1"), "The intro must require an explicit replay request.");
+assert.ok(gate.includes("if (!replayRequested)") && gate.includes("root.hidden = true;") && gate.includes("page.inert = false;"), "The welcome gate must be bypassed on a normal page load.");
+assert.ok(gate.includes("removeReplayQuery();") && gate.includes("root.hidden = false;") && gate.includes("page.inert = true;"), "The intro must still activate when replay is explicitly requested.");
 for (const behavior of [
   'window.matchMedia?.(REDUCED_MOTION_QUERY)',
   'document.addEventListener("visibilitychange"',
@@ -59,4 +60,4 @@ for (const cssRule of [
 
 assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(gate), "The decorative gate must not make network/authentication requests.");
 assert.ok(!html.includes('id="p2-visitor-name"') && !html.includes('id="p2-visitor-key"'), "The intro must not imitate a credential form.");
-console.log("Phase 2 gate checks passed: markup, scene components, per-load intro, reduced motion, responsive rules, and no-auth behavior.");
+console.log("Phase 2 gate checks passed: hidden by default, optional replay intro, reduced motion, responsive rules, and no-auth behavior.");
