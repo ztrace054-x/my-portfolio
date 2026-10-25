@@ -107,8 +107,8 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
         const rgb = luminance > 0.7 ? "231,255,239" : luminance > 0.4 ? "157,242,189" : "77,145,106";
         const alpha = Math.min(0.94, 0.26 + luminance * 0.58);
         portraitPoints.push({
-          x: Math.random() * 320,
-          y: Math.random() * 320,
+          x: 160 + (Math.random() - 0.5) * 112,
+          y: 160 + (Math.random() - 0.5) * 112,
           tx: x + (Math.random() - 0.5) * 1.4,
           ty: y + (Math.random() - 0.5) * 1.4,
           size: 1.1 + luminance * 0.7,
