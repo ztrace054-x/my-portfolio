@@ -12,7 +12,7 @@ assert.ok(fs.existsSync(path.join(rootDir, "assets/saad-golden.jpg")), "The exis
 assert.match(htmlSource, /js\/main\.js\?v=\d{8}\.\d+/, "The main module cache key must be current.");
 assert.match(htmlSource, /dashboard-shell\.css\?v=20261020\.2/, "The shell CSS cache key must be current.");
 assert.match(mainSource, /dashboard-shell\.js\?v=20261025\.6/, "The shell module cache key must be current.");
-assert.match(mainSource, /dataset\.release = '20261025\.6'/, "The release marker must match this update.");
+assert.match(mainSource, /dataset\.release = '20261025\.7'/, "The release marker must match this update.");
 assert.match(shellSource, /views\/profile\.js\?v=20261025\.6/, "Profile module cache key must be current.");
 assert.match(shellSource, /views\/dashboard\.js\?v=20261024\.2/, "Dashboard module cache key must be current.");
 assert.ok(workflowSource.includes("phase-4-profile-dashboard"), "Quality workflow must run on the Phase 4 branch.");
