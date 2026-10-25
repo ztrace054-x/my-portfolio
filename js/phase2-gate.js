@@ -88,8 +88,27 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
     portraitBufferContext.moveTo(42, 320);
     portraitBufferContext.bezierCurveTo(48, 278, 72, 256, 112, 240);
     portraitBufferContext.bezierCurveTo(88, 217, 74, 181, 74, 139);
-    portraitBufferContext.bezierCurveTo(74, 70, 111, 18, 160, 18);
-    portraitBufferContext.bezierCurveTo(210, 18, 246, 70, 246, 139);
+    portraitBufferContext.bezierCurveTo(72, 122, 75, 107, 82, 96);
+    portraitBufferContext.lineTo(66, 102);
+    portraitBufferContext.lineTo(82, 88);
+    portraitBufferContext.lineTo(75, 72);
+    portraitBufferContext.lineTo(98, 80);
+    portraitBufferContext.lineTo(92, 58);
+    portraitBufferContext.lineTo(115, 74);
+    portraitBufferContext.lineTo(112, 48);
+    portraitBufferContext.lineTo(133, 67);
+    portraitBufferContext.lineTo(143, 27);
+    portraitBufferContext.lineTo(156, 62);
+    portraitBufferContext.lineTo(162, 4);
+    portraitBufferContext.lineTo(176, 62);
+    portraitBufferContext.lineTo(192, 31);
+    portraitBufferContext.lineTo(198, 66);
+    portraitBufferContext.lineTo(219, 43);
+    portraitBufferContext.lineTo(216, 71);
+    portraitBufferContext.lineTo(240, 63);
+    portraitBufferContext.lineTo(231, 84);
+    portraitBufferContext.lineTo(251, 91);
+    portraitBufferContext.bezierCurveTo(247, 107, 246, 123, 246, 139);
     portraitBufferContext.bezierCurveTo(246, 181, 232, 217, 208, 240);
     portraitBufferContext.bezierCurveTo(248, 256, 272, 278, 278, 320);
     portraitBufferContext.closePath();
@@ -146,7 +165,7 @@ export function initPhase2Gate({ motionAllowed = true } = {}) {
       portraitCanvas.hidden = true;
       portraitFallback.hidden = false;
     };
-    portraitImage.src = "./assets/saad-intro.jpg";
+    portraitImage.src = "./assets/saad-crown.jpg";
     if (portraitImage.complete && portraitImage.naturalWidth) buildPortrait();
   }
 
