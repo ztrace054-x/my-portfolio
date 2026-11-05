@@ -3,13 +3,13 @@
 **Current production website (unchanged during this redesign):** https://ztrace054-x.github.io/my-portfolio/  
 **Redesign branch:** `redesign/ztrace-premium-portfolio`
 
-A static, client-side cybersecurity learning portfolio for Saad. The introductory experience leads into a hash-routed workspace. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
+A static, client-side cybersecurity learning portfolio for Md Saad (ZTRACE), a CSE student at the beginning of a cybersecurity learning journey. The introductory experience leads into a hash-routed workspace. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
 
 The design direction uses deep black, mint green, Space Grotesk, JetBrains Mono, an illustrative network globe, and a restrained terminal motif. The interface is English-only and aims to keep project claims, learning states, and credentials evidence-based.
 
 ## Workspace sections
 
-- **Profile** — CSE student and cybersecurity learner identity, learning focus, and verified public links
+- **Profile** — Md Saad's CSE student identity, beginner cybersecurity journey, course record, learning philosophy, future goals, and existing public links
 - **Dashboard** — honest zero-state metrics, useful shortcuts, and explicit empty states until records exist
 - **Projects** — repository-backed project evidence with an explicit in-progress status
 - **Attack Surface** — educational illustration, not a real scanner
