@@ -50,8 +50,8 @@ export function render() {
         <div class="hud-panel-heading"><h2 id="identity-focus-title">04 / CURRENT LEARNING FOCUS</h2><span class="view-code">BEGINNER FOUNDATIONS</span></div>
         <ul class="identity-check-list">${list(profile.learningFocus)}</ul>
         <div class="identity-course-card">
-          <div><p class="view-eyebrow">COURSE / LEARNING RECORD</p><h3>${e(profile.course)}</h3><p>Learning provider: <strong>${e(profile.learningPlatform)}</strong></p><p class="identity-course-programme">${e(profile.courseProgramme)}</p></div>
-          <div class="identity-course-meta"><span>COURSE CERTIFICATE</span><strong>${e(profile.courseAwardDate)}</strong><small>Certificate ID: ${e(profile.courseCertificateId)}</small></div>
+          <div><p class="view-eyebrow">COURSE / LEARNING RECORD</p><h3>${e(profile.course)}</h3><p>Learning provider: <strong>${e(profile.learningPlatform)}</strong></p><p class="identity-course-programme">Course certificate listed as part of the learning journey.</p></div>
+          <div class="identity-course-meta"><span>COURSE CERTIFICATE</span><strong>LEARNING RECORD</strong><small>Not a professional certification</small></div>
           <p class="identity-course-note">${e(profile.courseNote)} ${e(profile.courseVerification)}</p>
         </div>
       </section>
