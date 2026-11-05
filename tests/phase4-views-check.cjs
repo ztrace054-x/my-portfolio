@@ -76,12 +76,14 @@ async function run() {
   const dashboardHtml = dashboardModule.namespace.render();
 
   for (const phrase of [
-    "Profile portrait", "@rofiqul", "Class 10 student", "Girls lover",
-    "Class 10 Student", "Girls Lover", "Personal Goals", "How to make a girlfriend",
-    "Starting conversations", "Building confidence", "respectful", "honesty", "InshaAllah",
-    "I'm learning about myself and how to build genuine connections.", "Be confident. Be kind. Respect boundaries.",
-    "whoami", "cat status.txt", "data-copy-email", "GitHub", "TryHackMe", "ZeroDayTest", "Instagram"
-  ]) assert.ok(profileHtml.includes(phrase), "Profile is missing required content: " + phrase);
+    "Md Saad", "@ztrace054-x", "CSE student", "Cybersecurity beginner",
+    "Linux fundamentals", "Computer networking", "Reconnaissance fundamentals",
+    "Ethical Hacking for Beginners", "Byte Capsule", "100 Days Challenge Live Online Training Program",
+    "1 November 2026", "7482ZWKQ", "course certificate", "professional penetration-testing certification",
+    "ABOUT ME", "PERSONAL JOURNEY", "CYBERSECURITY INTERESTS", "CURRENT LEARNING FOCUS",
+    "PERSONAL LEARNING PHILOSOPHY", "FUTURE GOALS", "authorized", "responsibility",
+    "no professional experience", "data-copy-email", "GitHub", "TryHackMe", "ZeroDayTest", "Instagram"
+  ]) assert.ok(profileHtml.toLowerCase().includes(phrase.toLowerCase()), "Profile is missing required content: " + phrase);
   assert.ok(profileHtml.includes("./assets/saad-golden.jpg"), "Profile must use the existing golden portrait.");
   assert.ok(profileHtml.includes('href="mailto:ztrace054@gmail.com"'), "Email link must remain available.");
   assert.ok(profileHtml.includes("profile-copy-feedback"), "Copy action needs accessible feedback.");
