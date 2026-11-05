@@ -78,8 +78,7 @@ async function run() {
   for (const phrase of [
     "Md Saad", "@ztrace054-x", "CSE student", "Cybersecurity beginner",
     "Linux fundamentals", "Computer networking", "Reconnaissance fundamentals",
-    "Ethical Hacking for Beginners", "Byte Capsule", "100 Days Challenge Live Online Training Program",
-    "1 November 2026", "7482ZWKQ", "course certificate", "professional penetration-testing certification",
+    "Ethical Hacking for Beginners", "Byte Capsule", "Byte Capsule IT", "course certificate", "professional penetration-testing certification",
     "ABOUT ME", "PERSONAL JOURNEY", "CYBERSECURITY INTERESTS", "CURRENT LEARNING FOCUS",
     "PERSONAL LEARNING PHILOSOPHY", "FUTURE GOALS", "authorized", "responsibility",
     "no professional experience", "data-copy-email", "GitHub", "TryHackMe", "ZeroDayTest", "Instagram"
