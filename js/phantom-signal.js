@@ -151,8 +151,9 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
       if (!done) finish();
       events.abort();
       window.clearTimeout(autoTimer);
-      window.clearTimeout(exitTimer);
       window.clearInterval(clockTimer);
+      // Keep the exit timer alive so the hidden state, inert page, and completion
+      // promise are always released even when a caller disposes during the fade.
     }
   };
 }
