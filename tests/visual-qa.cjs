@@ -218,7 +218,7 @@ async function enterWorkspace(page) {
     return {
       titleSize: title ? parseFloat(getComputedStyle(title).fontSize) : 0,
       signalDisplay: signal ? getComputedStyle(signal).display : "",
-      echoColumns: echoes ? getComputedStyle(echoes).gridTemplateColumns.trim().split(/\\s+/).length : 0,
+      echoColumns: echoes ? getComputedStyle(echoes).gridTemplateColumns.trim().split(/\s+/).length : 0,
       footerPosition: footer ? getComputedStyle(footer).position : ""
     };
   });
