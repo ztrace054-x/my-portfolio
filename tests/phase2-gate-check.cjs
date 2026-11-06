@@ -11,6 +11,7 @@ const required = [
 for (const file of required) assert.ok(fs.existsSync(path.join(root, file)), "Missing Phantom Signal file: " + file);
 
 const html = read("index.html");
+const visibleHtmlText = html.replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ");
 const main = read("js/main.js");
 const intro = read("js/phantom-signal.js");
 const css = read("css/phantom-signal.css");
@@ -29,7 +30,7 @@ for (const quote of [
   "You call it a security system. I call it my playground.",
   "You fear the unknown. The unknown knows your name.",
   "./ phantom signal"
-]) assert.ok(html.includes(quote), "Missing exact Phantom Signal copy: " + quote);
+]) assert.ok(visibleHtmlText.includes(quote), "Missing exact Phantom Signal copy: " + quote);
 
 assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261106\.1"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
 assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, "The Phantom Signal title must be the intro heading.");
