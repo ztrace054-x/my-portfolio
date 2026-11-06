@@ -132,7 +132,13 @@ for (const image of imageTags) {
   assert(alt && alt[1].trim().length > 0, 'Every content image needs meaningful alt text');
   assert.match(image, /\bwidth=["']\d+["']/i, 'Images need intrinsic width');
   assert.match(image, /\bheight=["']\d+["']/i, 'Images need intrinsic height');
-  assert.match(image, /\bloading=["']lazy["']/i, 'Below-the-fold and dialog images should be lazy-loaded');
+  const isCriticalIntroPortrait = /\bclass=["'][^"']*\bphantom-intro__portrait\b[^"']*["']/i.test(image);
+  if (isCriticalIntroPortrait) {
+    assert.match(image, /\bloading=["']eager["']/i, 'The first-screen cinematic portrait should load eagerly');
+    assert.match(image, /\bfetchpriority=["']high["']/i, 'The first-screen cinematic portrait should receive high fetch priority');
+  } else {
+    assert.match(image, /\bloading=["']lazy["']/i, 'Below-the-fold and dialog images should be lazy-loaded');
+  }
   assert.match(image, /\bdecoding=["']async["']/i, 'Images should decode asynchronously');
 }
 checks++;
