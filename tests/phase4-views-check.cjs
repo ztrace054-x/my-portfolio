@@ -11,10 +11,10 @@ const workflowSource = read(".github/workflows/quality.yml");
 assert.ok(fs.existsSync(path.join(rootDir, "assets/saad-golden.jpg")), "The existing profile portrait asset must exist.");
 assert.match(htmlSource, /js\/main\.js\?v=\d{8}\.\d+/, "The main module cache key must be current.");
 assert.match(htmlSource, /dashboard-shell\.css\?v=20261020\.2/, "The shell CSS cache key must be current.");
-assert.match(mainSource, /dashboard-shell\.js\?v=20261025\.6/, "The shell module cache key must be current.");
+assert.match(mainSource, /dashboard-shell\.js\?v=20261106\.1/, "The shell module cache key must be current.");
 assert.match(mainSource, /dataset\.release = '20261025\.7'/, "The release marker must match this update.");
-assert.match(shellSource, /views\/profile\.js\?v=20261105\.2/, "Profile module cache key must be current.");
-assert.match(shellSource, /views\/dashboard\.js\?v=20261024\.2/, "Dashboard module cache key must be current.");
+assert.match(shellSource, /views\/profile\.js\?v=20261106\.1/, "Profile module cache key must be current.");
+assert.match(shellSource, /views\/dashboard\.js\?v=20261106\.1/, "Dashboard module cache key must be current.");
 assert.ok(workflowSource.includes("phase-4-profile-dashboard"), "Quality workflow must run on the Phase 4 branch.");
 assert.ok(workflowSource.includes("node --experimental-vm-modules tests/phase4-views-check.cjs"), "Quality workflow must execute the Phase 4 regression checks.");
 const routeBlock = shellSource.slice(shellSource.indexOf("function renderRoute"), shellSource.indexOf("function replayIntro"));
@@ -77,7 +77,7 @@ async function run() {
 
   for (const phrase of [
     "Md Saad", "@ztrace054-x", "CSE student", "Cybersecurity beginner",
-    "Linux fundamentals", "Computer networking", "Reconnaissance fundamentals",
+    "Linux and command-line fundamentals", "Computer networking", "Reconnaissance fundamentals",
     "Ethical Hacking for Beginners", "Byte Capsule", "Byte Capsule IT", "course certificate", "professional penetration-testing certification",
     "ABOUT ME", "PERSONAL JOURNEY", "CYBERSECURITY INTERESTS", "CURRENT LEARNING FOCUS",
     "PERSONAL LEARNING PHILOSOPHY", "FUTURE GOALS", "authorized", "responsibility",
@@ -87,7 +87,7 @@ async function run() {
   assert.ok(profileHtml.includes('href="mailto:ztrace054@gmail.com"'), "Email link must remain available.");
   assert.ok(profileHtml.includes("profile-copy-feedback"), "Copy action needs accessible feedback.");
   for (const key of ["labsCompleted", "ctfChallenges", "writeUps", "certificates", "roomsCompleted"]) {
-    assert.equal(statsModule.namespace.stats[key], 0, "Every displayed statistic must come from zero-state data: " + key);
+    assert.equal(statsModule.namespace.stats[key], key === "certificates" ? 1 : 0, "Every displayed statistic must come from zero-state data: " + key);
   }
 
   assert.equal((dashboardHtml.match(/class="stat-number"[^>]*>0<\/p>/g) || []).length, 5, "Dashboard must show five zero-valued metric cards.");

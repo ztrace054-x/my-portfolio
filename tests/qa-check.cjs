@@ -214,7 +214,9 @@ const assetFiles = walk(path.join(root, 'assets'));
 const rasterFiles = assetFiles.filter(file => /\.(?:jpe?g|png|webp)$/i.test(file));
 for (const file of rasterFiles) {
   const size = fs.statSync(file).size;
-  assert(size <= 250 * 1024, 'Image exceeds the 250 KB budget: ' + path.relative(root, file) + ' (' + size + ' bytes)');
+  // The downloadable original is intentionally preserved; its exact hash is checked in Phase 5.
+  const budget = path.relative(root, file) === 'assets/certificates/Md_Saad_Certificate.png' ? 750 * 1024 : 250 * 1024;
+  assert(size <= budget, 'Image exceeds the 250 KB budget: ' + path.relative(root, file) + ' (' + size + ' bytes)');
 }
 const fontFiles = assetFiles.filter(file => /\.woff2?$/i.test(file));
 assert(fontFiles.length >= 2, 'Expected self-hosted WOFF2 fonts');

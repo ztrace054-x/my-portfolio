@@ -9,7 +9,7 @@ import { initCursor } from './cursor.js?v=20261018.5';
 import { initAnimations } from './animations.js?v=20261018.5';
 import { initTerminal } from './terminal.js?v=20261016.1';
 import { initJourney } from './journey.js?v=20261018.4';
-import { initDashboardShell } from './dashboard-shell.js?v=20261025.6';
+import { initDashboardShell } from './dashboard-shell.js?v=20261106.1';
 
 const root = document.documentElement;
 root.dataset.release = '20261025.7';

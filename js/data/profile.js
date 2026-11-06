@@ -7,7 +7,7 @@ export const profile = Object.freeze({
   course: "Ethical Hacking for Beginners",
   learningPlatform: "Byte Capsule IT",
   courseCredentialType: "Course completion certificate",
-  courseVerification: "Issuer wording should be checked against the original certificate before publication.",
+  courseVerification: "Original inspected: Byte Capsule; awarded November 01, 2026; certificate ID 7482ZWKQ.",
   statusChips: ["CSE Student", "Cybersecurity Beginner", "Learning in Public"],
   focus: ["Linux fundamentals", "Computer networking", "Reconnaissance fundamentals", "Ethical hacking principles"],
   interests: [
