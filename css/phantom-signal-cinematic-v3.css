@@ -495,8 +495,8 @@
     font-size:9px;
   }
   .phantom-intro__ticker>span:first-child{display:none}
-  .phantom-intro__ticker>span:nth-child(2){display:none}
-  .phantom-intro__controls{width:100%;gap:9px}
+  .phantom-intro__ticker>span:nth-child(2){display:block;order:1;width:100%;text-align:left;font-size:8px;white-space:normal}
+  .phantom-intro__controls{order:2;width:100%;gap:9px}
   .phantom-intro__button{
     flex:1;
     min-width:0;
