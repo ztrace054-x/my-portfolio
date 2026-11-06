@@ -245,6 +245,8 @@ async function enterWorkspace(page) {
     rootWidth: el.clientWidth, rootScrollWidth: el.scrollWidth,
     viewportWidth: innerWidth, bodyScrollWidth: document.documentElement.scrollWidth
   }));
+  // Short viewports intentionally scroll so all four cards retain readable text.
+  await page.locator("#phase2-gate").evaluate(el => { el.scrollTop = el.scrollHeight; });
   const quoteLayout = await page.locator("#phase2-gate").evaluate(el => {
     const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
     const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();

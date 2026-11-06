@@ -92,6 +92,8 @@ async function verifyIntro(page, label, screenshotName) {
       overflowNodes
     };
   });
+  // All four readable cards may extend beyond a short viewport.
+  await intro.evaluate(el => { el.scrollTop = el.scrollHeight; });
   const quoteLayout = await intro.evaluate(el => {
     const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
     const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();

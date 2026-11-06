@@ -38,7 +38,7 @@ assert.match(html, /src="\.\/assets\/phantom-signal-hero\.webp"/, "The intro mus
 assert.ok(html.includes('data-p2-skip') && html.includes('data-p2-login'), "Skip and enter controls must be available.");
 assert.ok(html.includes('aria-modal="true"') && html.includes('aria-labelledby="phantom-intro-title"'), "Intro dialog must have an accessible name.");
 assert.ok(html.includes('href="./css/phantom-signal.css?v=20261106.1"'), "The Phantom Signal stylesheet must be linked.");
-assert.ok(html.includes('href="./css/phantom-signal-cinematic-v2.css?v=20261106.5"'), "The cinematic v2 stylesheet must be linked.");
+assert.ok(html.includes('href="./css/phantom-signal-cinematic-v2.css?v=20261106.6"'), "The cinematic v2 stylesheet must be linked.");
 assert.ok(!html.includes('phase-2-gate.css'), "The superseded HUD stylesheet must not load with the new intro.");
 assert.ok(/<div id="page">/.test(html), "The original portfolio content must remain intact.");
 assert.ok(html.includes("Replay the Phantom Signal cinematic introduction."), "Settings must describe the new replay experience.");

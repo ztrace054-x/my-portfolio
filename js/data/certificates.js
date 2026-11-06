@@ -15,7 +15,7 @@ export const certificates = Object.freeze([
   verificationUrl:"https://bytecapsuleit.com/verify-certificate"
  }),
  Object.freeze({id:"junior-penetration-tester",name:"Junior Penetration Tester Certificate",emptyLabel:"Not earned yet",status:"Planned"}),
+ Object.freeze({id:"oscp",name:"OSCP",emptyLabel:"Not earned yet",status:"Planned"}),
  Object.freeze({id:"senior-penetration-tester",name:"Senior Penetration Tester Certificate",emptyLabel:"Not earned yet",status:"Planned"}),
- Object.freeze({id:"ceh",name:"CEH",emptyLabel:"Not earned yet",status:"Planned"}),
- Object.freeze({id:"oscp",name:"OSCP",emptyLabel:"Not earned yet",status:"Planned"})
+ Object.freeze({id:"ceh",name:"CEH",emptyLabel:"Not earned yet",status:"Planned"})
 ]);
