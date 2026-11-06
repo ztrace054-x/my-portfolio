@@ -117,59 +117,6 @@ export function initWorkspaceMotion(shell, motion) {
       revealTargets.forEach(el => revealObserver.observe(el));
     }
 
-    root.querySelectorAll("[data-count-up]").forEach(el => {
-      const target = Number(el.dataset.countUp) || 0;
-      el.textContent = String(target);
-      if (target <= 0 || !motion.motionAllowed || motion.reducedMotion) return;
-
-      const duration = motion.intensity === "low" ? 650 : motion.intensity === "high" ? 1100 : 850;
-      let elapsed = 0;
-      let last = 0;
-      let frame = 0;
-      let stopped = false;
-
-      const finish = () => {
-        stopped = true;
-        if (frame) cancelAnimationFrame(frame);
-        frame = 0;
-        el.textContent = String(target);
-      };
-
-      const tick = now => {
-        frame = 0;
-        if (stopped || document.hidden || !motion.motionAllowed) return;
-        if (!last) last = now;
-        else {
-          elapsed += Math.min(64, now - last);
-          last = now;
-        }
-        const progress = Math.min(1, elapsed / duration);
-        el.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3))));
-        if (progress < 1) frame = requestAnimationFrame(tick);
-      };
-
-      const visibility = () => {
-        if (document.hidden) {
-          if (frame) cancelAnimationFrame(frame);
-          frame = 0;
-          last = 0;
-        } else if (!stopped && !frame) {
-          frame = requestAnimationFrame(tick);
-        }
-      };
-      const change = () => {
-        if (!motion.motionAllowed || motion.reducedMotion) finish();
-      };
-
-      document.addEventListener("visibilitychange", visibility);
-      motion.addEventListener("change", change);
-      frame = requestAnimationFrame(tick);
-      cleanups.push(() => {
-        finish();
-        document.removeEventListener("visibilitychange", visibility);
-        motion.removeEventListener("change", change);
-      });
-    });
   }
 
   return {
