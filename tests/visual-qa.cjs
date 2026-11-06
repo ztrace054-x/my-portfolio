@@ -189,7 +189,7 @@ async function enterWorkspace(page) {
   const introHeading = await page.locator("#phase2-gate h1").first().innerText().catch(() => "");
   if (!introHeading.trim()) issue("intro-heading-missing", "Intro has no visible H1.");
   const skipName = await page.locator("[data-p2-skip]").evaluate(el => ({
-    text: el.innerText.replace(/\\s+/g, " ").trim(),
+    text: el.innerText.replace(/\s+/g, " ").trim(),
     ariaLabel: el.getAttribute("aria-label")
   }));
   if (skipName.ariaLabel && !skipName.text.toLowerCase().includes(skipName.ariaLabel.toLowerCase())) {
@@ -331,7 +331,7 @@ async function checkProfileAndProjects(page) {
   await page.evaluate(() => { window.location.hash = "#/profile"; });
   await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
   await page.waitForFunction(() => document.querySelector("[data-view-root] .view-page h1")?.textContent.trim() === "Meet Md Saad", { timeout: 6000 });
-  const profile = (await page.locator("[data-view-root]").innerText()).replace(/\\s+/g, " ");
+  const profile = (await page.locator("[data-view-root]").innerText()).replace(/\s+/g, " ");
   for (const phrase of ["Meet Md Saad", "CSE student", "beginning of a cybersecurity journey", "LEARNING IN PUBLIC"]) {
     if (!profile.includes(phrase)) issue("profile-content-missing", "Profile is missing expected content: " + phrase + ".");
   }
@@ -339,7 +339,7 @@ async function checkProfileAndProjects(page) {
   await page.evaluate(() => { window.location.hash = "#/projects"; });
   await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="projects"]')?.getAttribute("aria-current") === "page");
   await page.waitForFunction(() => document.querySelector("[data-view-root] .project-card h2")?.textContent.trim() === "ZTRACE Cybersecurity Learning Portfolio", { timeout: 6000 });
-  const projects = (await page.locator("[data-view-root]").innerText()).replace(/\\s+/g, " ");
+  const projects = (await page.locator("[data-view-root]").innerText()).replace(/\s+/g, " ");
   if (!projects.includes("ZTRACE Cybersecurity Learning Portfolio")) issue("project-title-missing", "The repository-backed portfolio project title is missing.");
   if (!projects.includes("In progress")) issue("project-status-missing", "The portfolio project must remain marked In progress.");
   const sourceLink = page.locator('[data-view-root] a[href="https://github.com/ztrace054-x/my-portfolio"]');
