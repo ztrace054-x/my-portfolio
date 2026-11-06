@@ -10,16 +10,16 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const requiredQuotes = [
   "You built the firewall.",
-  "I became the",
+  "I became the shadow behind it.",
   "You encrypted the system.",
-  "I learned the",
+  "I learned the language of silence.",
   "You wait for the warning.",
-  "I arrive",
+  "I arrive before the alarm.",
   "And when you finally feel safe...",
   "I'm already everywhere.",
   "They build walls. I find cracks. They set rules. I rewrite them. They call it security. I call it a challenge. And when they think they are safe... that's when I'm already inside.",
-  "You call it impossible. I call it",
-  "You call it a security system. I call it",
+  "You call it impossible. I call it unfinished.",
+  "You call it a security system. I call it my playground.",
   "You fear the unknown. The unknown knows your name.",
   "./ phantom signal"
 ];
