@@ -172,30 +172,52 @@ async function ensureImages(page) {
 }
 
 async function enterWorkspace(page) {
-  currentRoute = "default-entry";
+  currentRoute = "phantom-signal-intro";
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
-  await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
-  await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
-  const gateHiddenByDefault = await page.locator("#phase2-gate").evaluate(el => el.hidden);
-  if (!gateHiddenByDefault) issue("default-welcome-popup-visible", "The welcome popup should not appear on a normal site visit.");
-  await screenshot(page, "00-direct-entry.png");
+  await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
+  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.1");
+  await screenshot(page, "00-phantom-signal-intro.png");
 
-  currentRoute = "intro";
-  await page.goto(`${ORIGIN}?intro=1`, { waitUntil: "load" });
-  await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
-  await page.waitForSelector("#phase2-gate", { state: "visible", timeout: 7000 });
-  await screenshot(page, "00-intro.png");
-  const introHeading = await page.locator("#phase2-gate h1").first().innerText().catch(() => "");
-  if (!introHeading.trim()) issue("intro-heading-missing", "Intro has no visible H1.");
+  const introText = await page.locator("#phase2-gate").evaluate(el => el.textContent || "");
+  const requiredQuotes = [
+    "You built the firewall.",
+    "I became the shadow behind it.",
+    "You encrypted the system.",
+    "I learned the language of silence.",
+    "You wait for the warning.",
+    "I arrive before the alarm.",
+    "And when you finally feel safe...",
+    "I'm already everywhere.",
+    "They build walls. I find cracks. They set rules. I rewrite them. They call it security. I call it a challenge. And when they think they are safe... that's when I'm already inside.",
+    "You call it impossible. I call it unfinished.",
+    "You call it a security system. I call it my playground.",
+    "You fear the unknown. The unknown knows your name.",
+    "./ phantom signal"
+  ];
+  for (const quote of requiredQuotes) {
+    if (!introText.includes(quote)) issue("intro-quote-missing", "An exact Phantom Signal quote is missing.", { quote });
+  }
+  const portrait = await page.locator(".phantom-intro__portrait").evaluate(img => ({
+    src: img.getAttribute("src"), complete: img.complete,
+    naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight,
+    alt: img.alt
+  }));
+  if (!portrait.complete || portrait.naturalWidth < 300 || !portrait.alt.trim()) {
+    issue("phantom-portrait-not-loaded", "The original Phantom Signal portrait did not load with useful alternative text.", portrait);
+  }
+  if (!portrait.src.includes("phantom-signal-hero.webp")) {
+    issue("phantom-original-image-not-used", "The Phantom Signal original portrait asset is not used.", portrait);
+  }
+
   const skipName = await page.locator("[data-p2-skip]").evaluate(el => ({
     text: el.innerText.replace(/\s+/g, " ").trim(),
     ariaLabel: el.getAttribute("aria-label")
   }));
-  if (skipName.ariaLabel && !skipName.text.toLowerCase().includes(skipName.ariaLabel.toLowerCase())) {
-    issue("intro-skip-name-mismatch", "Skip button accessible name does not include its visible text.", skipName);
+  if (!skipName.text.toLowerCase().includes("skip intro")) {
+    issue("intro-skip-name-mismatch", "Skip button accessible name must include its visible text.", skipName);
   }
-  const tickerMetrics = await page.locator(".phase2-gate__ticker").evaluate(el => {
+  const tickerMetrics = await page.locator(".phantom-intro__ticker").evaluate(el => {
     const rect = el.getBoundingClientRect();
     const children = Array.from(el.children).filter(child => getComputedStyle(child).display !== "none").map(child => {
       const childRect = child.getBoundingClientRect();
@@ -204,13 +226,13 @@ async function enterWorkspace(page) {
     return { top: rect.top, bottom: rect.bottom, clientHeight: el.clientHeight, scrollHeight: el.scrollHeight, viewportHeight: innerHeight, viewportWidth: innerWidth, children };
   });
   if (tickerMetrics.scrollHeight > tickerMetrics.clientHeight + 2
-      || tickerMetrics.children.some(child => child.bottom > tickerMetrics.bottom + 1 || child.bottom > tickerMetrics.viewportHeight + 1 || child.left < -1 || child.right > tickerMetrics.viewportWidth + 1)) {
-    issue("intro-footer-clipped", "Intro footer text overflows its footer or viewport.", tickerMetrics);
+      || tickerMetrics.children.some(child => child.bottom > tickerMetrics.bottom + 1 || child.left < -1 || child.right > tickerMetrics.viewportWidth + 1)) {
+    issue("intro-footer-clipped", "Intro controls or footer text overflow their visible area.", tickerMetrics);
   }
   if (page.viewportSize().width <= 560) {
     const smallText = await page.evaluate(() => [
-      ".phase2-gate__topbar", ".phase2-gate__ticker", ".phase2-gate__center-caption",
-      ".phase2-gate__terminal-top", ".phase2-gate__terminal-command", ".phase2-gate__terminal pre"
+      ".phantom-intro__topbar", ".phantom-intro__quote-group p",
+      ".phantom-intro__echo p", ".phantom-intro__button"
     ].map(selector => {
       const el = document.querySelector(selector);
       return { selector, fontSize: el ? parseFloat(getComputedStyle(el).fontSize) : null };
@@ -219,14 +241,17 @@ async function enterWorkspace(page) {
       issue("mobile-intro-small-text", "Intro text is below 12px on a mobile viewport.", item);
     }
   }
-  const globeVisible = await page.locator("#phase2-gate .phase2-gate__globe, #phase2-gate .phase2-gate__visual, #phase2-gate svg").first().isVisible().catch(() => false);
-  if (!globeVisible) issue("intro-globe-not-visible", "No visible SVG/globe element was found in the intro.");
+  const geometry = await page.locator("#phase2-gate").evaluate(el => ({
+    rootWidth: el.clientWidth, rootScrollWidth: el.scrollWidth,
+    viewportWidth: innerWidth, bodyScrollWidth: document.documentElement.scrollWidth
+  }));
+  if (geometry.rootScrollWidth > geometry.rootWidth + 2 || geometry.bodyScrollWidth > geometry.viewportWidth + 2) {
+    issue("intro-horizontal-overflow", "Phantom Signal intro causes horizontal overflow.", geometry);
+  }
+  const portraitVisible = await page.locator(".phantom-intro__portrait").isVisible().catch(() => false);
+  if (!portraitVisible) issue("intro-portrait-not-visible", "The original hooded portrait is not visible.");
+
   await page.locator("[data-p2-skip]").click();
-  await page.locator("[data-p2-login]").waitFor({ state: "visible", timeout: 4000 });
-  await screenshot(page, "01-intro-ready.png");
-  await page.locator("[data-p2-login]").click();
-  await page.waitForTimeout(120);
-  await screenshot(page, "02-transition.png");
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
   await page.waitForTimeout(160);
@@ -434,16 +459,18 @@ async function checkIntroReplay(page) {
   });
   await screenshot(page, "settings-panel-open.png");
   await page.locator("[data-replay-intro]").click();
-  await page.waitForFunction(() => new URL(window.location.href).searchParams.get("intro") === "1", { timeout: 7000 });
+  await page.waitForFunction(() => new URL(window.location.href).searchParams.get("intro") === "1", null, { timeout: 7000 });
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
-  await screenshot(page, "intro-replay.png");
-  await page.locator("[data-p2-skip]").click();
-  await page.locator("[data-p2-login]").waitFor({ state: "visible", timeout: 4000 });
+  await screenshot(page, "phantom-signal-replay.png");
+  const text = await page.locator("#phase2-gate").evaluate(el => el.textContent || "");
+  if (!text.includes("I'm already everywhere.") || !text.includes("You fear the unknown. The unknown knows your name.")) {
+    issue("replay-quotes-missing", "Replay intro did not render the full Phantom Signal copy.");
+  }
   await page.locator("[data-p2-login]").click();
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
+  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.hidden === true);
 }
-
 async function checkAccessibility(page) {
   currentRoute = "accessibility";
   try {
@@ -582,13 +609,13 @@ async function main() {
     reducedPage.on("response", response => {
       if (response.url().startsWith(ORIGIN) && response.status() >= 400) issue("asset-http-error", "Local resource returned an HTTP error.", { url: response.url(), status: response.status() });
     });
-    await reducedPage.goto(`${ORIGIN}?intro=1`, { waitUntil: "load" });
+    await reducedPage.goto(ORIGIN, { waitUntil: "load" });
+    await reducedPage.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
     const prefersReducedMotion = await reducedPage.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
-    if (!prefersReducedMotion) issue("reduced-motion-not-detected", "Browser context did not expose prefers-reduced-motion: reduce.");
+    const staticIntro = await reducedPage.locator("#phase2-gate").evaluate(el => el.classList.contains("is-static"));
+    if (!prefersReducedMotion || !staticIntro) issue("reduced-motion-not-detected", "The reduced-motion preference was not applied to the Phantom Signal intro.");
     await screenshot(reducedPage, "00-intro-reduced-motion.png");
     await reducedPage.locator("[data-p2-skip]").click();
-    await reducedPage.locator("[data-p2-login]").waitFor({ state: "visible", timeout: 4000 });
-    await reducedPage.locator("[data-p2-login]").click();
     await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
     await reducedPage.evaluate(() => { window.location.hash = "#/profile"; });
     await reducedPage.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");

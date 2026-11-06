@@ -123,50 +123,32 @@ function fixture() {
 }
 const flush = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
 
-function phase2Fixture({ search = '', entered = false, storageBlocked = false } = {}) {
+function phantomFixture({ search = '', hash = '', seen = false, storageBlocked = false, reducedMotion = false } = {}) {
   const f = fixture();
   f.doc.documentElement.classList.add('intro-pending');
-  if (search) {
-    const url = new URL(search, f.context.location.href);
+  if (search || hash) {
+    const url = new URL((search || '') + (hash || ''), f.context.location.href);
     f.context.location.search = url.search;
+    f.context.location.hash = url.hash;
     f.context.location.href = url.href;
   }
   const root = f.doc.getElementById('phase2-gate');
   const page = f.doc.getElementById('page');
   root.hidden = true;
   const skip = new Element(); skip.doc = f.doc;
-  const loginButton = new Element(); loginButton.doc = f.doc;
-  const loginLabel = new Element();
-  loginButton.children['[data-p2-login-label]'] = loginLabel;
-  const loginLayer = new Element(); loginLayer.inert = true; loginLayer.setAttribute('aria-hidden', 'true');
-  const clockReadout = new Element(), widgetClock = new Element(), widgetDate = new Element();
-  const bootStatus = new Element(), decodeReadout = new Element();
+  const enterButton = new Element(); enterButton.doc = f.doc;
+  const clockReadout = new Element();
   root.children['[data-p2-skip]'] = skip;
-  root.children['[data-p2-login]'] = loginButton;
-  root.children['[data-p2-login-layer]'] = loginLayer;
-  root.children['[data-p2-clock]'] = clockReadout;
-  root.children['[data-p2-widget-clock]'] = widgetClock;
-  root.children['[data-p2-widget-date]'] = widgetDate;
-  root.children['[data-p2-boot-status]'] = bootStatus;
-  root.children['[data-p2-decode]'] = decodeReadout;
-  root.descendants = [skip, loginButton, loginLayer];
-  const bar = new Element(); bar.dataset.p2Bar = '64';
-  const fill = new Element(), networkFill = new Element(), barValue = new Element();
-  networkFill.dataset.p2Fill = '78';
-  bar.children['.phase2-gate__fill'] = fill;
-  bar.children['[data-p2-bar-value]'] = barValue;
-  const counter = new Element(); counter.dataset.p2Count = '0'; counter.dataset.p2Digits = '3';
-  const ring = new Element(); ring.dataset.p2Ring = '72'; ring.children['[data-p2-ring-value]'] = new Element();
-  root.all['[data-p2-bar]'] = [bar];
-  root.all['[data-p2-fill]'] = [networkFill];
-  root.all['[data-p2-count]'] = [counter];
-  root.all['[data-p2-ring]'] = [ring];
-  if (entered) f.sessionValues.set('ztrace-phase2-entered', '1');
+  root.children['[data-p2-login]'] = enterButton;
+  root.children['[data-phantom-clock]'] = clockReadout;
+  root.descendants = [skip, enterButton];
+  if (seen) f.sessionValues.set('ztrace-phantom-signal-seen-v1', '1');
   if (storageBlocked) {
     f.context.sessionStorage.getItem = () => { throw new Error('storage blocked'); };
     f.context.sessionStorage.setItem = () => { throw new Error('storage blocked'); };
   }
-  return { ...f, root, page, skip, loginButton, loginLabel, loginLayer, fill, networkFill, barValue, counter, ring };
+  if (reducedMotion) f.setReducedMotion(true);
+  return { ...f, root, page, skip, enterButton, clockReadout };
 }
 async function clockFor(f) { return (await f.load('motion.js')).createClock(); }
 function contactFixture() { const f=fixture(); f.doc.getElementById('copy-email').children.span=new Element(); return f; }
@@ -192,111 +174,123 @@ async function run() {
     checks++;
   }
   {
-    const f = phase2Fixture(), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(f.root.hidden && !f.page.inert, 'Normal page visits must bypass the welcome overlay.');
-    assert.equal(f.timers.size, 0, 'Default entry must not start intro animation timers.');
-    await controller.completed;
-    checks++;
-  }
-  {
-    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(f.page.inert && !f.root.hidden && f.skip.focused);
-    f.advance(3700);
-    assert(f.root.classList.contains('is-login-ready'));
-    assert(!f.loginLayer.inert && f.loginButton.focused);
-    assert.equal(f.fill.style.width, '64%');
-    assert.equal(f.counter.textContent, '000');
-    f.loginButton.emit('click');
-    assert(f.loginButton.disabled);
-    assert.equal(f.loginLabel.textContent, 'OPENING WORKSPACE');
-    f.advance(1000);
+    const f = phantomFixture(), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    let entered = false;
+    controller.entryStarted.then(() => { entered = true; });
+    await flush();
+    assert(!f.root.hidden && f.page.inert && f.skip.focused, 'A first visit must open the Phantom Signal intro and move focus inside it.');
+    assert(f.root.classList.contains('is-active'));
+    assert(entered, 'The intro entry signal should resolve immediately when the cinematic begins.');
+    assert.equal(f.timers.size, 2, 'The first visit should run one clock interval and one auto-finish timer.');
+    f.advance(11800);
+    assert(f.root.classList.contains('is-exiting'), 'The cinematic should transition out after its full first-visit duration.');
+    f.advance(720);
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
-    assert.equal(f.sessionValues.has('ztrace-phase2-entered'), false, 'Completing the intro must not store a visit flag.');
-    assert(!f.doc.documentElement.classList.contains('intro-pending'), 'Completing the intro must release the initial page visibility guard.');
-    assert.equal(f.context.location.hash, '#/profile');
+    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1');
+    assert(!f.doc.documentElement.classList.contains('intro-pending'));
     assert.equal(f.timers.size, 0);
     checks++;
   }
   {
-    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    f.doc.emit('keydown', { key: 'Escape' });
-    assert(f.root.classList.contains('is-login-ready') && !f.loginLayer.inert);
+    const f = phantomFixture({ seen: true }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    assert(f.root.hidden && !f.page.inert, 'Returning visitors should bypass the intro unless replay is requested.');
+    assert.equal(f.timers.size, 0);
+    await controller.completed;
+    checks++;
+  }
+  {
+    const f = phantomFixture({ hash: '#/profile' }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    assert(f.root.hidden && !f.page.inert, 'Direct links to portfolio routes should not be interrupted by the intro.');
+    assert.equal(f.timers.size, 0);
+    await controller.completed;
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1', seen: true }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    assert(!f.root.hidden && f.page.inert && f.skip.focused, 'The explicit replay query should override the session-seen flag.');
+    f.skip.emit('click');
+    assert(f.root.classList.contains('is-exiting'));
+    assert.equal(f.root.getAttribute('aria-hidden'), 'true');
+    f.advance(720);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
+    assert.equal(f.context.location.search, '', 'The replay query should be removed after completion.');
+    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1');
+    assert.equal(f.timers.size, 0);
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1' }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
     f.doc.activeElement = f.skip;
-    f.doc.emit('keydown', { key: 'Tab' });
-    assert.equal(f.doc.activeElement, f.loginButton);
-    f.doc.emit('keydown', { key: 'Tab', shiftKey: true });
-    assert.equal(f.doc.activeElement, f.skip);
-    f.doc.emit('keydown', { key: 'Enter' });
-    assert(f.root.classList.contains('is-transitioning'));
-    assert.equal(f.loginLabel.textContent, 'OPENING WORKSPACE');
-    f.advance(1000);
-    await controller.completed;
-    assert(f.root.hidden && f.context.location.hash === '#/profile');
-    checks++;
-  }
-  {
-    const f = phase2Fixture({ entered: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(!f.root.hidden && f.page.inert && f.skip.focused, 'A previous visit flag must not suppress the intro on refresh.');
-    controller.cancel();
-    await controller.completed;
-    assert(f.root.hidden && !f.page.inert);
-    assert.equal(f.timers.size, 0);
-    checks++;
-  }
-  {
-    const f = phase2Fixture({ entered: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(!f.root.hidden);
-    assert.equal(f.context.location.search, '');
-    controller.cancel();
-    await controller.completed;
-    assert(f.root.hidden && f.timers.size === 0);
-    checks++;
-  }
-  {
-    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    f.setReducedMotion(true);
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    assert(f.root.classList.contains('is-login-ready'));
-    assert.equal(f.timers.size, 1);
-    controller.cancel();
-    await controller.completed;
-    assert.equal(f.timers.size, 0);
-    checks++;
-  }
-  {
-    const f = phase2Fixture({ storageBlocked: true, search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
+    const backwards = f.doc.emit('keydown', { key: 'Tab', shiftKey: true });
+    assert(backwards.defaultPrevented);
+    assert.equal(f.doc.activeElement, f.enterButton, 'Shift+Tab from the first control should wrap to the last control.');
+    f.doc.activeElement = f.enterButton;
+    const forwards = f.doc.emit('keydown', { key: 'Tab' });
+    assert(forwards.defaultPrevented);
+    assert.equal(f.doc.activeElement, f.skip, 'Tab from the last control should wrap to the first control.');
     f.doc.emit('keydown', { key: 'Escape' });
-    f.loginButton.emit('click');
-    f.advance(1000);
+    assert(f.root.classList.contains('is-exiting'), 'Escape should skip the cinematic.');
+    f.advance(720);
     await controller.completed;
-    assert(f.root.hidden && !f.page.inert);
+    assert(f.root.hidden && !f.page.inert && f.timers.size === 0);
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1', reducedMotion: true }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    assert(f.root.classList.contains('is-static'), 'Reduced-motion preference should disable the intro animation.');
+    f.enterButton.emit('click');
+    f.advance(180);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert && f.timers.size === 0);
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1' }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    f.setReducedMotion(true);
+    assert(f.root.classList.contains('is-static'), 'A live reduced-motion preference change should make the intro static.');
+    f.advance(1400);
+    f.advance(180);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert && f.timers.size === 0);
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1' }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    controller.setMotion(false);
+    assert(f.root.classList.contains('is-static'));
+    f.advance(1800);
+    f.advance(180);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert && f.timers.size === 0);
+    checks++;
+  }
+  {
+    const f = phantomFixture({ search: '?intro=1', storageBlocked: true }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    f.enterButton.emit('click');
+    f.advance(720);
+    await controller.completed;
+    assert(f.root.hidden && !f.page.inert, 'The intro should remain usable when session storage is blocked.');
     assert.equal(f.timers.size, 0);
     checks++;
   }
   {
-    const f = phase2Fixture({ search: '?intro=1' }), mod = await f.load('phase2-gate.js');
-    const controller = mod.initPhase2Gate({ motionAllowed: true });
-    f.advance(500);
-    const before = f.fill.style.width;
-    f.doc.hidden = true;
-    f.doc.emit('visibilitychange');
-    assert(f.doc.documentElement.classList.contains('phase2-paused'));
-    f.advance(1000);
-    assert.equal(f.fill.style.width, before);
-    f.doc.hidden = false;
-    f.doc.emit('visibilitychange');
-    assert(!f.doc.documentElement.classList.contains('phase2-paused'));
-    f.advance(3300);
-    assert(f.root.classList.contains('is-login-ready'));
-    controller.cancel();
+    const f = phantomFixture({ search: '?intro=1' }), mod = await f.load('phantom-signal.js');
+    const controller = mod.initPhantomSignal({ motionAllowed: true });
+    controller.dispose();
+    f.advance(720);
     await controller.completed;
+    assert(f.root.hidden && !f.page.inert, 'Disposal during the exit transition must still release the portfolio.');
     assert.equal(f.timers.size, 0);
     checks++;
   }
@@ -375,7 +369,7 @@ async function run() {
     assert.equal(timeline.style['--journey-progress'],'100%');
     controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
   }
-  console.log(`PASS: ${checks} interaction checks (Phase 2 boot/entry/keyboard/replay/session/reduced-motion/storage/visibility plus timeline, terminal, clipboard, gallery, and navigation).`);
+  console.log(`PASS: ${checks} interaction checks (Phantom Signal first-visit/replay/skip/keyboard/session/reduced-motion/storage/disposal plus timeline, terminal, clipboard, gallery, and navigation).`);
 }
 // A stalled promise must fail, rather than letting Node exit with a misleading zero code.
 const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);

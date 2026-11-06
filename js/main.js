@@ -1,6 +1,6 @@
 import { CONTENT, storage } from './config.js?v=20261016.1';
 import { createClock } from './motion.js?v=20261016.1';
-import { initPhase2Gate } from './phase2-gate.js?v=20261025.6';
+import { initPhantomSignal } from './phantom-signal.js?v=20261106.1';
 import { initContact } from './contact.js?v=20261016.1';
 import { createOverlayManager, initNavigation } from './navigation.js?v=20261018.3';
 import { initGallery } from './gallery.js?v=20261016.1';
@@ -44,7 +44,7 @@ function setCursor() {
   }
 }
 controls();
-const intro = initPhase2Gate({ clock, motionAllowed });
+const intro = initPhantomSignal({ motionAllowed });
 try { scene = initHeroScene({ clock, motionAllowed: false }); } catch { /* Accessible inline SVG remains. */ }
 function setMotion() {
   motionAllowed = getAllowed(); controls();

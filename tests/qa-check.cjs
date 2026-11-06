@@ -108,7 +108,7 @@ for (const match of html.matchAll(/\b(?:aria-labelledby|aria-describedby|aria-co
 }
 const headingLevels = [...html.matchAll(/<h([1-6])\b[^>]*>/gi)].map(match => Number(match[1]));
 assert.equal(headingLevels.filter(level => level === 1).length, 2, 'Intro and fallback page each need one primary h1 in mutually exclusive states');
-assert.match(html, /<h1 class="phase2-gate__manifesto">Security is a practice\.<\/h1>/, 'Intro headline must be the primary heading while the intro is visible');
+assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, 'Phantom Signal must be the intro primary heading');
 assert.match(html, /<h1 id="hero-title"/, 'Fallback hero must retain its own primary heading');
 assert.match(html, /html\.intro-pending #page \{ visibility: hidden !important; \}/, 'Intro and fallback page must not be simultaneously visible');
 for (let i = 1; i < headingLevels.length; i++) {
@@ -132,7 +132,13 @@ for (const image of imageTags) {
   assert(alt && alt[1].trim().length > 0, 'Every content image needs meaningful alt text');
   assert.match(image, /\bwidth=["']\d+["']/i, 'Images need intrinsic width');
   assert.match(image, /\bheight=["']\d+["']/i, 'Images need intrinsic height');
-  assert.match(image, /\bloading=["']lazy["']/i, 'Below-the-fold and dialog images should be lazy-loaded');
+  const isCriticalIntroPortrait = /\bclass=["'][^"']*\bphantom-intro__portrait\b[^"']*["']/i.test(image);
+  if (isCriticalIntroPortrait) {
+    assert.match(image, /\bloading=["']eager["']/i, 'The first-screen cinematic portrait should load eagerly');
+    assert.match(image, /\bfetchpriority=["']high["']/i, 'The first-screen cinematic portrait should receive high fetch priority');
+  } else {
+    assert.match(image, /\bloading=["']lazy["']/i, 'Below-the-fold and dialog images should be lazy-loaded');
+  }
   assert.match(image, /\bdecoding=["']async["']/i, 'Images should decode asynchronously');
 }
 checks++;

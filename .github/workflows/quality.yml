@@ -15,6 +15,7 @@ on:
       - phase-5-learning-sections
       - phase-6-gallery-contact-motion
       - redesign/ztrace-premium-portfolio
+      - feat/phantom-signal-cinematic-20261106
   pull_request:
     branches:
       - main
@@ -28,12 +29,45 @@ permissions:
   contents: read
 
 jobs:
+  prepare-phantom-asset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Assemble original Phantom Signal portrait
+        run: node scripts/assemble-phantom-asset.cjs
+      - name: Commit the assembled portrait asset
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Add original Phantom Signal portrait asset"
+            git push origin "HEAD:${BRANCH_NAME}"
+          else
+            echo "Portrait asset already assembled; no commit needed."
+          fi
+
   validate:
+    needs: [prepare-phantom-asset]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -68,11 +102,14 @@ jobs:
 
 
   visual-qa:
+    needs: [prepare-phantom-asset]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout redesign source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -94,11 +131,14 @@ jobs:
 
 
   performance-qa:
+    needs: [prepare-phantom-asset]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - name: Checkout redesign source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -150,3 +190,35 @@ jobs:
           path: artifacts/performance/
           if-no-files-found: warn
           retention-days: 7
+
+
+  live-deployment-qa:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [validate, visual-qa]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout deployed source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright@1.56.1
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Verify the actual GitHub Pages deployment
+        env:
+          PORTFOLIO_ORIGIN: https://ztrace054-x.github.io/my-portfolio/
+        run: node tests/live-deployment-check.cjs
+      - name: Upload live website screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phantom-signal-live-deployment
+          path: artifacts/live-deployment/
+          if-no-files-found: warn
+          retention-days: 30
