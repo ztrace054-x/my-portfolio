@@ -16,6 +16,7 @@ on:
       - phase-6-gallery-contact-motion
       - redesign/ztrace-premium-portfolio
       - feat/phantom-signal-cinematic-20261106
+      - feat/phantom-signal-cinematic-v3-20261106
   pull_request:
     branches:
       - main
