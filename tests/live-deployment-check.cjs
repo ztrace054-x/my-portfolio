@@ -3,7 +3,7 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const ORIGIN = process.env.PORTFOLIO_ORIGIN || "https://ztrace054-x.github.io/my-portfolio/";
-const RELEASE = "phantom-signal-20261106.2";
+const RELEASE = "phantom-signal-20261106.3";
 const OUT = path.resolve(__dirname, "..", "artifacts", "live-deployment");
 const errors = [];
 fs.mkdirSync(OUT, { recursive: true });
@@ -61,6 +61,29 @@ async function verifyIntro(page, label, screenshotName) {
   }, null, { timeout: 30000 });
   await waitForIntroReveal(page);
   const intro = page.locator("#phase2-gate");
+  const wakeState = await intro.evaluate(el => {
+    const read = selector => {
+      const node = el.querySelector(selector);
+      return { exists: Boolean(node), animationName: node ? getComputedStyle(node).animationName : "" };
+    };
+    return {
+      curtain: read(".phantom-intro__wake"),
+      crimson: read(".phantom-intro__crimson-wake"),
+      portrait: read(".phantom-intro__portrait"),
+      eyes: read(".phantom-intro__eyes")
+    };
+  });
+  if (!wakeState.curtain.exists || !wakeState.crimson.exists) {
+    throw new Error(label + " is missing a cinematic wake layer: " + JSON.stringify(wakeState));
+  }
+  const reducedMotion = await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
+  if (!reducedMotion && (
+    !wakeState.crimson.animationName.includes("phantom-crimson-bloom")
+    || !wakeState.portrait.animationName.includes("phantom-portrait-awaken")
+    || !wakeState.eyes.animationName.includes("phantom-eye-awaken")
+  )) {
+    throw new Error(label + " is missing a staged crimson/portrait/eye reveal: " + JSON.stringify(wakeState));
+  }
   const content = await intro.evaluate(el => el.textContent || "");
   const missing = requiredQuotes.filter(quote => !content.includes(quote));
   if (missing.length) throw new Error(label + " is missing exact quote text: " + missing.join(" | "));
@@ -92,6 +115,8 @@ async function verifyIntro(page, label, screenshotName) {
       overflowNodes
     };
   });
+  // All four readable cards may extend beyond a short viewport.
+  await intro.evaluate(el => { el.scrollTop = el.scrollHeight; });
   const quoteLayout = await intro.evaluate(el => {
     const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
     const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();

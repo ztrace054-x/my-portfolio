@@ -32,13 +32,14 @@ for (const quote of [
   "./ phantom signal"
 ]) assert.ok(visibleHtmlText.includes(quote), "Missing exact Phantom Signal copy: " + quote);
 
-assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261106\.2"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
+assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261106\.3"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
 assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, "The Phantom Signal title must be the intro heading.");
 assert.match(html, /src="\.\/assets\/phantom-signal-hero\.webp"/, "The intro must use the original Phantom Signal portrait crop.");
+assert.ok(html.includes('class="phantom-intro__crimson-wake" aria-hidden="true"'), "The intro must include its crimson ambient wake layer.");
 assert.ok(html.includes('data-p2-skip') && html.includes('data-p2-login'), "Skip and enter controls must be available.");
 assert.ok(html.includes('aria-modal="true"') && html.includes('aria-labelledby="phantom-intro-title"'), "Intro dialog must have an accessible name.");
 assert.ok(html.includes('href="./css/phantom-signal.css?v=20261106.1"'), "The Phantom Signal stylesheet must be linked.");
-assert.ok(html.includes('href="./css/phantom-signal-cinematic-v2.css?v=20261106.5"'), "The cinematic v2 stylesheet must be linked.");
+assert.ok(html.includes('href="./css/phantom-signal-cinematic-v2.css?v=20261106.7"'), "The cinematic v2 stylesheet must be linked.");
 assert.ok(!html.includes('phase-2-gate.css'), "The superseded HUD stylesheet must not load with the new intro.");
 assert.ok(/<div id="page">/.test(html), "The original portfolio content must remain intact.");
 assert.ok(html.includes("Replay the Phantom Signal cinematic introduction."), "Settings must describe the new replay experience.");
@@ -74,4 +75,7 @@ for (const selector of [".phantom-intro__smoke-layer", ".phantom-intro__particle
   assert.ok(cinematic.includes(selector), "Missing cinematic v2 enhancement: " + selector);
 }
 assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(intro), "The intro must not make network/authentication requests.");
+for (const effect of [".phantom-intro__crimson-wake", "@keyframes phantom-crimson-bloom", "@keyframes phantom-portrait-awaken", "@keyframes phantom-eye-awaken", "@keyframes phantom-eye-ignite"]) {
+  assert.ok(cinematic.includes(effect), "Missing staged crimson wake-up effect: " + effect);
+}
 console.log("Phantom Signal checks passed: original image, exact quotes, first-visit intro, skip/replay, accessible controls, responsive layout and reduced motion.");

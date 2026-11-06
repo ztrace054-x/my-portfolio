@@ -176,7 +176,7 @@ async function enterWorkspace(page) {
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
-  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.2");
+  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.3");
   await screenshot(page, "00-phantom-signal-intro.png");
 
   const introText = await page.locator("#phase2-gate").evaluate(el => el.textContent || "");
@@ -245,6 +245,8 @@ async function enterWorkspace(page) {
     rootWidth: el.clientWidth, rootScrollWidth: el.scrollWidth,
     viewportWidth: innerWidth, bodyScrollWidth: document.documentElement.scrollWidth
   }));
+  // Short viewports intentionally scroll so all four cards retain readable text.
+  await page.locator("#phase2-gate").evaluate(el => { el.scrollTop = el.scrollHeight; });
   const quoteLayout = await page.locator("#phase2-gate").evaluate(el => {
     const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
     const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();

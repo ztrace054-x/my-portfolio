@@ -1,4 +1,4 @@
-import {certificates,certificateContent} from "../data/certificates.js?v=20261106.1";
+import {certificates,certificateContent} from "../data/certificates.js?v=20261106.2";
 import {stats} from "../data/stats.js?v=20261106.1";
 import {escapeHTML} from "../utils.js?v=20261016.1";
 import {mountPhase5View,renderPhase5Header} from "./phase5-view.js?v=20261020.2";
