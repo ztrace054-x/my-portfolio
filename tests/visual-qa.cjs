@@ -331,7 +331,7 @@ async function checkProfileAndProjects(page) {
   await page.evaluate(() => { window.location.hash = "#/profile"; });
   await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
   const profile = (await page.locator("[data-view-root]").innerText()).replace(/\\s+/g, " ");
-  for (const phrase of ["Meet Md Saad", "CSE student", "Cybersecurity beginner", "Learning in public"]) {
+  for (const phrase of ["Meet Md Saad", "CSE student", "beginning of a cybersecurity journey", "LEARNING IN PUBLIC"]) {
     if (!profile.includes(phrase)) issue("profile-content-missing", "Profile is missing expected content: " + phrase + ".");
   }
   currentRoute = "projects-content";
