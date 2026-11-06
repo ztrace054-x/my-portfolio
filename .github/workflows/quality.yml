@@ -10,6 +10,7 @@ on:
       - phase-4-profile-dashboard
       - phase-4/ztrace-identity
       - phase-5/verified-certificate
+      - phase-6/cyber-noir-unification
       - phase-5-learning-sections
       - phase-6-gallery-contact-motion
       - redesign/ztrace-premium-portfolio
