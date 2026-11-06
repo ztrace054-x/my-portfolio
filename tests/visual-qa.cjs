@@ -176,7 +176,7 @@ async function enterWorkspace(page) {
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
-  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.3");
+  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.4");
   await screenshot(page, "00-phantom-signal-intro.png");
 
   const introText = await page.locator("#phase2-gate").evaluate(el => el.textContent || "");
@@ -208,6 +208,28 @@ async function enterWorkspace(page) {
   }
   if (!portrait.src.includes("phantom-signal-hero.webp")) {
     issue("phantom-original-image-not-used", "The Phantom Signal original portrait asset is not used.", portrait);
+  }
+
+  const introDesign = await page.locator("#phase2-gate").evaluate(el => {
+    const title = el.querySelector(".phantom-intro__title");
+    const signal = title?.querySelector("span");
+    const echoes = el.querySelector(".phantom-intro__echoes");
+    const footer = el.querySelector(".phantom-intro__ticker");
+    return {
+      titleSize: title ? parseFloat(getComputedStyle(title).fontSize) : 0,
+      signalDisplay: signal ? getComputedStyle(signal).display : "",
+      echoColumns: echoes ? getComputedStyle(echoes).gridTemplateColumns.trim().split(/\\s+/).length : 0,
+      footerPosition: footer ? getComputedStyle(footer).position : ""
+    };
+  });
+  if (introDesign.titleSize < 44 || introDesign.signalDisplay !== "block") {
+    issue("intro-title-hierarchy", "The cinematic intro title must render as a large, two-line wordmark.", introDesign);
+  }
+  if (page.viewportSize().width <= 560 && introDesign.echoColumns < 2) {
+    issue("intro-mobile-quote-grid", "The supplemental quotes should use a compact two-column mobile layout.", introDesign);
+  }
+  if (introDesign.footerPosition !== "sticky") {
+    issue("intro-controls-not-sticky", "Intro controls must remain reachable in the sticky footer.", introDesign);
   }
 
   const skipName = await page.locator("[data-p2-skip]").evaluate(el => ({
