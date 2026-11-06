@@ -59,6 +59,48 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
   let autoTimer = 0;
   let exitTimer = 0;
   let clockTimer = 0;
+  const finePointer = window.matchMedia?.("(hover: hover) and (pointer: fine)") ?? { matches: false, addEventListener() {} };
+  const parallaxNodes = [...root.querySelectorAll("[data-parallax]")];
+  let pointerFrame = 0;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function resetPointer() {
+    if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+    pointerFrame = 0;
+    root.classList.remove("has-pointer");
+    root.style.removeProperty("--pointer-x");
+    root.style.removeProperty("--pointer-y");
+    parallaxNodes.forEach(node => {
+      node.style.removeProperty("--parallax-x");
+      node.style.removeProperty("--parallax-y");
+    });
+  }
+
+  function paintPointer() {
+    pointerFrame = 0;
+    if (done || !currentMotion || !finePointer.matches) return;
+    const bounds = root.getBoundingClientRect();
+    const x = Math.max(0, Math.min(bounds.width, pointerX - bounds.left));
+    const y = Math.max(0, Math.min(bounds.height, pointerY - bounds.top));
+    const nx = bounds.width ? x / bounds.width : 0.5;
+    const ny = bounds.height ? y / bounds.height : 0.5;
+    root.classList.add("has-pointer");
+    root.style.setProperty("--pointer-x", `${x.toFixed(1)}px`);
+    root.style.setProperty("--pointer-y", `${y.toFixed(1)}px`);
+    parallaxNodes.forEach(node => {
+      const depth = Number(node.dataset.parallax) || 0;
+      node.style.setProperty("--parallax-x", `${((nx - 0.5) * depth * 26).toFixed(2)}px`);
+      node.style.setProperty("--parallax-y", `${((ny - 0.5) * depth * 18).toFixed(2)}px`);
+    });
+  }
+
+  function onPointerMove(event) {
+    if (done || !currentMotion || !finePointer.matches || event.pointerType === "touch") return;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    if (!pointerFrame) pointerFrame = window.requestAnimationFrame(paintPointer);
+  }
 
   function updateClock() {
     if (clockReadout) clockReadout.textContent = formatClock(new Date());
@@ -69,6 +111,7 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
     done = true;
     window.clearTimeout(autoTimer);
     window.clearInterval(clockTimer);
+    resetPointer();
     events.abort();
     root.classList.add("is-exiting");
     root.setAttribute("aria-hidden", "true");
@@ -108,9 +151,13 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
   skipButton?.addEventListener("click", finish, { signal: events.signal });
   enterButton?.addEventListener("click", finish, { signal: events.signal });
   document.addEventListener("keydown", onKeydown, { signal: events.signal });
+  root.addEventListener("pointermove", onPointerMove, { signal: events.signal, passive: true });
+  root.addEventListener("pointerleave", resetPointer, { signal: events.signal });
+  finePointer.addEventListener?.("change", resetPointer, { signal: events.signal });
   reducedMotion.addEventListener?.("change", event => {
     if (event.matches) {
       currentMotion = false;
+      resetPointer();
       root.classList.add("is-static");
       window.clearTimeout(autoTimer);
       autoTimer = window.setTimeout(finish, 1400);
@@ -141,6 +188,7 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
     cancel: finish,
     setMotion(enabled) {
       currentMotion = Boolean(enabled && !reducedMotion.matches);
+      if (!currentMotion) resetPointer();
       root.classList.toggle("is-static", !currentMotion);
       if (!currentMotion && !done) {
         window.clearTimeout(autoTimer);
@@ -149,6 +197,7 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
     },
     dispose() {
       if (!done) finish();
+      resetPointer();
       events.abort();
       window.clearTimeout(autoTimer);
       window.clearInterval(clockTimer);

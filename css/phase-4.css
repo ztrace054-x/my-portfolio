@@ -1,6 +1,6 @@
 /* Phase 4 — About and Journey only. Keep the remaining sections unchanged. */
 
-/* Portrait: restrained green duotone and a single scan pass on hover/focus. */
+/* Portrait: restrained crimson duotone and a single scan pass on hover/focus. */
 .identity-photo {
   overflow: hidden;
   border: 1px solid rgba(var(--accent-rgb), .12);
@@ -18,7 +18,7 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(135deg, rgba(var(--accent-rgb), .3), rgba(12, 22, 17, .08) 55%, rgba(120, 151, 222, .13));
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), .3), rgba(24, 4, 8, .08) 55%, rgba(151, 7, 21, .13));
   mix-blend-mode: color;
   transition: opacity .38s var(--ease-standard);
 }
@@ -30,7 +30,7 @@
 }
 .identity-photo:hover img,
 .identity-photo:focus-within img {
-  filter: grayscale(1) sepia(1) hue-rotate(78deg) saturate(1.45) contrast(1.12);
+  filter: grayscale(1) sepia(1) hue-rotate(330deg) saturate(1.45) contrast(1.12);
   transform: scale(1.015);
 }
 .identity-photo:hover::before,

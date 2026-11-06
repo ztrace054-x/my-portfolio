@@ -44,8 +44,8 @@ assert.ok(html.includes("Workspace notes"), "The notes panel must use an honest 
 assert.ok(!html.includes("data-notification-count") && !html.includes("3 unread"), "Static notes must not display fabricated unread counts.");
 assert.ok(!shell.includes('storage.set("notifications-read", "on")'), "Static workspace notes must not simulate unread state.");
 assert.ok((html.match(/<svg\b/g) || []).length >= 14, "Sidebar and top bar should use inline SVG icons.");
-assert.ok(html.includes("./css/dashboard-shell.css?v=20261020.2"), "Dashboard stylesheet cache key must match the current shell CSS.");
-assert.ok(main.includes("./dashboard-shell.js?v=20261106.1"), "Dashboard shell module cache key must match the current shell JS.");
+assert.ok(html.includes("./css/dashboard-shell.css?v=20261106.3"), "Dashboard stylesheet cache key must match the current shell CSS.");
+assert.ok(main.includes("./dashboard-shell.js?v=20261106.3"), "Dashboard shell module cache key must match the current shell JS.");
 assert.ok(/\.\/js\/main\.js\?v=\d{8}\.\d+/.test(html), "Main module cache key must be bumped.");
 assert.ok(main.includes("initDashboardShell") && main.includes("dashboard.activate()"), "Shell must activate after the gate.");
 assert.ok(navigation.includes("hash.startsWith('#/')"), "Legacy anchor handling must not intercept dashboard hash routes.");

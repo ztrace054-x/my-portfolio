@@ -13,7 +13,7 @@ import * as automationView from "./views/automation.js?v=20261020.2";
 import * as certificatesView from "./views/certificates.js?v=20261106.1";
 import * as galleryView from "./views/gallery.js?v=20261020.3";
 import * as contactView from "./views/contact.js?v=20261020.3";
-import { initWorkspaceMotion } from "./workspace-motion.js?v=20261020.3";
+import { initWorkspaceMotion } from "./workspace-motion.js?v=20261106.3";
 
 const ROUTES = Object.freeze({
   profile: profileView,
@@ -172,6 +172,7 @@ export function initDashboardShell() {
 
   function renderRoute({ id, view, previous }) {
     const token = ++routeToken;
+    const focusAtRouteStart = document.activeElement;
     window.clearTimeout(routeTimer);
     routeTimer = 0;
     disposeView?.();
@@ -208,7 +209,9 @@ export function initDashboardShell() {
           if (token === routeToken) viewRoot.classList.add("is-view-ready");
         });
       }
-      if (previous) viewRoot.querySelector("#view-heading")?.focus({ preventScroll: true });
+      if (previous && document.activeElement === focusAtRouteStart) {
+        viewRoot.querySelector("#view-heading")?.focus({ preventScroll: true });
+      }
     };
 
     if (previous && motion?.motionAllowed) {

@@ -176,7 +176,7 @@ async function enterWorkspace(page) {
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
-  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.1");
+  await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261106.2");
   await screenshot(page, "00-phantom-signal-intro.png");
 
   const introText = await page.locator("#phase2-gate").evaluate(el => el.textContent || "");
@@ -245,6 +245,14 @@ async function enterWorkspace(page) {
     rootWidth: el.clientWidth, rootScrollWidth: el.scrollWidth,
     viewportWidth: innerWidth, bodyScrollWidth: document.documentElement.scrollWidth
   }));
+  const quoteLayout = await page.locator("#phase2-gate").evaluate(el => {
+    const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
+    const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();
+    return { echoesBottom: echoes?.bottom ?? 0, footerTop: footer?.top ?? 0 };
+  });
+  if (page.viewportSize().width <= 560 && quoteLayout.echoesBottom > quoteLayout.footerTop + 2) {
+    issue("intro-quotes-overlap-controls", "The mobile quote cards overlap the intro controls.", quoteLayout);
+  }
   if (geometry.rootScrollWidth > geometry.rootWidth + 2 || geometry.bodyScrollWidth > geometry.viewportWidth + 2) {
     issue("intro-horizontal-overflow", "Phantom Signal intro causes horizontal overflow.", geometry);
   }
@@ -345,9 +353,26 @@ async function checkDesktopNavigation(page) {
       continue;
     }
     await link.focus();
+    const focusState = await link.evaluate(el => ({
+      focused: document.activeElement === el,
+      href: el.getAttribute("href"),
+      text: el.innerText.trim()
+    }));
+    console.log("Desktop keyboard navigation:", route, JSON.stringify(focusState));
     await page.keyboard.press("Enter");
-    await page.waitForFunction(id => window.location.hash === "#/" + id
-      && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 6000 });
+    try {
+      await page.waitForFunction(id => window.location.hash === "#/" + id
+        && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 6000 });
+    } catch (error) {
+      const state = await page.evaluate(() => ({
+        hash: window.location.hash,
+        activeElement: document.activeElement?.outerHTML?.slice(0, 500) || "",
+        activeRoute: document.querySelector('[data-nav-item][aria-current="page"]')?.dataset.route || "",
+        sidebarOpen: document.querySelector("#app-shell")?.classList.contains("is-sidebar-open"),
+        targetRoute: document.querySelector('[data-nav-item][data-route="' + location.hash.slice(2) + '"]')?.dataset.route || ""
+      }));
+      throw new Error("Desktop keyboard navigation failed for " + route + ": " + JSON.stringify({ focusState, state, cause: error.message }));
+    }
   }
 }
 

@@ -158,7 +158,7 @@ async function run() {
     const site=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
     assert.match(site,/id="workbench"/);
     assert.match(site,/href="#workbench"/);
-    assert.match(site,/portfolio-refresh\.css\?v=20261018\.3/);
+    assert.match(site,/portfolio-refresh\.css\?v=20261106\.3/);
     assert.match(site,/motion-polish\.css\?v=20261018\.5/);
     const motionCss=fs.readFileSync(path.join(__dirname,'..','css','motion-polish.css'),'utf8');
     const tokens=fs.readFileSync(path.join(__dirname,'..','css','tokens.css'),'utf8');
