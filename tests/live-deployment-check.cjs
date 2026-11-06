@@ -101,9 +101,13 @@ async function verifyIntro(page, label, screenshotName) {
     throw new Error(label + " has quote cards overlapping the intro controls: " + JSON.stringify(quoteLayout));
   }
   await page.screenshot({ path: path.join(OUT, screenshotName), fullPage: false });
-  if (geometry.scrollWidth > geometry.width + 2 || geometry.documentWidth > geometry.viewportWidth + 2) {
-    throw new Error(label + " has horizontal overflow: " + JSON.stringify(geometry));
+  const clippedDecorativeOverflow = geometry.scrollWidth > geometry.width + 2
+    && ["hidden", "clip"].includes(geometry.rootOverflowX);
+  if (geometry.documentWidth > geometry.viewportWidth + 2
+      || !["hidden", "clip"].includes(geometry.rootOverflowX)) {
+    throw new Error(label + " has visible horizontal overflow: " + JSON.stringify(geometry));
   }
+  geometry.clippedDecorativeOverflow = clippedDecorativeOverflow;
   return { label, portrait, geometry, quoteCount: requiredQuotes.length };
 }
 
