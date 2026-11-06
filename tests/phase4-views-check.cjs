@@ -11,7 +11,7 @@ const workflowSource = read(".github/workflows/quality.yml");
 assert.ok(fs.existsSync(path.join(rootDir, "assets/saad-golden.jpg")), "The existing profile portrait asset must exist.");
 assert.match(htmlSource, /js\/main\.js\?v=\d{8}\.\d+/, "The main module cache key must be current.");
 assert.match(htmlSource, /dashboard-shell\.css\?v=20261020\.2/, "The shell CSS cache key must be current.");
-assert.match(mainSource, /dashboard-shell\.js\?v=20261106\.1/, "The shell module cache key must be current.");
+assert.match(mainSource, /dashboard-shell\.js\?v=20261106\.2/, "The shell module cache key must be current.");
 assert.match(mainSource, /dataset\.release = '20261106\.2'/, "The release marker must match this update.");
 assert.match(shellSource, /views\/profile\.js\?v=20261106\.1/, "Profile module cache key must be current.");
 assert.match(shellSource, /views\/dashboard\.js\?v=20261106\.1/, "Dashboard module cache key must be current.");
