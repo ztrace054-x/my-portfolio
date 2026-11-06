@@ -13,7 +13,7 @@ import * as automationView from "./views/automation.js?v=20261020.2";
 import * as certificatesView from "./views/certificates.js?v=20261106.1";
 import * as galleryView from "./views/gallery.js?v=20261020.3";
 import * as contactView from "./views/contact.js?v=20261020.3";
-import { initWorkspaceMotion } from "./workspace-motion.js?v=20261020.3";
+import { initWorkspaceMotion } from "./workspace-motion.js?v=20261106.2";
 
 const ROUTES = Object.freeze({
   profile: profileView,
