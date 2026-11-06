@@ -84,7 +84,7 @@ export function render() {
             <option value="all">All statuses</option><option value="In progress">In progress</option><option value="Building">Building</option><option value="Planned">Planned</option><option value="Future goal">Future goal</option>
           </select></label>
         </div>
-        <div class="data-table-wrap learning-log-table-wrap"><table class="data-table learning-log-table">
+        <div class="data-table-wrap learning-log-table-wrap" role="region" aria-label="Scrollable learning log table" tabindex="0"><table class="data-table learning-log-table">
           <caption class="sr-only">Learning topics, their current status, level, and notes.</caption>
           <thead><tr><th scope="col">Topic</th><th scope="col">Status</th><th scope="col">Level</th><th scope="col">Notes</th></tr></thead>
           <tbody data-learning-log-body>${logRows}</tbody>
