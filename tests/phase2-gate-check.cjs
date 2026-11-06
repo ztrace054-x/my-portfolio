@@ -66,5 +66,5 @@ for (const cssRule of [
   "@media(prefers-reduced-motion:reduce)", "@keyframes phantom-glitch-out"
 ]) assert.ok(css.includes(cssRule), "Missing responsive/cinematic CSS: " + cssRule);
 
-assert.ok(!/\\b(fetch|XMLHttpRequest|WebSocket)\\s*\\(/.test(intro), "The intro must not make network/authentication requests.");
+assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(intro), "The intro must not make network/authentication requests.");
 console.log("Phantom Signal checks passed: original image, exact quotes, first-visit intro, skip/replay, accessible controls, responsive layout and reduced motion.");
