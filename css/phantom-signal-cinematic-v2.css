@@ -119,3 +119,9 @@ html.page-paused #app-shell .app-view-stage:before,html.page-paused #app-shell .
   .phantom-intro__echo{padding:6px 7px}
   .phantom-intro__echo p{font-size:12px;line-height:1.25}
 }
+
+/* Keep the core eight-line introduction and controls clear on very narrow phones.
+   The fourth echo is supplemental copy, not part of the original signature quotes. */
+@media(max-width:360px) and (max-height:760px){
+  .phantom-intro__echo:nth-child(4){display:none}
+}
