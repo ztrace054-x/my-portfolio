@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const http = require("node:http");
 const { chromium } = require("playwright");
+const AxeBuilder = require("@axe-core/playwright").default;
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "artifacts", "visual-qa");
@@ -9,12 +10,13 @@ const PORT = 4173;
 const ORIGIN = "http://127.0.0.1:" + PORT;
 const VIEWPORTS = [
   { name: "desktop-1440x900", width: 1440, height: 900 },
+  { name: "laptop-1280x800", width: 1280, height: 800 },
   { name: "tablet-1024x768", width: 1024, height: 768 },
   { name: "mobile-390x844", width: 390, height: 844 },
   { name: "narrow-320x700", width: 320, height: 700 }
 ];
 const ROUTES = [
-  ["profile", "Profile"],
+  ["profile", "Meet Md Saad"],
   ["dashboard", "Dashboard"],
   ["projects", "Projects"],
   ["attack-surface", "Attack Surface — Authorized Labs"],
@@ -48,6 +50,7 @@ const report = {
   generated_at: new Date().toISOString(),
   preview: "Local static server only; no production deployment",
   viewports: [],
+  accessibility: [],
   issues: [],
   summary: {}
 };
@@ -127,7 +130,9 @@ async function collectLayout(page, expectedHeading) {
       viewClientWidth: root ? root.clientWidth : null,
       heading: heading ? heading.innerText.trim() : "",
       documentTitle: document.title,
-      fontsStatus: document.fonts ? document.fonts.status : "unknown"
+      fontsStatus: document.fonts ? document.fonts.status : "unknown",
+      spaceGroteskLoaded: document.fonts ? document.fonts.check('16px "Space Grotesk"') : false,
+      jetBrainsMonoLoaded: document.fonts ? document.fonts.check('16px "JetBrains Mono"') : false
     };
   });
   if (result.documentWidth > result.viewportWidth + 1 || result.bodyWidth > result.viewportWidth + 1) {
@@ -140,6 +145,9 @@ async function collectLayout(page, expectedHeading) {
     issue("view-content-overflow", "The active view has horizontal overflow.", result);
   }
   if (!result.heading) issue("missing-heading", "Rendered view has no H1.", result);
+  if (!result.spaceGroteskLoaded || !result.jetBrainsMonoLoaded) {
+    issue("font-not-loaded", "One or more self-hosted workspace font families did not resolve.", result);
+  }
   if (expectedHeading && result.heading.replace(/\s+/g, " ").toLowerCase() !== expectedHeading.toLowerCase()) {
     issue("wrong-heading", 'Expected H1 "' + expectedHeading + '" but got "' + result.heading + '".', result);
   }
@@ -233,9 +241,13 @@ async function checkGalleryKeyboard(page) {
   await trigger.focus();
   await page.keyboard.press("Enter");
   await page.waitForFunction(() => document.querySelector("[data-gallery-dialog]")?.open === true);
+  await screenshot(page, "gallery-lightbox-open.png");
   await page.keyboard.press("ArrowRight");
-  const position = (await page.locator("#phase6-lightbox-position").innerText()).trim();
+  let position = (await page.locator("#phase6-lightbox-position").innerText()).trim();
   if (position !== "2 of 3") issue("gallery-next-key-failed", 'Expected "2 of 3" after ArrowRight, got "' + position + '".');
+  await page.keyboard.press("ArrowLeft");
+  position = (await page.locator("#phase6-lightbox-position").innerText()).trim();
+  if (position !== "1 of 3") issue("gallery-previous-key-failed", 'Expected "1 of 3" after ArrowLeft, got "' + position + '".');
   await page.keyboard.press("Escape");
   await page.waitForFunction(() => document.querySelector("[data-gallery-dialog]")?.open === false);
   const restored = await trigger.evaluate(el => document.activeElement === el);
@@ -255,34 +267,32 @@ async function checkMobileNavigation(page) {
   if (!initiallyOpen && initial && initial.x + initial.width > 1) {
     issue("mobile-sidebar-visible-by-default", "The sidebar occupies the mobile viewport before the menu is opened.", initial);
   }
-  try {
-    await toggle.click({ timeout: 5000 });
-  } catch (error) {
-    issue("mobile-menu-toggle-unusable", "The mobile menu toggle could not receive a real click: " + error.message);
-    return;
+  for (const [route] of ROUTES) {
+    try {
+      if ((await toggle.getAttribute("aria-expanded")) !== "true") await toggle.click({ timeout: 5000 });
+      const expanded = await toggle.getAttribute("aria-expanded");
+      if (expanded !== "true") issue("mobile-menu-did-not-open", "Expected aria-expanded=true, got " + expanded + ".");
+      const layers = await page.evaluate(() => ({
+        sidebarZ: Number.parseInt(getComputedStyle(document.querySelector("[data-app-sidebar")).zIndex, 10) || 0,
+        backdropZ: Number.parseInt(getComputedStyle(document.querySelector("[data-sidebar-backdrop")).zIndex, 10) || 0,
+        sidebarOpen: document.querySelector("#app-shell").classList.contains("is-sidebar-open")
+      }));
+      if (!layers.sidebarOpen || layers.sidebarZ <= layers.backdropZ) {
+        issue("mobile-sidebar-layer-order", "The open sidebar must sit above its click-blocking backdrop.", layers);
+      }
+      if (route === "profile") await screenshot(page, "03-mobile-drawer-open.png");
+      const link = page.locator('[data-nav-item][data-route="' + route + '"]');
+      await link.focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(id => window.location.hash === "#/" + id
+        && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 5000 });
+      const closed = await toggle.getAttribute("aria-expanded");
+      if (closed !== "false") issue("mobile-menu-did-not-close", "Expected aria-expanded=false after navigating to " + route + ", got " + closed + ".");
+    } catch (error) {
+      issue("mobile-nav-link-unusable", "Mobile navigation failed for " + route + ": " + error.message);
+      return;
+    }
   }
-  const expanded = await toggle.getAttribute("aria-expanded");
-  if (expanded !== "true") issue("mobile-menu-did-not-open", "Expected aria-expanded=true, got " + expanded + ".");
-  const layers = await page.evaluate(() => ({
-    sidebarZ: Number.parseInt(getComputedStyle(document.querySelector("[data-app-sidebar")).zIndex, 10) || 0,
-    backdropZ: Number.parseInt(getComputedStyle(document.querySelector("[data-sidebar-backdrop")).zIndex, 10) || 0,
-    sidebarOpen: document.querySelector("#app-shell").classList.contains("is-sidebar-open")
-  }));
-  if (!layers.sidebarOpen || layers.sidebarZ <= layers.backdropZ) {
-    issue("mobile-sidebar-layer-order", "The open sidebar must sit above its click-blocking backdrop.", layers);
-  }
-  await screenshot(page, "03-mobile-drawer-open.png");
-  const projectLink = page.locator('[data-nav-item][data-route="projects"]');
-  try {
-    await projectLink.click({ timeout: 5000 });
-    await page.waitForFunction(() => window.location.hash === "#/projects"
-      && document.querySelector('[data-nav-item][data-route="projects"]')?.getAttribute("aria-current") === "page", null, { timeout: 5000 });
-  } catch (error) {
-    issue("mobile-nav-link-unusable", "A real click on the Projects link failed while the drawer was open: " + error.message);
-    return;
-  }
-  const closed = await toggle.getAttribute("aria-expanded");
-  if (closed !== "false") issue("mobile-menu-did-not-close", "Expected aria-expanded=false after navigation, got " + closed + ".");
 }
 
 async function checkMotionToggle(page) {
@@ -301,6 +311,159 @@ async function checkMotionToggle(page) {
   if (restored !== before) issue("motion-toggle-not-restored", "Expected " + before + " after toggling twice, got " + restored + ".");
 }
 
+async function checkDesktopNavigation(page) {
+  currentRoute = "desktop-navigation";
+  for (const [route] of ROUTES) {
+    const link = page.locator('[data-nav-item][data-route="' + route + '"]');
+    if (!(await link.isVisible().catch(() => false))) {
+      issue("desktop-nav-link-missing", "Desktop navigation link is not visible for " + route + ".");
+      continue;
+    }
+    await link.focus();
+    await page.keyboard.press("Enter");
+    await page.waitForFunction(id => window.location.hash === "#/" + id
+      && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 6000 });
+  }
+}
+
+async function checkProfileAndProjects(page) {
+  currentRoute = "profile-content";
+  await page.evaluate(() => { window.location.hash = "#/profile"; });
+  await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
+  const profile = (await page.locator("[data-view-root]").innerText()).replace(/\\s+/g, " ");
+  for (const phrase of ["Meet Md Saad", "CSE student", "Cybersecurity beginner", "Learning in public"]) {
+    if (!profile.includes(phrase)) issue("profile-content-missing", "Profile is missing expected content: " + phrase + ".");
+  }
+  currentRoute = "projects-content";
+  await page.evaluate(() => { window.location.hash = "#/projects"; });
+  await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="projects"]')?.getAttribute("aria-current") === "page");
+  const projects = (await page.locator("[data-view-root]").innerText()).replace(/\\s+/g, " ");
+  if (!projects.includes("ZTRACE Cybersecurity Learning Portfolio")) issue("project-title-missing", "The repository-backed portfolio project title is missing.");
+  if (!projects.includes("In progress")) issue("project-status-missing", "The portfolio project must remain marked In progress.");
+  const sourceLink = page.locator('[data-view-root] a[href="https://github.com/ztrace054-x/my-portfolio"]');
+  if (!(await sourceLink.count())) issue("project-source-link-missing", "The project source link is missing or changed.");
+}
+
+async function checkCertificatePreviewAndDownload(page) {
+  currentRoute = "certificate-preview-download";
+  await page.evaluate(() => { window.location.hash = "#/certificates"; });
+  await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="certificates"]')?.getAttribute("aria-current") === "page"
+    && document.querySelector("[data-certificate-open]"));
+  const earned = await page.locator(".certificate-earned").innerText();
+  for (const phrase of ["Ethical Hacking for Beginners", "Byte Capsule", "MD SAAD", "7482ZWKQ", "November 01, 2026"]) {
+    if (!earned.includes(phrase)) issue("certificate-record-missing", "Earned certificate record is missing: " + phrase + ".");
+  }
+  const trigger = page.locator(".certificate-actions [data-certificate-open]").first();
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.locator("#certificate-preview");
+  await page.waitForFunction(() => document.querySelector("#certificate-preview")?.open === true);
+  const image = dialog.locator("img");
+  await image.evaluate(el => el.decode());
+  const dimensions = await image.evaluate(el => ({ width: el.naturalWidth, height: el.naturalHeight, alt: el.alt }));
+  if (dimensions.width !== 1123 || dimensions.height !== 794 || !dimensions.alt) {
+    issue("certificate-preview-image-invalid", "Certificate preview did not load the original accessible image.", dimensions);
+  }
+  await screenshot(page, "certificate-preview-open.png");
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(() => document.querySelector("#certificate-preview")?.open === false);
+  if (!(await trigger.evaluate(el => document.activeElement === el))) {
+    issue("certificate-focus-not-restored", "Closing the certificate preview did not restore focus to its trigger.");
+  }
+  try {
+    const downloadPromise = page.waitForEvent("download", { timeout: 7000 });
+    await page.locator(".certificate-actions a[download]").click();
+    const download = await downloadPromise;
+    if (download.suggestedFilename() !== "Md_Saad_Certificate.png") {
+      issue("certificate-download-name", "Unexpected certificate download filename: " + download.suggestedFilename() + ".");
+    }
+    const downloadedPath = await download.path();
+    if (!downloadedPath || !fs.existsSync(downloadedPath) || fs.statSync(downloadedPath).size < 10000) {
+      issue("certificate-download-empty", "The certificate download did not produce the original image bytes.");
+    }
+  } catch (error) {
+    issue("certificate-download-failed", "Certificate download did not complete: " + error.message);
+  }
+}
+
+async function checkContactLinksAndCopy(page) {
+  currentRoute = "contact-links-copy";
+  await page.evaluate(() => { window.location.hash = "#/contact"; });
+  await page.waitForFunction(() => document.querySelector('[data-nav-item][data-route="contact"]')?.getAttribute("aria-current") === "page"
+    && document.querySelector("[data-copy-email]"));
+  const email = await page.locator("[data-email-link]").getAttribute("href");
+  const send = await page.locator("[data-send-email]").getAttribute("href");
+  if (email !== "mailto:ztrace054@gmail.com" || send !== "mailto:ztrace054@gmail.com") {
+    issue("contact-email-link-invalid", "Email links must retain the original mailto destination.", { email, send });
+  }
+  const expected = [
+    ["GitHub", "https://github.com/ztrace054-x"],
+    ["TryHackMe", "https://tryhackme.com/p/mdsaad01755"],
+    ["ZeroDayTest", "https://zt.zerodaytest.com/dashboard/profile"],
+    ["Instagram", "https://www.instagram.com/mdsaad01755/"]
+  ];
+  const actual = await page.locator(".phase6-social-link").evaluateAll(nodes => nodes.map(node => ({
+    name: node.querySelector("strong")?.textContent.trim(),
+    href: node.getAttribute("href")
+  })));
+  for (const [name, href] of expected) {
+    if (!actual.some(item => item.name === name && item.href === href)) {
+      issue("contact-social-link-invalid", "Missing or changed contact destination for " + name + ".", { actual });
+    }
+  }
+  await page.locator("[data-copy-email]").click();
+  await page.waitForFunction(() => document.querySelector("[data-copy-status]")?.textContent.trim() !== "", { timeout: 5000 });
+  const status = (await page.locator("[data-copy-status]").innerText()).trim();
+  if (status !== "Copied") issue("copy-email-failed", "Copy email feedback was not successful: " + status + ".");
+  try {
+    const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+    if (clipboard !== "ztrace054@gmail.com") issue("copy-email-clipboard-mismatch", "Clipboard content did not match the displayed email.");
+  } catch (error) {
+    issue("copy-email-clipboard-unreadable", "The browser clipboard could not be verified: " + error.message);
+  }
+}
+
+async function checkIntroReplay(page) {
+  currentRoute = "intro-replay";
+  await page.locator('[data-panel-open="settings"]').first().click();
+  await page.waitForFunction(() => {
+    const panel = document.querySelector('[data-app-panel="settings"]');
+    return panel && !panel.hidden && panel.getAttribute("aria-hidden") === "false";
+  });
+  await screenshot(page, "settings-panel-open.png");
+  await page.locator("[data-replay-intro]").click();
+  await page.waitForFunction(() => new URL(window.location.href).searchParams.get("intro") === "1", { timeout: 7000 });
+  await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
+  await screenshot(page, "intro-replay.png");
+  await page.locator("[data-p2-skip]").click();
+  await page.locator("[data-p2-login]").waitFor({ state: "visible", timeout: 4000 });
+  await page.locator("[data-p2-login]").click();
+  await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
+  await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
+}
+
+async function checkAccessibility(page) {
+  currentRoute = "accessibility";
+  try {
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"])
+      .analyze();
+    const violations = results.violations.map(item => ({
+      id: item.id,
+      impact: item.impact,
+      help: item.help,
+      nodes: item.nodes.length,
+      selectors: item.nodes.slice(0, 4).map(node => node.target)
+    }));
+    report.accessibility.push({ viewport: currentViewport, route: currentRoute, passes: results.passes.length, violations });
+    for (const item of violations.filter(item => ["critical", "serious"].includes(item.impact))) {
+      issue("accessibility-" + item.impact, item.id + ": " + item.help, item);
+    }
+  } catch (error) {
+    issue("accessibility-audit-error", "Axe accessibility audit failed: " + error.message);
+  }
+}
+
 async function main() {
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
@@ -314,8 +477,10 @@ async function main() {
       const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
         reducedMotion: "no-preference",
-        colorScheme: "dark"
+        colorScheme: "dark",
+        acceptDownloads: true
       });
+      try { await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: ORIGIN }); } catch {}
       const page = await context.newPage();
       const failedResources = [];
       page.on("pageerror", error => issue("javascript-exception", error.message));
@@ -354,6 +519,7 @@ async function main() {
           if (!image.alt.trim()) issue("image-alt-missing", "An active workspace image has empty alternative text.", image);
         }
         const layout = await collectLayout(page, expectedHeading);
+        if (viewport.width === 1440 || viewport.width === 390) await checkAccessibility(page);
         const title = (await page.locator("[data-view-root] h1").first().innerText()).trim();
         let contactCTA = null;
         if (route === "contact") {
@@ -389,7 +555,14 @@ async function main() {
       }
       await checkGalleryKeyboard(page);
       await checkMotionToggle(page);
+      if (viewport.width >= 1280) await checkDesktopNavigation(page);
       if (viewport.width <= 900) await checkMobileNavigation(page);
+      if (viewport.width === 1440 || viewport.width === 390) {
+        await checkProfileAndProjects(page);
+        await checkCertificatePreviewAndDownload(page);
+        await checkContactLinksAndCopy(page);
+      }
+      if (viewport.width === 1440) await checkIntroReplay(page);
       report.viewports.push(viewportRecord);
       await context.close();
     }
@@ -428,6 +601,8 @@ async function main() {
     viewportCount: report.viewports.length,
     routeChecks: routeCheckCount,
     screenshots: screenshotCount,
+    accessibilityAudits: report.accessibility.length,
+    severeAccessibilityViolations: report.accessibility.reduce((total, item) => total + item.violations.filter(v => ["critical", "serious"].includes(v.impact)).length, 0),
     issueCount: report.issues.length,
     issueTypes: report.issues.reduce((counts, item) => {
       counts[item.type] = (counts[item.type] || 0) + 1;
