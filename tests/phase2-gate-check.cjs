@@ -11,7 +11,7 @@ const required = [
 for (const file of required) assert.ok(fs.existsSync(path.join(root, file)), "Missing Phantom Signal file: " + file);
 
 const html = read("index.html");
-const visibleHtmlText = html.replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ");
+const visibleHtmlText = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ");
 const main = read("js/main.js");
 const intro = read("js/phantom-signal.js");
 const css = read("css/phantom-signal.css");
