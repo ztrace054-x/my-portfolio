@@ -41,7 +41,7 @@ html.intro-pending #page { visibility: hidden !important; }
 <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
 <link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="./assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<script type="module" src="./js/main.js?v=20261106.2"></script>
+<script type="module" src="./js/main.js?v=20261106.3"></script>
 <link rel="stylesheet" href="./css/tokens.css?v=20261024.3"><link rel="stylesheet" href="./css/base.css?v=20261019.1"><link rel="stylesheet" href="./css/components.css?v=20261019.1"><link rel="stylesheet" href="./css/motion.css?v=20261019.1"><link rel="stylesheet" href="./css/style.css?v=20261018.6"><link rel="stylesheet" href="./css/intro.css?v=20261018.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261018.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261018.5">
   
   <link rel="stylesheet" href="./css/motion-polish.css?v=20261018.5">
@@ -61,6 +61,7 @@ html.intro-pending #page { visibility: hidden !important; }
   <link rel="stylesheet" href="./css/cyber-noir.css?v=20261105.2">
   <link rel="stylesheet" href="./css/phase-6-visual-unification.css?v=20261106.1">
   <link rel="stylesheet" href="./css/phantom-signal.css?v=20261106.1">
+  <link rel="stylesheet" href="./css/phantom-signal-cinematic-v2.css?v=20261106.2">
 </head>
 <body data-design="workbench-v4">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -344,9 +345,13 @@ html.intro-pending #page { visibility: hidden !important; }
     <p class="app-panel-footnote">Preferences are saved in this browser when local storage is available. System reduced-motion preferences are respected.</p>
   </aside>
 </div>
-<div id="phase2-gate" class="phase2-gate phantom-intro" role="dialog" aria-modal="true" aria-labelledby="phantom-intro-title" aria-hidden="true" hidden data-release="phantom-signal-20261106.1">
-  <div class="phantom-intro__backdrop" aria-hidden="true">
-    <div class="phantom-intro__code"><span>01011001 01010011 01001001 01000111 01001110 01000001 01001100</span><span>10100101 01010011 01001000 01000001 01000100 01001111 01010111</span><span>01010000 01001000 01000001 01001110 01010100 01001111 01001101</span><span>01010011 01001001 01000111 01001110 01000001 01001100 01010011</span><span>01000011 01010010 01001001 01001101 01010011 01001111 01001110</span></div>
+<div id="phase2-gate" class="phase2-gate phantom-intro" role="dialog" aria-modal="true" aria-labelledby="phantom-intro-title" aria-hidden="true" hidden data-release="phantom-signal-20261106.2">
+  <div class="phantom-intro__backdrop" aria-hidden="true" data-parallax="0.12">
+    <span class="phantom-intro__cursor-light"></span>
+    <span class="phantom-intro__light-streak"></span>
+    <span class="phantom-intro__particles" data-parallax="0.22"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <div class="phantom-intro__code" data-parallax="0.16"><span>01011001 01010011 01001001 01000111 01001110 01000001 01001100</span><span>10100101 01010011 01001000 01000001 01000100 01001111 01010111</span><span>01010000 01001000 01000001 01001110 01010100 01001111 01001101</span><span>01010011 01001001 01000111 01001110 01000001 01001100 01010011</span><span>01000011 01010010 01001001 01001101 01010011 01001111 01001110</span><span>01010011 01001001 01000111 01001110 01000001 01001100 01011111 01011000</span><span>01001000 01000001 01011010 01000101 01011111 01010011 01010100 01000001 01010100 01001001 01000011</span></div>
+    <span class="phantom-intro__exit-sweep"></span>
   </div>
   <header class="phantom-intro__topbar phase2-gate__topbar">
     <span class="phantom-intro__brand"><i class="phantom-intro__brand-mark" aria-hidden="true"></i><strong>./ PHANTOM SIGNAL</strong></span>
@@ -356,7 +361,7 @@ html.intro-pending #page { visibility: hidden !important; }
   <section class="phantom-intro__stage" aria-labelledby="phantom-intro-title">
     <div class="phantom-intro__copy">
       <p class="phantom-intro__eyebrow">SIGNAL 001 / UNKNOWN PRESENCE DETECTED</p>
-      <h1 class="phantom-intro__title" id="phantom-intro-title">PHANTOM <span>SIGNAL</span></h1>
+      <h1 class="phantom-intro__title" id="phantom-intro-title" data-text="PHANTOM SIGNAL">PHANTOM <span>SIGNAL</span></h1>
       <div class="phantom-intro__quotes" aria-label="Phantom Signal introduction">
         <blockquote class="phantom-intro__quote-group">
           <p>You built the firewall.</p>
@@ -378,10 +383,16 @@ html.intro-pending #page { visibility: hidden !important; }
       </div>
       <p class="phantom-intro__signature">./ phantom signal</p>
     </div>
-    <figure class="phantom-intro__visual">
-      <img class="phantom-intro__portrait" src="./assets/phantom-signal-hero.webp" alt="A mysterious hooded figure in a rain-soaked black cloak, with intense glowing crimson eyes, drifting red smoke and falling digital code." width="732" height="941" loading="eager" fetchpriority="high" decoding="async">
+    <figure class="phantom-intro__visual" data-parallax="0.3">
+      <img class="phantom-intro__portrait" data-parallax="0.62" src="./assets/phantom-signal-hero.webp" alt="A mysterious hooded figure in a rain-soaked black cloak, with intense glowing crimson eyes, drifting red smoke and falling digital code." width="732" height="941" loading="eager" fetchpriority="high" decoding="async">
       <span class="phantom-intro__eyes" aria-hidden="true"></span>
+      <span class="phantom-intro__eyes-core" aria-hidden="true"><i></i><i></i></span>
+      <span class="phantom-intro__smoke-layer phantom-intro__smoke-layer--one" data-parallax="0.9" aria-hidden="true"></span>
+      <span class="phantom-intro__smoke-layer phantom-intro__smoke-layer--two" data-parallax="1.25" aria-hidden="true"></span>
+      <span class="phantom-intro__smoke-layer phantom-intro__smoke-layer--three" data-parallax="0.72" aria-hidden="true"></span>
       <span class="phantom-intro__smoke" aria-hidden="true"></span>
+      <span class="phantom-intro__scan-field" aria-hidden="true"></span>
+      <span class="phantom-intro__visual-frame" aria-hidden="true"></span>
       <figcaption class="phantom-intro__visual-label"><strong>NO FACE. NO TRACE.</strong>VISUAL IDENTITY / PHANTOM SIGNAL</figcaption>
     </figure>
   </section>
