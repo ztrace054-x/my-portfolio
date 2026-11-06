@@ -353,9 +353,26 @@ async function checkDesktopNavigation(page) {
       continue;
     }
     await link.focus();
+    const focusState = await link.evaluate(el => ({
+      focused: document.activeElement === el,
+      href: el.getAttribute("href"),
+      text: el.innerText.trim()
+    }));
+    console.log("Desktop keyboard navigation:", route, JSON.stringify(focusState));
     await page.keyboard.press("Enter");
-    await page.waitForFunction(id => window.location.hash === "#/" + id
-      && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 6000 });
+    try {
+      await page.waitForFunction(id => window.location.hash === "#/" + id
+        && document.querySelector('[data-nav-item][data-route="' + id + '"]')?.getAttribute("aria-current") === "page", route, { timeout: 6000 });
+    } catch (error) {
+      const state = await page.evaluate(() => ({
+        hash: window.location.hash,
+        activeElement: document.activeElement?.outerHTML?.slice(0, 500) || "",
+        activeRoute: document.querySelector('[data-nav-item][aria-current="page"]')?.dataset.route || "",
+        sidebarOpen: document.querySelector("#app-shell")?.classList.contains("is-sidebar-open"),
+        targetRoute: document.querySelector('[data-nav-item][data-route="' + location.hash.replace(/^#\\/?/, "") + '"]')?.dataset.route || ""
+      }));
+      throw new Error("Desktop keyboard navigation failed for " + route + ": " + JSON.stringify({ focusState, state, cause: error.message }));
+    }
   }
 }
 
