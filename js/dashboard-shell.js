@@ -172,6 +172,7 @@ export function initDashboardShell() {
 
   function renderRoute({ id, view, previous }) {
     const token = ++routeToken;
+    const focusAtRouteStart = document.activeElement;
     window.clearTimeout(routeTimer);
     routeTimer = 0;
     disposeView?.();
@@ -208,7 +209,9 @@ export function initDashboardShell() {
           if (token === routeToken) viewRoot.classList.add("is-view-ready");
         });
       }
-      if (previous) viewRoot.querySelector("#view-heading")?.focus({ preventScroll: true });
+      if (previous && document.activeElement === focusAtRouteStart) {
+        viewRoot.querySelector("#view-heading")?.focus({ preventScroll: true });
+      }
     };
 
     if (previous && motion?.motionAllowed) {
