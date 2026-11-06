@@ -40,6 +40,7 @@ The design direction uses deep black, crimson red, Space Grotesk, JetBrains Mono
 | `css/phase-5.css`, `css/phase-6.css` | Learning views, Gallery/Contact, and interaction polish |
 | `css/cyber-noir.css` | Central crimson tokens and cyber-noir palette |
 | `css/phase-6-visual-unification.css` | Global crimson visual unification across all workspace routes |
+| `css/phantom-signal.css`, `css/phantom-signal-cinematic-v2.css`, `css/phantom-signal-cinematic-v3.css` | Phantom Signal visitor intro; v3 provides the focused responsive composition and restrained cinematic motion |
 | `tests/` | Foundation, route, view, accessibility-state, interaction, and SEO/link checks |
 | `.github/workflows/quality.yml` | JavaScript syntax and regression checks for the redesign and established phases |
 

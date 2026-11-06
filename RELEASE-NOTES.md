@@ -56,3 +56,19 @@ The earned Byte Capsule record remains unchanged: Ethical Hacking for Beginners,
 
 ## Release boundary
 No direct `main` edits, merge, or production deployment. Final QA status and evidence are recorded in [PHASE-7-PRODUCTION-QA.md](PHASE-7-PRODUCTION-QA.md).
+
+# Phantom Signal 3.0 — focused cinematic refinement (2026-11-06)
+
+## Intro-only changes
+- Recompose the visitor intro around a large two-line PHANTOM SIGNAL wordmark, clearer quote hierarchy, and a better-balanced original hooded portrait.
+- Reduce competing scanlines, binary rain, smoke, eye glow, and decorative HUD intensity so the crimson atmosphere supports the content instead of overwhelming it.
+- Present all four supplemental quotes in a compact signal-card rail; use a two-column mobile arrangement so the intro is easier to scan without hiding any original copy.
+- Refine the top bar, footer, and Skip / Enter controls with consistent spacing, readable type, and a persistent mobile control row.
+- Keep the existing artwork, all original quote text, first-visit behavior, Escape/Skip/Enter controls, Settings replay, and intro-to-workspace transition.
+- Preserve reduced-motion behavior and pointer parallax. The new stylesheet is additive and loaded after the existing cinematic layers.
+
+## Scope and verification
+- Only the Phantom Signal intro presentation and its release/visual regression checks are changed; workspace routes, certificates, gallery, contact links, and dashboard data are not redesigned.
+- Release marker: `phantom-signal-20261106.4`.
+- CI checks cover source assertions, title hierarchy, mobile quote columns, sticky controls, all existing routes, and reduced-motion behavior.
+- Production release remains gated on successful CI and live deployment verification.
