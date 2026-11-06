@@ -70,10 +70,28 @@ async function verifyIntro(page, label, screenshotName) {
   if (!portrait.src.includes("assets/phantom-signal-hero.webp") || portrait.width < 300 || !portrait.alt) {
     throw new Error(label + " did not load the original Phantom Signal portrait: " + JSON.stringify(portrait));
   }
-  const geometry = await intro.evaluate(el => ({
-    width: el.clientWidth, scrollWidth: el.scrollWidth,
-    documentWidth: document.documentElement.scrollWidth, viewportWidth: innerWidth
-  }));
+  const geometry = await intro.evaluate(el => {
+    const overflowNodes = [...el.querySelectorAll("*")].map(node => {
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        selector: node.tagName.toLowerCase() + (node.id ? "#" + node.id : "") + (typeof node.className === "string" && node.className ? "." + node.className.trim().replace(/\\s+/g, ".") : ""),
+        left: Math.round(rect.left * 10) / 10,
+        right: Math.round(rect.right * 10) / 10,
+        width: Math.round(rect.width * 10) / 10,
+        position: style.position,
+        transform: style.transform,
+        overflow: style.overflow
+      };
+    }).filter(node => node.left < -2 || node.right > innerWidth + 2).slice(0, 30);
+    const style = getComputedStyle(el);
+    return {
+      width: el.clientWidth, scrollWidth: el.scrollWidth,
+      documentWidth: document.documentElement.scrollWidth, viewportWidth: innerWidth,
+      rootOverflowX: style.overflowX, rootOverflowY: style.overflowY,
+      overflowNodes
+    };
+  });
   const quoteLayout = await intro.evaluate(el => {
     const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
     const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();
@@ -82,10 +100,10 @@ async function verifyIntro(page, label, screenshotName) {
   if (page.viewportSize().width <= 560 && quoteLayout.echoesBottom > quoteLayout.footerTop + 2) {
     throw new Error(label + " has quote cards overlapping the intro controls: " + JSON.stringify(quoteLayout));
   }
+  await page.screenshot({ path: path.join(OUT, screenshotName), fullPage: false });
   if (geometry.scrollWidth > geometry.width + 2 || geometry.documentWidth > geometry.viewportWidth + 2) {
     throw new Error(label + " has horizontal overflow: " + JSON.stringify(geometry));
   }
-  await page.screenshot({ path: path.join(OUT, screenshotName), fullPage: false });
   return { label, portrait, geometry, quoteCount: requiredQuotes.length };
 }
 
