@@ -16,7 +16,7 @@ const required = [
 for (const file of required) assert.ok(fs.existsSync(path.join(root, file)), `Missing required foundation file: ${file}`);
 
 const tokens = fs.readFileSync(path.join(root, "css/tokens.css"), "utf8");
-for (const token of ["#05090c", "#0b1418", "#477c5c", "#85e9ad", "#35f2e0", "#eaf5f2", "#8da9a0", "#f2cc85", "#ff737d"]) {
+for (const token of ["#050304", "#100609", "#0b0608", "#ff4353", "#ff3145", "229, 9, 26", "#f3e9eb", "#b5a0a4", "#f2cc85", "#ff737d"]) {
   assert.ok(tokens.toLowerCase().includes(token), `Missing HUD design token: ${token}`);
 }
 const components = fs.readFileSync(path.join(root, "css/components.css"), "utf8");
