@@ -1,4 +1,4 @@
-import { stats } from "../data/stats.js?v=20261019.2";
+import { stats } from "../data/stats.js?v=20261106.1";
 import { learningLog } from "../data/learning-log.js?v=20261019.1";
 import { escapeHTML } from "../utils.js?v=20261016.1";
 import { countUp } from "../motion.js?v=20261016.1";
@@ -25,7 +25,7 @@ const metricCards = [
   { label: "Labs Completed", value: stats.labsCompleted, mark: "01", note: "No verified labs yet" },
   { label: "CTF Challenges", value: stats.ctfChallenges, mark: "02", note: "No completed challenges recorded" },
   { label: "Write-ups", value: stats.writeUps, mark: "03", note: "No write-ups published yet" },
-  { label: "Certificates", value: stats.certificates, mark: "04", note: "No credentials earned" },
+  { label: "Certificates", value: stats.certificates, mark: "04", note: `${stats.certificates} course certificate earned` },
   { label: "Rooms Completed", value: stats.roomsCompleted, mark: "05", note: "No rooms completed yet" }
 ].map(item => `
   <article class="stat-card dashboard-stat dashboard-stat--phase4">
@@ -49,7 +49,7 @@ export function render() {
   return `
     <section class="view-page dashboard-view" aria-labelledby="view-heading">
       <header class="view-heading-block dashboard-heading">
-        <div><p class="view-eyebrow">WORKSPACE OVERVIEW / 002</p><h1 id="view-heading" tabindex="-1">Dashboard</h1><p class="view-intro">A factual snapshot of the learning journey. Every total stays at zero until completed work is verified.</p></div>
+        <div><p class="view-eyebrow">WORKSPACE OVERVIEW / 002</p><h1 id="view-heading" tabindex="-1">Dashboard</h1><p class="view-intro">A factual snapshot of the learning journey. Totals reflect documented achievements; future goals are excluded.</p></div>
         <span class="dashboard-status"><span class="status-dot" aria-hidden="true"></span> LEARNING MODE</span>
       </header>
       <div class="stat-grid dashboard-stat-grid" aria-label="Verified learning totals">${metricCards}</div>
@@ -84,7 +84,7 @@ export function render() {
             <option value="all">All statuses</option><option value="In progress">In progress</option><option value="Building">Building</option><option value="Planned">Planned</option><option value="Future goal">Future goal</option>
           </select></label>
         </div>
-        <div class="data-table-wrap learning-log-table-wrap"><table class="data-table learning-log-table">
+        <div class="data-table-wrap learning-log-table-wrap" role="region" aria-label="Scrollable learning log table" tabindex="0"><table class="data-table learning-log-table">
           <caption class="sr-only">Learning topics, their current status, level, and notes.</caption>
           <thead><tr><th scope="col">Topic</th><th scope="col">Status</th><th scope="col">Level</th><th scope="col">Notes</th></tr></thead>
           <tbody data-learning-log-body>${logRows}</tbody>

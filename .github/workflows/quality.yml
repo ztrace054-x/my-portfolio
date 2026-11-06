@@ -8,6 +8,10 @@ on:
       - phase-2-intro-login
       - phase-3-dashboard-shell
       - phase-4-profile-dashboard
+      - phase-4/ztrace-identity
+      - phase-5/verified-certificate
+      - phase-6/cyber-noir-unification
+      - phase-7/production-qa
       - phase-5-learning-sections
       - phase-6-gallery-contact-motion
       - redesign/ztrace-premium-portfolio
@@ -15,6 +19,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+
+concurrency:
+  group: portfolio-quality-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -30,6 +38,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install CSS parser
+        run: npm install --no-save --package-lock=false postcss@8.5.6
       - name: Check JavaScript module syntax
         shell: bash
         run: |
@@ -51,6 +61,8 @@ jobs:
         run: node --experimental-vm-modules tests/phase6-views-check.cjs
       - name: Run static SEO, link, accessibility, contrast, and asset checks
         run: node tests/qa-check.cjs
+      - name: Run Phase 7 production source checks
+        run: node tests/phase7-production-check.cjs
       - name: Run interaction and accessibility-state tests
         run: node --experimental-vm-modules tests/interaction-check.cjs
 
@@ -65,8 +77,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Playwright
-        run: npm install --no-save --package-lock=false playwright
+      - name: Install Playwright and Axe accessibility engine
+        run: npm install --no-save --package-lock=false playwright@1.56.1 @axe-core/playwright
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - name: Run local rendered visual QA
@@ -91,8 +103,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Playwright and Lighthouse
-        run: npm install --no-save --package-lock=false playwright lighthouse
+      - name: Install pinned Playwright and Lighthouse
+        run: npm install --no-save --package-lock=false playwright@1.56.1 lighthouse@12.8.2
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - name: Start safe local preview
@@ -127,36 +139,9 @@ jobs:
             --output=json --output=html \
             --output-path=artifacts/performance/lighthouse-mobile \
             --quiet
-      - name: Summarize Lighthouse metrics
+      - name: Validate Lighthouse reports and summarize scores
         if: always()
-        run: |
-          node <<'NODE'
-          const fs = require('node:fs');
-          const path = require('node:path');
-          const dir = 'artifacts/performance';
-          if (!fs.existsSync(dir)) { console.log('No Lighthouse reports were produced.'); process.exit(0); }
-          for (const file of fs.readdirSync(dir).filter(name => name.endsWith('.json'))) {
-            try {
-              const r = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
-              const score = id => r.categories && r.categories[id] ? Math.round(r.categories[id].score * 100) : null;
-              const metric = id => r.audits && r.audits[id] ? r.audits[id].displayValue || r.audits[id].numericValue || null : null;
-              console.log(JSON.stringify({
-                report: file,
-                lighthouseVersion: r.lighthouseVersion,
-                fetchTime: r.fetchTime,
-                performance: score('performance'),
-                accessibility: score('accessibility'),
-                bestPractices: score('best-practices'),
-                seo: score('seo'),
-                firstContentfulPaint: metric('first-contentful-paint'),
-                largestContentfulPaint: metric('largest-contentful-paint'),
-                cumulativeLayoutShift: metric('cumulative-layout-shift'),
-                totalBlockingTime: metric('total-blocking-time'),
-                speedIndex: metric('speed-index')
-              }));
-            } catch (error) { console.error(file + ': ' + error.message); }
-          }
-          NODE
+        run: node tests/lighthouse-report-check.cjs artifacts/performance
       - name: Upload Lighthouse reports
         if: always()
         uses: actions/upload-artifact@v4

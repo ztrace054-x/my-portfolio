@@ -31,7 +31,7 @@ const stats = fs.readFileSync(path.join(root, "js/data/stats.js"), "utf8");
 assert.match(stats, /totalLabs:\s*0/);
 assert.match(stats, /writeUps:\s*0/);
 assert.match(stats, /skillsInProgress:\s*0/);
-assert.match(stats, /certificatesEarned:\s*0/);
+assert.match(stats, /certificatesEarned:\s*earnedCertificates/);
 const certificates = fs.readFileSync(path.join(root, "js/data/certificates.js"), "utf8");
 assert.match(certificates, /Not earned yet/);
 assert.match(certificates, /status:"Planned"/);

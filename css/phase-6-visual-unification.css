@@ -1,0 +1,680 @@
+/* ZTRACE PHASE 6 — workspace-wide cyber-noir visual unification.
+   Loaded after the existing phase styles. Keeps every view and interaction intact. */
+:root {
+  --app-cyan: var(--accent);
+  --app-cyan-2: var(--accent-hover);
+  --app-cyan-rgb: var(--accent-rgb);
+  --ztrace-panel: var(--surface-raised);
+  --ztrace-panel-deep: var(--surface-dark);
+  --ztrace-red: var(--accent);
+  --ztrace-red-rgb: var(--accent-rgb);
+  --ztrace-border: var(--line);
+  --ztrace-muted: var(--text-soft);
+  --ztrace-card-shadow: 0 18px 48px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.025);
+  --ztrace-red-glow: 0 0 26px rgba(var(--accent-rgb),.11);
+}
+#app-shell[hidden] { display: none !important; }
+#app-shell.hud-body {
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 82% 0, rgba(var(--accent-rgb),.09), transparent 34rem),
+    radial-gradient(ellipse at 8% 76%, rgba(var(--accent-rgb),.035), transparent 38rem),
+    var(--bg);
+  font-family: var(--font-display);
+}
+#app-shell .app-sidebar {
+  border-right: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(17,17,20,.98), rgba(5,5,5,.99));
+  box-shadow: 18px 0 55px rgba(0,0,0,.24);
+}
+#app-shell .app-sidebar__brand-row,
+#app-shell .app-sidebar__bottom { border-color: var(--line); }
+#app-shell .app-brand { color: var(--text); }
+#app-shell .app-brand__mark {
+  border-color: rgba(var(--accent-rgb),.32);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb),.055);
+  box-shadow: inset 0 0 18px rgba(var(--accent-rgb),.055);
+}
+#app-shell .app-brand__word > span { color: var(--accent); }
+#app-shell .app-sidebar__section-label,
+#app-shell .app-sidebar__foot,
+#app-shell .app-topbar-eyebrow { color: var(--text-soft); }
+#app-shell .app-sidebar__section-line {
+  background: linear-gradient(90deg, rgba(var(--accent-rgb),.32), transparent);
+}
+#app-shell .app-nav-link {
+  min-height: 44px;
+  border-color: transparent;
+  border-radius: 6px;
+  color: var(--text-soft);
+  background: transparent;
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease,
+    background var(--duration-fast) ease, box-shadow var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+#app-shell .app-nav-link > svg,
+#app-shell .app-nav-arrow { color: #8e8e94; }
+#app-shell .app-nav-link:hover,
+#app-shell .app-nav-link:focus-visible {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb),.22);
+  background: linear-gradient(100deg, rgba(var(--accent-rgb),.085), rgba(var(--accent-rgb),.018));
+}
+#app-shell .app-nav-link:hover > svg,
+#app-shell .app-nav-link:focus-visible > svg { color: var(--accent); }
+#app-shell .app-nav-link[aria-current="page"] {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb),.3);
+  background: linear-gradient(100deg, rgba(var(--accent-rgb),.13), rgba(var(--accent-rgb),.035) 78%);
+  box-shadow: inset 2px 0 var(--accent), 0 0 24px rgba(var(--accent-rgb),.045);
+}
+#app-shell .app-nav-link[aria-current="page"]::before {
+  width: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb),.65);
+}
+#app-shell .app-nav-link[aria-current="page"] > svg,
+#app-shell .app-nav-link[aria-current="page"] .app-nav-arrow { color: var(--accent); }
+#app-shell .app-nav-link[aria-current="page"] > svg { filter: drop-shadow(0 0 5px rgba(var(--accent-rgb),.18)); }
+#app-shell .app-main {
+  background:
+    radial-gradient(ellipse at 52% 0, rgba(var(--accent-rgb),.055), transparent 44%),
+    linear-gradient(180deg, #09090c, #050505 72%);
+}
+#app-shell .app-topbar {
+  border-bottom-color: var(--line);
+  background: rgba(9,9,12,.88);
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+  backdrop-filter: blur(18px);
+}
+#app-shell .app-current-view { color: var(--text); }
+#app-shell .app-period,
+#app-shell .app-search,
+#app-shell .app-topbar-bell {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(17,17,20,.68);
+}
+#app-shell .app-search:focus-within { border-color: rgba(var(--accent-rgb),.48); box-shadow: var(--ztrace-red-glow); }
+#app-shell .app-search input { color: var(--text); }
+#app-shell .app-search kbd { color: var(--accent); border-color: var(--line); }
+#app-shell .app-icon-button,
+#app-shell .app-motion-toggle,
+#app-shell .app-setting-toggle {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(17,17,20,.76);
+}
+#app-shell .app-icon-button:hover,
+#app-shell .app-motion-toggle:hover,
+#app-shell .app-setting-toggle:hover {
+  border-color: rgba(var(--accent-rgb),.42);
+  color: var(--text);
+  background: rgba(var(--accent-rgb),.07);
+}
+#app-shell .app-motion-dot,
+#app-shell .app-setting-toggle-dot { background: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb),.42); }
+#app-shell .app-avatar { border-color: rgba(var(--accent-rgb),.28); background: rgba(var(--accent-rgb),.055); }
+#app-shell .app-avatar span { color: var(--text); }
+#app-shell .app-view-root {
+  scrollbar-color: rgba(var(--accent-rgb),.38) transparent;
+  background:
+    radial-gradient(ellipse at 84% 3%, rgba(var(--accent-rgb),.035), transparent 30rem),
+    transparent;
+}
+#app-shell .app-view-root::after {
+  background: linear-gradient(180deg, transparent, rgba(var(--accent-rgb),.065), transparent);
+}
+#app-shell .app-statusbar {
+  border-top-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(5,5,5,.96);
+}
+#app-shell .app-sidebar__foot .status-dot,
+#app-shell .app-statusbar .status-dot { background: var(--accent); box-shadow: 0 0 9px rgba(var(--accent-rgb),.52); }
+#app-shell .app-statusbar b { color: var(--accent); }
+#app-shell .app-side-panel {
+  border-left: 1px solid var(--line);
+  color: var(--text);
+  background: linear-gradient(155deg, #151519, #08080b 74%);
+  box-shadow: -24px 0 70px rgba(0,0,0,.48);
+}
+#app-shell .app-panel-header,
+#app-shell .app-panel-summary,
+#app-shell .app-notification-item { border-color: var(--line); }
+#app-shell .app-panel-summary-dot,
+#app-shell .app-notification-icon { color: var(--accent); border-color: rgba(var(--accent-rgb),.3); background: rgba(var(--accent-rgb),.06); }
+#app-shell .app-notification-kicker,
+#app-shell .app-panel-footnote,
+#app-shell .app-setting-status { color: var(--text-soft); }
+#app-shell .app-setting-select { border-color: var(--line); color: var(--text); background: #111114; }
+#app-shell .app-panel-backdrop { background: rgba(0,0,0,.68); backdrop-filter: blur(4px); }
+
+/* Shared view typography, surfaces, controls, and focus treatment. */
+#app-shell .view-page { color: var(--text); }
+#app-shell .view-heading-block { margin-bottom: clamp(22px,3vw,34px); }
+#app-shell .view-eyebrow,
+#app-shell .view-code,
+#app-shell .phase5-micro,
+#app-shell .phase6-micro { color: #e36a73; }
+#app-shell .view-heading-block h1,
+#app-shell .view-title-row h1 { color: var(--text); letter-spacing: -.045em; }
+#app-shell .view-intro { color: var(--text-soft); line-height: 1.75; }
+#app-shell .badge {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(255,255,255,.025);
+}
+#app-shell .badge--cyan,
+#app-shell .badge--danger {
+  border-color: rgba(var(--accent-rgb),.34);
+  color: #ff8790;
+  background: rgba(var(--accent-rgb),.075);
+}
+#app-shell .badge--amber,
+#app-shell .badge--neutral { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.025); }
+#app-shell .status-dot { background: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb),.45); }
+#app-shell .hud-panel,
+#app-shell .stat-card,
+#app-shell .dashboard-chart-card,
+#app-shell .dashboard-shortcut,
+#app-shell .phase5-stat-card,
+#app-shell .phase5-skill-card,
+#app-shell .phase5-timeline-card,
+#app-shell .phase5-tool-card,
+#app-shell .phase5-guidance-card,
+#app-shell .phase5-journal-section,
+#app-shell .phase6-gallery-card,
+#app-shell .phase6-contact-primary,
+#app-shell .phase6-contact-social,
+#app-shell .phase6-social-link,
+#app-shell .certificate-earned {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  background: linear-gradient(145deg, rgba(var(--accent-rgb),.035), transparent 58%), var(--surface-raised);
+  box-shadow: var(--ztrace-card-shadow);
+}
+#app-shell .hud-panel::before { opacity: .34; background: linear-gradient(135deg, rgba(var(--accent-rgb),.72), transparent 25%, transparent 72%, rgba(var(--accent-rgb),.3)); }
+#app-shell .hud-panel::after { opacity: .2; background:
+  linear-gradient(var(--accent),var(--accent)) left top/18px 1px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) left top/1px 18px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) right bottom/18px 1px no-repeat,
+  linear-gradient(var(--accent),var(--accent)) right bottom/1px 18px no-repeat; }
+#app-shell :is(.hud-panel,.stat-card,.dashboard-chart-card,.dashboard-shortcut,.phase5-stat-card,.phase5-skill-card,.phase5-timeline-card,.phase5-tool-card,.phase5-guidance-card,.phase5-journal-section,.phase6-gallery-card,.phase6-contact-primary,.phase6-contact-social,.phase6-social-link,.certificate-earned) {
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease, background-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  #app-shell :is(.hud-panel,.stat-card,.dashboard-chart-card,.dashboard-shortcut,.phase5-stat-card,.phase5-skill-card,.phase5-timeline-card,.phase5-tool-card,.phase5-guidance-card,.phase5-journal-section,.phase6-gallery-card,.phase6-contact-primary,.phase6-contact-social,.phase6-social-link,.certificate-earned):hover {
+    border-color: rgba(var(--accent-rgb),.42);
+    box-shadow: 0 20px 54px rgba(0,0,0,.36), 0 0 24px rgba(var(--accent-rgb),.075);
+  }
+}
+#app-shell .hud-panel-heading { border-color: var(--line); }
+#app-shell .hud-panel-heading h2,
+#app-shell .hud-panel-heading h3 { color: var(--text); }
+#app-shell .hud-btn,
+#app-shell .certificate-actions :is(a,button),
+#app-shell .certificate-dialog :is(a,button) {
+  min-height: 44px;
+  border: 1px solid rgba(var(--accent-rgb),.35);
+  border-radius: 6px;
+  color: var(--text);
+  background: rgba(var(--accent-rgb),.065);
+  font-family: var(--font-display);
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease, background var(--duration-fast) ease, box-shadow var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+#app-shell .hud-btn:hover,
+#app-shell .certificate-actions :is(a,button):hover,
+#app-shell .certificate-dialog :is(a,button):hover {
+  border-color: var(--accent);
+  color: #fff;
+  background: rgba(var(--accent-rgb),.13);
+  box-shadow: var(--ztrace-red-glow);
+}
+#app-shell .hud-btn--primary,
+#app-shell .certificate-actions button,
+#app-shell .phase6-send-button {
+  border-color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 8px 24px rgba(var(--accent-rgb),.17);
+}
+#app-shell .hud-btn--primary:hover,
+#app-shell .certificate-actions button:hover,
+#app-shell .phase6-send-button:hover { color: #fff; background: #c90817; border-color: #ff3947; }
+#app-shell :is(a,button,input,select,textarea,[tabindex="0"]):focus-visible {
+  outline: 2px solid #ff6973;
+  outline-offset: 3px;
+}
+#app-shell a { text-decoration-color: rgba(var(--accent-rgb),.4); }
+#app-shell a:hover { text-decoration-color: var(--accent); }
+
+/* 01 — Dashboard: restrained crimson metrics and honest data visualisation. */
+#app-shell .dashboard-heading { color: var(--text); }
+#app-shell .dashboard-stat-grid { gap: 14px; }
+#app-shell .dashboard-stat,
+#app-shell .stat-card {
+  border-color: var(--line);
+  background: linear-gradient(145deg, rgba(var(--accent-rgb),.05), transparent 62%), var(--surface-raised);
+}
+#app-shell .stat-icon,
+#app-shell .stat-card .stat-icon {
+  border-color: rgba(var(--accent-rgb),.34);
+  color: #ff737d;
+  background: rgba(var(--accent-rgb),.07);
+}
+#app-shell .stat-label,
+#app-shell .stat-foot,
+#app-shell .dashboard-footer-note { color: var(--text-soft); }
+#app-shell .stat-number { color: var(--text); }
+#app-shell .trend-badge { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.025); }
+#app-shell .dashboard-chart-grid { gap: 14px; }
+#app-shell .dashboard-chart-card {
+  border-color: var(--line);
+  background: linear-gradient(145deg, rgba(var(--accent-rgb),.035), transparent 58%), var(--surface-raised);
+}
+#app-shell .dashboard-chart-heading h2,
+#app-shell .dashboard-chart-heading h3 { color: var(--text); }
+#app-shell .dashboard-chart-empty {
+  border-color: rgba(var(--accent-rgb),.22);
+  background: linear-gradient(135deg, rgba(var(--accent-rgb),.045), transparent 70%), rgba(9,9,12,.72);
+}
+#app-shell .dashboard-chart-empty__eyebrow,
+#app-shell .chart-empty-tag,
+#app-shell .dashboard-shortcut__index { color: #f06b75; }
+#app-shell .dashboard-chart-empty h3 { color: var(--text); }
+#app-shell .dashboard-chart-empty p { color: var(--text-soft); }
+#app-shell .dashboard-chart-empty a,
+#app-shell .dashboard-shortcut:hover,
+#app-shell .dashboard-shortcut:focus-visible { color: var(--text); }
+#app-shell .dashboard-chart-svg .chart-grid-lines,
+#app-shell .dashboard-chart-svg .chart-axis { stroke: rgba(var(--accent-rgb),.2); }
+#app-shell .dashboard-chart-svg .chart-axis-labels,
+#app-shell .chart-axis-labels { fill: var(--text-soft); }
+#app-shell .dashboard-chart-svg .chart-pulse,
+#app-shell .dashboard-chart-svg .chart-pulse--line { stroke: var(--accent); }
+#app-shell .dashboard-shortcut {
+  border-color: var(--line);
+  color: var(--text);
+  background: rgba(17,17,20,.8);
+}
+#app-shell .dashboard-shortcut:hover { border-color: rgba(var(--accent-rgb),.4); box-shadow: var(--ztrace-red-glow); }
+#app-shell .dashboard-shortcut__index { color: var(--accent); }
+#app-shell .dashboard-log-panel { border-color: var(--line); background: rgba(17,17,20,.8); }
+#app-shell .learning-log-search,
+#app-shell .learning-log-filter select { border-color: var(--line); color: var(--text); background: #09090c; }
+#app-shell .learning-log-search input { color: var(--text); }
+#app-shell .learning-log-search input::placeholder { color: var(--text-soft); }
+#app-shell .learning-log-table th { color: #ff7a83; background: rgba(var(--accent-rgb),.06); }
+#app-shell .learning-log-table td { color: var(--text); border-color: var(--line); }
+#app-shell .learning-log-topic { color: var(--text); }
+#app-shell .learning-log-notes,
+#app-shell .learning-log-footer,
+#app-shell .learning-log-empty { color: var(--text-soft) !important; }
+#app-shell .learning-log-status { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.025); }
+#app-shell .learning-log-status--building { border-color: rgba(var(--accent-rgb),.3); color: #ff858d; background: rgba(var(--accent-rgb),.06); }
+
+/* 02 — Profile: portrait, story and learning details share the same dark-metal language. */
+#app-shell .identity-hero,
+#app-shell .profile-hero {
+  border-color: rgba(var(--accent-rgb),.25);
+  background: radial-gradient(ellipse at 80% 12%, rgba(var(--accent-rgb),.14), transparent 48%), linear-gradient(145deg,#111114,#08080b);
+}
+#app-shell .identity-hero .profile-hero-media::after {
+  background: linear-gradient(180deg,transparent 38%,rgba(5,5,5,.86)), linear-gradient(90deg,transparent 68%,rgba(var(--accent-rgb),.16));
+}
+#app-shell .identity-hero .profile-hero-portrait { filter: grayscale(.18) contrast(1.08) saturate(.82); }
+#app-shell .identity-hero .profile-hero-copy h2 { color: var(--text); text-shadow: 0 0 30px rgba(var(--accent-rgb),.14); }
+#app-shell .identity-hero .profile-hero-handle,
+#app-shell .identity-view .profile-status-chip {
+  border-color: rgba(var(--accent-rgb),.3);
+  color: #ff7b84;
+  background: rgba(var(--accent-rgb),.065);
+}
+#app-shell .identity-hero .profile-hero-line { border-color: var(--accent); color: var(--text); }
+#app-shell .identity-honesty-note,
+#app-shell .identity-story,
+#app-shell .identity-section-heading > p:last-child,
+#app-shell .identity-philosophy > p:last-child { color: var(--text-soft); }
+#app-shell .identity-section { border-color: var(--line); }
+#app-shell .identity-section-heading h2,
+#app-shell .identity-philosophy h2 { color: var(--text); }
+#app-shell .identity-journey-card,
+#app-shell .identity-interest-card {
+  border-color: var(--line);
+  background: linear-gradient(145deg, rgba(var(--accent-rgb),.055), transparent 68%), #0b0b0f;
+}
+#app-shell .identity-journey-card.is-current { border-color: rgba(var(--accent-rgb),.44); box-shadow: inset 0 1px rgba(var(--accent-rgb),.12); }
+#app-shell .identity-journey-card > span,
+#app-shell .identity-journey-card small,
+#app-shell .identity-card-index { color: #ed6872; }
+#app-shell .identity-journey-card h3,
+#app-shell .identity-interest-card h3 { color: var(--text); }
+#app-shell .identity-journey-card p,
+#app-shell .identity-interest-card p { color: var(--text-soft); }
+#app-shell .identity-interest-card:hover { border-color: rgba(var(--accent-rgb),.42); }
+#app-shell .identity-list-item { border-color: var(--line); color: var(--text-soft); }
+#app-shell .identity-list-item::before { border-color: var(--accent); }
+#app-shell .identity-course-card {
+  border-color: rgba(var(--accent-rgb),.3);
+  background: linear-gradient(115deg, rgba(var(--accent-rgb),.09), rgba(9,9,12,.78) 64%);
+}
+#app-shell .identity-course-card h3 { color: var(--text); }
+#app-shell .identity-course-card p { color: var(--text-soft); }
+#app-shell .identity-course-card strong,
+#app-shell .identity-course-meta strong { color: #ff7b84; }
+#app-shell .identity-course-note { border-color: var(--line); color: var(--text-soft) !important; }
+#app-shell .identity-philosophy { border-color: rgba(var(--accent-rgb),.32); background: radial-gradient(ellipse at 10% 10%,rgba(var(--accent-rgb),.12),transparent 58%),#09090c; }
+#app-shell .profile-links-panel { border-color: var(--line); }
+#app-shell .profile-link,
+#app-shell .profile-copy-button { border-color: var(--line); color: var(--text); background: rgba(255,255,255,.02); }
+#app-shell .profile-link:hover,
+#app-shell .profile-copy-button:hover { border-color: rgba(var(--accent-rgb),.42); color: #fff; background: rgba(var(--accent-rgb),.07); }
+
+/* 03 — Projects: quiet metallic cards with a precise crimson edge on interaction. */
+#app-shell .project-card {
+  border-color: var(--line);
+  background: linear-gradient(145deg,rgba(var(--accent-rgb),.04),transparent 56%),#111114;
+}
+#app-shell .project-card__index,
+#app-shell .project-card__type,
+#app-shell .project-card__label { color: #e66b75; }
+#app-shell .project-card h2 { color: var(--text); }
+#app-shell .project-card__summary,
+#app-shell .project-card__scope { color: var(--text-soft); }
+#app-shell .project-card__scope { border-color: var(--line); background: rgba(0,0,0,.14); }
+#app-shell .project-card__scope strong { color: var(--text); }
+#app-shell .project-card__stack li {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(255,255,255,.025);
+}
+#app-shell .project-card__links { border-color: var(--line); }
+#app-shell .project-card__links a,
+#app-shell .project-empty-state a,
+#app-shell .project-evidence-note a { color: #ff7a83; }
+#app-shell .project-empty-state,
+#app-shell .project-evidence-note { border-color: var(--line); background: var(--surface-raised); }
+#app-shell .project-evidence-note h2 { color: var(--text); }
+#app-shell .project-evidence-note p { color: var(--text-soft); }
+
+/* 04 — Attack Surface: a red scanning motif, explicitly illustrative rather than live. */
+#app-shell .phase5-authorized-banner {
+  border-color: rgba(var(--accent-rgb),.32);
+  background: linear-gradient(100deg,rgba(var(--accent-rgb),.09),rgba(var(--accent-rgb),.018));
+}
+#app-shell .phase5-banner-mark { border-color: rgba(var(--accent-rgb),.48); color: #ff7a83; background: rgba(var(--accent-rgb),.07); }
+#app-shell .phase5-authorized-banner strong { color: var(--text); }
+#app-shell .phase5-authorized-banner p { color: var(--text-soft); }
+#app-shell .phase5-stat-card { border-color: var(--line); background: linear-gradient(145deg,rgba(var(--accent-rgb),.045),transparent 60%),#111114; }
+#app-shell .phase5-stat-mark { border-color: rgba(var(--accent-rgb),.32); color: #ff737d; background: rgba(var(--accent-rgb),.055); }
+#app-shell .phase5-stat-label,
+#app-shell .phase5-stat-note { color: var(--text-soft); }
+#app-shell .phase5-stat-number { color: var(--text); }
+#app-shell .phase5-radar-panel {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--line);
+  background: radial-gradient(ellipse at 50% 48%,rgba(var(--accent-rgb),.075),transparent 62%),#09090c;
+}
+#app-shell .phase5-radar-panel::after {
+  position: absolute;
+  inset: 48px 12% 42px;
+  border: 1px solid rgba(var(--accent-rgb),.1);
+  border-radius: 50%;
+  background: linear-gradient(180deg,transparent 49.8%,rgba(var(--accent-rgb),.16) 50%,transparent 50.4%);
+  content: "";
+  pointer-events: none;
+}
+#app-shell .phase5-radar-grid polygon,
+#app-shell .phase5-radar-grid path { stroke: rgba(var(--accent-rgb),.24); }
+#app-shell .phase5-radar-simulated { fill: #ff737d; }
+#app-shell .phase5-radar-empty { fill: var(--text); }
+#app-shell .phase5-chart-note { border-color: var(--line); color: var(--text-soft); }
+#app-shell .phase5-guidance-card { border-color: var(--line); background: rgba(17,17,20,.78); }
+#app-shell .phase5-guidance-index { color: #e66b75; }
+#app-shell .phase5-guidance-card h3 { color: var(--text); }
+#app-shell .phase5-guidance-card p { color: var(--text-soft); }
+
+/* 05 — Skill Progress: red meters, with status copy remaining the source of truth. */
+#app-shell .phase5-skill-intro { border-color: var(--line); background: rgba(var(--accent-rgb),.035); }
+#app-shell .phase5-skill-intro-mark { color: #ff7a83; }
+#app-shell .phase5-skill-intro p:not(.view-eyebrow) { color: var(--text-soft); }
+#app-shell .phase5-skill-card { border-color: var(--line); background: linear-gradient(145deg,rgba(var(--accent-rgb),.04),transparent 60%),#111114; }
+#app-shell .phase5-skill-kicker { color: #e66b75; }
+#app-shell .phase5-skill-heading h2 { color: var(--text); }
+#app-shell .phase5-skill-note { color: var(--text-soft); }
+#app-shell .phase5-status {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: rgba(255,255,255,.025);
+}
+#app-shell .phase5-status--in-progress { border-color: rgba(var(--accent-rgb),.3); color: #ff8790; background: rgba(var(--accent-rgb),.055); }
+#app-shell .phase5-status--planned,
+#app-shell .phase5-status--long-term { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.018); }
+#app-shell .phase5-skill-meter { border-color: rgba(var(--accent-rgb),.22); background: rgba(var(--accent-rgb),.045); }
+#app-shell .phase5-skill-meter span { background: linear-gradient(90deg,var(--red-soft),var(--accent)); box-shadow: 0 0 14px rgba(var(--accent-rgb),.22); }
+#app-shell .phase5-skill-footer strong { color: var(--text); }
+#app-shell .phase5-skill-footer span { color: var(--text-soft); }
+
+/* 06 — Learning Path: connected milestones and tool cards. */
+#app-shell .phase5-timeline::before { background: linear-gradient(180deg,rgba(var(--accent-rgb),.78),rgba(var(--accent-rgb),.12)); }
+#app-shell .phase5-timeline-node {
+  border-color: rgba(var(--accent-rgb),.46);
+  color: #ff737d;
+  background: #111114;
+  box-shadow: 0 0 18px rgba(var(--accent-rgb),.09);
+}
+#app-shell .phase5-timeline-card { border-color: var(--line); background: linear-gradient(145deg,rgba(var(--accent-rgb),.04),transparent 58%),#111114; }
+#app-shell .phase5-timeline-card h2 { color: var(--text); }
+#app-shell .phase5-timeline-card > p { color: var(--text-soft); }
+#app-shell .phase5-topic-list li { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.025); }
+#app-shell .phase5-tool-card { border-color: var(--line); background: #111114; }
+#app-shell .phase5-tool-symbol { border-color: rgba(var(--accent-rgb),.34); color: #ff737d; background: rgba(var(--accent-rgb),.05); }
+#app-shell .phase5-tool-card h3 { color: var(--text); }
+#app-shell .phase5-tool-card p { color: var(--text-soft); }
+#app-shell .phase5-tool-status { border-color: var(--line); color: var(--text-soft); background: rgba(255,255,255,.02); }
+
+/* 07 — Write-ups: terminal-like editorial panels, without inventing published work. */
+#app-shell .phase5-empty-state {
+  border-color: rgba(var(--accent-rgb),.22);
+  background: linear-gradient(120deg,rgba(var(--accent-rgb),.055),transparent 72%),#111114;
+}
+#app-shell .phase5-empty-icon { border-color: rgba(var(--accent-rgb),.4); color: #ff737d; background: rgba(var(--accent-rgb),.04); }
+#app-shell .phase5-empty-state h2 { color: var(--text); }
+#app-shell .phase5-empty-state p:not(.view-eyebrow) { color: var(--text-soft); }
+#app-shell .phase5-journal-section { border-color: var(--line); background: linear-gradient(135deg,rgba(var(--accent-rgb),.035),transparent 64%),#0b0b0f; }
+#app-shell .phase5-journal-index { color: #e66b75; }
+#app-shell .phase5-journal-section h3 { color: var(--text); }
+#app-shell .phase5-journal-section p { color: var(--text-soft); }
+#app-shell .phase5-status--planned { border-style: dashed; }
+
+/* 08 — Automation: restrained red topology, clearly a learning placeholder. */
+#app-shell .phase5-automation-empty {
+  border-color: var(--line);
+  background: radial-gradient(ellipse at center,rgba(var(--accent-rgb),.085),transparent 62%),#09090c;
+}
+#app-shell .phase5-automation-orbit,
+#app-shell .phase5-automation-orbit::before,
+#app-shell .phase5-automation-orbit::after { border-color: rgba(var(--accent-rgb),.17); }
+#app-shell .phase5-automation-orbit span { background: var(--accent); box-shadow: 0 0 12px rgba(var(--accent-rgb),.6); }
+#app-shell .phase5-automation-icon { border-color: rgba(var(--accent-rgb),.36); color: #ff737d; background: rgba(var(--accent-rgb),.06); }
+#app-shell .phase5-automation-empty h2 { color: var(--text); }
+#app-shell .phase5-automation-description { color: var(--text-soft); }
+#app-shell .phase5-automation-status { border-color: var(--line); color: var(--text-soft); background: rgba(17,17,20,.7); }
+
+/* 09 — Certificates: preserve the original earned record and untouched image. */
+#app-shell .phase5-earned-summary { border-color: rgba(var(--accent-rgb),.24); background: rgba(var(--accent-rgb),.045); }
+#app-shell .phase5-earned-summary strong { color: var(--text); }
+#app-shell .phase5-earned-summary > span:last-child { color: var(--text-soft); }
+#app-shell .phase5-earned-dot { background: var(--accent); box-shadow: 0 0 12px rgba(var(--accent-rgb),.42); }
+#app-shell .certificate-earned {
+  grid-template-columns: minmax(0,1fr) minmax(0,1.12fr);
+  align-items: center;
+  border-color: rgba(var(--accent-rgb),.36);
+  background: radial-gradient(ellipse at 12% 0,rgba(var(--accent-rgb),.15),transparent 62%),linear-gradient(145deg,#151519,#09090c 72%);
+  box-shadow: 0 18px 60px rgba(0,0,0,.38),0 0 30px rgba(var(--accent-rgb),.055);
+}
+#app-shell .certificate-earned h2 { color: var(--text); }
+#app-shell .certificate-issuer { color: #ff9aa1; }
+#app-shell .certificate-earned-copy > p { color: var(--text-soft); }
+#app-shell .certificate-earned dt { color: var(--text-soft); }
+#app-shell .certificate-earned dd { color: var(--text); }
+#app-shell .certificate-evidence { color: var(--text-soft); }
+#app-shell .phase5-certificate-status {
+  border-color: rgba(var(--accent-rgb),.38);
+  color: #ffd0d4;
+  background: rgba(var(--accent-rgb),.09);
+}
+#app-shell .certificate-preview-button {
+  border-color: var(--line);
+  color: var(--text-soft);
+  background: #08080b;
+  box-shadow: inset 0 0 26px rgba(var(--accent-rgb),.035);
+}
+#app-shell .certificate-preview-button:hover { border-color: rgba(var(--accent-rgb),.45); box-shadow: var(--ztrace-red-glow); }
+#app-shell .certificate-preview-button img { border-radius: 4px; }
+#app-shell .certificate-preview-button span { color: #ff8790; }
+#app-shell .certificate-actions :is(a,button) { text-decoration: none; }
+#app-shell .certificate-actions a:last-child { border-color: rgba(var(--accent-rgb),.28); color: #ff9aa1; background: rgba(var(--accent-rgb),.035); }
+#app-shell .phase5-certificate-card { border-color: var(--line); background: #111114; }
+#app-shell .phase5-certificate-card h2 { color: var(--text); }
+#app-shell .phase5-certificate-empty,
+#app-shell .phase5-certificate-note { color: var(--text-soft); }
+#app-shell .phase5-certificate-note { border-color: var(--line); background: rgba(0,0,0,.14); }
+#app-shell .phase5-certificate-lock { border-color: var(--line); color: var(--text-soft); }
+#app-shell .certificate-dialog {
+  border-color: rgba(var(--accent-rgb),.42);
+  color: var(--text);
+  background: #111114;
+  box-shadow: 0 24px 90px rgba(0,0,0,.72),0 0 34px rgba(var(--accent-rgb),.08);
+}
+#app-shell .certificate-dialog::backdrop { background: rgba(0,0,0,.86); backdrop-filter: blur(8px); }
+#app-shell .certificate-dialog > p { color: var(--text-soft); }
+#app-shell .certificate-dialog img { background: #050505; }
+
+/* 10 — Gallery: dark photographic framing; keep portraits natural and legible. */
+#app-shell .phase6-gallery-meta { border-color: var(--line); color: var(--text-soft); }
+#app-shell .phase6-gallery-card { border-color: var(--line); background: #111114; }
+#app-shell .phase6-gallery-image-wrap { background: #09090c; }
+#app-shell .phase6-gallery-image-wrap::after { border-color: rgba(var(--accent-rgb),.16); background: linear-gradient(180deg,rgba(var(--accent-rgb),.08),transparent 35%,transparent 76%,rgba(var(--accent-rgb),.09)); }
+#app-shell .phase6-gallery-image-wrap img { filter: saturate(.78) contrast(1.06); }
+#app-shell .phase6-gallery-trigger:hover img,
+#app-shell .phase6-gallery-trigger:focus-visible img { filter: saturate(.9) contrast(1.07); }
+#app-shell .phase6-gallery-corner { border-color: rgba(var(--accent-rgb),.32); color: var(--text); background: rgba(5,5,5,.82); }
+#app-shell .phase6-gallery-open-mark { border-color: rgba(var(--accent-rgb),.48); color: #ff8790; background: rgba(5,5,5,.82); }
+#app-shell .phase6-gallery-caption strong { color: var(--text); }
+#app-shell .phase6-gallery-caption-arrow { color: #ff7a83; }
+#app-shell .phase6-lightbox {
+  border-color: rgba(var(--accent-rgb),.4);
+  color: var(--text);
+  background: rgba(9,9,12,.99);
+  box-shadow: 0 24px 90px rgba(0,0,0,.72),0 0 30px rgba(var(--accent-rgb),.08);
+}
+#app-shell .phase6-lightbox::backdrop { background: rgba(0,0,0,.86); backdrop-filter: blur(8px); }
+#app-shell .phase6-lightbox-header,
+#app-shell .phase6-lightbox-footer { border-color: var(--line); }
+#app-shell .phase6-lightbox-stage { background: rgba(0,0,0,.18); }
+#app-shell .phase6-lightbox-nav,
+#app-shell .phase6-icon-button { border-color: rgba(var(--accent-rgb),.3); color: var(--text); background: rgba(var(--accent-rgb),.055); }
+#app-shell .phase6-lightbox-nav:hover,
+#app-shell .phase6-icon-button:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),.13); }
+#app-shell .phase6-lightbox-footer h2 { color: var(--text); }
+#app-shell .phase6-lightbox-position { color: var(--text-soft); }
+
+/* 11 — Contact: direct, accessible actions and the original public destinations. */
+#app-shell .phase6-contact-primary,
+#app-shell .phase6-contact-social {
+  border-color: var(--line);
+  background: radial-gradient(ellipse at 15% 10%,rgba(var(--accent-rgb),.07),transparent 48%),#111114;
+}
+#app-shell .phase6-contact-top,
+#app-shell .phase6-contact-description,
+#app-shell .phase6-social-heading p:not(.view-eyebrow),
+#app-shell .phase6-contact-footnote { color: var(--text-soft); }
+#app-shell .phase6-contact-signal { border-color: rgba(var(--accent-rgb),.3); color: #ff8790; background: rgba(var(--accent-rgb),.055); }
+#app-shell .phase6-contact-glyph { border-color: rgba(var(--accent-rgb),.34); color: #ff7a83; background: rgba(var(--accent-rgb),.045); }
+#app-shell .phase6-contact-primary h2,
+#app-shell .phase6-social-heading h2 { color: var(--text); }
+#app-shell .phase6-email-address { border-color: var(--line); }
+#app-shell .phase6-email-address a { color: #ff8b94; }
+#app-shell .phase6-copy-status { color: #ff9aa1; }
+#app-shell .phase6-social-link { border-color: var(--line); background: rgba(5,5,5,.3); }
+#app-shell .phase6-social-link:hover,
+#app-shell .phase6-social-link:focus-visible { border-color: rgba(var(--accent-rgb),.42); background: rgba(var(--accent-rgb),.055); }
+#app-shell .phase6-social-index,
+#app-shell .phase6-social-copy small { color: var(--text-soft); }
+#app-shell .phase6-social-mark { border-color: rgba(var(--accent-rgb),.28); color: #ff7a83; background: rgba(var(--accent-rgb),.045); }
+#app-shell .phase6-social-copy strong { color: var(--text); }
+#app-shell .phase6-social-arrow { color: #ff7a83; }
+
+/* Shared atmosphere: the workspace glow and grid are decorative, never interactive. */
+#app-shell .workspace-ambient {
+  opacity: .42;
+  background-image: linear-gradient(rgba(var(--accent-rgb),.045) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--accent-rgb),.045) 1px,transparent 1px);
+}
+#app-shell .workspace-ambient span { background: var(--accent); box-shadow: 0 0 12px rgba(var(--accent-rgb),.5); }
+#app-shell .workspace-cursor-glow { background: radial-gradient(circle,rgba(var(--accent-rgb),.105),transparent 68%); }
+#app-shell .app-view-root.is-view-entering::after { background: linear-gradient(180deg,transparent,rgba(var(--accent-rgb),.075),transparent); }
+#phase2-gate .phase2-gate__grid {
+  background-image: linear-gradient(rgba(var(--accent-rgb),.055) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--accent-rgb),.055) 1px,transparent 1px);
+}
+#phase2-gate .phase2-gate__signal,
+#phase2-gate .phase2-gate__status-dot,
+#phase2-gate .phase2-gate__login-button { background-color: var(--accent); }
+#phase2-gate .phase2-gate__eyebrow,
+#phase2-gate .phase2-gate__ticker,
+#phase2-gate .phase2-gate__terminal-command { color: #ff737d; }
+#phase2-gate .phase2-gate__panel,
+#phase2-gate .phase2-gate__terminal,
+#phase2-gate .phase2-gate__login-card { border-color: var(--line); }
+
+/* Responsive refinements supplement, rather than replace, the existing layout rules. */
+@media (max-width: 1050px) {
+  #app-shell .dashboard-stat-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #app-shell .phase5-guidance { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  #app-shell .app-topbar { background: rgba(9,9,12,.94); }
+  #app-shell .view-heading-block { margin-bottom: 22px; }
+  #app-shell .dashboard-stat-grid,
+  #app-shell .dashboard-chart-grid,
+  #app-shell .phase5-stat-grid,
+  #app-shell .phase5-skill-grid,
+  #app-shell .phase5-certificate-grid,
+  #app-shell .phase6-gallery-grid,
+  #app-shell .phase6-contact-grid { grid-template-columns: minmax(0,1fr); }
+  #app-shell .phase5-guidance { grid-template-columns: minmax(0,1fr); }
+  #app-shell .certificate-earned { grid-template-columns: minmax(0,1fr); }
+  #app-shell .certificate-preview-button { grid-row: 1; }
+  #app-shell .phase5-skill-heading { align-items: flex-start; }
+}
+@media (max-width: 420px) {
+  #app-shell .app-current-view { font-size: 17px; }
+  #app-shell .app-view-root { padding-inline: 12px; }
+  #app-shell .dashboard-stat-grid { grid-template-columns: minmax(0,1fr); }
+  #app-shell .phase5-tool-grid { grid-template-columns: minmax(0,1fr); }
+  #app-shell .certificate-actions { display: grid; grid-template-columns: minmax(0,1fr); }
+  #app-shell .certificate-actions > * { width: 100%; justify-content: center; }
+  #app-shell .phase6-social-link { grid-template-columns: 22px 30px minmax(0,1fr) 16px; gap: 8px; }
+  #app-shell .phase6-lightbox-stage { grid-template-columns: 32px minmax(0,1fr) 32px; }
+}
+@media (hover:none), (pointer:coarse) {
+  #app-shell .workspace-cursor-glow { display: none !important; }
+  #app-shell .phase6-gallery-trigger:hover img { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #app-shell *,
+  #app-shell *::before,
+  #app-shell *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  #app-shell .workspace-ambient,
+  #app-shell .workspace-cursor-glow { display: none !important; }
+  #app-shell .app-view-root.is-view-entering,
+  #app-shell .app-view-root.is-view-leaving { opacity: 1 !important; transform: none !important; }
+  #app-shell .app-view-root.is-view-entering::after { display: none !important; }
+}
