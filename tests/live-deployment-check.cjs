@@ -44,12 +44,22 @@ async function waitForRelease(page) {
   throw new Error("GitHub Pages did not serve " + RELEASE + " within 12 minutes. Last response: " + lastStatus);
 }
 
+async function waitForIntroReveal(page) {
+  await page.waitForFunction(() => {
+    const elements = [...document.querySelectorAll(
+      ".phantom-intro__quote-group, .phantom-intro__final-line, .phantom-intro__signature, .phantom-intro__echo"
+    )];
+    return elements.length >= 9 && elements.every(element => getComputedStyle(element).opacity === "1");
+  }, null, { timeout: 9000 });
+}
+
 async function verifyIntro(page, label, screenshotName) {
   await waitForRelease(page);
   await page.waitForFunction(() => {
     const image = document.querySelector(".phantom-intro__portrait");
     return image && image.complete && image.naturalWidth > 300;
   }, null, { timeout: 30000 });
+  await waitForIntroReveal(page);
   const intro = page.locator("#phase2-gate");
   const content = await intro.evaluate(el => el.textContent || "");
   const missing = requiredQuotes.filter(quote => !content.includes(quote));
@@ -104,6 +114,7 @@ async function verifyIntro(page, label, screenshotName) {
     await desktop.locator("[data-replay-intro]").click();
     await desktop.waitForFunction(() => new URL(location.href).searchParams.get("intro") === "1", null, { timeout: 10000 });
     await desktop.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 10000 });
+    await waitForIntroReveal(desktop);
     await desktop.screenshot({ path: path.join(OUT, "live-phantom-intro-replay.png"), fullPage: false });
     await desktop.locator("[data-p2-login]").click();
     await desktop.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
