@@ -39,3 +39,20 @@
 - Browser checks covered a desktop session and a 390 × 844 mobile viewport; all physical devices, keyboard/screen-reader combinations, Lighthouse scores, and guaranteed frame rates were not independently measured.
 - Motion-off is also enforced by system reduced-motion settings; the control cannot override an OS preference.
 - GitHub Pages may briefly serve a cached prior revision after a successful deployment.
+
+
+# Phase 7 — Production QA (2026-11-06)
+
+## Scope
+- Dedicated QA branch: `phase-7/production-qa`, based on `phase-6/cyber-noir-unification`.
+- Expanded Playwright visual QA to five required viewports: 1440×900, 1280×800, 1024×768, 390×844, and 320×700.
+- Added desktop/mobile route navigation, intro replay, profile/project content, Byte Capsule preview and download, Gallery keyboard navigation and focus restoration, Contact destination and clipboard checks, motion toggle, and reduced-motion coverage.
+- Added axe-core WCAG 2.1 A/AA browser scans on desktop and mobile.
+- Added PostCSS parsing of the active stylesheet stack, raster image budgets, exact Byte Capsule source-image SHA-256 integrity check, and a Lighthouse report validator that rejects missing scores or metrics.
+- Pinned Playwright and Lighthouse versions for repeatable Chromium/Lighthouse runs.
+
+## Certificate integrity
+The earned Byte Capsule record remains unchanged: Ethical Hacking for Beginners, recipient MD SAAD, issuer Byte Capsule, certificate ID 7482ZWKQ, date 2026-11-01. The original certificate PNG is verified by SHA-256 in `tests/phase7-production-check.cjs`; the QA work does not modify the certificate artwork or planned CEH/OSCP states.
+
+## Release boundary
+No direct `main` edits, merge, or production deployment. Final QA status and evidence are recorded in [PHASE-7-PRODUCTION-QA.md](PHASE-7-PRODUCTION-QA.md).
