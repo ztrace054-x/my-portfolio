@@ -369,7 +369,7 @@ async function checkDesktopNavigation(page) {
         activeElement: document.activeElement?.outerHTML?.slice(0, 500) || "",
         activeRoute: document.querySelector('[data-nav-item][aria-current="page"]')?.dataset.route || "",
         sidebarOpen: document.querySelector("#app-shell")?.classList.contains("is-sidebar-open"),
-        targetRoute: document.querySelector('[data-nav-item][data-route="' + location.hash.replace(/^#\\/?/, "") + '"]')?.dataset.route || ""
+        targetRoute: document.querySelector('[data-nav-item][data-route="' + location.hash.slice(2) + '"]')?.dataset.route || ""
       }));
       throw new Error("Desktop keyboard navigation failed for " + route + ": " + JSON.stringify({ focusState, state, cause: error.message }));
     }
