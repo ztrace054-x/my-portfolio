@@ -3,7 +3,7 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const ORIGIN = process.env.PORTFOLIO_ORIGIN || "https://ztrace054-x.github.io/my-portfolio/";
-const RELEASE = "phantom-signal-20261106.1";
+const RELEASE = "phantom-signal-20261106.2";
 const OUT = path.resolve(__dirname, "..", "artifacts", "live-deployment");
 const errors = [];
 fs.mkdirSync(OUT, { recursive: true });
@@ -74,6 +74,14 @@ async function verifyIntro(page, label, screenshotName) {
     width: el.clientWidth, scrollWidth: el.scrollWidth,
     documentWidth: document.documentElement.scrollWidth, viewportWidth: innerWidth
   }));
+  const quoteLayout = await intro.evaluate(el => {
+    const echoes = el.querySelector(".phantom-intro__echoes")?.getBoundingClientRect();
+    const footer = el.querySelector(".phantom-intro__ticker")?.getBoundingClientRect();
+    return { echoesBottom: echoes?.bottom ?? 0, footerTop: footer?.top ?? 0 };
+  });
+  if (page.viewportSize().width <= 560 && quoteLayout.echoesBottom > quoteLayout.footerTop + 2) {
+    throw new Error(label + " has quote cards overlapping the intro controls: " + JSON.stringify(quoteLayout));
+  }
   if (geometry.scrollWidth > geometry.width + 2 || geometry.documentWidth > geometry.viewportWidth + 2) {
     throw new Error(label + " has horizontal overflow: " + JSON.stringify(geometry));
   }
