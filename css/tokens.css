@@ -47,7 +47,7 @@
   --text-soft-rgb: 183, 194, 189;
 
   --accent: #ff4353;
-  --accent-rgb: 133, 233, 173;
+  --accent-rgb: 229, 9, 26;
   --accent-hover: #ff8b94;
   --accent-soft: rgba(229, 9, 26, 0.1);
   --accent-line: rgba(229, 9, 26, 0.24);
@@ -183,17 +183,17 @@
 
 /* SAAD.ztrace_ HUD namespace — additive so the current portfolio remains visually stable. */
 :root {
-  --hud-bg: #05090c;
-  --hud-bg-soft: #0b1418;
-  --hud-panel: rgba(11, 20, 24, 0.9);
-  --hud-panel-solid: #0b1418;
-  --hud-panel-raised: #101d21;
-  --hud-line: #477c5c;
+  --hud-bg: #050304;
+  --hud-bg-soft: #100609;
+  --hud-panel: rgba(5, 3, 4, 0.9);
+  --hud-panel-solid: #0b0608;
+  --hud-panel-raised: #16090c;
+  --hud-line: rgba(229, 9, 26, 0.26);
   --hud-line-soft: rgba(229, 9, 26, 0.14);
   --hud-cyan: #ff4353;
   --hud-cyan-2: #ff4353;
   --hud-text: #f3e9eb;
-  --hud-muted: #8da9a0;
+  --hud-muted: #b5a0a4;
   --hud-amber: #f2cc85;
   --hud-danger: #ff737d;
   --hud-display: "Space Grotesk", Arial, sans-serif;
