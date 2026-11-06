@@ -3,7 +3,7 @@
 **Repository:** `ztrace054-x/my-portfolio`  
 **QA branch:** `phase-7/production-qa`  
 **Base:** `phase-6/cyber-noir-unification`  
-**Current QA source commit:** `c4363d0a100ac53aff17e188c00da23b17d987d3`  
+**Latest QA workflow commit:** `b763ff897929cc5857d3bb587cb251e90af079b3`  
 **Production deployment:** Not performed  
 **Merge:** Not performed
 
@@ -11,11 +11,9 @@
 
 **Release recommendation: HOLD — do not merge or deploy yet.**
 
-The Phase 7 validation job passed on the current branch. The first expanded browser run successfully visited all 11 routes at all five requested viewports (55 route/viewport checks), captured 137 screenshots, found zero local asset failures and zero horizontal overflow failures, and exercised intro replay/skip, desktop/mobile navigation, certificate preview/download, Gallery keyboard controls, contact links/copy, and the Motion toggle.
+The latest completed Phase 7 workflow is [run #42159329548](https://github.com/ztrace054-x/my-portfolio/actions/runs/42159329548). The validation job passed. The Playwright job passed: all 11 routes at all five requested viewports (55 route/viewport checks), 137 screenshots, zero recorded issues, zero severe Axe violations across 22 accessibility audits, and successful intro replay/skip, desktop/mobile navigation, certificate preview/download, Gallery keyboard controls, contact links/copy, and Motion/reduced-motion checks.
 
-That first expanded run also identified accessibility and test-synchronization issues. Scoped fixes were committed on this branch and a fresh complete run is in progress. Do not interpret the earlier failing browser run as final, or the fixes as passed until the latest run finishes.
-
-Lighthouse 12.8.2 currently fails to produce a valid Performance category: both desktop and mobile traces report `NO_LCP`. A strict report validator intentionally fails rather than presenting fabricated performance scores. This remains a release blocker until valid LCP/performance results are obtained or the audit environment is corrected.
+The performance job failed. Lighthouse 12.8.2 did not produce a valid Performance category: both desktop and mobile traces report `NO_LCP`. The strict report validator correctly rejects the missing category score and metrics instead of presenting fabricated values. This remains a release blocker.
 
 ## Viewport and route coverage
 
@@ -28,7 +26,7 @@ Lighthouse 12.8.2 currently fails to produce a valid Performance category: both 
 | Small mobile — 320 × 700 | 11 |
 | **Total in first expanded run** | **55** |
 
-The first run produced 137 screenshots. It reported no broken local image/resource references and no horizontal overflow at the tested viewport sizes. A fresh run is being executed after the accessibility and test-wait fixes.
+The latest passing browser run produced 137 screenshots, reported zero test issues, and recorded no broken local image/resource references or horizontal overflow at the tested viewport sizes.
 
 ## Functionality covered
 
@@ -47,18 +45,9 @@ The first run produced 137 screenshots. It reported no broken local image/resour
 
 ## Issues discovered and fixes committed
 
-The first expanded browser run recorded 19 issues:
-- 9 serious Axe findings for scrollable regions not being keyboard reachable.
-- 4 Profile-content assertions and 6 Project-content assertions caused by reading a route before its delayed render completed.
+The earlier expanded run identified 19 issues, including nine serious Axe findings and delayed-render assertions. The fixes were committed and verified by the latest Playwright run: `issueCount: 0`, `severeAccessibilityViolations: 0`, and `accessibilityAudits: 22`.
 
-Scoped fixes committed on this branch:
-1. `#app-view-root` is now keyboard focusable with `tabindex="0"`.
-2. The Dashboard learning-log table scroller now has a region name and keyboard focus.
-3. The Attack Surface radar heading was corrected from h3 to h2 to avoid a skipped heading level.
-4. Profile/Projects browser checks now wait for the expected rendered content before asserting.
-5. Axe scans are limited to representative Dashboard, Attack Surface, Certificates and Contact views at desktop and mobile, while all routes remain covered by the rendered viewport checks.
-
-These changes require confirmation by the latest Playwright run.
+Fixes include keyboard focus for the workspace scroll region, a named/focusable Dashboard learning-log region, corrected Attack Surface heading hierarchy, and waits for actual Profile/Projects route content.
 
 ## Static validation
 
@@ -77,7 +66,7 @@ The current branch validation job passed:
 
 Pinned Lighthouse 12.8.2 runs against the local static preview completed the desktop and mobile navigation/trace steps, but the report validator rejected the output because both reports contain `LanternError: NO_LCP`. The Performance category score is therefore unavailable and is not reported as zero or as a pass.
 
-The previous Phase 6 run had the same NO_LCP problem under Lighthouse 12.8.2. A strict checker now rejects missing category scores and missing FCP/LCP/CLS/TBT/Speed Index measurements. Accessibility, Best Practices and SEO scores must also be read from the current report artifacts after a valid run; no Phase 7 score is claimed here.
+The Phase 7 Lighthouse report artifacts are attached to [run #42159329548](https://github.com/ztrace054-x/my-portfolio/actions/runs/42159329548). The strict checker rejects missing category scores and missing FCP/LCP/CLS/TBT/Speed Index measurements. The report did not yield valid Performance, Accessibility, Best Practices or SEO category scores, so no Lighthouse score is claimed here.
 
 ## Certificate record and assets
 
@@ -103,7 +92,7 @@ The corresponding Lighthouse HTML/JSON reports are available here:
 [GitHub Actions — Phase 7 Lighthouse reports](https://github.com/ztrace054-x/my-portfolio/actions/runs/42159052326)
 
 The first expanded run artifact (137 screenshots and `visual-qa-report.json`) is available here:
-[Download first expanded Playwright artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/42158635331/artifacts/13475682855)
+[Earlier failed Playwright run artifact](https://github.com/ztrace054-x/my-portfolio/actions/runs/42158635331/artifacts/13475682855)
 
 ## Modified source/documentation files
 
@@ -126,4 +115,4 @@ The first expanded run artifact (137 screenshots and `visual-qa-report.json`) is
 3. Review the generated desktop and mobile screenshots visually, not just the automated summary.
 4. Production-hosted behavior and real-user Core Web Vitals remain untested; CI uses a local static preview.
 
-**Release decision:** keep the QA branch isolated. Do not merge, publish or deploy until these blockers are cleared and the owner approves.
+**Release decision:** keep the QA branch isolated. The visual and static checks pass, but Lighthouse performance validation fails with `NO_LCP`. Do not merge, publish or deploy until valid Lighthouse metrics are obtained and the owner approves.
