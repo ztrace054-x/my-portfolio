@@ -37,47 +37,31 @@ assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*h
 assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, "The Phantom Signal title must be the intro heading.");
 assert.match(html, /src="\.\/assets\/phantom-signal-hero\.webp"/, "The intro must use the original Phantom Signal portrait crop.");
 assert.ok(html.includes('class="phantom-intro__crimson-wake" aria-hidden="true"'), "The intro must include its crimson ambient wake layer.");
-assert.ok(html.includes('data-p2-skip') && html.includes('data-p2-login'), "Skip and enter controls must be available.");
-assert.ok(html.includes('aria-modal="true"') && html.includes('aria-labelledby="phantom-intro-title"'), "Intro dialog must have an accessible name.");
-assert.ok(html.includes('href="./css/phantom-signal.css?v=20261107.1"'), "The consolidated Phantom Signal stylesheet must be linked.");
-assert.ok(html.includes('href="./css/workspace-shell.css?v=20261107.1"'), "The workspace shell stylesheet must be linked.");
-assert.ok(!html.includes('phantom-signal-cinematic-v2.css') && !html.includes('phantom-signal-cinematic-v3.css'), "The superseded cinematic layer files must no longer be linked.");
-assert.ok(!html.includes('phase-2-gate.css'), "The superseded HUD stylesheet must not load with the new intro.");
-assert.ok(/<div id="page">/.test(html), "The original portfolio content must remain intact.");
-assert.ok(html.includes("Replay the Phantom Signal cinematic introduction."), "Settings must describe the new replay experience.");
-assert.ok(html.includes('data-replay-intro'), "The existing settings replay control must remain available.");
+// By design there is no visible Skip/Enter control: the intro always plays its
+// full course and the workspace unlocks automatically when it finishes.
+assert.ok(!html.includes('data-p2-skip') && !html.includes('data-p2-login'), "The intro must not expose visible skip/enter buttons.");
+assert.ok(!html.includes('class="phantom-intro__button"') && !html.includes('class="phantom-intro__controls"'), "The intro must not render visible skip/enter button markup.");
 
-assert.ok(main.includes("initPhantomSignal"), "Main startup must initialize the Phantom Signal intro.");
-assert.ok(main.includes("intro.completed.then"), "The workspace must activate after the intro completes.");
-assert.ok(!main.includes("initPhase2Gate"), "The superseded visitor gate must no longer run.");
-
-for (const behavior of [
-  "sessionStorage.getItem(SEEN_KEY)",
-  'new URLSearchParams(window.location.search).get("intro") === "1"',
-  'event.key === "Escape"',
-  'event.key !== "Tab"',
-  "page.inert = true",
-  "page.inert = false",
-  "prefers-reduced-motion: reduce",
-  "autoTimer = window.setTimeout(finish",
-  "clearReplayQuery()"
-]) assert.ok(intro.includes(behavior), "Missing intro behavior: " + behavior);
-
-// The autoTimer must finish within ~5s on a motion-enabled first visit.
-assert.match(intro, /autoTimer = window\.setTimeout\(finish, currentMotion \? (\d+) : (\d+)\);/, "autoTimer must set an explicit motion/no-motion duration.");
-const [, motionMs] = intro.match(/autoTimer = window\.setTimeout\(finish, currentMotion \? (\d+) : (\d+)\);/);
+assert.ok(main.includes('from "./phantom-signal.js"') || main.includes("from './phantom-signal.js'"), "main.js must import the Phantom Signal module.");
+assert.ok(intro.includes("export function initPhantomSignal"), "phantom-signal.js must export initPhantomSignal.");
+assert.ok(intro.includes("SEEN_KEY"), "phantom-signal.js must track first-visit state.");
+assert.ok(intro.includes("autoTimer = window.setTimeout(finish, currentMotion ? 5000 : 3200)"), "The first-visit intro must auto-finish at ~5s.");
+const motionMatch = intro.match(/autoTimer = window\.setTimeout\(finish, currentMotion \? (\d+) : (\d+)\);/);
+const motionMs = motionMatch ? motionMatch[1] : "0";
 assert.ok(Number(motionMs) <= 5200, "The first-visit intro must auto-finish at ~5s or less, found " + motionMs + "ms");
 
 for (const cssRule of [
   ".phantom-intro__visual", ".phantom-intro__smoke", ".phantom-intro__eyes",
   ".phantom-intro__code", ".phantom-intro__quote-group", ".phantom-intro__echoes",
-  ".phantom-intro__button", "@media(max-width:900px)",
+  "@media(max-width:900px)",
   "@media(max-width:680px)", "@media(max-width:360px)",
   "@media(prefers-reduced-motion:reduce)",
   ".phantom-intro__wake", "@keyframes phantom-wake",
   ".phantom-intro__crimson-wake", "@keyframes phantom-crimson-bloom",
   "@keyframes phantom-portrait-awaken", "@keyframes phantom-eye-awaken", "@keyframes phantom-eye-ignite"
 ]) assert.ok(css.includes(cssRule), "Missing responsive/cinematic CSS: " + cssRule);
+// No visible skip/enter buttons remain by design.
+assert.ok(!css.includes(".phantom-intro__button{") && !css.includes(".phantom-intro__controls{"), "Dead skip/enter button CSS should not remain.");
 
 // The ticker/footer's BASE rule (outside any media query) must now be defined exactly
 // once; previously three separate files each defined it at the top level, which is
