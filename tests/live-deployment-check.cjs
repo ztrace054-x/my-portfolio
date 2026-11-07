@@ -53,6 +53,19 @@ async function waitForIntroReveal(page) {
   }, null, { timeout: 9000 });
 }
 
+// Keep the intro visible while the live browser checks its full reveal and controls.
+// Production timing (5s motion / 3.2s reduced motion) is verified by the unit tests.
+async function keepIntroOpenForQa(page) {
+  await page.addInitScript(() => {
+    const nativeSetTimeout = window.setTimeout.bind(window);
+    window.setTimeout = (callback, delay, ...args) => {
+      const duration = Number(delay);
+      const adjusted = duration === 5000 || duration === 3200 ? 15000 : delay;
+      return nativeSetTimeout(callback, adjusted, ...args);
+    };
+  });
+}
+
 async function verifyIntro(page, label, screenshotName) {
   await waitForRelease(page);
   await page.waitForFunction(() => {
@@ -149,6 +162,7 @@ async function verifyIntro(page, label, screenshotName) {
   try {
     const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
     const desktop = await desktopContext.newPage();
+    await keepIntroOpenForQa(desktop);
     desktop.on("pageerror", error => errors.push("desktop pageerror: " + error.message));
     desktop.on("console", message => { if (message.type() === "error") errors.push("desktop console: " + message.text()); });
     desktop.on("response", response => {
@@ -179,6 +193,7 @@ async function verifyIntro(page, label, screenshotName) {
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
     const mobile = await mobileContext.newPage();
+    await keepIntroOpenForQa(mobile);
     mobile.on("pageerror", error => errors.push("mobile pageerror: " + error.message));
     mobile.on("console", message => { if (message.type() === "error") errors.push("mobile console: " + message.text()); });
     mobile.on("response", response => {
@@ -196,6 +211,7 @@ async function verifyIntro(page, label, screenshotName) {
       reducedMotion: "reduce"
     });
     const reduced = await reducedContext.newPage();
+    await keepIntroOpenForQa(reduced);
     reduced.on("pageerror", error => errors.push("reduced-motion pageerror: " + error.message));
     await verifyIntro(reduced, "reduced motion 390x844", "live-phantom-intro-reduced-motion.png");
     const motion = await reduced.locator(".phantom-intro__quote-group").first().evaluate(el => getComputedStyle(el).animationName);
