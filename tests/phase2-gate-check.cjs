@@ -42,7 +42,7 @@ assert.ok(html.includes('class="phantom-intro__crimson-wake" aria-hidden="true"'
 assert.ok(!html.includes('data-p2-skip') && !html.includes('data-p2-login'), "The intro must not expose visible skip/enter buttons.");
 assert.ok(!html.includes('class="phantom-intro__button"') && !html.includes('class="phantom-intro__controls"'), "The intro must not render visible skip/enter button markup.");
 
-assert.ok(main.includes('from "./phantom-signal.js"') || main.includes("from './phantom-signal.js'"), "main.js must import the Phantom Signal module.");
+assert.match(main, /from\s+["\']\.\/phantom-signal\.js(?:\?[^"\']*)?["\']/, "main.js must import the Phantom Signal module, including its optional cache-busting query.");
 assert.ok(intro.includes("export function initPhantomSignal"), "phantom-signal.js must export initPhantomSignal.");
 assert.ok(intro.includes("SEEN_KEY"), "phantom-signal.js must track first-visit state.");
 assert.ok(intro.includes("autoTimer = window.setTimeout(finish, currentMotion ? 5000 : 3200)"), "The first-visit intro must auto-finish at ~5s.");
@@ -77,4 +77,4 @@ for (const selector of [".workspace-scroll-reveal", "#app-shell .app-view-stage:
   assert.ok(shell.includes(selector), "Missing workspace shell rule: " + selector);
 }
 assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(intro), "The intro must not make network/authentication requests.");
-console.log("Phantom Signal checks passed: original image, exact quotes, 5s first-visit intro, single-source ticker/echoes, skip/replay, accessible controls, responsive layout and reduced motion.");
+console.log("Phantom Signal checks passed: original image, exact quotes, 5s first-visit intro, single-source ticker/echoes, automatic handoff, replay, responsive layout and reduced motion.");
