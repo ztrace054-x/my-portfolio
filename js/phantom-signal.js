@@ -180,7 +180,7 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
   resolveEntry();
 
   // A full cinematic pass plays on first visit. Returning visitors can replay it from Settings.
-  autoTimer = window.setTimeout(finish, currentMotion ? 11800 : 4600);
+  autoTimer = window.setTimeout(finish, currentMotion ? 5000 : 3200);
 
   return {
     completed,
