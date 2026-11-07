@@ -53,7 +53,7 @@ async function waitForIntroReveal(page) {
   }, null, { timeout: 9000 });
 }
 
-// Keep the intro visible while the live browser checks its full reveal and controls.
+// Keep the intro visible while the live browser checks its full reveal and keyboard exit.
 // Production timing (5s motion / 3.2s reduced motion) is verified by the unit tests.
 async function keepIntroOpenForQa(page) {
   await page.addInitScript(() => {
@@ -136,7 +136,7 @@ async function verifyIntro(page, label, screenshotName) {
     return { echoesBottom: echoes?.bottom ?? 0, footerTop: footer?.top ?? 0 };
   });
   if (page.viewportSize().width <= 560 && quoteLayout.echoesBottom > quoteLayout.footerTop + 2) {
-    throw new Error(label + " has quote cards overlapping the intro controls: " + JSON.stringify(quoteLayout));
+    throw new Error(label + " has quote cards overlapping the sticky footer: " + JSON.stringify(quoteLayout));
   }
   await page.screenshot({ path: path.join(OUT, screenshotName), fullPage: false });
   const clippedDecorativeOverflow = geometry.scrollWidth > geometry.width + 2
@@ -170,10 +170,10 @@ async function verifyIntro(page, label, screenshotName) {
     });
     report.checks.push(await verifyIntro(desktop, "desktop 1440x900", "live-phantom-intro-desktop-1440x900.png"));
     report.screenshots.push("live-phantom-intro-desktop-1440x900.png");
-    await desktop.locator("[data-p2-skip]").click();
+    await desktop.keyboard.press("Escape");
     await desktop.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
     await desktop.waitForFunction(() => document.body.classList.contains("app-shell-active"));
-    report.checks.push({ label: "desktop skip intro opens existing workspace", passed: true });
+    report.checks.push({ label: "desktop Escape exits intro and opens existing workspace", passed: true });
 
     await desktop.locator('[data-panel-open="settings"]').first().click();
     await desktop.waitForFunction(() => {
@@ -185,9 +185,9 @@ async function verifyIntro(page, label, screenshotName) {
     await desktop.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 10000 });
     await waitForIntroReveal(desktop);
     await desktop.screenshot({ path: path.join(OUT, "live-phantom-intro-replay.png"), fullPage: false });
-    await desktop.locator("[data-p2-login]").click();
+    await desktop.keyboard.press("Escape");
     await desktop.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "desktop settings replay and Enter portfolio work", passed: true });
+    report.checks.push({ label: "desktop settings replay and Escape exit work", passed: true });
     report.screenshots.push("live-phantom-intro-replay.png");
     await desktopContext.close();
 
@@ -201,9 +201,9 @@ async function verifyIntro(page, label, screenshotName) {
     });
     report.checks.push(await verifyIntro(mobile, "mobile 390x844", "live-phantom-intro-mobile-390x844.png"));
     report.screenshots.push("live-phantom-intro-mobile-390x844.png");
-    await mobile.locator("[data-p2-login]").click();
+    await mobile.keyboard.press("Escape");
     await mobile.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "mobile Enter portfolio opens existing workspace", passed: true });
+    report.checks.push({ label: "mobile Escape exits intro and opens existing workspace", passed: true });
     await mobileContext.close();
 
     const reducedContext = await browser.newContext({
@@ -216,9 +216,9 @@ async function verifyIntro(page, label, screenshotName) {
     await verifyIntro(reduced, "reduced motion 390x844", "live-phantom-intro-reduced-motion.png");
     const motion = await reduced.locator(".phantom-intro__quote-group").first().evaluate(el => getComputedStyle(el).animationName);
     if (motion !== "none") throw new Error("Reduced-motion mode still animates intro quote groups: " + motion);
-    await reduced.locator("[data-p2-skip]").click();
+    await reduced.keyboard.press("Escape");
     await reduced.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "reduced-motion intro is static and skippable", passed: true });
+    report.checks.push({ label: "reduced-motion intro is static and exits on Escape", passed: true });
     report.screenshots.push("live-phantom-intro-reduced-motion.png");
     await reducedContext.close();
 

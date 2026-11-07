@@ -229,15 +229,7 @@ async function enterWorkspace(page) {
     issue("intro-mobile-quote-grid", "The supplemental quotes should use a compact two-column mobile layout.", introDesign);
   }
   if (introDesign.footerPosition !== "sticky") {
-    issue("intro-controls-not-sticky", "Intro controls must remain reachable in the sticky footer.", introDesign);
-  }
-
-  const skipName = await page.locator("[data-p2-skip]").evaluate(el => ({
-    text: el.innerText.replace(/\s+/g, " ").trim(),
-    ariaLabel: el.getAttribute("aria-label")
-  }));
-  if (!skipName.text.toLowerCase().includes("skip intro")) {
-    issue("intro-skip-name-mismatch", "Skip button accessible name must include its visible text.", skipName);
+    issue("intro-footer-not-sticky", "The intro footer must remain reachable while the cinematic scrolls.", introDesign);
   }
   const tickerMetrics = await page.locator(".phantom-intro__ticker").evaluate(el => {
     const rect = el.getBoundingClientRect();
@@ -249,12 +241,12 @@ async function enterWorkspace(page) {
   });
   if (tickerMetrics.scrollHeight > tickerMetrics.clientHeight + 2
       || tickerMetrics.children.some(child => child.bottom > tickerMetrics.bottom + 1 || child.left < -1 || child.right > tickerMetrics.viewportWidth + 1)) {
-    issue("intro-footer-clipped", "Intro controls or footer text overflow their visible area.", tickerMetrics);
+    issue("intro-footer-clipped", "Intro footer text overflows its visible area.", tickerMetrics);
   }
   if (page.viewportSize().width <= 560) {
     const smallText = await page.evaluate(() => [
       ".phantom-intro__topbar", ".phantom-intro__quote-group p",
-      ".phantom-intro__echo p", ".phantom-intro__button"
+      ".phantom-intro__echo p"
     ].map(selector => {
       const el = document.querySelector(selector);
       return { selector, fontSize: el ? parseFloat(getComputedStyle(el).fontSize) : null };
@@ -275,7 +267,7 @@ async function enterWorkspace(page) {
     return { echoesBottom: echoes?.bottom ?? 0, footerTop: footer?.top ?? 0 };
   });
   if (page.viewportSize().width <= 560 && quoteLayout.echoesBottom > quoteLayout.footerTop + 2) {
-    issue("intro-quotes-overlap-controls", "The mobile quote cards overlap the intro controls.", quoteLayout);
+    issue("intro-quotes-overlap-footer", "The mobile quote cards overlap the sticky footer.", quoteLayout);
   }
   if (geometry.rootScrollWidth > geometry.rootWidth + 2 || geometry.bodyScrollWidth > geometry.viewportWidth + 2) {
     issue("intro-horizontal-overflow", "Phantom Signal intro causes horizontal overflow.", geometry);
@@ -283,7 +275,7 @@ async function enterWorkspace(page) {
   const portraitVisible = await page.locator(".phantom-intro__portrait").isVisible().catch(() => false);
   if (!portraitVisible) issue("intro-portrait-not-visible", "The original hooded portrait is not visible.");
 
-  await page.locator("[data-p2-skip]").click();
+  await page.keyboard.press("Escape");
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
   await page.waitForTimeout(160);
@@ -515,7 +507,7 @@ async function checkIntroReplay(page) {
   if (!text.includes("I'm already everywhere.") || !text.includes("You fear the unknown. The unknown knows your name.")) {
     issue("replay-quotes-missing", "Replay intro did not render the full Phantom Signal copy.");
   }
-  await page.locator("[data-p2-login]").click();
+  await page.keyboard.press("Escape");
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
   await page.waitForFunction(() => document.querySelector("#phase2-gate")?.hidden === true);
@@ -664,7 +656,7 @@ async function main() {
     const staticIntro = await reducedPage.locator("#phase2-gate").evaluate(el => el.classList.contains("is-static"));
     if (!prefersReducedMotion || !staticIntro) issue("reduced-motion-not-detected", "The reduced-motion preference was not applied to the Phantom Signal intro.");
     await screenshot(reducedPage, "00-intro-reduced-motion.png");
-    await reducedPage.locator("[data-p2-skip]").click();
+    await reducedPage.keyboard.press("Escape");
     await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
     await reducedPage.evaluate(() => { window.location.hash = "#/profile"; });
     await reducedPage.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
