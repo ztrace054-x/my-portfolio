@@ -6,7 +6,7 @@
 #app-shell.hud-body{background:radial-gradient(ellipse at 78% -6%,rgba(229,9,26,.105),transparent 38rem),radial-gradient(ellipse at 5% 72%,rgba(121,0,13,.085),transparent 34rem),#050505}
 #app-shell .app-view-stage{position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 0,rgba(229,9,26,.045),transparent 48%),linear-gradient(180deg,rgba(9,9,12,.12),rgba(5,5,5,.18))}
 #app-shell .app-view-stage:before{position:absolute;inset:0;z-index:0;content:"";pointer-events:none;opacity:.32;background-image:linear-gradient(rgba(229,9,26,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(229,9,26,.035) 1px,transparent 1px);background-size:68px 68px;mask-image:linear-gradient(120deg,#000,transparent 82%);animation:ztrace-ambient-grid 48s linear infinite}
-#app-shell .app-view-stage:after{position:absolute;inset:0;z-index:4;content:"";pointer-events:none;opacity:0;transform:translateX(-120%);background:linear-gradient(105deg,transparent 30%,rgba(229,9,26,.035) 42%,rgba(255,45,60,.16) 50%,rgba(229,9,26,.035) 58%,transparent 70%)}
+#app-shell .app-view-stage:after{position:absolute;inset:0;z-index:4;content:"";pointer-events:none;opacity:0;background:linear-gradient(105deg,transparent 30%,rgba(229,9,26,.035) 42%,rgba(255,45,60,.16) 50%,rgba(229,9,26,.035) 58%,transparent 70%);background-size:220% 100%;background-position:100% 0}
 #app-shell.is-entering .app-view-stage:after{animation:ztrace-workspace-entry 1050ms cubic-bezier(.6,0,.2,1) 140ms both}
 #app-shell .app-view-root{position:relative;z-index:1}
 #app-shell .app-nav-link{transition:color 220ms ease,border-color 220ms ease,background 220ms ease,box-shadow 220ms ease,translate 220ms ease}
@@ -26,7 +26,7 @@
 #app-shell .workspace-scroll-reveal.is-revealed{opacity:1;translate:0 0;filter:none}
 #app-shell .progress-fill,#app-shell .skill-progress-fill,#app-shell .phase5-skill-progress-fill{transform-origin:left center;animation:ztrace-progress-reveal 1100ms cubic-bezier(.16,1,.3,1) both}
 @keyframes ztrace-ambient-grid{to{background-position:68px 68px}}
-@keyframes ztrace-workspace-entry{0%{opacity:0;transform:translateX(-120%)}28%{opacity:1}100%{opacity:0;transform:translateX(120%)}}
+@keyframes ztrace-workspace-entry{0%{opacity:0;background-position:100% 0}28%{opacity:1}100%{opacity:0;background-position:0 0}}
 @keyframes ztrace-topbar-signal{from{transform:translateX(-130%)}to{transform:translateX(620%)}}
 @keyframes ztrace-section-reveal{from{opacity:0;transform:translate3d(0,14px,0);filter:blur(2px)}to{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}}
 @keyframes ztrace-progress-reveal{from{transform:scaleX(.08)}to{transform:scaleX(1)}}

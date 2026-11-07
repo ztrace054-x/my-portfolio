@@ -183,7 +183,7 @@ async function run() {
     assert(f.root.classList.contains('is-active'));
     assert(entered, 'The intro entry signal should resolve immediately when the cinematic begins.');
     assert.equal(f.timers.size, 2, 'The first visit should run one clock interval and one auto-finish timer.');
-    f.advance(11800);
+    f.advance(5000);
     assert(f.root.classList.contains('is-exiting'), 'The cinematic should transition out after its full first-visit duration.');
     f.advance(720);
     await controller.completed;
