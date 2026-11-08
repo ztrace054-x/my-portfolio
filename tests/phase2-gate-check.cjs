@@ -33,7 +33,7 @@ for (const quote of [
   "./ phantom signal"
 ]) assert.ok(visibleHtmlText.includes(quote), "Missing exact Phantom Signal copy: " + quote);
 
-assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261106\.4"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
+assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261108\.1"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
 assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, "The Phantom Signal title must be the intro heading.");
 assert.match(html, /src="\.\/assets\/phantom-signal-hero\.webp"/, "The intro must use the original Phantom Signal portrait crop.");
 assert.ok(html.includes('class="phantom-intro__crimson-wake" aria-hidden="true"'), "The intro must include its crimson ambient wake layer.");
@@ -44,7 +44,7 @@ assert.ok(!html.includes('class="phantom-intro__button"') && !html.includes('cla
 
 assert.match(main, /from\s+["\']\.\/phantom-signal\.js(?:\?[^"\']*)?["\']/, "main.js must import the Phantom Signal module, including its optional cache-busting query.");
 assert.ok(intro.includes("export function initPhantomSignal"), "phantom-signal.js must export initPhantomSignal.");
-assert.ok(intro.includes("SEEN_KEY"), "phantom-signal.js must track first-visit state.");
+assert.ok(!intro.includes("SEEN_KEY") && !intro.includes("sessionStorage") && !intro.includes("deepLinkRequested"), "The intro must play on every page load, including returning visits and hash URLs.");
 assert.ok(intro.includes("autoTimer = window.setTimeout(finish, currentMotion ? 5000 : 3200)"), "The first-visit intro must auto-finish at ~5s.");
 const motionMatch = intro.match(/autoTimer = window\.setTimeout\(finish, currentMotion \? (\d+) : (\d+)\);/);
 const motionMs = motionMatch ? motionMatch[1] : "0";
@@ -68,7 +68,9 @@ assert.ok(!css.includes(".phantom-intro__button{") && !css.includes(".phantom-in
 // what caused the conflicting/broken layout. Overrides inside @media blocks are fine.
 const topLevelDefs = (selector) => (css.match(new RegExp("^" + selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\{", "gm")) || []).length;
 const tickerDefs = topLevelDefs(".phantom-intro__ticker");
-assert.equal(tickerDefs, 1, "The intro ticker/footer base rule must be defined exactly once (outside media queries), found " + tickerDefs);
+assert.equal(tickerDefs, 1, "The hidden structural ticker anchor must have one base rule, found " + tickerDefs);
+assert.match(html, /<footer class="phantom-intro__ticker phase2-gate__ticker" aria-hidden="true"><\/footer>/, "The bottom intro strip must contain no visible text.");
+assert.ok(css.includes("height:0!important") && css.includes("visibility:hidden!important"), "The bottom intro strip must have zero height and remain invisible.");
 const echoesDefs = topLevelDefs(".phantom-intro__echoes");
 assert.equal(echoesDefs, 1, "The intro echoes grid base rule must be defined exactly once (outside media queries), found " + echoesDefs);
 
@@ -77,4 +79,4 @@ for (const selector of [".workspace-scroll-reveal", "#app-shell .app-view-stage:
   assert.ok(shell.includes(selector), "Missing workspace shell rule: " + selector);
 }
 assert.ok(!/\b(fetch|XMLHttpRequest|WebSocket)\s*\(/.test(intro), "The intro must not make network/authentication requests.");
-console.log("Phantom Signal checks passed: original image, exact quotes, 5s first-visit intro, single-source ticker/echoes, automatic handoff, replay, responsive layout and reduced motion.");
+console.log("Phantom Signal checks passed: original image, exact quotes, 5s every-load intro, hidden bottom strip, crimson palette and echoes, automatic handoff, replay, responsive layout and reduced motion.");

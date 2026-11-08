@@ -3,7 +3,7 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 
 const ORIGIN = process.env.PORTFOLIO_ORIGIN || "https://ztrace054-x.github.io/my-portfolio/";
-const RELEASE = "phantom-signal-20261106.4";
+const RELEASE = "phantom-signal-20261108.1";
 const OUT = path.resolve(__dirname, "..", "artifacts", "live-deployment");
 const errors = [];
 fs.mkdirSync(OUT, { recursive: true });

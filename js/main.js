@@ -1,6 +1,6 @@
 import { CONTENT, storage } from './config.js?v=20261016.1';
 import { createClock } from './motion.js?v=20261016.1';
-import { initPhantomSignal } from './phantom-signal.js?v=20261106.2';
+import { initPhantomSignal } from './phantom-signal.js?v=20261108.1';
 import { initContact } from './contact.js?v=20261016.1';
 import { createOverlayManager, initNavigation } from './navigation.js?v=20261018.3';
 import { initGallery } from './gallery.js?v=20261016.1';

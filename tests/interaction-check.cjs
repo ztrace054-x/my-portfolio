@@ -184,7 +184,7 @@ async function run() {
     f.advance(720);
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
-    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1');
+    assert.equal(f.sessionValues.has('ztrace-phantom-signal-seen-v1'), false, 'The intro must not write a visit-suppression flag.');
     assert(!f.doc.documentElement.classList.contains('intro-pending'));
     assert.equal(f.timers.size, 0);
     checks++;
@@ -192,23 +192,31 @@ async function run() {
   {
     const f = phantomFixture({ seen: true }), mod = await f.load('phantom-signal.js');
     const controller = mod.initPhantomSignal({ motionAllowed: true });
-    assert(f.root.hidden && !f.page.inert, 'Returning visitors should bypass the intro unless replay is requested.');
-    assert.equal(f.timers.size, 0);
+    assert(!f.root.hidden && f.page.inert && f.root.focused, 'Returning visitors must see the intro again after every page refresh, even if an old seen flag exists.');
+    assert.equal(f.timers.size, 2);
+    f.advance(5000);
+    assert(f.root.classList.contains('is-exiting'));
+    f.advance(720);
     await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
+    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1', 'An old session flag must not suppress or be rewritten by this load.');
     checks++;
   }
   {
     const f = phantomFixture({ hash: '#/profile' }), mod = await f.load('phantom-signal.js');
     const controller = mod.initPhantomSignal({ motionAllowed: true });
-    assert(f.root.hidden && !f.page.inert, 'Direct links to portfolio routes should not be interrupted by the intro.');
-    assert.equal(f.timers.size, 0);
+    assert(!f.root.hidden && f.page.inert && f.root.focused, 'A refresh on a deep-linked portfolio section must still show the intro.');
+    assert.equal(f.timers.size, 2);
+    f.doc.emit('keydown', { key: 'Escape' });
+    f.advance(720);
     await controller.completed;
+    assert(f.root.hidden && !f.page.inert);
     checks++;
   }
   {
     const f = phantomFixture({ search: '?intro=1', seen: true }), mod = await f.load('phantom-signal.js');
     const controller = mod.initPhantomSignal({ motionAllowed: true });
-    assert(!f.root.hidden && f.page.inert && f.root.focused, 'The explicit replay query should override the session-seen flag.');
+    assert(!f.root.hidden && f.page.inert && f.root.focused, 'The intro query must continue to show the cinematic even when an old session flag exists.');
     const escape = f.doc.emit('keydown', { key: 'Escape' });
     assert(escape.defaultPrevented, 'Escape should remain an accessible way to exit the intro.');
     assert(f.root.classList.contains('is-exiting'));
@@ -217,7 +225,7 @@ async function run() {
     await controller.completed;
     assert(f.root.hidden && !f.page.inert);
     assert.equal(f.context.location.search, '', 'The replay query should be removed after completion.');
-    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1');
+    assert.equal(f.sessionValues.get('ztrace-phantom-signal-seen-v1'), '1', 'The old flag is ignored and left untouched.');
     assert.equal(f.timers.size, 0);
     checks++;
   }
@@ -362,7 +370,7 @@ async function run() {
     assert.equal(timeline.style['--journey-progress'],'100%');
     controller.dispose();f.advance(32);assert.equal(f.timers.size,0);checks++;
   }
-  console.log(`PASS: ${checks} interaction checks (Phantom Signal first-visit/replay/Escape/keyboard/session/reduced-motion/storage/disposal plus timeline, terminal, clipboard, gallery, and navigation).`);
+  console.log(`PASS: ${checks} interaction checks (Phantom Signal every-load/replay/Escape/keyboard/reduced-motion/storage/disposal plus timeline, terminal, clipboard, gallery, and navigation).`);
 }
 // A stalled promise must fail, rather than letting Node exit with a misleading zero code.
 const watchdog=setTimeout(()=>{console.error('FAIL: interaction suite did not complete');process.exit(1);},5000);

@@ -1,5 +1,4 @@
 /* PHANTOM SIGNAL — accessible visitor introduction; no authentication or network activity. */
-const SEEN_KEY = "ztrace-phantom-signal-seen-v1";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 function clearReplayQuery() {
@@ -33,20 +32,6 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
     addEventListener() {},
     removeEventListener() {}
   };
-  const replayRequested = new URLSearchParams(window.location.search).get("intro") === "1";
-  const deepLinkRequested = Boolean(window.location.hash);
-  let alreadySeen = false;
-  try { alreadySeen = sessionStorage.getItem(SEEN_KEY) === "1"; } catch { /* Storage is optional. */ }
-
-  if (!replayRequested && (alreadySeen || deepLinkRequested)) {
-    root.hidden = true;
-    root.setAttribute("aria-hidden", "true");
-    page.inert = false;
-    document.documentElement.classList.remove("phase2-active", "intro-pending");
-    const ready = Promise.resolve();
-    return { completed: ready, entryStarted: ready, cancel() {}, setMotion() {}, dispose() {} };
-  }
-
   let resolveCompleted;
   let resolveEntry;
   const completed = new Promise(resolve => { resolveCompleted = resolve; });
@@ -121,7 +106,6 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
       root.classList.remove("is-active", "is-static", "is-exiting");
       page.inert = false;
       document.documentElement.classList.remove("phase2-active", "intro-pending");
-      try { sessionStorage.setItem(SEEN_KEY, "1"); } catch { /* Private browsing remains usable. */ }
       clearReplayQuery();
       resolveCompleted();
     }, fadeDuration);
@@ -168,7 +152,7 @@ export function initPhantomSignal({ motionAllowed = true } = {}) {
   root.focus?.({ preventScroll: true });
   resolveEntry();
 
-  // A full cinematic pass plays on first visit. Returning visitors can replay it from Settings.
+  // Every full page load starts with the cinematic; Settings also keeps a manual replay action.
   autoTimer = window.setTimeout(finish, currentMotion ? 5000 : 3200);
 
   return {
