@@ -369,3 +369,82 @@
 }
 #phase2-gate.phantom-intro .phantom-intro__ticker:before,
 #phase2-gate.phantom-intro .phantom-intro__ticker>*{display:none!important}
+
+
+/* 2026-11-08 targeted polish: stable portrait lighting and a complete frame. */
+/* Remove the cursor-following bloom and recurring sweep: keep the red light on the eyes. */
+#phase2-gate.phantom-intro .phantom-intro__cursor-light,
+#phase2-gate.phantom-intro .phantom-intro__light-streak{
+  display:none!important;
+}
+
+/* Keep the upper-right haze atmospheric rather than flashing across the portrait. */
+#phase2-gate.phantom-intro .phantom-intro__smoke-layer--three{
+  opacity:.06;
+  animation:none;
+}
+
+/* Give the portrait a deliberate, complete edge on every side. */
+#phase2-gate.phantom-intro .phantom-intro__visual{
+  border:1px solid rgba(229,9,26,.28);
+  border-left-color:rgba(229,9,26,.42);
+  background:#050304;
+  box-shadow:0 18px 52px rgba(0,0,0,.56),inset 0 0 0 1px rgba(255,255,255,.025);
+}
+#phase2-gate.phantom-intro .phantom-intro__portrait{
+  transform:scale(1.015);
+}
+#phase2-gate.phantom-intro .phantom-intro__visual-frame{
+  inset:13px;
+  border:1px solid rgba(255,80,92,.2);
+  opacity:.82;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.45);
+  background:
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) left top/22px 1px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) left top/1px 22px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) right top/22px 1px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) right top/1px 22px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) left bottom/22px 1px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) left bottom/1px 22px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) right bottom/22px 1px no-repeat,
+    linear-gradient(rgba(255,76,90,.58),rgba(255,76,90,.58)) right bottom/1px 22px no-repeat;
+}
+
+/* Align the soft halo to the actual eye positions; keep the pulse smooth and restrained. */
+#phase2-gate.phantom-intro .phantom-intro__eyes{
+  top:29%;
+  left:0;
+  width:100%;
+  height:12%;
+  background:
+    radial-gradient(ellipse 5.2% 19% at 33.75% 57%,rgba(255,20,38,.46) 0 24%,transparent 100%),
+    radial-gradient(ellipse 5.2% 19% at 68.75% 57%,rgba(255,20,38,.46) 0 24%,transparent 100%);
+  filter:blur(9px);
+}
+#phase2-gate.phantom-intro .phantom-intro__eyes-core i{
+  box-shadow:0 0 8px rgba(255,43,58,.86),0 0 17px rgba(229,9,26,.5),0 0 28px rgba(229,9,26,.18);
+  animation-duration:.55s,4.2s;
+}
+@keyframes phantom-eye-awaken{
+  from{opacity:0;filter:blur(16px)}
+  to{opacity:.5;filter:blur(9px)}
+}
+@keyframes phantom-eye-glow{
+  from{opacity:.34;filter:blur(8px)}
+  to{opacity:.54;filter:blur(10px)}
+}
+@keyframes phantom-eye-core{
+  0%,100%{opacity:.62;filter:blur(.7px)}
+  50%{opacity:.86;filter:blur(1px)}
+}
+
+@media(max-width:680px){
+  #phase2-gate.phantom-intro .phantom-intro__visual{
+    border:0;
+    box-shadow:none;
+  }
+  #phase2-gate.phantom-intro .phantom-intro__visual-frame{
+    inset:8px;
+    opacity:.55;
+  }
+}
