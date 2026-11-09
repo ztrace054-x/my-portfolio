@@ -1,5 +1,5 @@
-/* Design tokens — mint-on-ink portfolio system.
-   Space Grotesk and JetBrains Mono are self-hosted; no remote font requests. */
+/* Shared design tokens for the ZTRACE portfolio and optional workspace.
+   Space Grotesk and JetBrains Mono are self-hosted; Barlow Condensed is loaded asynchronously. */
 @font-face {
   font-family: "Space Grotesk";
   src: url("../assets/fonts/space-grotesk-latin.woff2") format("woff2");
