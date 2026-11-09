@@ -27,7 +27,7 @@ function loadPortfolioModules() {
       import('./navigation.js?v=20261018.3'),
       import('./gallery.js?v=20261016.1'),
       import('./cursor.js?v=20261018.5'),
-      import('./animations.js?v=20261109.1'),
+      import('./animations.js?v=20261109.2'),
       import('./terminal.js?v=20261016.1'),
       import('./journey.js?v=20261018.4'),
       import('./contact.js?v=20261016.1')
