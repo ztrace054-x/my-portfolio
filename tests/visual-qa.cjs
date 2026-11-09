@@ -276,6 +276,23 @@ async function enterWorkspace(page) {
   if (!portraitVisible) issue("intro-portrait-not-visible", "The original hooded portrait is not visible.");
 
   await page.keyboard.press("Escape");
+  await page.waitForFunction(() => {
+    const landing = document.querySelector("#page");
+    return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
+  }, null, { timeout: 7000 });
+  const landing = await page.locator("#page").evaluate(el => ({
+    heading: document.querySelector("#hero-title")?.textContent.trim() || "",
+    sections: [...document.querySelectorAll("#main > section[id]")].map(section => section.id),
+    documentWidth: document.documentElement.scrollWidth,
+    viewportWidth: innerWidth
+  }));
+  if (!landing.heading.includes("SAAD")) issue("portfolio-landing-heading", "The editorial landing page does not show Md Saad's hero heading.", landing);
+  for (const id of ["home", "about", "workbench", "projects", "certificates", "contact"]) {
+    if (!landing.sections.includes(id)) issue("portfolio-landing-section", "The landing page is missing section #" + id + ".", landing);
+  }
+  if (landing.documentWidth > landing.viewportWidth + 1) issue("portfolio-landing-overflow", "The editorial landing page overflows its viewport.", landing);
+  await screenshot(page, "01-editorial-portfolio-landing.png");
+  await page.evaluate(() => { window.location.hash = "#/profile"; });
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
   await page.waitForTimeout(160);
@@ -657,8 +674,12 @@ async function main() {
     if (!prefersReducedMotion || !staticIntro) issue("reduced-motion-not-detected", "The reduced-motion preference was not applied to the Phantom Signal intro.");
     await screenshot(reducedPage, "00-intro-reduced-motion.png");
     await reducedPage.keyboard.press("Escape");
-    await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
+    await reducedPage.waitForFunction(() => {
+      const landing = document.querySelector("#page");
+      return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
+    }, null, { timeout: 7000 });
     await reducedPage.evaluate(() => { window.location.hash = "#/profile"; });
+    await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
     await reducedPage.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
     await screenshot(reducedPage, "01-profile-reduced-motion.png");
     await reducedContext.close();
