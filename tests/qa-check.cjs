@@ -132,7 +132,7 @@ for (const image of imageTags) {
   assert(alt && alt[1].trim().length > 0, 'Every content image needs meaningful alt text');
   assert.match(image, /\bwidth=["']\d+["']/i, 'Images need intrinsic width');
   assert.match(image, /\bheight=["']\d+["']/i, 'Images need intrinsic height');
-  const isCriticalIntroPortrait = /\bclass=["'][^"']*\bphantom-intro__portrait\b[^"']*["']/i.test(image);
+  const isCriticalIntroPortrait = /phantom-intro__portrait|hero-portrait-image/.test(image);
   if (isCriticalIntroPortrait) {
     assert.match(image, /\bloading=["']eager["']/i, 'The first-screen cinematic portrait should load eagerly');
     assert.match(image, /\bfetchpriority=["']high["']/i, 'The first-screen cinematic portrait should receive high fetch priority');
