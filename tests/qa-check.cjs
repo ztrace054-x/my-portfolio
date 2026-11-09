@@ -70,10 +70,10 @@ for (const name of [
   assert.match(editorialTokens, new RegExp('--' + name + ':\\s*[^;]+;'), 'Missing central design token --' + name);
 }
 const editorialCss = fs.readFileSync(path.join(root, 'css/editorial-reference.css'), 'utf8');
-assert.match(editorialCss, /--bg:\\s*var\\(--editorial-bg\\)/, 'Editorial page must consume the central background token');
-assert.match(editorialCss, /--font-display:\\s*var\\(--editorial-font-display\\)/, 'Editorial page must consume the central display-font token');
-assert.match(html, /family=Barlow\\+Condensed/, 'The condensed display font must be loaded from Google Fonts');
-assert.match(html, /class="hero-portrait-image"[^>]*src="\\.\\/assets\\/saad-golden\\.jpg"/, 'The real local portrait must be used in the hero');
+assert.match(editorialCss, /--bg:\s*var\(--editorial-bg\)/, 'Editorial page must consume the central background token');
+assert.match(editorialCss, /--font-display:\s*var\(--editorial-font-display\)/, 'Editorial page must consume the central display-font token');
+assert.match(html, /family=Barlow\+Condensed/, 'The condensed display font must be loaded from Google Fonts');
+assert.match(html, /class="hero-portrait-image"[^>]*src="\.\/assets\/saad-golden\.jpg"/, 'The real local portrait must be used in the hero');
 checks++;
 
 // SEO metadata must describe the same canonical page and social preview.
