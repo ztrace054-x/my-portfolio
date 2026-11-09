@@ -45,7 +45,9 @@ function setCursor() {
 }
 controls();
 const intro = initPhantomSignal({ motionAllowed });
-try { scene = initHeroScene({ clock, motionAllowed: false }); } catch { /* Accessible inline SVG remains. */ }
+if (document.getElementById('hero-canvas')) {
+  try { scene = initHeroScene({ clock, motionAllowed: false }); } catch { /* The portrait-based editorial hero does not require a canvas scene. */ }
+}
 function setMotion() {
   motionAllowed = getAllowed(); controls();
   intro.setMotion(motionAllowed);
@@ -63,8 +65,8 @@ reduced.addEventListener('change', setMotion);
 fine.addEventListener('change', setCursor);
 intro.entryStarted.then(() => {
   entered = true;
-  // Phase 3 replaces the legacy one-page view after the gate; keep its source intact,
-  // but do not start background animation loops for content that is no longer visible.
+  // The one-page editorial portfolio is now the default view; keep its reveal and
+  // terminal interactions active until a visitor explicitly opens the workspace.
   const appShell = document.getElementById('app-shell');
   if (appShell && !appShell.hidden) return;
   root.classList.add('hero-motion-ready');
