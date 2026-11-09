@@ -333,6 +333,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   position: relative;
   display: block;
   min-width: 0;
+  height: clamp(500px, 64vh, 680px);
   min-height: clamp(500px, 64vh, 680px);
   padding: 0;
   overflow: visible;
@@ -1174,7 +1175,7 @@ dialog.mobile-menu button:focus-visible {
   }
   #page .hero-copy { max-width: 700px; }
   #page .hero-name { font-size: clamp(5.2rem, 17vw, 9rem); }
-  #page .hero-visual.editorial-portrait-stage { min-height: clamp(420px, 66vw, 570px); }
+  #page .hero-visual.editorial-portrait-stage { height: clamp(420px, 66vw, 570px); min-height: clamp(420px, 66vw, 570px); }
   #page .hero-backdrop-word { font-size: clamp(8rem, 22vw, 14rem); }
   #page .hero-portrait { right: 12%; width: min(72%, 500px); }
   #page .hero-hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1202,7 +1203,7 @@ dialog.mobile-menu button:focus-visible {
   #page .hero-actions { gap: 14px; margin-top: 22px; }
   #page .hero-actions .button-primary { min-height: 44px; padding-inline: 14px; font-size: 8px; }
   #page .course-credit { font-size: 7px; }
-  #page .hero-visual.editorial-portrait-stage { min-height: 410px; margin-top: 0; }
+  #page .hero-visual.editorial-portrait-stage { height: 410px; min-height: 410px; margin-top: 0; }
   #page .hero-backdrop-word { top: 43%; font-size: clamp(6rem, 25vw, 9.5rem); }
   #page .hero-portrait { right: 8%; width: 84%; height: 94%; }
   #page .hero-float-tag { padding: 7px 8px; font-size: 7px; }
