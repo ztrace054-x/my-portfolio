@@ -239,7 +239,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   display: block;
   padding-right: 0.06em;
   color: #ff5b35;
-  background: linear-gradient(110deg, var(--editorial-accent-end) 0%, var(--editorial-accent) 54%, #c92d1c 100%);
+  background: linear-gradient(110deg, var(--editorial-accent-start) 0%, var(--editorial-accent) 54%, var(--editorial-accent-end) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -364,7 +364,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   max-width: 120%;
   transform: translate(-50%, -50%);
   color: transparent;
-  background: linear-gradient(180deg, var(--editorial-accent-end) 0%, var(--editorial-accent) 52%, rgba(158, 31, 22, .8) 100%);
+  background: linear-gradient(180deg, var(--editorial-accent-end) 0%, var(--editorial-accent) 52%, var(--editorial-accent-start) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   font: 900 clamp(7rem, 18.5vw, 17rem)/0.72 var(--font-display);
