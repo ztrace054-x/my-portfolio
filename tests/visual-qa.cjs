@@ -301,6 +301,11 @@ async function enterWorkspace(page) {
       navLinks: navLinks.map(link => ({ href: link.getAttribute("href"), targetExists: Boolean(document.querySelector(link.getAttribute("href"))) })),
       heroPortraitLoaded: Boolean(document.querySelector(".hero-portrait-image")?.naturalWidth),
       heroPortraitOpacity: Number(getComputedStyle(document.querySelector(".hero-portrait-image")).opacity),
+      heroPortraitBox: (() => {
+        const figure = document.querySelector(".hero-portrait");
+        const rect = figure?.getBoundingClientRect();
+        return { width: rect?.width || 0, height: rect?.height || 0, display: figure ? getComputedStyle(figure).display : "missing", visibility: figure ? getComputedStyle(figure).visibility : "missing" };
+      })(),
       workbenchCards: workbenchCards.length,
       workbenchStatuses: workbenchCards.map(card => card.querySelector(".tool-exploration")?.textContent.trim() || ""),
       projectCards: projectCards.length,
@@ -322,7 +327,7 @@ async function enterWorkspace(page) {
     };
   });
   if (!landing.heading.includes("SAAD")) issue("portfolio-landing-heading", "The editorial landing page does not show Md Saad's hero heading.", landing);
-  if (!landing.heroPortraitLoaded || landing.heroPortraitOpacity < 0.95) issue("portfolio-hero-image", "The existing personal portrait must load and be visible immediately in the editorial hero.", landing);
+  if (!landing.heroPortraitLoaded || landing.heroPortraitOpacity < 0.95 || landing.heroPortraitBox.width < 100 || landing.heroPortraitBox.height < 100 || landing.heroPortraitBox.visibility !== "visible") issue("portfolio-hero-image", "The existing personal portrait must load, occupy visible layout space and be visible immediately in the editorial hero.", landing);
   if (landing.workbenchCards !== 4 || landing.workbenchStatuses.some(status => status !== "Beginner exploration")) issue("portfolio-workbench-content", "The public workbench must contain four tools, each labelled Beginner exploration.", landing);
   if (landing.projectCards !== 3 || landing.projectStatuses.length !== 3 || landing.projectTags.some(tags => tags.length !== 3)) issue("portfolio-learning-tracks", "The three learning-track cards must retain their status and all nine topic tags.", landing);
   if (landing.futureGoalCards !== 4 || !landing.futureGoalButtons || landing.futureGoalLabels.some(label => label !== "Future goal — not yet earned") || landing.disclaimer !== "These are future goals, not yet earned — InshaAllah." || !landing.disclaimerBeforeCards || !landing.earnedCertificateAfterGoals) issue("portfolio-certificate-honesty", "The banner, four future-goal cards, disabled buttons and separate earned course certificate must retain the requested order and wording.", landing);
