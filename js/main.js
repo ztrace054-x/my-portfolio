@@ -76,6 +76,7 @@ intro.entryStarted.then(() => {
 });
 let dashboardPromise;
 let workspaceStylesPromise;
+let lastActivatedWorkspaceHash = '';
 function loadWorkspaceStyles() {
   if (!workspaceStylesPromise) {
     const links = [...document.querySelectorAll('link[data-workspace-styles]')];
@@ -105,7 +106,11 @@ async function activateWorkspaceFromRoute() {
     dashboardPromise = import('./dashboard-shell.js?v=20261106.4').then(({ initDashboardShell }) => initDashboardShell());
   }
   const dashboard = await dashboardPromise;
-  if (location.hash.startsWith('#/')) dashboard.activate();
+  const routeHash = location.hash;
+  if (routeHash.startsWith('#/') && routeHash !== lastActivatedWorkspaceHash) {
+    lastActivatedWorkspaceHash = routeHash;
+    dashboard.activate();
+  }
 }
 intro.completed.then(() => {
   document.documentElement.classList.remove('intro-pending');
