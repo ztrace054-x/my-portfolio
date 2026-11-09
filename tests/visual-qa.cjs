@@ -342,10 +342,12 @@ async function enterWorkspace(page) {
   if ([375, 768, 1440].includes(page.viewportSize().width)) {
     for (const id of ["about", "workbench", "projects", "certificates", "contact"]) {
       currentRoute = "public-" + id;
-      await page.locator("#" + id).scrollIntoViewIfNeeded();
+      const firstReveal = page.locator("#" + id + " [data-reveal]").first();
+      if (await firstReveal.count()) await firstReveal.scrollIntoViewIfNeeded();
+      else await page.locator("#" + id).scrollIntoViewIfNeeded();
       await page.waitForFunction(sectionId => {
-        const firstReveal = document.querySelector("#" + sectionId + " [data-reveal]");
-        return !firstReveal || firstReveal.classList.contains("is-revealed");
+        const firstNode = document.querySelector("#" + sectionId + " [data-reveal]");
+        return !firstNode || firstNode.classList.contains("is-revealed");
       }, id, { timeout: 3500 });
       if (id === "about") {
         await page.waitForFunction(() => {
