@@ -24,7 +24,7 @@ function loadPortfolioModules() {
   if (!portfolioModulesPromise) {
     portfolioModulesPromise = Promise.all([
       import('./motion.js?v=20261016.1'),
-      import('./navigation.js?v=20261018.3'),
+      import('./navigation.js?v=20261109.1'),
       import('./gallery.js?v=20261016.1'),
       import('./cursor.js?v=20261018.5'),
       import('./animations.js?v=20261109.3'),
