@@ -1,6 +1,12 @@
 /* ZTRACE — video-reference editorial portfolio layer.
    Additive presentation layer; existing workspace modules remain intact. */
 
+/* Keep portfolio copy visible while the optional motion controller is still loading. */
+html:not(.hero-motion-ready) #page [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
 body[data-design="editorial-portfolio-v1"] {
   --bg: var(--editorial-bg);
   --bg-deep: var(--editorial-bg-deep);
