@@ -1,21 +1,38 @@
-# ZTRACE Cyber-Noir Design System
+# ZTRACE Editorial Cyber-Noir Design System
 
 ## Visual direction
-A premium cybersecurity learning workspace built around deep black surfaces, restrained crimson accents, metallic panels, and high-contrast editorial typography. The design should feel cinematic without hiding controls or reducing readability.
+A premium cybersecurity learning portfolio inspired by the supplied video reference: deep black surfaces, oversized condensed editorial typography, a restrained red-to-orange gradient, a cinematic personal portrait, and crisp mono labels. The optional workspace keeps its evidence-first cybersecurity UI. The design should feel expressive without hiding controls or reducing readability.
 
 ## Tokens
-- Background: `#050505` / `#09090c`.
-- Raised surfaces: `#111114`.
-- Primary text: `#f5f5f5`.
-- Secondary text: `#a6a6aa`.
-- Crimson accent: `#e5091a`; hover accent: `#ff3947`.
-- Typography: self-hosted Space Grotesk for display/body hierarchy and JetBrains Mono for technical labels.
+The public-page palette is defined once in the editorial token group in `css/tokens.css` and mapped into the landing-page scope by `css/editorial-reference.css`.
+
+| Role | Token / value |
+| --- | --- |
+| Background | `--editorial-bg: #070707`; deep background `#030303` |
+| Surfaces | `#101010` and `#171717` |
+| Primary / secondary / muted text | `#f5f2ee` / `#b8b1ab` / `#8f8983` |
+| Main gradient | `#ff3b1f` → `#ff6b35` |
+| Accent | `#ff4b2d` |
+| Muted tag accents | Blue `#a9c9f2`, yellow `#e9cb86`, green `#9bd9ae`, orange `#ff9a75` |
+| Display / body / mono | Barlow Condensed / Space Grotesk / JetBrains Mono |
+| Spacing | Shared `--space-1` through `--space-8` scale |
+| Radius | `--editorial-radius` and `--editorial-radius-pill` |
+
+**Font pairing:** Barlow Condensed (600–900) gives the hero and section titles their condensed editorial weight; Space Grotesk (400–700) keeps paragraphs readable; JetBrains Mono is reserved for labels and terminal details. The live site loads Barlow Condensed asynchronously from Google Fonts and keeps Space Grotesk / JetBrains Mono self-hosted to avoid extra body-font requests.
+
+Equivalent Google Fonts pairing, if remote fonts are preferred:
+```html
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+```
 
 ## CSS ownership
-- `css/cyber-noir.css`: shared crimson palette and base component styling.
+- `css/cyber-noir.css`: shared cyber-noir base tokens.
+- `css/editorial-reference.css`: additive video-reference landing-page layout, orange-red palette, portrait composition, cards, and responsive refinements.
 - `css/phase-6-visual-unification.css`: workspace shell and all eleven routed sections.
 - `css/phase-5.css` and `css/phase-6.css`: existing section structure and interaction-specific styles; the global layer overrides color/surface treatments without changing route markup.
-- `css/tokens.css`: font faces, spacing, and shared design primitives.
+- `css/tokens.css`: font faces, spacing, and the single central editorial token group (`--editorial-*`).
+- `css/editorial-reference.css`: consumes the central editorial tokens; responsive layout and component rules stay additive.
+- `css/dashboard-shell.css` and `css/workspace-shell.css`: deferred until the visitor opens the optional workspace.
 
 ## Section language
 - Dashboard: metallic stat panels, crimson indicators, data only where verified.

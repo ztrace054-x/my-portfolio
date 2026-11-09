@@ -56,6 +56,26 @@ function token(name) {
 
 let checks = 0;
 
+// The public editorial design is driven by one documented token set in tokens.css.
+const editorialTokens = fs.readFileSync(path.join(root, 'css/tokens.css'), 'utf8');
+for (const name of [
+  'editorial-bg', 'editorial-bg-deep', 'editorial-surface', 'editorial-surface-raised',
+  'editorial-text', 'editorial-text-soft', 'editorial-muted',
+  'editorial-accent-start', 'editorial-accent-end', 'editorial-accent',
+  'editorial-tag-blue', 'editorial-tag-yellow', 'editorial-tag-green', 'editorial-tag-orange',
+  'editorial-font-display', 'editorial-font-body', 'editorial-font-mono',
+  'space-1', 'space-2', 'space-3', 'space-4', 'space-5', 'space-6', 'space-7', 'space-8',
+  'radius-sm', 'radius-pill'
+]) {
+  assert.match(editorialTokens, new RegExp('--' + name + ':\\s*[^;]+;'), 'Missing central design token --' + name);
+}
+const editorialCss = fs.readFileSync(path.join(root, 'css/editorial-reference.css'), 'utf8');
+assert.match(editorialCss, /--bg:\s*var\(--editorial-bg\)/, 'Editorial page must consume the central background token');
+assert.match(editorialCss, /--font-display:\s*var\(--editorial-font-display\)/, 'Editorial page must consume the central display-font token');
+assert.match(html, /family=Barlow\+Condensed/, 'The condensed display font must be loaded from Google Fonts');
+assert.match(html, /class="hero-portrait-image"[^>]*src="\.\/assets\/saad-golden\.jpg"/, 'The real local portrait must be used in the hero');
+checks++;
+
 // SEO metadata must describe the same canonical page and social preview.
 const title = requiredMatch(/<title>([^<]+)<\/title>/i, html, 'page title')[1].trim();
 assert(title.length > 0 && title.length <= 60, 'Title should be concise (1–60 characters)');
@@ -117,7 +137,8 @@ for (let i = 1; i < headingLevels.length; i++) {
 assert.match(html, /<a\b[^>]*class=["'][^"']*skip-link[^"']*["'][^>]*href=["']#main["']/i, 'Keyboard skip link should target main');
 assert.match(html, /<main\b[^>]*\bid=["']main["']/i, 'Main landmark should have the skip-link target');
 const activeCssText = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0])
-  .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean)
+  .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1])
+  .filter(href => href && (href.startsWith('./') || href.startsWith('/')))
   .map(href => fs.readFileSync(relativeFile(href), 'utf8')).join('\n');
 assert.match(activeCssText, /:focus-visible/, 'Visible keyboard focus styles must be present');
 for (const match of html.matchAll(/<a\b([^>]*)\btarget=["']_blank["']([^>]*)>/gi)) {
@@ -132,7 +153,7 @@ for (const image of imageTags) {
   assert(alt && alt[1].trim().length > 0, 'Every content image needs meaningful alt text');
   assert.match(image, /\bwidth=["']\d+["']/i, 'Images need intrinsic width');
   assert.match(image, /\bheight=["']\d+["']/i, 'Images need intrinsic height');
-  const isCriticalIntroPortrait = /\bclass=["'][^"']*\bphantom-intro__portrait\b[^"']*["']/i.test(image);
+  const isCriticalIntroPortrait = /phantom-intro__portrait|hero-portrait-image/.test(image);
   if (isCriticalIntroPortrait) {
     assert.match(image, /\bloading=["']eager["']/i, 'The first-screen cinematic portrait should load eagerly');
     assert.match(image, /\bfetchpriority=["']high["']/i, 'The first-screen cinematic portrait should receive high fetch priority');
@@ -144,14 +165,17 @@ for (const image of imageTags) {
 checks++;
 
 // Verify every local HTML/CSS asset reference resolves inside this repository.
-for (const match of html.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)) {
+// HTML comments may intentionally contain future certificate-link examples.
+const assetScanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
+for (const match of assetScanHtml.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)) {
   const value = match[1];
   if (/^(?:#|https?:|data:|blob:|mailto:|tel:|javascript:|\?)/i.test(value)) continue;
   const file = relativeFile(value);
   if (file) assert(fs.existsSync(file), 'Missing local HTML asset: ' + value);
 }
 const stylesheetTags = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0]);
-const stylesheetPaths = stylesheetTags.map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean);
+const stylesheetPaths = stylesheetTags.map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1])
+  .filter(href => href && (href.startsWith('./') || href.startsWith('/')));
 for (const stylesheet of stylesheetPaths) {
   const file = relativeFile(stylesheet);
   assert(file && fs.existsSync(file), 'Missing stylesheet: ' + stylesheet);

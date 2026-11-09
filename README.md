@@ -1,11 +1,11 @@
 # ZTRACE — Security is a practice.
 
-**Current production website (unchanged during this redesign):** https://ztrace054-x.github.io/my-portfolio/  
-**Current QA branch:** `phase-7/production-qa` (not merged or deployed)
+**Production website:** https://ztrace054-x.github.io/my-portfolio/  
+**Deployment target:** GitHub Pages from `main`; approved changes go live after merge and the Pages refresh.
 
-A static, client-side cybersecurity learning portfolio for Md Saad (ZTRACE), a CSE student at the beginning of a cybersecurity learning journey. The introductory experience leads into a hash-routed workspace. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
+A static, client-side cybersecurity learning portfolio for Md Saad (ZTRACE), a CSE student at the beginning of a cybersecurity learning journey. The cinematic introduction hands visitors to the editorial portfolio landing page; the optional hash-routed learning workspace opens when a visitor chooses **Open workspace**. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
 
-The design direction uses deep black, crimson red, Space Grotesk, JetBrains Mono, an illustrative network globe, and a restrained terminal motif. The interface is English-only and aims to keep project claims, learning states, and credentials evidence-based.
+The landing-page design follows a dark editorial neo-brutalist direction inspired by the supplied portfolio video: near-black surfaces, a restrained red-to-orange gradient, oversized Barlow Condensed typography, Space Grotesk body copy, JetBrains Mono labels, and an original personal portrait. The optional workspace retains its evidence-first cybersecurity tools and routes, with the accent palette unified to the new orange-red direction. The interface is English-only and aims to keep project claims, learning states, and credentials evidence-based.
 
 ## Workspace sections
 
@@ -33,14 +33,16 @@ The design direction uses deep black, crimson red, Space Grotesk, JetBrains Mono
 | `js/workspace-motion.js` | Dashboard-specific motion polish |
 | `js/views/` | Profile, dashboard, Projects, learning views, Gallery, Contact, and certificates |
 | `js/data/` | Profile, project evidence, learning records, links, roadmap, and metric data |
-| `css/tokens.css` | Shared color, typography, and spacing tokens |
+| `css/tokens.css` | Shared color, typography, and spacing tokens, including the central editorial palette |
 | `css/premium-redesign.css` | Additive premium design layer and responsive refinements |
-| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation, and workspace surfaces |
+| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation, and workspace surfaces; deferred until the workspace is opened |
+| `css/editorial-reference.css` | Additive video-reference landing-page design layer and responsive editorial components; consumes the central `--editorial-*` tokens |
 | `css/phase-2-gate.css` | Intro visual and workspace transition |
 | `css/phase-5.css`, `css/phase-6.css` | Learning views, Gallery/Contact, and interaction polish |
 | `css/cyber-noir.css` | Central crimson tokens and cyber-noir palette |
 | `css/phase-6-visual-unification.css` | Global crimson visual unification across all workspace routes |
 | `css/phantom-signal.css`, `css/phantom-signal-cinematic-v2.css`, `css/phantom-signal-cinematic-v3.css` | Phantom Signal visitor intro; v3 provides the focused responsive composition and restrained cinematic motion |
+| `js/main.js` | Loads the dashboard module and workspace-only styles on demand, after a visitor opens a `#/` route |
 | `tests/` | Foundation, route, view, accessibility-state, interaction, and SEO/link checks |
 | `.github/workflows/quality.yml` | JavaScript syntax and regression checks for the redesign and established phases |
 
@@ -77,6 +79,6 @@ node --experimental-vm-modules tests/interaction-check.cjs
 - The Contact section opens direct email/profile links; it does not collect form submissions or send data to a server.
 - GitHub Pages serves a static frontend only.
 
-## Redesign release boundary
+## Release and deployment
 
-All Phase 7 QA and any scoped fixes are kept on `phase-7/production-qa`. Do not push directly to `main`, merge the redesign PR, or deploy until the owner explicitly approves the completed review.
+The owner has approved this redesign for release. Merge the review branch into `main` only after the complete CI suite passes; GitHub Pages serves the production site from `main`. The `live-deployment-qa` job then smoke-tests the actual deployed site. Do not push directly to `main` or bypass failing checks.

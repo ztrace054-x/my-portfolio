@@ -33,7 +33,9 @@ for (const quote of [
   "./ phantom signal"
 ]) assert.ok(visibleHtmlText.includes(quote), "Missing exact Phantom Signal copy: " + quote);
 
-assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro"[^>]*hidden[^>]*data-release="phantom-signal-20261108\.1"/, "Phantom Signal must be the hidden-by-default intro dialog and expose a deployment marker.");
+assert.match(html, /id="phase2-gate"[^>]*class="phase2-gate phantom-intro is-active"[^>]*aria-hidden="false"[^>]*data-release="phantom-signal-20261108\.1"/, "Phantom Signal must paint immediately as the active intro dialog and expose a deployment marker.");
+assert.match(read("js/phantom-signal.js"), /page\.inert = true;/, "The intro controller must make the portfolio inert while the modal is active.");
+assert.match(read("js/phantom-signal.js"), /page\.inert = false;/, "The intro controller must restore the portfolio after handoff.");
 assert.match(html, /<h1[^>]*id="phantom-intro-title"[^>]*>PHANTOM <span>SIGNAL<\/span><\/h1>/, "The Phantom Signal title must be the intro heading.");
 assert.match(html, /src="\.\/assets\/phantom-signal-hero\.webp"/, "The intro must use the original Phantom Signal portrait crop.");
 assert.ok(html.includes('class="phantom-intro__crimson-wake" aria-hidden="true"'), "The intro must include its crimson ambient wake layer.");

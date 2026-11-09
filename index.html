@@ -41,11 +41,11 @@ html.intro-pending #page { visibility: hidden !important; }
 <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
 <link rel="preload" href="./assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="./assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<script type="module" src="./js/main.js?v=20261108.1"></script>
-<link rel="stylesheet" href="./css/tokens.css?v=20261106.3"><link rel="stylesheet" href="./css/base.css?v=20261106.3"><link rel="stylesheet" href="./css/components.css?v=20261106.3"><link rel="stylesheet" href="./css/motion.css?v=20261106.3"><link rel="stylesheet" href="./css/style.css?v=20261106.3"><link rel="stylesheet" href="./css/intro.css?v=20261106.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261106.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261106.3">
+<script type="module" src="./js/main.js?v=20261109.7"></script>
+<link rel="stylesheet" href="./css/tokens.css?v=20261109.1"><link rel="stylesheet" href="./css/base.css?v=20261106.3"><link rel="stylesheet" href="./css/components.css?v=20261106.3"><link rel="stylesheet" href="./css/motion.css?v=20261106.3"><link rel="stylesheet" href="./css/style.css?v=20261106.3"><link rel="stylesheet" href="./css/intro.css?v=20261106.3"><link rel="stylesheet" href="./css/responsive.css?v=20261018.3"><link rel="stylesheet" href="./css/portfolio-refresh.css?v=20261106.3"><link rel="stylesheet" href="./css/design-system.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-3.css?v=20261018.3"><link rel="stylesheet" href="./css/phase-4.css?v=20261106.3">
   
   <link rel="stylesheet" href="./css/motion-polish.css?v=20261018.5">
-  <link rel="stylesheet" href="./css/dashboard-shell.css?v=20261106.3"><link rel="stylesheet" href="./css/phase-5.css?v=20261106.3"><link rel="stylesheet" href="./css/phase-6.css?v=20261106.3"><link rel="stylesheet" href="./css/premium-redesign.css?v=20261106.3"><meta name="color-scheme" content="dark"><script type="application/ld+json">
+  <link rel="stylesheet" href="./css/dashboard-shell.css?v=20261106.3" media="print" data-workspace-styles><link rel="stylesheet" href="./css/phase-5.css?v=20261106.3"><link rel="stylesheet" href="./css/phase-6.css?v=20261106.3"><link rel="stylesheet" href="./css/premium-redesign.css?v=20261106.3"><meta name="color-scheme" content="dark"><script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -60,50 +60,62 @@ html.intro-pending #page { visibility: hidden !important; }
 </script>
   <link rel="stylesheet" href="./css/cyber-noir.css?v=20261105.2">
   <link rel="stylesheet" href="./css/phase-6-visual-unification.css?v=20261106.1">
-  <link rel="stylesheet" href="./css/phantom-signal.css?v=20261108.1">
-  <link rel="stylesheet" href="./css/workspace-shell.css?v=20261107.1">
+  <link rel="stylesheet" href="./css/phantom-signal.css?v=20261109.1">
+  <link rel="stylesheet" href="./css/workspace-shell.css?v=20261107.1" media="print" data-workspace-styles>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" media="print" data-async-fonts>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="./css/editorial-reference.css?v=20261109.6">
 </head>
-<body data-design="workbench-v4">
+<body data-design="editorial-portfolio-v1">
 <a class="skip-link" href="#main">Skip to content</a>
 <div id="page">
   <header class="site-header" id="site-header">
     <div class="header-inner container">
       <a class="wordmark" href="#home" aria-label="ZTRACE by Md Saad, home">ZTRACE<span>.</span><small>MD SAAD</small></a>
       <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#home" data-magnetic aria-current="location"><span class="nav-link-inner"><span class="nav-index">01</span> Home</span></a><a href="#about" data-magnetic><span class="nav-link-inner"><span class="nav-index">02</span> About</span></a><a href="#journey" data-magnetic><span class="nav-link-inner"><span class="nav-index">03</span> Journey</span></a><a href="#workbench" data-magnetic><span class="nav-link-inner"><span class="nav-index">04</span> Workbench</span></a><a href="#gallery" data-magnetic><span class="nav-link-inner"><span class="nav-index">05</span> Gallery</span></a><a href="#contact" data-magnetic><span class="nav-link-inner"><span class="nav-index">06</span> Contact</span></a>
+        <a href="#home" data-magnetic aria-current="location"><span class="nav-link-inner"><span class="nav-index">01</span> Home</span></a><a href="#about" data-magnetic><span class="nav-link-inner"><span class="nav-index">02</span> About</span></a><a href="#workbench" data-magnetic><span class="nav-link-inner"><span class="nav-index">03</span> Workbench</span></a><a href="#projects" data-magnetic><span class="nav-link-inner"><span class="nav-index">04</span> Projects</span></a><a href="#certificates" data-magnetic><span class="nav-link-inner"><span class="nav-index">05</span> Certificates</span></a><a href="#contact" data-magnetic><span class="nav-link-inner"><span class="nav-index">06</span> Contact</span></a>
       </nav>
+      <a class="workspace-launch" id="workspace-launch" href="#/profile">Open workspace <span aria-hidden="true">↗</span></a>
       <div class="header-controls">
         <button class="motion-toggle" data-motion-toggle type="button" aria-pressed="true" aria-label="Turn animations off"><span class="motion-dot" aria-hidden="true"></span><span data-motion-label>Motion on</span></button><button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" aria-controls="mobile-menu" aria-expanded="false"><span></span><span></span></button>
       </div>
     </div>
   </header>
   <main id="main" tabindex="-1">
-    <noscript><style>.motion-toggle,.menu-toggle,.copy-button,.replay-link{display:none!important}</style>
+    <noscript><style>.motion-toggle,.menu-toggle,.copy-button,.replay-link,.workspace-launch,.mobile-workspace-link,.app-back-link{display:none!important}</style>
     <nav class="container no-script-nav" aria-label="Section links">
-      <a href="#home">Home</a><a href="#about">About</a><a href="#journey">Journey</a><a href="#workbench">Workbench</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+      <a href="#home">Home</a><a href="#about">About</a><a href="#workbench">Workbench</a><a href="#projects">Projects</a><a href="#certificates">Certificates</a><a href="#contact">Contact</a><a href="#gallery">Gallery</a>
     </nav>
     </noscript>
-    <section class="hero container" id="home" aria-labelledby="hero-title">
- <div class="hero-grid" aria-hidden="true"></div>
- <div class="hero-topline"><p class="eyebrow"><span class="status-dot"></span>01 / LEARNING IN PUBLIC</p><span class="micro">ZTRACE.SECURITY_PROFILE / V.04</span></div>
- <div class="hero-main"><div class="hero-copy">
-  <h1 id="hero-title" class="hero-name"><span class="sr-only">Security is a practice. Md Saad is a CSE student and cybersecurity beginner.</span><span class="name-visual" data-glitch="ZTRACE." aria-hidden="true"><span class="name-letter">Z</span><span class="name-letter">T</span><span class="name-letter">R</span><span class="name-letter">A</span><span class="name-letter">C</span><span class="name-letter">E</span><span class="name-period">.</span></span></h1>
-  <p class="hero-statement" aria-hidden="true"><span class="line-mask"><span>SECURITY IS</span></span><span class="line-mask"><span class="text-outline">A PRACTICE<span class="terminal-caret">_</span></span></span></p>
-  <p class="hero-description"><span class="sr-only">CSE student. Cybersecurity learner. Interested in cybersecurity foundations.</span><span aria-hidden="true">CSE student. Cybersecurity beginner.<br><span data-hero-type>Learning the foundations. Practising responsibly.</span></span></p>
-  <div class="hero-actions"><a class="button button-primary" href="#workbench" data-magnetic><span>Explore my workbench <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a><a class="text-link" href="#about">Meet Saad <span aria-hidden="true">↗</span></a></div>
-  <p class="course-credit">LEARNING / <strong>ETHICAL HACKING FOR BEGINNERS · BYTE CAPSULE</strong></p>
-  <div class="hero-tags" aria-label="Current learning focus"><span>LINUX BASICS</span><span>NETWORKING</span><span>RECON FUNDAMENTALS</span></div>
- </div><div class="hero-visual">
-  <div class="globe-top micro" aria-hidden="true"><span><i class="status-dot"></i> NETWORK / 001</span><span>SIMULATED VISUAL / NOT LIVE DATA</span></div>
-  <div class="globe-stage"><div class="globe-guide" aria-hidden="true"></div><div class="globe-reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg class="core-fallback" id="core-fallback" viewBox="0 0 520 520" aria-hidden="true"><defs><radialGradient id="coreGlow"><stop stop-color="#85e9ad" stop-opacity=".14"></stop><stop offset="1" stop-color="#85e9ad" stop-opacity="0"></stop></radialGradient></defs><circle cx="260" cy="260" r="225" fill="url(#coreGlow)"></circle><g fill="none" stroke="#85e9ad" stroke-width="1" opacity=".5"><ellipse cx="260" cy="260" rx="154" ry="182" transform="rotate(-24 260 260)"></ellipse><ellipse cx="260" cy="260" rx="74" ry="182" transform="rotate(-24 260 260)"></ellipse><ellipse cx="260" cy="260" rx="181" ry="57" transform="rotate(-24 260 260)"></ellipse><ellipse cx="260" cy="260" rx="181" ry="115" transform="rotate(-24 260 260)"></ellipse><path d="m165 112 211 53 61 174-140 96-189-117 57-206 132-36 140 161-140 96-189-117 268-53-79 192L165 112"></path></g><g fill="#b7ffd0"><circle cx="165" cy="112" r="3"></circle><circle cx="376" cy="165" r="3"></circle><circle cx="437" cy="339" r="3"></circle><circle cx="297" cy="435" r="3"></circle><circle cx="108" cy="318" r="3"></circle><circle cx="297" cy="76" r="3"></circle><circle cx="260" cy="260" r="4"></circle></g></svg>
-            <canvas id="hero-canvas" aria-hidden="true" hidden></canvas><div class="globe-center" aria-hidden="true">ZTRACE<span>_</span></div><span class="globe-coordinate micro" aria-hidden="true">23° / CURIOUS BY DESIGN</span></div>
-  <div class="globe-telemetry micro" role="group" aria-label="Decorative telemetry. Values are simulated, not live system data."><span>CPU <b data-telemetry="cpu">42%</b></span><span>LATENCY <b>18ms</b></span><span>PACKETS <b data-telemetry="packets">128/s</b></span><span class="telemetry-note">SIMULATED DATA / DISPLAY ONLY</span></div>
-  <div class="hero-terminal-strip" aria-label="Current learning status"><div class="hero-terminal-command"><span aria-hidden="true">$</span> cat focus.txt <span>READ ONLY</span></div><div class="hero-terminal-row"><span>FOCUS</span><strong>LINUX / NETWORKING / RECON</strong></div><div class="hero-terminal-row"><span>PRINCIPLE</span><strong>AUTHORIZED PRACTICE ONLY</strong></div></div>
- </div></div>
- <div class="hero-hud"><div><span>IDENTITY</span><strong>ZTRACE / ZTRACE</strong></div><div><span>MODE</span><strong data-rotating-status>LEARNING IN PUBLIC</strong></div><div><span>NEXT</span><strong>RECON → NETWORKING → SECURITY</strong></div><a href="#about" class="scroll-cue" aria-label="Scroll to meet Md Saad">MEET THE PERSON <span aria-hidden="true">↓</span></a></div>
-</section><section class="about section container" id="about" aria-labelledby="about-title">
+    <section class="hero container editorial-hero" id="home" aria-labelledby="hero-title">
+ <div class="hero-topline"><p class="eyebrow"><span class="status-dot"></span>01 / LEARNING IN PUBLIC</p><span class="micro">ZTRACE / CYBERSECURITY PORTFOLIO</span></div>
+ <div class="hero-main editorial-hero-main">
+  <div class="hero-copy">
+   <p class="hero-greeting">HELLO, I'M</p>
+   <h1 id="hero-title" class="hero-name" aria-label="MD SAAD."><span class="hero-name-first">MD</span><span class="hero-name-last">SAAD<span class="hero-name-period">.</span></span></h1>
+   <p class="hero-role">CSE STUDENT <span aria-hidden="true">/</span> CYBERSECURITY BEGINNER</p>
+   <p class="hero-description">I'm beginning my cybersecurity journey, building strong foundations in Linux, computer networking and reconnaissance—while keeping every exercise authorized and responsible.</p>
+   <div class="hero-actions"><a class="button button-primary" href="#workbench"><span>Explore my workbench <svg class="arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a><a class="text-link" href="#about">Meet Saad <span aria-hidden="true">↗</span></a></div>
+   <p class="course-credit">LEARNING / <strong>ETHICAL HACKING FOR BEGINNERS · BYTE CAPSULE</strong></p>
+   <div class="hero-tags" aria-label="Current learning focus"><span>LINUX</span><span>NETWORKING</span><span>RECON</span><span>ETHICAL HACKING</span></div>
+  </div>
+  <div class="hero-visual editorial-portrait-stage">
+   <span class="hero-backdrop-word" aria-hidden="true">PORTFOLIO</span>
+   <figure class="hero-portrait"><img class="hero-portrait-image" src="./assets/saad-golden.jpg" alt="Profile portrait in warm evening light, wearing a dark jacket" width="864" height="1080" loading="eager" fetchpriority="high" decoding="async"></figure>
+   <span class="hero-float-tag hero-float-tag--linux" aria-hidden="true">LINUX</span>
+   <span class="hero-float-tag hero-float-tag--network" aria-hidden="true">NETWORKING</span>
+   <span class="hero-float-tag hero-float-tag--recon" aria-hidden="true">RECON</span>
+   <span class="hero-float-tag hero-float-tag--ethical" aria-hidden="true">ETHICAL HACKING</span>
+   <div class="hero-portrait-caption" aria-hidden="true"><strong>MD SAAD / ZTRACE</strong><span>CYBERSECURITY BEGINNER</span></div>
+  </div>
+ </div>
+ <div class="hero-hud"><div><span>FOCUS</span><strong>LINUX / NETWORKING / RECON</strong></div><div><span>LEVEL</span><strong>BEGINNER / LEARNING IN PUBLIC</strong></div><div><span>PRINCIPLE</span><strong>AUTHORIZED PRACTICE ONLY</strong></div><a href="#projects" class="scroll-cue" aria-label="Scroll to learning tracks">SEE WHAT I'M BUILDING <span aria-hidden="true">↓</span></a></div>
+</section>
+<section class="about section container" id="about" aria-labelledby="about-title">
  <div class="section-heading"><p class="eyebrow">02 / ABOUT ME</p><h2 class="section-title" id="about-title" data-reveal="heading">A curious mind.<br><span class="secondary-heading">A new direction.</span></h2><span class="section-code" aria-hidden="true">THE PERSON BEHIND THE SIGNAL</span></div>
- <div class="identity-grid"><figure class="identity-portrait" data-reveal="photo"><div class="identity-photo" data-identity-tilt><div class="photo-label micro" aria-hidden="true"><span>WHO AM I?</span><span>SUBJECT // MD SAAD</span></div><img src="./assets/saad-golden.jpg" alt="Profile portrait in warm evening light, wearing a dark jacket" width="864" height="1080" loading="lazy" decoding="async"><div class="photo-scan" aria-hidden="true"></div><div class="photo-brackets" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="photo-stamp micro" aria-hidden="true"><span>IDENTITY VERIFIED</span><small>PORTRAIT / VISUAL LABEL</small></div></div><figcaption><span>A face behind the curiosity.</span><span>HANDLE // ZTRACE054-X</span></figcaption></figure>
+ <div class="identity-grid"><figure class="identity-portrait" data-reveal="photo"><div class="identity-photo" data-identity-tilt><div class="photo-label micro" aria-hidden="true"><span>WHO AM I?</span><span>SUBJECT // MD SAAD</span></div><img src="./assets/saad-formal.jpg" alt="Formal portrait of Md Saad" width="810" height="1080" loading="lazy" decoding="async"><div class="photo-scan" aria-hidden="true"></div><div class="photo-brackets" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="photo-stamp micro" aria-hidden="true"><span>IDENTITY VERIFIED</span><small>PORTRAIT / VISUAL LABEL</small></div></div><figcaption><span>A face behind the curiosity.</span><span>HANDLE // ZTRACE054-X</span></figcaption></figure>
  <div class="identity-content"><p class="identity-intro" data-reveal="block">I'm Md Saad.<br><span>And this is where my cybersecurity journey begins.</span></p><div class="profile-card terminal-card" id="identity-terminal" data-cursor="terminal" role="region" aria-label="Terminal-style learning profile">
             <div class="profile-bar"><span class="profile-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>saad@ztrace:~</span></div>
             <div class="profile-body">
@@ -131,7 +143,7 @@ html.intro-pending #page { visibility: hidden !important; }
         <div class="section-heading">
           <p class="eyebrow">03 / THE LEARNING PATH</p><h2 class="section-title" id="journey-title" data-reveal="heading">Foundations first. Possibilities ahead.</h2><span class="section-code" aria-hidden="true">PROGRESSION / 003</span>
         </div>
-        <p class="section-intro" data-reveal="block">What I'm exploring now, what I want to try next,<br class="desktop-break"> and the direction I'm working toward.</p><a class="journey-skip text-link" href="#journey-details">Skip to tools and future goals <span aria-hidden="true">↓</span></a>
+        <p class="section-intro" data-reveal="block">What I'm exploring now, what I want to try next,<br class="desktop-break"> and the direction I'm working toward.</p><a class="journey-skip text-link" href="#workbench">Skip to the workbench <span aria-hidden="true">↓</span></a>
         <div class="journey-route micro" aria-label="Learning roadmap"><span>START</span><span>LINUX</span><span>NETWORKING</span><span>RECON</span><span>ETHICAL HACKING</span><span>NEXT ↗</span></div><div class="journey-stage">
           <div class="journey-stage-label"><span>THE ROAD AHEAD</span><span>A learning roadmap, one step at a time.</span></div>
           <div class="journey-timeline" data-journey-timeline aria-label="Learning roadmap timeline">
@@ -143,57 +155,56 @@ html.intro-pending #page { visibility: hidden !important; }
           </div>
           </div>
         </div>
-        <div class="journey-details" id="journey-details" tabindex="-1">
-          <article class="detail-panel tools-panel" data-reveal="block"><p class="small-label">EXPLORATION / TOOLS</p><h3>Getting familiar.</h3><p class="panel-description">Tools I'm learning to use. Familiarity is a work in progress.</p><div class="tool-grid" aria-label="Cybersecurity tools in beginner exploration">
-            <article class="tool-card" tabindex="0" role="group" aria-label="Kali Linux, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 01</span><span class="tool-card-symbol" aria-hidden="true">K</span></div><h4>Kali Linux</h4><p>Learning environment</p><span class="tool-exploration">Beginner exploration</span></article>
-            <article class="tool-card" tabindex="0" role="group" aria-label="Nmap, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 02</span><span class="tool-card-symbol" aria-hidden="true">N</span></div><h4>Nmap</h4><p>Network discovery basics</p><span class="tool-exploration">Beginner exploration</span></article>
-            <article class="tool-card" tabindex="0" role="group" aria-label="Wireshark, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 03</span><span class="tool-card-symbol" aria-hidden="true">W</span></div><h4>Wireshark</h4><p>Packet and protocol concepts</p><span class="tool-exploration">Beginner exploration</span></article>
-            <article class="tool-card" tabindex="0" role="group" aria-label="Burp Suite, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 04</span><span class="tool-card-symbol" aria-hidden="true">B</span></div><h4>Burp Suite</h4><p>Web request concepts</p><span class="tool-exploration">Beginner exploration</span></article>
-          </div><p class="panel-status"><span class="status-dot" aria-hidden="true"></span>Beginner exploration</p></article>
-          <article class="detail-panel credentials-panel" data-reveal="block"><p class="small-label">FUTURE / CREDENTIALS</p><h3>Goals, not achievements.</h3><p class="panel-description">I haven't earned these certifications yet. These are future ambitions, InshaAllah.</p><ul class="credential-list"><li><span>Junior Penetration Tester Certificate</span><small>Future goal, not yet earned</small></li><li><span>OSCP</span><small>Future goal, not yet earned</small></li><li><span>Senior Penetration Tester Certificate</span><small>Future goal, not yet earned</small></li><li><span>CEH (Certified Ethical Hacker)</span><small>Future goal, not yet earned</small></li></ul></article>
-        </div>
+        <div class="journey-commitment" data-reveal="block"><span class="small-label">THE RULE THAT DOESN'T CHANGE</span><p>Every exercise starts with permission, a clearly defined scope, and a learning objective. I only practise in environments where I am explicitly authorized.</p><strong>AUTHORIZED PRACTICE ONLY.</strong></div>
       </div>
     </section>
     <section class="workbench section" id="workbench" aria-labelledby="workbench-title">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">04 / THE WORKBENCH</p>
-          <h2 class="section-title" id="workbench-title" data-reveal="heading">Learn it. Test it.<br><span class="secondary-heading">Write it down.</span></h2>
-          <span class="section-code" aria-hidden="true">FIELD NOTES / 004</span>
-        </div>
-        <p class="section-intro" data-reveal="block">A transparent look at the skills I'm building—not a list of achievements I haven't earned yet.</p>
-        <div class="workbench-grid">
-          <article class="workbench-card" data-reveal="block">
-            <div class="workbench-card-top"><span class="workbench-index">TRACK / 01</span><span class="workbench-status is-active"><i></i> IN PROGRESS</span></div>
-            <div class="workbench-glyph" aria-hidden="true"><span>01</span><i></i></div>
-            <h3>Recon foundations</h3>
-            <p>Learning how scope, DNS, HTTP, and discovery fit together before any security test begins.</p>
-            <ul class="workbench-tags"><li>DNS</li><li>HTTP</li><li>SCOPE</li></ul>
-            <div class="workbench-card-foot"><span>LEARNING TRACK</span><span>01 / 03</span></div>
-          </article>
-          <article class="workbench-card" data-reveal="block">
-            <div class="workbench-card-top"><span class="workbench-index">TRACK / 02</span><span class="workbench-status is-active"><i></i> BUILDING</span></div>
-            <div class="workbench-glyph glyph-network" aria-hidden="true"><span>02</span><i></i></div>
-            <h3>Linux &amp; networking</h3>
-            <p>Strengthening command-line habits and learning how addresses, ports, and packets fit together.</p>
-            <ul class="workbench-tags"><li>CLI</li><li>TCP/IP</li><li>PACKETS</li></ul>
-            <div class="workbench-card-foot"><span>FOUNDATIONS</span><span>02 / 03</span></div>
-          </article>
-          <article class="workbench-card" data-reveal="block">
-            <div class="workbench-card-top"><span class="workbench-index">TRACK / 03</span><span class="workbench-status is-planned"><i></i> PLANNED</span></div>
-            <div class="workbench-glyph glyph-notes" aria-hidden="true"><span>03</span><i></i></div>
-            <h3>Authorized lab journal</h3>
-            <p>A planned place to record lab objectives, permitted scope, observations, and what each exercise teaches me.</p>
-            <ul class="workbench-tags"><li>LAB NOTES</li><li>ETHICS</li><li>LESSONS</li></ul>
-            <div class="workbench-card-foot"><span>FUTURE NOTES</span><span>03 / 03</span></div>
-          </article>
-        </div>
-        <div class="workbench-note" data-reveal="block"><span class="small-label">PUBLIC LEARNING NOTE</span><p>These are learning tracks and future plans—not claims of completed professional projects.</p><a class="text-link" href="#contact">Talk about learning <span aria-hidden="true">↗</span></a></div>
-      </div>
-    </section>
+ <div class="container">
+  <div class="section-heading"><p class="eyebrow">04 / THE WORKBENCH</p><h2 class="section-title" id="workbench-title" data-reveal="heading">Tools I'm learning.<br><span class="secondary-heading">Foundations first.</span></h2><span class="section-code" aria-hidden="true">BEGINNER EXPLORATION / 004</span></div>
+  <p class="section-intro" data-reveal="block">A practical look at the tools I'm getting familiar with. Every one of them is still part of my learning process.</p>
+  <div class="tool-grid editorial-tool-grid" aria-label="Cybersecurity tools in beginner exploration">
+   <article class="tool-card" tabindex="0" role="group" aria-label="Kali Linux, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 01</span><span class="tool-card-symbol" aria-hidden="true">K</span></div><h3>Kali Linux</h3><p>Learning environment</p><span class="tool-exploration">Beginner exploration</span></article>
+   <article class="tool-card" tabindex="0" role="group" aria-label="Nmap, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 02</span><span class="tool-card-symbol" aria-hidden="true">N</span></div><h3>Nmap</h3><p>Network discovery basics</p><span class="tool-exploration">Beginner exploration</span></article>
+   <article class="tool-card" tabindex="0" role="group" aria-label="Wireshark, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 03</span><span class="tool-card-symbol" aria-hidden="true">W</span></div><h3>Wireshark</h3><p>Packet and protocol concepts</p><span class="tool-exploration">Beginner exploration</span></article>
+   <article class="tool-card" tabindex="0" role="group" aria-label="Burp Suite, beginner exploration"><div class="tool-card-top"><span class="tool-card-index">TOOL / 04</span><span class="tool-card-symbol" aria-hidden="true">B</span></div><h3>Burp Suite</h3><p>Web request concepts</p><span class="tool-exploration">Beginner exploration</span></article>
+  </div>
+  <div class="workbench-note" data-reveal="block"><span class="small-label">LEARNING STATUS</span><p>All four tools are at beginner-exploration level. Familiarity is not the same as professional experience.</p><a class="text-link" href="#/skill-progress">Open skill progress <span aria-hidden="true">↗</span></a></div>
+ </div>
+</section>
+<section class="projects section" id="projects" aria-labelledby="projects-title">
+ <div class="container">
+  <div class="section-heading"><p class="eyebrow">05 / LEARNING TRACKS</p><h2 class="section-title" id="projects-title" data-reveal="heading">Work in progress.<br><span class="secondary-heading">One step at a time.</span></h2><span class="section-code" aria-hidden="true">PLANNED / ACTIVE LEARNING</span></div>
+  <p class="section-intro" data-reveal="block">These are learning tracks and planned work—not completed professional projects or claims of practical security experience.</p>
+  <div class="project-track-grid">
+   <article class="workbench-card" data-reveal="block"><div class="workbench-card-top"><span class="workbench-index">TRACK / 01</span><span class="workbench-status is-active"><i aria-hidden="true"></i> IN PROGRESS</span></div><div class="workbench-glyph" aria-hidden="true"><span>01</span></div><h3>Recon foundations</h3><p>Learning how scope, DNS, HTTP and discovery concepts fit together before any security test begins.</p><ul class="workbench-tags"><li class="tag-blue">DNS</li><li class="tag-yellow">HTTP</li><li class="tag-green">SCOPE</li></ul><div class="workbench-card-foot"><span>LEARNING TRACK</span><span>01 / 03</span></div></article>
+   <article class="workbench-card" data-reveal="block"><div class="workbench-card-top"><span class="workbench-index">TRACK / 02</span><span class="workbench-status is-building"><i aria-hidden="true"></i> BUILDING</span></div><div class="workbench-glyph" aria-hidden="true"><span>02</span></div><h3>Linux &amp; networking</h3><p>Strengthening command-line habits and learning how addresses, ports and packets fit together.</p><ul class="workbench-tags"><li class="tag-orange">CLI</li><li class="tag-blue">TCP/IP</li><li class="tag-yellow">PACKETS</li></ul><div class="workbench-card-foot"><span>FOUNDATIONS</span><span>02 / 03</span></div></article>
+   <article class="workbench-card" data-reveal="block"><div class="workbench-card-top"><span class="workbench-index">TRACK / 03</span><span class="workbench-status is-planned"><i aria-hidden="true"></i> PLANNED</span></div><div class="workbench-glyph" aria-hidden="true"><span>03</span></div><h3>Authorized lab journal</h3><p>A planned place to record lab objectives, permitted scope, observations and lessons from each exercise.</p><ul class="workbench-tags"><li class="tag-green">LAB NOTES</li><li class="tag-orange">ETHICS</li><li class="tag-blue">LESSONS</li></ul><div class="workbench-card-foot"><span>FUTURE NOTES</span><span>03 / 03</span></div></article>
+  </div>
+  <div class="workbench-note" data-reveal="block"><span class="small-label">EVIDENCE FIRST</span><p>I'll present projects as completed only when there is real implementation and evidence to show.</p><a class="text-link" href="#/projects">View project record <span aria-hidden="true">↗</span></a></div>
+ </div>
+</section>
+<section class="certificates section" id="certificates" aria-labelledby="certificates-title">
+ <div class="container">
+  <div class="certificate-goals-banner" role="note" data-reveal="block"><span class="certificate-banner-mark" aria-hidden="true">!</span><div><strong>These are future goals, not yet earned — InshaAllah.</strong><p>The four professional certifications below are future goals. The Byte Capsule course-completion certificate is a separate learning milestone.</p></div></div>
+
+ <div class="section-heading"><p class="eyebrow">06 / CREDENTIALS</p><h2 class="section-title" id="certificates-title" data-reveal="heading">Proof of learning.<br><span class="secondary-heading">Goals still ahead.</span></h2><span class="section-code" aria-hidden="true">EARNED / PLANNED</span></div>
+
+  <div class="certificate-goal-grid">
+   <article class="certificate-goal-card" data-reveal="block"><span class="goal-number">01</span><span class="goal-status">Future goal — not yet earned</span><h3>Junior Penetration Tester Certificate</h3><!-- When a real certificate is earned: replace this button with a working <a href="path/to/certificate.pdf" download> link, and remove the disabled/aria-disabled attribute and the "Coming soon" label. --><button type="button" class="certificate-coming-soon" aria-disabled="true" tabindex="0"><span>Download certificate</span><strong>Coming soon</strong></button></article>
+   <article class="certificate-goal-card" data-reveal="block"><span class="goal-number">02</span><span class="goal-status">Future goal — not yet earned</span><h3>OSCP</h3><!-- When a real certificate is earned: replace this button with a working <a href="path/to/certificate.pdf" download> link, and remove the disabled/aria-disabled attribute and the "Coming soon" label. --><button type="button" class="certificate-coming-soon" aria-disabled="true" tabindex="0"><span>Download certificate</span><strong>Coming soon</strong></button></article>
+   <article class="certificate-goal-card" data-reveal="block"><span class="goal-number">03</span><span class="goal-status">Future goal — not yet earned</span><h3>Senior Penetration Tester Certificate</h3><!-- When a real certificate is earned: replace this button with a working <a href="path/to/certificate.pdf" download> link, and remove the disabled/aria-disabled attribute and the "Coming soon" label. --><button type="button" class="certificate-coming-soon" aria-disabled="true" tabindex="0"><span>Download certificate</span><strong>Coming soon</strong></button></article>
+   <article class="certificate-goal-card" data-reveal="block"><span class="goal-number">04</span><span class="goal-status">Future goal — not yet earned</span><h3>CEH (Certified Ethical Hacker)</h3><!-- When a real certificate is earned: replace this button with a working <a href="path/to/certificate.pdf" download> link, and remove the disabled/aria-disabled attribute and the "Coming soon" label. --><button type="button" class="certificate-coming-soon" aria-disabled="true" tabindex="0"><span>Download certificate</span><strong>Coming soon</strong></button></article>
+  </div>
+  <article class="earned-certificate-card" data-reveal="block">
+   <div class="earned-certificate-copy"><p class="small-label">DOCUMENTED LEARNING MILESTONE</p><span class="earned-status">EARNED / COURSE COMPLETION</span><h3>Ethical Hacking for Beginners</h3><p>Byte Capsule · 100 Days Challenge Live Online Training Program</p><dl><div><dt>Awarded</dt><dd><time datetime="2026-11-01">November 01, 2026</time></dd></div><div><dt>Certificate ID</dt><dd>7482ZWKQ</dd></div></dl><div class="certificate-actions"><a href="./assets/certificates/Md_Saad_Certificate.png" target="_blank" rel="noopener noreferrer">View original certificate ↗</a><a href="https://bytecapsuleit.com/verify-certificate" target="_blank" rel="noopener noreferrer">Verify with issuer ↗</a></div><p class="certificate-note">This is a course-completion certificate, not a professional penetration-testing certification.</p></div>
+   <figure class="earned-certificate-preview"><img src="./assets/certificates/Md_Saad_Certificate.png" alt="Byte Capsule Certificate of Completion for Ethical Hacking for Beginners, awarded to Md Saad" width="1123" height="794" loading="lazy" decoding="async"></figure>
+  </article>
+
+ </div>
+</section>
     <section class="gallery section container" id="gallery" aria-labelledby="gallery-title">
       <div class="section-heading">
-        <p class="eyebrow">05 / BEYOND THE SCREEN</p><h2 class="section-title" id="gallery-title" data-reveal="heading">The person behind the journey.</h2><span class="section-code" aria-hidden="true">PERSONAL FRAMES / 005</span>
+        <p class="eyebrow">07 / BEYOND THE SCREEN</p><h2 class="section-title" id="gallery-title" data-reveal="heading">The person behind the journey.</h2><span class="section-code" aria-hidden="true">PERSONAL FRAMES / 005</span>
       </div>
       <p class="section-intro" data-reveal="block">A few personal frames. Another way to meet the person<br class="desktop-break"> behind the learning.</p>
       <div class="gallery-grid">
@@ -214,7 +225,7 @@ html.intro-pending #page { visibility: hidden !important; }
     <section class="contact section" id="contact" aria-labelledby="contact-title">
       <div class="container contact-grid">
         <div class="contact-copy">
-          <p class="eyebrow">06 / OPEN A CONNECTION</p><h2 class="section-title" id="contact-title" data-reveal="heading">Let's exchange ideas.</h2><p class="section-intro" data-reveal="block">Want to talk about cybersecurity, technology, or learning? A simple hello is a good place to start.</p>
+          <p class="eyebrow">08 / OPEN A CONNECTION</p><h2 class="section-title" id="contact-title" data-reveal="heading">Let's exchange ideas.</h2><p class="section-intro" data-reveal="block">Want to talk about cybersecurity, technology, or learning? A simple hello is a good place to start.</p>
         </div>
         <div class="contact-panel" id="contact-panel" data-reveal="block" data-cursor="terminal">
           <div class="terminal-command"><span aria-hidden="true">&gt;</span> contact --email<span class="command-index" aria-hidden="true">01</span></div>
@@ -231,8 +242,22 @@ html.intro-pending #page { visibility: hidden !important; }
     </section>
   </main>
   <footer class="site-footer container">
-    <span class="footer-credit"><span aria-hidden="true">&gt;</span> Personal goal / Building connections</span><span>© <span id="year">2026</span> Md Saad / ZTRACE</span><span class="online-status"><span class="status-dot" aria-hidden="true"></span>Portfolio online</span>
-  <a class="replay-link text-link" href="?intro=1">Replay Phantom Signal <span aria-hidden="true">↻</span></a></footer>
+    <span class="footer-credit"><span aria-hidden="true">&gt;</span> Personal goal / Building connections</span>
+    <span>© <span id="year">2026</span> Md Saad / ZTRACE</span>
+    <nav class="footer-links" aria-label="Footer links">
+      <a class="footer-social-link" href="https://github.com/ztrace054-x" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .9a11.1 11.1 0 0 0-3.5 21.6c.55.1.75-.24.75-.53v-2.06c-3.04.66-3.68-1.29-3.68-1.29-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.55 1.18 3.17.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.42 0-1.2.43-2.18 1.13-2.95-.12-.28-.49-1.4.11-2.91 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.1-1.42 3.01-1.13 3.01-1.13.6 1.51.23 2.63.12 2.91.7.77 1.12 1.75 1.12 2.95 0 4.21-2.55 5.13-4.99 5.4.39.34.73 1 .73 2.02v3.02c0 .29.2.64.76.53A11.1 11.1 0 0 0 12 .9Z"/></svg><span>GitHub</span><span aria-hidden="true">↗</span>
+      </a>
+      <a class="footer-social-link" href="https://www.instagram.com/mdsaad01755/" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>Instagram</span><span aria-hidden="true">↗</span>
+      </a>
+      <a class="footer-social-link" href="mailto:ztrace054@gmail.com" aria-label="Email Saad">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Email</span>
+      </a>
+      <a href="#gallery">Gallery</a><a href="#home">Back to top ↑</a>
+    </nav>
+    <a class="replay-link text-link" href="?intro=1">Replay intro <span aria-hidden="true">↻</span></a>
+  </footer>
 </div>
 <div id="app-shell" class="app-shell hud-body" data-app-shell hidden>
   <button class="app-sidebar-backdrop" type="button" data-sidebar-backdrop hidden aria-label="Close navigation drawer"></button>
@@ -246,6 +271,7 @@ html.intro-pending #page { visibility: hidden !important; }
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="1.5"/><path d="M9 4v16m7-11-3 3 3 3"/></svg>
       </button>
     </div>
+    <a class="app-back-link" href="./" aria-label="Return to the main portfolio page">← Back to portfolio</a>
     <div class="app-sidebar__section-label"><span>MENU</span><span class="app-sidebar__section-line"></span></div>
     <nav class="app-nav" aria-label="Workspace views">
       <a class="app-nav-link" href="#/profile" data-nav-item data-route="profile" aria-label="Profile" title="Profile">
@@ -313,7 +339,7 @@ html.intro-pending #page { visibility: hidden !important; }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h14v15H5zM8 8h8M8 12h8M8 16h5"/></svg>
         </button>
         <button class="app-motion-toggle" type="button" data-shell-motion-toggle aria-pressed="true" aria-label="Turn motion off"><span class="app-motion-dot" aria-hidden="true"></span><span data-shell-motion-label>MOTION ON</span></button>
-        <a class="app-avatar" href="#/profile" aria-label="Open Md Saad profile" title="Open Profile"><img src="./assets/saad-golden.jpg" alt="Profile portrait" width="40" height="40" loading="lazy" decoding="async"><span>ZTRACE</span></a>
+        <a class="app-avatar" href="#/profile" aria-label="Open Md Saad profile" title="Open Profile"><img src="./assets/saad-golden.jpg" alt="Profile portrait" width="40" height="50" loading="lazy" decoding="async"><span>ZTRACE</span></a>
       </div>
     </header>
 
@@ -345,7 +371,7 @@ html.intro-pending #page { visibility: hidden !important; }
     <p class="app-panel-footnote">Preferences are saved in this browser when local storage is available. System reduced-motion preferences are respected.</p>
   </aside>
 </div>
-<div id="phase2-gate" class="phase2-gate phantom-intro" role="dialog" aria-modal="true" aria-labelledby="phantom-intro-title" aria-hidden="true" hidden tabindex="-1" data-release="phantom-signal-20261108.1">
+<div id="phase2-gate" class="phase2-gate phantom-intro is-active" role="dialog" aria-modal="true" aria-labelledby="phantom-intro-title" aria-hidden="false" tabindex="-1" data-release="phantom-signal-20261108.1">
   <span class="phantom-intro__wake" aria-hidden="true"></span>
   <div class="phantom-intro__backdrop" aria-hidden="true" data-parallax="0.12">
     <span class="phantom-intro__crimson-wake" aria-hidden="true"></span>
@@ -410,8 +436,9 @@ html.intro-pending #page { visibility: hidden !important; }
 <dialog class="mobile-menu" id="mobile-menu" aria-label="Navigation" data-lenis-prevent>
   <div class="menu-top"><span>ZTRACE.</span><button class="icon-button" id="menu-close" type="button" aria-label="Close navigation">×</button></div>
   <nav aria-label="Mobile navigation">
-    <a href="#home" aria-current="location"><span>01</span> Home <b aria-hidden="true">↗</b></a><a href="#about"><span>02</span> About <b aria-hidden="true">↗</b></a><a href="#journey"><span>03</span> Journey <b aria-hidden="true">↗</b></a><a href="#workbench"><span>04</span> Workbench <b aria-hidden="true">↗</b></a><a href="#gallery"><span>05</span> Gallery <b aria-hidden="true">↗</b></a><a href="#contact"><span>06</span> Contact <b aria-hidden="true">↗</b></a>
+    <a href="#home" aria-current="location"><span>01</span> Home <b aria-hidden="true">↗</b></a><a href="#about"><span>02</span> About <b aria-hidden="true">↗</b></a><a href="#workbench"><span>03</span> Workbench <b aria-hidden="true">↗</b></a><a href="#projects"><span>04</span> Projects <b aria-hidden="true">↗</b></a><a href="#certificates"><span>05</span> Certificates <b aria-hidden="true">↗</b></a><a href="#contact"><span>06</span> Contact <b aria-hidden="true">↗</b></a>
   </nav>
+  <a class="mobile-workspace-link" href="#/profile">Open learning workspace ↗</a>
   <p class="small-label">CSE STUDENT / CYBERSECURITY BEGINNER</p>
 </dialog>
 <dialog class="photo-viewer" id="photo-viewer" aria-labelledby="viewer-caption" data-lenis-prevent>

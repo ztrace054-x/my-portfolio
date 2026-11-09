@@ -12,7 +12,9 @@ const VIEWPORTS = [
   { name: "desktop-1440x900", width: 1440, height: 900 },
   { name: "laptop-1280x800", width: 1280, height: 800 },
   { name: "tablet-1024x768", width: 1024, height: 768 },
+  { name: "tablet-768x1024", width: 768, height: 1024 },
   { name: "mobile-390x844", width: 390, height: 844 },
+  { name: "mobile-375x812", width: 375, height: 812 },
   { name: "narrow-320x700", width: 320, height: 700 }
 ];
 const ROUTES = [
@@ -175,6 +177,7 @@ async function enterWorkspace(page) {
   currentRoute = "phantom-signal-intro";
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
+  await page.waitForFunction(() => document.documentElement.dataset.release === "20261106.4", null, { timeout: 7000 });
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261108.1");
   await screenshot(page, "00-phantom-signal-intro.png");
@@ -276,6 +279,115 @@ async function enterWorkspace(page) {
   if (!portraitVisible) issue("intro-portrait-not-visible", "The original hooded portrait is not visible.");
 
   await page.keyboard.press("Escape");
+  await page.waitForFunction(() => {
+    const landing = document.querySelector("#page");
+    return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
+  }, null, { timeout: 7000 });
+  await page.waitForFunction(() => document.documentElement.classList.contains("hero-motion-ready"), null, { timeout: 7000 });
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".hero-portrait-image");
+    return image && image.complete && image.naturalWidth > 0;
+  }, null, { timeout: 7000 });
+  const landing = await page.locator("#page").evaluate(el => {
+    const navLinks = [...document.querySelectorAll(".desktop-nav a")];
+    const goals = [...document.querySelectorAll("#certificates .certificate-goal-card")];
+    const certificateSection = document.querySelector("#certificates");
+    const grid = certificateSection?.querySelector(".certificate-goal-grid");
+    const earned = certificateSection?.querySelector(".earned-certificate-card");
+    const workbenchCards = [...document.querySelectorAll("#workbench .tool-card")];
+    const projectCards = [...document.querySelectorAll("#projects .workbench-card")];
+    return {
+      heading: document.querySelector("#hero-title")?.getAttribute("aria-label") || document.querySelector("#hero-title")?.textContent.trim() || "",
+      sections: [...document.querySelectorAll("#main > section[id]")].map(section => section.id),
+      navLinks: navLinks.map(link => ({ href: link.getAttribute("href"), targetExists: Boolean(document.querySelector(link.getAttribute("href"))) })),
+      heroPortraitLoaded: Boolean(document.querySelector(".hero-portrait-image")?.naturalWidth),
+      heroPortraitOpacity: Number(getComputedStyle(document.querySelector(".hero-portrait-image")).opacity),
+      heroPortraitBox: (() => {
+        const figure = document.querySelector(".hero-portrait");
+        const rect = figure?.getBoundingClientRect();
+        return { width: rect?.width || 0, height: rect?.height || 0, display: figure ? getComputedStyle(figure).display : "missing", visibility: figure ? getComputedStyle(figure).visibility : "missing" };
+      })(),
+      workbenchCards: workbenchCards.length,
+      workbenchStatuses: workbenchCards.map(card => card.querySelector(".tool-exploration")?.textContent.trim() || ""),
+      projectCards: projectCards.length,
+      projectStatuses: projectCards.map(card => card.querySelector(".workbench-status")?.textContent.trim() || ""),
+      projectTags: projectCards.map(card => [...card.querySelectorAll(".workbench-tags li")].map(tag => tag.textContent.trim())),
+      futureGoalCards: goals.length,
+      futureGoalLabels: goals.map(card => card.querySelector(".goal-status")?.textContent.trim() || ""),
+      futureGoalButtons: goals.every(card => {
+        const button = card.querySelector(".certificate-coming-soon");
+        return button?.getAttribute("aria-disabled") === "true" && button.tabIndex === 0 && button.textContent.includes("Coming soon");
+      }),
+      disclaimer: certificateSection?.querySelector(".certificate-goals-banner strong")?.textContent.trim() || "",
+      disclaimerBeforeCards: Boolean(certificateSection?.querySelector(".certificate-goals-banner")?.compareDocumentPosition(grid) & Node.DOCUMENT_POSITION_FOLLOWING),
+      earnedCertificateAfterGoals: Boolean(earned && grid && grid.compareDocumentPosition(earned) & Node.DOCUMENT_POSITION_FOLLOWING),
+      contactEmail: document.querySelector("#contact")?.textContent.includes("ztrace054@gmail.com") || false,
+      footer: document.querySelector(".site-footer")?.textContent.includes("© 2026 Md Saad / ZTRACE") || false,
+      footerSocialIcons: document.querySelectorAll(".footer-links .footer-social-link svg").length,
+      footerSocialLinks: [...document.querySelectorAll(".footer-links .footer-social-link")].map(link => link.getAttribute("aria-label")),
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: innerWidth
+    };
+  });
+  if (!landing.heading.includes("SAAD")) issue("portfolio-landing-heading", "The editorial landing page does not show Md Saad's hero heading.", landing);
+  if (!landing.heroPortraitLoaded || landing.heroPortraitOpacity < 0.95 || landing.heroPortraitBox.width < 100 || landing.heroPortraitBox.height < 100 || landing.heroPortraitBox.visibility !== "visible") issue("portfolio-hero-image", "The existing personal portrait must load, occupy visible layout space and be visible immediately in the editorial hero.", landing);
+  if (landing.workbenchCards !== 4 || landing.workbenchStatuses.some(status => status !== "Beginner exploration")) issue("portfolio-workbench-content", "The public workbench must contain four tools, each labelled Beginner exploration.", landing);
+  if (landing.projectCards !== 3 || landing.projectStatuses.length !== 3 || landing.projectTags.some(tags => tags.length !== 3)) issue("portfolio-learning-tracks", "The three learning-track cards must retain their status and all nine topic tags.", landing);
+  if (landing.futureGoalCards !== 4 || !landing.futureGoalButtons || landing.futureGoalLabels.some(label => label !== "Future goal — not yet earned") || landing.disclaimer !== "These are future goals, not yet earned — InshaAllah." || !landing.disclaimerBeforeCards || !landing.earnedCertificateAfterGoals) issue("portfolio-certificate-honesty", "The banner, four future-goal cards, disabled buttons and separate earned course certificate must retain the requested order and wording.", landing);
+  if (landing.navLinks.length !== 6 || landing.navLinks.some(link => !link.targetExists)) issue("portfolio-navigation-targets", "The six main navigation links must resolve to real page sections.", landing);
+  if (!landing.contactEmail || !landing.footer || landing.footerSocialIcons !== 3 || landing.footerSocialLinks.length !== 3) issue("portfolio-contact-footer", "The original email, copyright and three real footer social/contact icons must remain visible.", landing);
+  for (const id of ["home", "about", "workbench", "projects", "certificates", "contact"]) {
+    if (!landing.sections.includes(id)) issue("portfolio-landing-section", "The landing page is missing section #" + id + ".", landing);
+  }
+  if (landing.documentWidth > landing.viewportWidth + 1) issue("portfolio-landing-overflow", "The editorial landing page overflows its viewport.", landing);
+  await screenshot(page, "01-editorial-portfolio-landing.png");
+  if ([375, 768, 1440].includes(page.viewportSize().width)) {
+    for (const id of ["about", "workbench", "projects", "certificates", "contact"]) {
+      currentRoute = "public-" + id;
+      const firstReveal = page.locator("#" + id + " [data-reveal]").first();
+      if (await firstReveal.count()) await firstReveal.scrollIntoViewIfNeeded();
+      else await page.locator("#" + id).scrollIntoViewIfNeeded();
+      await page.waitForFunction(sectionId => {
+        const firstNode = document.querySelector("#" + sectionId + " [data-reveal]");
+        return !firstNode || firstNode.classList.contains("is-revealed");
+      }, id, { timeout: 3500 });
+      if (id === "about") {
+        await page.locator("#identity-terminal").scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => {
+          const commands = [...document.querySelectorAll("#identity-terminal [data-type-command]")];
+          return commands.length > 0 && commands.every(node => node.textContent === node.dataset.typeCommand);
+        }, null, { timeout: 4500 });
+        await firstReveal.scrollIntoViewIfNeeded();
+      }
+      await page.waitForTimeout(560);
+      await screenshot(page, "public-" + id + ".png");
+    }
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  }
+  if (page.viewportSize().width <= 900) {
+    currentRoute = "public-mobile-navigation";
+    const toggle = page.locator("#menu-toggle");
+    const dialog = page.locator("#mobile-menu");
+    await toggle.click();
+    await page.waitForFunction(() => document.querySelector("#mobile-menu")?.open === true);
+    const openState = await page.evaluate(() => ({
+      expanded: document.querySelector("#menu-toggle")?.getAttribute("aria-expanded"),
+      focusedInside: document.querySelector("#mobile-menu")?.contains(document.activeElement)
+    }));
+    if (openState.expanded !== "true" || !openState.focusedInside) issue("public-mobile-menu-open", "The public hamburger must open the dialog and move focus inside it.", openState);
+    await dialog.locator("a").last().focus();
+    await page.keyboard.press("Tab");
+    const trapped = await dialog.evaluate(el => el.contains(document.activeElement));
+    if (!trapped) issue("public-mobile-menu-focus-trap", "Tabbing from the final menu link must keep focus inside the open mobile dialog.");
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => document.querySelector("#mobile-menu")?.open === false);
+    const closedState = await page.evaluate(() => ({
+      expanded: document.querySelector("#menu-toggle")?.getAttribute("aria-expanded"),
+      focusRestored: document.activeElement === document.querySelector("#menu-toggle")
+    }));
+    if (closedState.expanded !== "false" || !closedState.focusRestored) issue("public-mobile-menu-close", "Escape must close the public menu, reset aria-expanded and restore focus.", closedState);
+  }
+  await page.evaluate(() => { window.location.hash = "#/profile"; });
   await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
   await page.waitForTimeout(160);
@@ -657,8 +769,12 @@ async function main() {
     if (!prefersReducedMotion || !staticIntro) issue("reduced-motion-not-detected", "The reduced-motion preference was not applied to the Phantom Signal intro.");
     await screenshot(reducedPage, "00-intro-reduced-motion.png");
     await reducedPage.keyboard.press("Escape");
-    await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
+    await reducedPage.waitForFunction(() => {
+      const landing = document.querySelector("#page");
+      return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
+    }, null, { timeout: 7000 });
     await reducedPage.evaluate(() => { window.location.hash = "#/profile"; });
+    await reducedPage.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 7000 });
     await reducedPage.waitForFunction(() => document.querySelector('[data-nav-item][data-route="profile"]')?.getAttribute("aria-current") === "page");
     await screenshot(reducedPage, "01-profile-reduced-motion.png");
     await reducedContext.close();

@@ -307,7 +307,7 @@
   .phantom-intro__topbar,.phantom-intro__stage,.phantom-intro__echoes{width:calc(100% - 44px)}
   .phantom-intro__stage{grid-template-columns:minmax(0,1fr) minmax(240px,.82fr);gap:16px;min-height:460px;padding:26px 0 18px}
   .phantom-intro__visual{min-height:380px}
-  #phase2-gate.phantom-intro .phantom-intro__title{font-size:clamp(32px,4.6vw,52px)}
+  #phase2-gate.phantom-intro .phantom-intro__title{font-size:clamp(44px,6vw,58px)}
   .phantom-intro__echoes{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .phantom-intro__echo:first-child{grid-column:1/-1}
   .phantom-intro__ticker>span:nth-child(2){display:none}

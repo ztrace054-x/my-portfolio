@@ -21,17 +21,28 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   function reveal(node) {
     if (seen.has(node)) return;
     seen.add(node);
-    animate(node, [{ opacity: 0, transform: `translateY(${revealDistance}px)` }, { opacity: 1, transform: 'translateY(0)' }]);
+    // The source CSS keeps [data-reveal] content readable only after this state
+    // is applied. The transition itself is CSS-driven, not a JS animation.
+    node.classList.add('is-revealed');
     if (enabled) node.querySelector('.identity-photo')?.classList.add('is-revealed');
   }
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     entries.forEach(entry => { if (entry.isIntersecting) { reveal(entry.target); observer.unobserve(entry.target); } });
   }, { threshold: .12, rootMargin: '0px 0px -24px 0px' }) : null;
-  document.querySelectorAll('[data-reveal],.phase-card').forEach(node => observer?.observe(node));
+  const revealNodes = [...document.querySelectorAll('[data-reveal],.phase-card')];
+  if (observer) {
+    revealNodes.forEach(node => {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) reveal(node);
+      else observer.observe(node);
+    });
+  } else revealNodes.forEach(reveal);
   document.querySelector('.phase-card')?.classList.add('is-active');
   const typed = document.querySelector('[data-hero-type]');
-  const fullText = typed.textContent;
-  if (enabled && heroEntry) {
+  const fullText = typed?.textContent ?? '';
+  // The editorial hero is intentionally static: the portrait and headline are
+  // already visible, so skip the legacy typewriter/glitch entrance sequence.
+  if (enabled && heroEntry && typed && !document.querySelector('.editorial-hero')) {
     document.querySelector('.hero-name')?.classList.add('is-glitching');
     document.querySelector('.hero-hud .scroll-cue')?.classList.add('is-cue-active');
     animate(document.querySelector('.hero-name'), [{ opacity: 0, transform: `translateY(${revealDistance}px)` }, { opacity: 1, transform: 'translateY(0)' }], { duration: pageDuration, fill: 'backwards' });
@@ -49,7 +60,7 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   const heroObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     heroVisible = entries.some(entry => entry.isIntersecting);
     heroSection?.classList.toggle('is-in-view', heroVisible);
-    if (!heroVisible && heroUnsubscribe) { heroUnsubscribe(); heroUnsubscribe = null; typed.textContent = fullText; }
+    if (!heroVisible && heroUnsubscribe) { heroUnsubscribe(); heroUnsubscribe = null; if (typed) typed.textContent = fullText; }
   }) : null;
   if (heroObserver) heroObserver.observe(heroSection);
   else heroSection?.classList.add('is-in-view');
@@ -58,12 +69,19 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   }, { signal: events.signal });
   function finish() {
     running.forEach(effect => effect.cancel()); running.clear();
-    heroUnsubscribe?.(); heroUnsubscribe = null; typed.textContent = fullText;
+    heroUnsubscribe?.(); heroUnsubscribe = null; if (typed) typed.textContent = fullText;
     document.querySelector('.hero-name')?.classList.remove('is-glitching');
     document.querySelector('.hero-hud .scroll-cue')?.classList.remove('is-cue-active');
   }
   return {
-    setMotion(allowed) { enabled = allowed; if (!allowed) { finish(); document.querySelector('.identity-photo')?.classList.remove('is-revealed'); } },
+    setMotion(allowed) {
+      enabled = allowed;
+      if (!allowed) {
+        finish();
+        revealNodes.forEach(node => node.classList.add('is-revealed'));
+        document.querySelectorAll('.identity-photo').forEach(node => node.classList.remove('is-revealed'));
+      }
+    },
     dispose() { finish(); observer?.disconnect(); heroObserver?.disconnect(); events.abort(); },
   };
 }

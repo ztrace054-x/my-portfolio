@@ -52,8 +52,8 @@ for (const value of ["Ethical Hacking for Beginners", "Byte Capsule", "7482ZWKQ"
   assert(certificateData.includes(value), "Certificate record is missing " + value);
 }
 const visual = read("tests/visual-qa.cjs");
-for (const size of ["1440x900", "1280x800", "1024x768", "390x844", "320x700"]) {
+for (const size of ["1440x900", "1280x800", "1024x768", "768x1024", "390x844", "375x812", "320x700"]) {
   assert(visual.includes(size), "Visual QA viewport is missing: " + size);
 }
 assert(visual.includes("@axe-core/playwright"), "Axe browser accessibility audit is not configured.");
-console.log("PASS: Phase 7 production checks — " + cssFiles + " CSS files parsed (" + cssRules + " rules), " + imageFiles + " raster assets within budgets, Byte Capsule original hash intact, five requested viewports and Axe audit configured.");
+console.log("PASS: Phase 7 production checks — " + cssFiles + " CSS files parsed (" + cssRules + " rules), " + imageFiles + " raster assets within budgets, Byte Capsule original hash intact, seven requested viewports including 375px and 768px plus Axe audit configured.");
