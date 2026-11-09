@@ -283,6 +283,7 @@ async function enterWorkspace(page) {
     const landing = document.querySelector("#page");
     return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
   }, null, { timeout: 7000 });
+  await page.waitForFunction(() => document.documentElement.classList.contains("hero-motion-ready"), null, { timeout: 7000 });
   await page.waitForFunction(() => {
     const image = document.querySelector(".hero-portrait-image");
     return image && image.complete && image.naturalWidth > 0;
@@ -342,6 +343,10 @@ async function enterWorkspace(page) {
     for (const id of ["about", "workbench", "projects", "certificates", "contact"]) {
       currentRoute = "public-" + id;
       await page.locator("#" + id).scrollIntoViewIfNeeded();
+      await page.waitForFunction(sectionId => {
+        const firstReveal = document.querySelector("#" + sectionId + " [data-reveal]");
+        return !firstReveal || firstReveal.classList.contains("is-revealed");
+      }, id, { timeout: 3500 });
       await page.waitForTimeout(560);
       await screenshot(page, "public-" + id + ".png");
     }
