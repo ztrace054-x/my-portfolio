@@ -280,13 +280,22 @@ async function enterWorkspace(page) {
     const landing = document.querySelector("#page");
     return landing && !landing.hidden && getComputedStyle(landing).visibility === "visible";
   }, null, { timeout: 7000 });
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".hero-portrait-image");
+    return image && image.complete && image.naturalWidth > 0;
+  }, null, { timeout: 7000 });
   const landing = await page.locator("#page").evaluate(el => ({
-    heading: document.querySelector("#hero-title")?.textContent.trim() || "",
+    heading: document.querySelector("#hero-title")?.getAttribute("aria-label") || document.querySelector("#hero-title")?.textContent.trim() || "",
     sections: [...document.querySelectorAll("#main > section[id]")].map(section => section.id),
+    heroPortraitLoaded: Boolean(document.querySelector(".hero-portrait-image")?.naturalWidth),
+    futureGoalCards: document.querySelectorAll("#certificates .certificate-goal-card").length,
+    futureGoalButtons: [...document.querySelectorAll("#certificates .certificate-coming-soon")].every(button => button.getAttribute("aria-disabled") === "true" && button.tabIndex === 0),
     documentWidth: document.documentElement.scrollWidth,
     viewportWidth: innerWidth
   }));
   if (!landing.heading.includes("SAAD")) issue("portfolio-landing-heading", "The editorial landing page does not show Md Saad's hero heading.", landing);
+  if (!landing.heroPortraitLoaded) issue("portfolio-hero-image", "The existing personal portrait did not load in the editorial hero.", landing);
+  if (landing.futureGoalCards !== 4 || !landing.futureGoalButtons) issue("portfolio-certificate-honesty", "The landing page must show four future-goal cards with focusable aria-disabled buttons.", landing);
   for (const id of ["home", "about", "workbench", "projects", "certificates", "contact"]) {
     if (!landing.sections.includes(id)) issue("portfolio-landing-section", "The landing page is missing section #" + id + ".", landing);
   }
