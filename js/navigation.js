@@ -67,6 +67,24 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
     if (returnFocus) toggle.focus({ preventScroll: true });
   }, { signal: events.signal });
 
+  // Keep keyboard focus inside the native modal on browsers where the
+  // implicit dialog tab loop does not wrap consistently.
+  menu.addEventListener('keydown', event => {
+    if (event.key !== 'Tab' || !menu.open) return;
+    const focusable = [...menu.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+      .filter(element => !element.hidden && element.getClientRects().length > 0);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !menu.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !menu.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }, { signal: events.signal });
+
   function goTo(hash, push = true) {
     let target;
     try { target = document.querySelector(hash); } catch { return; }
