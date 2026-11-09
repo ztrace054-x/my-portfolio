@@ -1,18 +1,19 @@
-# ZTRACE Cyber-Noir Design System
+# ZTRACE Editorial Cyber-Noir Design System
 
 ## Visual direction
-A premium cybersecurity learning workspace built around deep black surfaces, restrained crimson accents, metallic panels, and high-contrast editorial typography. The design should feel cinematic without hiding controls or reducing readability.
+A premium cybersecurity learning portfolio inspired by the supplied video reference: deep black surfaces, oversized condensed editorial typography, a restrained red-to-orange gradient, a cinematic personal portrait, and crisp mono labels. The optional workspace keeps its evidence-first cybersecurity UI. The design should feel expressive without hiding controls or reducing readability.
 
 ## Tokens
 - Background: `#050505` / `#09090c`.
-- Raised surfaces: `#111114`.
+- Raised surfaces: `#101010` / `#171717`.
 - Primary text: `#f5f5f5`.
 - Secondary text: `#a6a6aa`.
-- Crimson accent: `#e5091a`; hover accent: `#ff3947`.
-- Typography: self-hosted Space Grotesk for display/body hierarchy and JetBrains Mono for technical labels.
+- Primary accent: `#ff4b2d`; gradient range: `#ff8a54` to `#c92d1c`.
+- Typography: Barlow Condensed for oversized display headlines, Space Grotesk for body copy, and JetBrains Mono for technical labels.
 
 ## CSS ownership
-- `css/cyber-noir.css`: shared crimson palette and base component styling.
+- `css/cyber-noir.css`: shared cyber-noir base tokens.
+- `css/editorial-reference.css`: additive video-reference landing-page layout, orange-red palette, portrait composition, cards, and responsive refinements.
 - `css/phase-6-visual-unification.css`: workspace shell and all eleven routed sections.
 - `css/phase-5.css` and `css/phase-6.css`: existing section structure and interaction-specific styles; the global layer overrides color/surface treatments without changing route markup.
 - `css/tokens.css`: font faces, spacing, and shared design primitives.
