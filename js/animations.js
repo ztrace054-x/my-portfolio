@@ -30,8 +30,13 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
     entries.forEach(entry => { if (entry.isIntersecting) { reveal(entry.target); observer.unobserve(entry.target); } });
   }, { threshold: .12, rootMargin: '0px 0px -24px 0px' }) : null;
   const revealNodes = [...document.querySelectorAll('[data-reveal],.phase-card')];
-  if (observer) revealNodes.forEach(node => observer.observe(node));
-  else revealNodes.forEach(reveal);
+  if (observer) {
+    revealNodes.forEach(node => {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) reveal(node);
+      else observer.observe(node);
+    });
+  } else revealNodes.forEach(reveal);
   document.querySelector('.phase-card')?.classList.add('is-active');
   const typed = document.querySelector('[data-hero-type]');
   const fullText = typed?.textContent ?? '';
