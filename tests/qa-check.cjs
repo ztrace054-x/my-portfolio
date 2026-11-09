@@ -117,7 +117,8 @@ for (let i = 1; i < headingLevels.length; i++) {
 assert.match(html, /<a\b[^>]*class=["'][^"']*skip-link[^"']*["'][^>]*href=["']#main["']/i, 'Keyboard skip link should target main');
 assert.match(html, /<main\b[^>]*\bid=["']main["']/i, 'Main landmark should have the skip-link target');
 const activeCssText = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0])
-  .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean)
+  .map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1])
+  .filter(href => href && (href.startsWith('./') || href.startsWith('/')))
   .map(href => fs.readFileSync(relativeFile(href), 'utf8')).join('\n');
 assert.match(activeCssText, /:focus-visible/, 'Visible keyboard focus styles must be present');
 for (const match of html.matchAll(/<a\b([^>]*)\btarget=["']_blank["']([^>]*)>/gi)) {
