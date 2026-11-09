@@ -33,15 +33,16 @@ The landing-page design follows a dark editorial neo-brutalist direction inspire
 | `js/workspace-motion.js` | Dashboard-specific motion polish |
 | `js/views/` | Profile, dashboard, Projects, learning views, Gallery, Contact, and certificates |
 | `js/data/` | Profile, project evidence, learning records, links, roadmap, and metric data |
-| `css/tokens.css` | Shared color, typography, and spacing tokens |
+| `css/tokens.css` | Shared color, typography, and spacing tokens, including the central editorial palette |
 | `css/premium-redesign.css` | Additive premium design layer and responsive refinements |
-| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation, and workspace surfaces |
-| `css/editorial-reference.css` | Additive video-reference landing-page design layer and responsive editorial components |
+| `css/dashboard-shell.css` | Dashboard layout, sidebar, responsive navigation, and workspace surfaces; deferred until the workspace is opened |
+| `css/editorial-reference.css` | Additive video-reference landing-page design layer and responsive editorial components; consumes the central `--editorial-*` tokens |
 | `css/phase-2-gate.css` | Intro visual and workspace transition |
 | `css/phase-5.css`, `css/phase-6.css` | Learning views, Gallery/Contact, and interaction polish |
 | `css/cyber-noir.css` | Central crimson tokens and cyber-noir palette |
 | `css/phase-6-visual-unification.css` | Global crimson visual unification across all workspace routes |
 | `css/phantom-signal.css`, `css/phantom-signal-cinematic-v2.css`, `css/phantom-signal-cinematic-v3.css` | Phantom Signal visitor intro; v3 provides the focused responsive composition and restrained cinematic motion |
+| `js/main.js` | Loads the dashboard module and workspace-only styles on demand, after a visitor opens a `#/` route |
 | `tests/` | Foundation, route, view, accessibility-state, interaction, and SEO/link checks |
 | `.github/workflows/quality.yml` | JavaScript syntax and regression checks for the redesign and established phases |
 
