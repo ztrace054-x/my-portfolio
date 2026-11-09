@@ -12,7 +12,7 @@ import { initJourney } from './journey.js?v=20261018.4';
 import { initDashboardShell } from './dashboard-shell.js?v=20261106.4';
 
 const root = document.documentElement;
-root.dataset.release = '20261106.4';
+root.dataset.release = '20261109.1';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const fine = matchMedia('(min-width: 901px) and (pointer: fine) and (hover: hover)');
@@ -65,16 +65,24 @@ intro.entryStarted.then(() => {
   entered = true;
   // Phase 3 replaces the legacy one-page view after the gate; keep its source intact,
   // but do not start background animation loops for content that is no longer visible.
-  if (document.getElementById('app-shell')) return;
+  const appShell = document.getElementById('app-shell');
+  if (appShell && !appShell.hidden) return;
   root.classList.add('hero-motion-ready');
   try { animations = initAnimations({ clock, motionAllowed, heroEntry: !location.hash && window.scrollY < 20 }); } catch { /* Source content stays readable. */ }
   scene?.setMotion(motionAllowed); setCursor();
 });
 let dashboard;
-intro.completed.then(() => {
+function activateWorkspaceFromRoute() {
+  if (!location.hash.startsWith('#/')) return;
   if (!dashboard) dashboard = initDashboardShell();
   dashboard.activate();
+}
+intro.completed.then(() => {
   document.documentElement.classList.remove('intro-pending');
+  // The editorial portfolio is the default destination. The interactive workspace
+  // opens only when a visitor chooses a slash-prefixed workspace route.
+  activateWorkspaceFromRoute();
 });
+window.addEventListener('hashchange', activateWorkspaceFromRoute);
 window.addEventListener('beforeprint', () => { intro.cancel(); scene?.setMotion(false); animations?.setMotion(false); terminal.setMotion(false); journey.setMotion(false); contact.setMotion(false); cursor?.dispose(); cursor = null; });
 window.addEventListener('afterprint', setMotion);
