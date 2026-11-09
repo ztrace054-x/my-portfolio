@@ -347,6 +347,12 @@ async function enterWorkspace(page) {
         const firstReveal = document.querySelector("#" + sectionId + " [data-reveal]");
         return !firstReveal || firstReveal.classList.contains("is-revealed");
       }, id, { timeout: 3500 });
+      if (id === "about") {
+        await page.waitForFunction(() => {
+          const commands = [...document.querySelectorAll("#identity-terminal [data-type-command]")];
+          return commands.length > 0 && commands.every(node => node.textContent === node.dataset.typeCommand);
+        }, null, { timeout: 4500 });
+      }
       await page.waitForTimeout(560);
       await screenshot(page, "public-" + id + ".png");
     }
