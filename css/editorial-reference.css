@@ -1263,3 +1263,15 @@ dialog.mobile-menu button:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Keep the workspace email CTA readable on the brighter orange accent. */
+#app-shell a[data-send-email] {
+  color: #130804 !important;
+  background: #ff7045 !important;
+  border-color: #ff7045 !important;
+}
+#app-shell a[data-send-email]:hover {
+  color: #130804 !important;
+  background: #ff8a54 !important;
+  border-color: #ff8a54 !important;
+}
