@@ -145,7 +145,9 @@ for (const image of imageTags) {
 checks++;
 
 // Verify every local HTML/CSS asset reference resolves inside this repository.
-for (const match of html.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)) {
+// HTML comments may intentionally contain future certificate-link examples.
+const assetScanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
+for (const match of assetScanHtml.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)) {
   const value = match[1];
   if (/^(?:#|https?:|data:|blob:|mailto:|tel:|javascript:|\?)/i.test(value)) continue;
   const file = relativeFile(value);
