@@ -9,7 +9,6 @@ import { initCursor } from './cursor.js?v=20261018.5';
 import { initAnimations } from './animations.js?v=20261018.5';
 import { initTerminal } from './terminal.js?v=20261016.1';
 import { initJourney } from './journey.js?v=20261018.4';
-import { initDashboardShell } from './dashboard-shell.js?v=20261106.4';
 
 const root = document.documentElement;
 const asyncFontStylesheet = document.querySelector('link[data-async-fonts]');
@@ -75,11 +74,38 @@ intro.entryStarted.then(() => {
   try { animations = initAnimations({ clock, motionAllowed, heroEntry: !location.hash && window.scrollY < 20 }); } catch { /* Source content stays readable. */ }
   scene?.setMotion(motionAllowed); setCursor();
 });
-let dashboard;
-function activateWorkspaceFromRoute() {
+let dashboardPromise;
+let workspaceStylesPromise;
+function loadWorkspaceStyles() {
+  if (!workspaceStylesPromise) {
+    const links = [...document.querySelectorAll('link[data-workspace-styles]')];
+    workspaceStylesPromise = Promise.all(links.map(link => new Promise(resolve => {
+      if (link.sheet) {
+        link.media = 'all';
+        resolve();
+        return;
+      }
+      const ready = () => {
+        link.dataset.workspaceStylesReady = 'true';
+        resolve();
+      };
+      link.addEventListener('load', ready, { once: true });
+      link.addEventListener('error', ready, { once: true });
+      link.media = 'all';
+      if (link.sheet) ready();
+    })));
+  }
+  return workspaceStylesPromise;
+}
+async function activateWorkspaceFromRoute() {
   if (!location.hash.startsWith('#/')) return;
-  if (!dashboard) dashboard = initDashboardShell();
-  dashboard.activate();
+  await loadWorkspaceStyles();
+  if (!location.hash.startsWith('#/')) return;
+  if (!dashboardPromise) {
+    dashboardPromise = import('./dashboard-shell.js?v=20261106.4').then(({ initDashboardShell }) => initDashboardShell());
+  }
+  const dashboard = await dashboardPromise;
+  if (location.hash.startsWith('#/')) dashboard.activate();
 }
 intro.completed.then(() => {
   document.documentElement.classList.remove('intro-pending');
