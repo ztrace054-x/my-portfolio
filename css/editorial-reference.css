@@ -1087,6 +1087,9 @@ body[data-design="editorial-portfolio-v1"] #page {
 #page .footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
 #page .footer-links a,
 #page .replay-link { color: #ff8b66; font: 8px var(--font-mono); text-transform: uppercase; }
+#page .footer-links a { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; }
+#page .footer-links .footer-social-link svg { width: 13px; height: 13px; flex: 0 0 13px; opacity: .9; transition: color .2s ease, transform .2s ease; }
+#page .footer-links .footer-social-link:hover svg { color: var(--editorial-accent-end); transform: translateY(-1px); }
 
 dialog.mobile-menu {
   border: 1px solid rgba(255,104,67,.3);
