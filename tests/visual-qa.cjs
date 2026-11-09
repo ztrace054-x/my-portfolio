@@ -323,6 +323,8 @@ async function enterWorkspace(page) {
       earnedCertificateAfterGoals: Boolean(earned && grid && grid.compareDocumentPosition(earned) & Node.DOCUMENT_POSITION_FOLLOWING),
       contactEmail: document.querySelector("#contact")?.textContent.includes("ztrace054@gmail.com") || false,
       footer: document.querySelector(".site-footer")?.textContent.includes("© 2026 Md Saad / ZTRACE") || false,
+      footerSocialIcons: document.querySelectorAll(".footer-links .footer-social-link svg").length,
+      footerSocialLinks: [...document.querySelectorAll(".footer-links .footer-social-link")].map(link => link.getAttribute("aria-label")),
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: innerWidth
     };
@@ -333,7 +335,7 @@ async function enterWorkspace(page) {
   if (landing.projectCards !== 3 || landing.projectStatuses.length !== 3 || landing.projectTags.some(tags => tags.length !== 3)) issue("portfolio-learning-tracks", "The three learning-track cards must retain their status and all nine topic tags.", landing);
   if (landing.futureGoalCards !== 4 || !landing.futureGoalButtons || landing.futureGoalLabels.some(label => label !== "Future goal — not yet earned") || landing.disclaimer !== "These are future goals, not yet earned — InshaAllah." || !landing.disclaimerBeforeCards || !landing.earnedCertificateAfterGoals) issue("portfolio-certificate-honesty", "The banner, four future-goal cards, disabled buttons and separate earned course certificate must retain the requested order and wording.", landing);
   if (landing.navLinks.length !== 6 || landing.navLinks.some(link => !link.targetExists)) issue("portfolio-navigation-targets", "The six main navigation links must resolve to real page sections.", landing);
-  if (!landing.contactEmail || !landing.footer) issue("portfolio-contact-footer", "The original email and requested footer must remain visible.", landing);
+  if (!landing.contactEmail || !landing.footer || landing.footerSocialIcons !== 3 || landing.footerSocialLinks.length !== 3) issue("portfolio-contact-footer", "The original email, copyright and three real footer social/contact icons must remain visible.", landing);
   for (const id of ["home", "about", "workbench", "projects", "certificates", "contact"]) {
     if (!landing.sections.includes(id)) issue("portfolio-landing-section", "The landing page is missing section #" + id + ".", landing);
   }
