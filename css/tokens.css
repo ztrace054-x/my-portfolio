@@ -172,6 +172,37 @@
   --focus-ring: 2px solid var(--focus);
   --focus-offset: 5px;
   --focus-offset-compact: 4px;
+
+  /* Editorial portfolio theme: one shared source of truth for the public page. */
+  --editorial-bg: #070707;
+  --editorial-bg-deep: #030303;
+  --editorial-surface: #101010;
+  --editorial-surface-raised: #171717;
+  --editorial-surface-glass: rgba(8, 8, 8, 0.92);
+  --editorial-text: #f5f2ee;
+  --editorial-text-soft: #b8b1ab;
+  --editorial-muted: #8f8983;
+  --editorial-line: rgba(255, 255, 255, 0.085);
+  --editorial-accent-start: #ff3b1f;
+  --editorial-accent-end: #ff6b35;
+  --editorial-accent: #ff4b2d;
+  --editorial-accent-hover: #ff764d;
+  --editorial-accent-rgb: 255, 75, 45;
+  --editorial-accent-soft: rgba(255, 75, 45, 0.12);
+  --editorial-accent-line: rgba(255, 104, 67, 0.24);
+  --editorial-tag-blue: #a9c9f2;
+  --editorial-tag-blue-line: rgba(110, 164, 230, 0.38);
+  --editorial-tag-yellow: #e9cb86;
+  --editorial-tag-yellow-line: rgba(239, 193, 94, 0.35);
+  --editorial-tag-green: #9bd9ae;
+  --editorial-tag-green-line: rgba(112, 197, 144, 0.34);
+  --editorial-tag-orange: #ff9a75;
+  --editorial-tag-orange-line: rgba(255, 120, 77, 0.36);
+  --editorial-font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --editorial-font-body: "Space Grotesk", Arial, sans-serif;
+  --editorial-font-mono: "JetBrains Mono", "Courier New", monospace;
+  --editorial-radius: 3px;
+  --editorial-radius-pill: 999px;
 }
 
 @media (max-width: 900px) {
