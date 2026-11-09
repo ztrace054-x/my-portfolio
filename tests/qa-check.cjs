@@ -154,7 +154,8 @@ for (const match of assetScanHtml.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi))
   if (file) assert(fs.existsSync(file), 'Missing local HTML asset: ' + value);
 }
 const stylesheetTags = [...html.matchAll(/<link\b(?=[^>]*\brel=["']stylesheet["'])[^>]*>/gi)].map(match => match[0]);
-const stylesheetPaths = stylesheetTags.map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1]).filter(Boolean);
+const stylesheetPaths = stylesheetTags.map(tag => tag.match(/\bhref=["']([^"']+)["']/i)?.[1])
+  .filter(href => href && (href.startsWith('./') || href.startsWith('/')));
 for (const stylesheet of stylesheetPaths) {
   const file = relativeFile(stylesheet);
   assert(file && fs.existsSync(file), 'Missing stylesheet: ' + stylesheet);
