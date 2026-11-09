@@ -1,7 +1,7 @@
 # ZTRACE — Security is a practice.
 
 **Production website:** https://ztrace054-x.github.io/my-portfolio/  
-**Current review branch:** `redesign/video-editorial-portfolio-20261109` (review-only; not deployed)
+**Deployment target:** GitHub Pages from `main`; approved changes go live after merge and the Pages refresh.
 
 A static, client-side cybersecurity learning portfolio for Md Saad (ZTRACE), a CSE student at the beginning of a cybersecurity learning journey. The cinematic introduction hands visitors to the editorial portfolio landing page; the optional hash-routed learning workspace opens when a visitor chooses **Open workspace**. The project uses semantic HTML, CSS, and vanilla JavaScript; there is no backend, real authentication, analytics, or live security telemetry.
 
@@ -79,6 +79,6 @@ node --experimental-vm-modules tests/interaction-check.cjs
 - The Contact section opens direct email/profile links; it does not collect form submissions or send data to a server.
 - GitHub Pages serves a static frontend only.
 
-## Redesign release boundary
+## Release and deployment
 
-The video-reference redesign is kept on `redesign/video-editorial-portfolio-20261109` for review. Do not merge to `main` or deploy until the owner has reviewed the landing page, workspace handoff, and CI results and explicitly approves release.
+The owner has approved this redesign for release. Merge the review branch into `main` only after the complete CI suite passes; GitHub Pages serves the production site from `main`. The `live-deployment-qa` job then smoke-tests the actual deployed site. Do not push directly to `main` or bypass failing checks.
