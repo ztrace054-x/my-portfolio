@@ -44,6 +44,25 @@ async function waitForRelease(page) {
   throw new Error("GitHub Pages did not serve " + RELEASE + " within 12 minutes. Last response: " + lastStatus);
 }
 
+async function waitForLanding(page) {
+  await page.waitForFunction(() => {
+    const landing = document.getElementById("page");
+    const intro = document.getElementById("phase2-gate");
+    const hero = document.getElementById("hero-title");
+    return Boolean(
+      landing && !landing.inert
+      && intro?.hidden
+      && hero
+      && getComputedStyle(landing).visibility === "visible"
+    );
+  }, null, { timeout: 12000 });
+}
+
+async function waitForWorkspace(page) {
+  await page.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
+  await page.waitForFunction(() => document.body.classList.contains("app-shell-active"));
+}
+
 async function waitForIntroReveal(page) {
   await page.waitForFunction(() => {
     const elements = [...document.querySelectorAll(
@@ -171,9 +190,21 @@ async function verifyIntro(page, label, screenshotName) {
     report.checks.push(await verifyIntro(desktop, "desktop 1440x900", "live-phantom-intro-desktop-1440x900.png"));
     report.screenshots.push("live-phantom-intro-desktop-1440x900.png");
     await desktop.keyboard.press("Escape");
-    await desktop.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    await desktop.waitForFunction(() => document.body.classList.contains("app-shell-active"));
-    report.checks.push({ label: "desktop Escape exits intro and opens existing workspace", passed: true });
+    await waitForLanding(desktop);
+    const landingState = await desktop.evaluate(() => ({
+      visible: getComputedStyle(document.getElementById("page")).visibility === "visible",
+      introHidden: document.getElementById("phase2-gate").hidden,
+      workspaceHidden: document.getElementById("app-shell").hidden,
+      heading: document.getElementById("hero-title")?.textContent.trim() || ""
+    }));
+    if (!landingState.visible || !landingState.introHidden || !landingState.workspaceHidden || !landingState.heading.includes("SAAD")) {
+      throw new Error("Desktop Escape did not reveal the editorial landing page: " + JSON.stringify(landingState));
+    }
+    report.checks.push({ label: "desktop Escape exits intro to the editorial portfolio landing page", passed: true });
+
+    await desktop.locator("#workspace-launch").click();
+    await waitForWorkspace(desktop);
+    report.checks.push({ label: "desktop Open workspace link opens the preserved learning workspace", passed: true });
 
     await desktop.locator('[data-panel-open="settings"]').first().click();
     await desktop.waitForFunction(() => {
@@ -186,8 +217,8 @@ async function verifyIntro(page, label, screenshotName) {
     await waitForIntroReveal(desktop);
     await desktop.screenshot({ path: path.join(OUT, "live-phantom-intro-replay.png"), fullPage: false });
     await desktop.keyboard.press("Escape");
-    await desktop.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "desktop settings replay and Escape exit work", passed: true });
+    await waitForLanding(desktop);
+    report.checks.push({ label: "desktop settings replay and Escape return to the editorial landing page", passed: true });
     report.screenshots.push("live-phantom-intro-replay.png");
     await desktopContext.close();
 
@@ -202,8 +233,13 @@ async function verifyIntro(page, label, screenshotName) {
     report.checks.push(await verifyIntro(mobile, "mobile 390x844", "live-phantom-intro-mobile-390x844.png"));
     report.screenshots.push("live-phantom-intro-mobile-390x844.png");
     await mobile.keyboard.press("Escape");
-    await mobile.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "mobile Escape exits intro and opens existing workspace", passed: true });
+    await waitForLanding(mobile);
+    report.checks.push({ label: "mobile Escape exits intro to the editorial portfolio landing page", passed: true });
+    await mobile.locator("#menu-toggle").click();
+    await mobile.waitForFunction(() => document.getElementById("mobile-menu")?.open === true, null, { timeout: 5000 });
+    await mobile.locator("#mobile-menu .mobile-workspace-link").click();
+    await waitForWorkspace(mobile);
+    report.checks.push({ label: "mobile navigation opens the preserved learning workspace", passed: true });
     await mobileContext.close();
 
     const reducedContext = await browser.newContext({
@@ -217,8 +253,8 @@ async function verifyIntro(page, label, screenshotName) {
     const motion = await reduced.locator(".phantom-intro__quote-group").first().evaluate(el => getComputedStyle(el).animationName);
     if (motion !== "none") throw new Error("Reduced-motion mode still animates intro quote groups: " + motion);
     await reduced.keyboard.press("Escape");
-    await reduced.waitForSelector("#app-shell:not([hidden])", { state: "visible", timeout: 12000 });
-    report.checks.push({ label: "reduced-motion intro is static and exits on Escape", passed: true });
+    await waitForLanding(reduced);
+    report.checks.push({ label: "reduced-motion intro is static and exits to the editorial landing page", passed: true });
     report.screenshots.push("live-phantom-intro-reduced-motion.png");
     await reducedContext.close();
 
