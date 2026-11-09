@@ -1275,3 +1275,9 @@ dialog.mobile-menu button:focus-visible {
   background: #ff8a54 !important;
   border-color: #ff8a54 !important;
 }
+
+
+#page .workbench-tags li.tag-blue { border-color: rgba(110,164,230,.38); color: #a9c9f2; }
+#page .workbench-tags li.tag-yellow { border-color: rgba(239,193,94,.35); color: #e9cb86; }
+#page .workbench-tags li.tag-green { border-color: rgba(112,197,144,.34); color: #9bd9ae; }
+#page .workbench-tags li.tag-orange { border-color: rgba(255,120,77,.36); color: #ff9a75; }
