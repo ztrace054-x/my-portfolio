@@ -177,6 +177,7 @@ async function enterWorkspace(page) {
   currentRoute = "phantom-signal-intro";
   await page.goto(ORIGIN, { waitUntil: "load" });
   await page.evaluate(() => document.fonts ? document.fonts.ready : Promise.resolve());
+  await page.waitForFunction(() => document.documentElement.dataset.release === "20261106.4", null, { timeout: 7000 });
   await page.waitForSelector("#phase2-gate:not([hidden])", { state: "visible", timeout: 7000 });
   await page.waitForFunction(() => document.querySelector("#phase2-gate")?.dataset.release === "phantom-signal-20261108.1");
   await screenshot(page, "00-phantom-signal-intro.png");
