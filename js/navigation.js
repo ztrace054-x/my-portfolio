@@ -95,7 +95,13 @@ export function initNavigation({ getScroll, getMotion, overlays }) {
     const link = event.target.closest?.('a[href^="#"]');
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
     const hash = link.getAttribute('href');
-    if (hash.length < 2 || hash.startsWith('#/')) return; // The dashboard shell owns slash-prefixed hash routes.
+    if (hash.length < 2) return;
+    if (hash.startsWith('#/')) {
+      // Workspace routes belong to the dashboard router, but a route chosen from
+      // the mobile portfolio menu must close that menu before the shell appears.
+      if (menu.open) closeMenu(false);
+      return;
+    }
     event.preventDefault();
     goTo(hash);
   }, { signal: events.signal });
