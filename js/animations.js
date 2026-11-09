@@ -34,8 +34,10 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   else revealNodes.forEach(reveal);
   document.querySelector('.phase-card')?.classList.add('is-active');
   const typed = document.querySelector('[data-hero-type]');
-  const fullText = typed.textContent;
-  if (enabled && heroEntry) {
+  const fullText = typed?.textContent ?? '';
+  // The editorial hero is intentionally static: the portrait and headline are
+  // already visible, so skip the legacy typewriter/glitch entrance sequence.
+  if (enabled && heroEntry && typed && !document.querySelector('.editorial-hero')) {
     document.querySelector('.hero-name')?.classList.add('is-glitching');
     document.querySelector('.hero-hud .scroll-cue')?.classList.add('is-cue-active');
     animate(document.querySelector('.hero-name'), [{ opacity: 0, transform: `translateY(${revealDistance}px)` }, { opacity: 1, transform: 'translateY(0)' }], { duration: pageDuration, fill: 'backwards' });
@@ -53,7 +55,7 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   const heroObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     heroVisible = entries.some(entry => entry.isIntersecting);
     heroSection?.classList.toggle('is-in-view', heroVisible);
-    if (!heroVisible && heroUnsubscribe) { heroUnsubscribe(); heroUnsubscribe = null; typed.textContent = fullText; }
+    if (!heroVisible && heroUnsubscribe) { heroUnsubscribe(); heroUnsubscribe = null; if (typed) typed.textContent = fullText; }
   }) : null;
   if (heroObserver) heroObserver.observe(heroSection);
   else heroSection?.classList.add('is-in-view');
@@ -62,7 +64,7 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   }, { signal: events.signal });
   function finish() {
     running.forEach(effect => effect.cancel()); running.clear();
-    heroUnsubscribe?.(); heroUnsubscribe = null; typed.textContent = fullText;
+    heroUnsubscribe?.(); heroUnsubscribe = null; if (typed) typed.textContent = fullText;
     document.querySelector('.hero-name')?.classList.remove('is-glitching');
     document.querySelector('.hero-hud .scroll-cue')?.classList.remove('is-cue-active');
   }
