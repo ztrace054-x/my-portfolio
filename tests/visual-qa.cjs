@@ -352,10 +352,12 @@ async function enterWorkspace(page) {
         return !firstNode || firstNode.classList.contains("is-revealed");
       }, id, { timeout: 3500 });
       if (id === "about") {
+        await page.locator("#identity-terminal").scrollIntoViewIfNeeded();
         await page.waitForFunction(() => {
           const commands = [...document.querySelectorAll("#identity-terminal [data-type-command]")];
           return commands.length > 0 && commands.every(node => node.textContent === node.dataset.typeCommand);
         }, null, { timeout: 4500 });
+        await firstReveal.scrollIntoViewIfNeeded();
       }
       await page.waitForTimeout(560);
       await screenshot(page, "public-" + id + ".png");
