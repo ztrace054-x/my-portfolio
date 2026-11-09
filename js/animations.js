@@ -21,13 +21,17 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
   function reveal(node) {
     if (seen.has(node)) return;
     seen.add(node);
-    animate(node, [{ opacity: 0, transform: `translateY(${revealDistance}px)` }, { opacity: 1, transform: 'translateY(0)' }]);
+    // The source CSS keeps [data-reveal] content readable only after this state
+    // is applied. The transition itself is CSS-driven, not a JS animation.
+    node.classList.add('is-revealed');
     if (enabled) node.querySelector('.identity-photo')?.classList.add('is-revealed');
   }
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     entries.forEach(entry => { if (entry.isIntersecting) { reveal(entry.target); observer.unobserve(entry.target); } });
   }, { threshold: .12, rootMargin: '0px 0px -24px 0px' }) : null;
-  document.querySelectorAll('[data-reveal],.phase-card').forEach(node => observer?.observe(node));
+  const revealNodes = [...document.querySelectorAll('[data-reveal],.phase-card')];
+  if (observer) revealNodes.forEach(node => observer.observe(node));
+  else revealNodes.forEach(reveal);
   document.querySelector('.phase-card')?.classList.add('is-active');
   const typed = document.querySelector('[data-hero-type]');
   const fullText = typed.textContent;
@@ -63,7 +67,14 @@ export function initAnimations({ clock, motionAllowed, heroEntry }) {
     document.querySelector('.hero-hud .scroll-cue')?.classList.remove('is-cue-active');
   }
   return {
-    setMotion(allowed) { enabled = allowed; if (!allowed) { finish(); document.querySelector('.identity-photo')?.classList.remove('is-revealed'); } },
+    setMotion(allowed) {
+      enabled = allowed;
+      if (!allowed) {
+        finish();
+        revealNodes.forEach(node => node.classList.add('is-revealed'));
+        document.querySelectorAll('.identity-photo').forEach(node => node.classList.remove('is-revealed'));
+      }
+    },
     dispose() { finish(); observer?.disconnect(); heroObserver?.disconnect(); events.abort(); },
   };
 }
