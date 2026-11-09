@@ -2,35 +2,35 @@
    Additive presentation layer; existing workspace modules remain intact. */
 
 body[data-design="editorial-portfolio-v1"] {
-  --bg: #070707;
-  --bg-deep: #030303;
-  --surface: #101010;
-  --surface-raised: #171717;
-  --surface-glass: rgba(8, 8, 8, 0.92);
-  --text: #f5f2ee;
-  --text-soft: #b8b1ab;
-  --muted: #8f8983;
-  --accent: #ff4b2d;
-  --accent-rgb: 255, 75, 45;
-  --accent-hover: #ff764d;
-  --accent-soft: rgba(255, 75, 45, 0.12);
-  --accent-line: rgba(255, 104, 67, 0.24);
-  --green: #ff7045;
-  --warning: #f0c36a;
-  --line: rgba(255, 104, 67, 0.18);
-  --panel-edge: rgba(255, 104, 67, 0.22);
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-body: "Space Grotesk", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
-  --radius: 3px;
+  --bg: var(--editorial-bg);
+  --bg-deep: var(--editorial-bg-deep);
+  --surface: var(--editorial-surface);
+  --surface-raised: var(--editorial-surface-raised);
+  --surface-glass: var(--editorial-surface-glass);
+  --text: var(--editorial-text);
+  --text-soft: var(--editorial-text-soft);
+  --muted: var(--editorial-muted);
+  --accent: var(--editorial-accent);
+  --accent-rgb: var(--editorial-accent-rgb);
+  --accent-hover: var(--editorial-accent-hover);
+  --accent-soft: var(--editorial-accent-soft);
+  --accent-line: var(--editorial-accent-line);
+  --green: var(--editorial-accent-end);
+  --warning: var(--editorial-tag-yellow);
+  --line: var(--editorial-accent-line);
+  --panel-edge: var(--editorial-accent-line);
+  --font-display: var(--editorial-font-display);
+  --font-body: var(--editorial-font-body);
+  --font-mono: var(--editorial-font-mono);
+  --radius: var(--editorial-radius);
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
 }
 
 body[data-design="editorial-portfolio-v1"] #page {
-  background: #070707;
-  color: #f5f2ee;
+  background: var(--editorial-bg);
+  color: var(--editorial-text);
   font-family: var(--font-body);
 }
 
@@ -77,7 +77,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   line-height: 1;
 }
 
-#page .wordmark > span { color: #ff5a35; }
+#page .wordmark > span { color: var(--editorial-accent-end); }
 #page .wordmark small {
   color: #8f8983;
   font: 9px/1 var(--font-mono);
@@ -106,7 +106,7 @@ body[data-design="editorial-portfolio-v1"] #page {
 
 #page .desktop-nav a:hover,
 #page .desktop-nav a[aria-current="location"] {
-  color: #ff7045;
+  color: var(--editorial-accent-end);
   background: transparent;
   border-color: transparent;
 }
@@ -136,7 +136,7 @@ body[data-design="editorial-portfolio-v1"] #page {
 }
 
 #page .workspace-launch:hover {
-  border-color: #ff7045;
+  border-color: var(--editorial-accent-end);
   background: rgba(255, 75, 45, 0.17);
   transform: translateY(-1px);
 }
@@ -239,7 +239,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   display: block;
   padding-right: 0.06em;
   color: #ff5b35;
-  background: linear-gradient(110deg, #ff8a54 0%, #ff4b2d 54%, #c92d1c 100%);
+  background: linear-gradient(110deg, var(--editorial-accent-end) 0%, var(--editorial-accent) 54%, #c92d1c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -324,10 +324,10 @@ body[data-design="editorial-portfolio-v1"] #page {
   letter-spacing: 0.06em;
 }
 
-#page .hero-tags span:nth-child(4n+1) { border-color: rgba(110,164,230,.38); color: #a9c9f2; }
-#page .hero-tags span:nth-child(4n+2) { border-color: rgba(239,193,94,.35); color: #e9cb86; }
-#page .hero-tags span:nth-child(4n+3) { border-color: rgba(112,197,144,.34); color: #9bd9ae; }
-#page .hero-tags span:nth-child(4n+4) { border-color: rgba(255,120,77,.36); color: #ff9a75; }
+#page .hero-tags span:nth-child(4n+1) { border-color: var(--editorial-tag-blue-line); color: var(--editorial-tag-blue); }
+#page .hero-tags span:nth-child(4n+2) { border-color: var(--editorial-tag-yellow-line); color: var(--editorial-tag-yellow); }
+#page .hero-tags span:nth-child(4n+3) { border-color: var(--editorial-tag-green-line); color: var(--editorial-tag-green); }
+#page .hero-tags span:nth-child(4n+4) { border-color: var(--editorial-tag-orange-line); color: var(--editorial-tag-orange); }
 
 #page .hero-visual.editorial-portrait-stage {
   position: relative;
@@ -364,7 +364,7 @@ body[data-design="editorial-portfolio-v1"] #page {
   max-width: 120%;
   transform: translate(-50%, -50%);
   color: transparent;
-  background: linear-gradient(180deg, #ff8151 0%, #f0472a 52%, rgba(158, 31, 22, .8) 100%);
+  background: linear-gradient(180deg, var(--editorial-accent-end) 0%, var(--editorial-accent) 52%, rgba(158, 31, 22, .8) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   font: 900 clamp(7rem, 18.5vw, 17rem)/0.72 var(--font-display);
@@ -1267,8 +1267,8 @@ dialog.mobile-menu button:focus-visible {
 /* Keep the workspace email CTA readable on the brighter orange accent. */
 #app-shell a[data-send-email] {
   color: #130804 !important;
-  background: #ff7045 !important;
-  border-color: #ff7045 !important;
+  background: var(--editorial-accent-end) !important;
+  border-color: var(--editorial-accent-end) !important;
 }
 #app-shell a[data-send-email]:hover {
   color: #130804 !important;
