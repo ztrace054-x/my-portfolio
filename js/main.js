@@ -12,6 +12,8 @@ import { initJourney } from './journey.js?v=20261018.4';
 import { initDashboardShell } from './dashboard-shell.js?v=20261106.4';
 
 const root = document.documentElement;
+const asyncFontStylesheet = document.querySelector('link[data-async-fonts]');
+if (asyncFontStylesheet) asyncFontStylesheet.media = 'all';
 root.dataset.release = '20261106.4';
 root.dataset.scrollEngine = 'native';
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
